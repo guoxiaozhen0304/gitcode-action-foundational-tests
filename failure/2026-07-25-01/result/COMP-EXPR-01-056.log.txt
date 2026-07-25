@@ -1,0 +1,11 @@
+[2026/07/25 14:04:20.033 GMT+08:00] [INFO] Job(1530576437176315904_1530576437155344391) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/86a68cf2-924a-455a-9539-b7f4b1e76214.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/86a68cf2-924a-455a-9539-b7f4b1e76214.sh
+EVENT_JSON=null
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/fb8a1085-4b55-4338-b249-03503038ad8c.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/fb8a1085-4b55-4338-b249-03503038ad8c.sh
+/home/slave1/runner/workers/0.0.4.4.version/_temp/fb8a1085-4b55-4338-b249-03503038ad8c.sh: line 1: syntax error near unexpected token `('
+::error::Process exited with code 2

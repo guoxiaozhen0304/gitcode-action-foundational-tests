@@ -1,0 +1,37 @@
+{
+  "case_id": "SEC-DEFPERM-01-001",
+  "title": "ATOMGIT_TOKEN 默认权限范围与 job 级覆盖必须正确生效",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-036",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "701e3b05adb04ec393fa7c96e7313f4a",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 61,
+  "log_fingerprint": "0d78f2fd2e5b2a64",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/701e3b05adb04ec393fa7c96e7313f4a",
+  "assertion_results": [
+    {
+      "kind": "leak",
+      "type": "negative",
+      "target": "run_logs",
+      "pass": true,
+      "is_security_critical": true,
+      "expected": "plaintext 'write_successful' 0 hits",
+      "actual": 0
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains '403_or_permission_denied'",
+      "actual": "absent"
+    }
+  ]
+}

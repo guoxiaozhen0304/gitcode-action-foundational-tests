@@ -1,0 +1,28 @@
+{
+  "case_id": "COMP-PR-01-003",
+  "title": "fork PR 的 pull_request workflow ATOMGIT_TOKEN 仅 read 权限",
+  "dimension": "completeness",
+  "priority": "P0",
+  "intent_ref": "INTENT-COMP-004",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "031524341e854a2fa9bf7e69f19c3e82",
+  "run_status": "COMPLETED",
+  "head_sha": "a3fe95c25a498c91944cc0ae8b252a8016487ff3",
+  "job_count": 1,
+  "duration_seconds": 94,
+  "log_fingerprint": "9892b9e6c337e5c2",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/031524341e854a2fa9bf7e69f19c3e82",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "SUCCESS_OR_FAILURE",
+      "actual": "COMPLETED"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+[2026/07/25 14:07:02.979 GMT+08:00] [INFO] Job(1530577119837167616_1530577119803613191) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/661d3534-c390-45a6-8f30-1fd87f3d4680.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/661d3534-c390-45a6-8f30-1fd87f3d4680.sh
+SHA_SET=no
+REF_SET=yes
+REF_NAME_SET=yes
+EVENT_NAME_SET=yes
+WORKSPACE_SET=yes
+REPO_SET=yes
+RUN_ID_SET=yes
+RUN_NUM_SET=yes
+SERVER_SET=yes
+API_SET=yes

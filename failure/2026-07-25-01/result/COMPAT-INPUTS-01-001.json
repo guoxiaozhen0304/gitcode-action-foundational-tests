@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-INPUTS-01-001",
+  "title": "workflow_dispatch inputs 类型限制 - boolean 应报错",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-014",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "0e732c6244bf4086a6399c73561a4ca7",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 33,
+  "log_fingerprint": "04ab2a5a84d44633",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/0e732c6244bf4086a6399c73561a4ca7",
+  "assertion_results": [
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": false,
+      "expected": "conclusion != COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

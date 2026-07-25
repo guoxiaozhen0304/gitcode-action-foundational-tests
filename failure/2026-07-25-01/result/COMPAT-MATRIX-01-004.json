@@ -1,0 +1,36 @@
+{
+  "case_id": "COMPAT-MATRIX-01-004",
+  "title": "matrix include 无基础变量不被支持时的差异",
+  "dimension": "compatibility",
+  "priority": "P2",
+  "intent_ref": "INTENT-COMPAT-NEW-007",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "e1707ded8ad54df6b1b5a3e012f296b7",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 2,
+  "duration_seconds": 29,
+  "log_fingerprint": "7d2833cd69af7f8d",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/e1707ded8ad54df6b1b5a3e012f296b7",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    },
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": false,
+      "expected": "conclusion != COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-EXPR-01-001",
+  "title": "引用不存在的上下文属性时报错应包含原始表达式与错误类型",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-024",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "70811c7c35554d3a990a9e0ed2aff57c",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 48,
+  "log_fingerprint": "37c49f6e24319ad4",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/70811c7c35554d3a990a9e0ed2aff57c",
+  "assertion_results": [
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": false,
+      "expected": "conclusion != COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

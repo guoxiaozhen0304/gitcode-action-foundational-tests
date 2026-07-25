@@ -1,0 +1,35 @@
+{
+  "case_id": "SEC-PRTGT-01-001",
+  "title": "pull_request_target 下显式 checkout 不可信 PR 时 secrets 仍应受控",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-002",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "9aceadbe21f94770b5c4aedc49a330aa",
+  "run_status": "COMPLETED",
+  "head_sha": "f7cadee26e6f1cf09269151691d02047defa4171",
+  "job_count": 1,
+  "duration_seconds": 55,
+  "log_fingerprint": "4dedc470be2c0ed1",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/9aceadbe21f94770b5c4aedc49a330aa",
+  "assertion_results": [
+    {
+      "kind": "config_probe",
+      "pass": true,
+      "not_configured": false,
+      "expected": "资源已配置（日志无 'configured_len=0'）",
+      "actual": "configured"
+    },
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "BLOCKED_OR_PENDING",
+      "actual": "COMPLETED"
+    }
+  ]
+}

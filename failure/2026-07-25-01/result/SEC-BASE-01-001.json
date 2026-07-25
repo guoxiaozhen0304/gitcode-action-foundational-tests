@@ -1,0 +1,37 @@
+{
+  "case_id": "SEC-BASE-01-001",
+  "title": "pull_request_target 使用 base 分支的 workflow 版本",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-035",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "190a072868b740379c738a5923899cde",
+  "run_status": "COMPLETED",
+  "head_sha": "a85656f21db1913327c571b0b3fbac457dcb2bca",
+  "job_count": 1,
+  "duration_seconds": 22,
+  "log_fingerprint": "f963551461c95909",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/190a072868b740379c738a5923899cde",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'base_branch_workflow_executed'",
+      "actual": "absent"
+    },
+    {
+      "kind": "leak",
+      "type": "negative",
+      "target": "run_logs",
+      "pass": true,
+      "is_security_critical": true,
+      "expected": "plaintext 'fork_injected_step' 0 hits",
+      "actual": 0
+    }
+  ]
+}

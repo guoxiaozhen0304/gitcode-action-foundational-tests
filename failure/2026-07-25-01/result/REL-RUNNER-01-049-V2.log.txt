@@ -1,0 +1,21 @@
+[2026/07/25 13:45:09.120 GMT+08:00] [INFO] Job(1530571609780129792_1530571609754963975) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/29cabc39-0de5-4c26-afce-840b13821a66.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/29cabc39-0de5-4c26-afce-840b13821a66.sh
+16
+               total        used        free      shared  buff/cache   available
+Mem:           62256        3096       11032         102       48929       59159
+Swap:              0           0           0
+Filesystem                    1G-blocks  Used Available Use% Mounted on
+overlay                            118G   50G       63G  45% /
+tmpfs                                1G    0G        1G   0% /dev
+tmpfs                               31G    0G       31G   0% /sys/fs/cgroup
+shm                                  1G    0G        1G   0% /dev/shm
+/dev/mapper/vgpaas-kubernetes       30G    1G       28G   1% /etc/hosts
+/dev/vda1                           50G    5G       43G  11% /etc/resolv.conf
+/dev/mapper/vgpaas-dockersys       118G   50G       63G  45% /etc/hostname
+tmpfs                               31G    0G       31G   0% /proc/acpi
+tmpfs                               31G    0G       31G   0% /proc/scsi
+tmpfs                               31G    0G       31G   0% /sys/firmware
+
+[2026/07/25 13:45:09.103 GMT+08:00] [INFO] Job(1530571609780129792_1530571609754963977) duration check: true

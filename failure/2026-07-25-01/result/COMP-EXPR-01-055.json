@@ -1,0 +1,44 @@
+{
+  "case_id": "COMP-EXPR-01-055",
+  "title": "hashFiles 函数边界行为",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "KEEP-TC-186",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "f35c8c790b11440e93404ad0dbe5c691",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 90,
+  "log_fingerprint": "b8b506851ec0b67e",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/f35c8c790b11440e93404ad0dbe5c691",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'HASH_SINGLE='",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'HASH_MULTI='",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'HASH_NONE='",
+      "actual": "absent"
+    }
+  ]
+}

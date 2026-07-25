@@ -1,0 +1,36 @@
+{
+  "case_id": "COMP-EXPR-01-056",
+  "title": "toJson 函数边界行为",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "KEEP-TC-187",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "7d8c0b543c044126980667853561d847",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 81,
+  "log_fingerprint": "5ba7e3481cffa2a5",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/7d8c0b543c044126980667853561d847",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'EVENT_JSON={'",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'ENV_JSON={'",
+      "actual": "absent"
+    }
+  ]
+}

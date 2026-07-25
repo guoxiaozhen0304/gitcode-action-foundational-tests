@@ -1,0 +1,26 @@
+[2026/07/25 12:53:40.542 GMT+08:00] [INFO] Job(1530558655353458688_1530558655332487175) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/2689f5df-e044-4445-a41c-2f9956d213e2.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/2689f5df-e044-4445-a41c-2f9956d213e2.sh
+
+::debug::Using workspace directory: /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-1
+Uploading artifact "secret-artifact" from paths: /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-1/secret.txt
+::debug::followSymbolicLinks 'true'
+::debug::implicitDescendants 'true'
+::debug::matchDirectories 'true'
+::debug::omitBrokenSymbolicLinks 'true'
+::debug::followSymbolicLinks 'true'
+::debug::implicitDescendants 'true'
+::debug::matchDirectories 'true'
+::debug::omitBrokenSymbolicLinks 'true'
+::debug::Search path '/home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-1/secret.txt'
+Found 1 file(s) to upload
+::debug::[diagnostic] First 1 matched file(s): /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-1/secret.txt
+::debug::Resolved root directory: /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-1
+Creating zip archive from 1 file(s)...
+Zip archive created: /tmp/artifact-1784955233549-bd850920.zip (~0 MB, 155 bytes)
+Creating artifact "secret-artifact" (size: 155 bytes, workflow: 92877ce27bff4e149e2f5985f84e9b19)...
+[Twirp] trace-id: 3993e9d9fb2ed23c02acef2cd1dcc8b8
+[Twirp] error trace-id: 3993e9d9fb2ed23c02acef2cd1dcc8b8
+::debug::Temp zip file removed: /tmp/artifact-1784955233549-bd850920.zip
+::error::Upload artifact failed: Artifact with name already exists: secret-artifact, repoId=10431328, workflowId=92877ce27bff4e149e2f5985f84e9b19

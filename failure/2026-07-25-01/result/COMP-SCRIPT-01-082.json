@@ -1,0 +1,28 @@
+{
+  "case_id": "COMP-SCRIPT-01-082",
+  "title": "脚本权限设置与直接执行验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "KEEP-TC-431~433",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "5abd74a196634630b69201ee6f269827",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 89,
+  "log_fingerprint": "1be509b8356ffe5c",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/5abd74a196634630b69201ee6f269827",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "COMPLETED",
+      "actual": "FAILED"
+    }
+  ]
+}

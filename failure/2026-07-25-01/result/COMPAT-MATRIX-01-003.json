@@ -1,0 +1,36 @@
+{
+  "case_id": "COMPAT-MATRIX-01-003",
+  "title": "matrix 三维展开不被支持时的差异",
+  "dimension": "compatibility",
+  "priority": "P2",
+  "intent_ref": "INTENT-COMPAT-NEW-007",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "a1739d67a6ac4e2390294ba6243e2692",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 9,
+  "duration_seconds": 105,
+  "log_fingerprint": "123cc13b673a305b",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/a1739d67a6ac4e2390294ba6243e2692",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    },
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": false,
+      "expected": "conclusion != COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

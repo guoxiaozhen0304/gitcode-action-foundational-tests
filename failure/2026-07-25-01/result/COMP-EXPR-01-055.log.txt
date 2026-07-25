@@ -1,0 +1,9 @@
+[2026/07/25 14:04:07.758 GMT+08:00] [INFO] Job(1530576385548881920_1530576385523716103) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/a7e717b8-b887-4f57-856e-09d1b7e978b5.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/a7e717b8-b887-4f57-856e-09d1b7e978b5.sh
+/home/slave1/runner/workers/0.0.4.4.version/_temp/a7e717b8-b887-4f57-856e-09d1b7e978b5.sh: line 1: HASH_SINGLE=${{ hashFiles('package.json') }}: bad substitution
+::error::Process exited with code 1
+
+ 
+ 

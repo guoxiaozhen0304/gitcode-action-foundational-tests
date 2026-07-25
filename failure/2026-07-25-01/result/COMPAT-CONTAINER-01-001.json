@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-CONTAINER-01-001",
+  "title": "container 字段不被支持时应明确报错而非静默忽略",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-NEW-001",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "f1bdbb5f59134248b3b68a0def2438b3",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 66,
+  "log_fingerprint": "1def63feb7f9729e",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/f1bdbb5f59134248b3b68a0def2438b3",
+  "assertion_results": [
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": false,
+      "expected": "conclusion != COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

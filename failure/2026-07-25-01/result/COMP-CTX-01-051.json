@@ -1,0 +1,44 @@
+{
+  "case_id": "COMP-CTX-01-051",
+  "title": "上下文在 workflow job step 各级注入验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "KEEP-TC-086~124",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "2f5e9ba39d654fee9ceb748aee78609a",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 54,
+  "log_fingerprint": "1e202f1609f0f9bc",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/2f5e9ba39d654fee9ceb748aee78609a",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'WF_REF=refs/'",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'JOB_REF=refs/'",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'JOB_STATUS='",
+      "actual": "present"
+    }
+  ]
+}

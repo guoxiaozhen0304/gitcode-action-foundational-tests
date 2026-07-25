@@ -1,0 +1,44 @@
+{
+  "case_id": "COMP-ATOMGIT-01-047",
+  "title": "atomgit 核心上下文属性可访问性",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "KEEP-TC-017~057",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "e2b40b59c28844eaaf846f692784e55f",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 105,
+  "log_fingerprint": "79e1b76e67ce6aff",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/e2b40b59c28844eaaf846f692784e55f",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'SHA='",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'REF=refs/'",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'REPO='",
+      "actual": "present"
+    }
+  ]
+}

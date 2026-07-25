@@ -1,0 +1,64 @@
+[2026/07/25 14:12:11.975 GMT+08:00] [INFO] Job(1530578414824460288_1530578414828654593) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/b0ecb665-21bb-413a-b199-343b4c71de8c.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/b0ecb665-21bb-413a-b199-343b4c71de8c.sh
+os=ubuntu
+node=16
+browser=chrome
+
+[2026/07/25 14:12:12.104 GMT+08:00] [INFO] Job(1530578414824460288_1530578414828654596) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/6e953d4f-3447-4ac8-a3db-fe76063d9a52.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/6e953d4f-3447-4ac8-a3db-fe76063d9a52.sh
+os=ubuntu
+node=16
+browser=firefox
+
+[2026/07/25 14:12:11.857 GMT+08:00] [INFO] Job(1530578414824460288_1530578414828654597) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/3f231e47-6489-4ca6-934a-3357de98192f.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/3f231e47-6489-4ca6-934a-3357de98192f.sh
+os=macos
+node=16
+browser=chrome
+
+[2026/07/25 14:12:12.279 GMT+08:00] [INFO] Job(1530578414824460288_1530578414828654594) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/0c00e6aa-349d-4281-9b7d-476283a94786.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/0c00e6aa-349d-4281-9b7d-476283a94786.sh
+os=macos
+node=16
+browser=firefox
+
+[2026/07/25 14:12:11.774 GMT+08:00] [INFO] Job(1530578414824460288_1530578414828654595) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/382799b7-4348-4b32-ad2d-abe2bce0dfb7.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/382799b7-4348-4b32-ad2d-abe2bce0dfb7.sh
+os=ubuntu
+node=18
+browser=chrome
+
+[2026/07/25 14:12:11.587 GMT+08:00] [INFO] Job(1530578414824460288_1530578414828654599) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/f919a7ed-0a90-4aea-8a7e-aa5476df01f5.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/f919a7ed-0a90-4aea-8a7e-aa5476df01f5.sh
+os=ubuntu
+node=18
+browser=firefox
+
+[2026/07/25 14:12:12.210 GMT+08:00] [INFO] Job(1530578414824460288_1530578414828654600) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/4116fbdd-0b67-4a2e-b6cb-7f78673e1031.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/4116fbdd-0b67-4a2e-b6cb-7f78673e1031.sh
+os=macos
+node=18
+browser=chrome
+
+[2026/07/25 14:12:11.672 GMT+08:00] [INFO] Job(1530578414824460288_1530578414828654598) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/a1120cf0-2082-4eb2-9100-1c8ca0b248e4.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/a1120cf0-2082-4eb2-9100-1c8ca0b248e4.sh
+os=macos
+node=18
+browser=firefox
+

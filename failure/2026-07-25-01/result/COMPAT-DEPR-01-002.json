@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-DEPR-01-002",
+  "title": "::add-path:: 废弃命令应被拒绝或给出迁移指引",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-NEW-012",
+  "phase02_run": "2026-07-25-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "aa0233e8aa984a5ab9d5c5bd87550358",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 41,
+  "log_fingerprint": "21727d2ddc9d5565",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/aa0233e8aa984a5ab9d5c5bd87550358",
+  "assertion_results": [
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": false,
+      "expected": "conclusion != COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}
