@@ -458,6 +458,8 @@ def _validate_workflow_syntax(workflow_yaml):
 
     # 3) jobs
     jobs = doc.get("jobs")
+    if (not jobs or not isinstance(jobs, dict)) and isinstance(doc.get("stages"), dict):
+        return errors  # stages: 合法替代结构，跳过 jobs 检查
     if not isinstance(jobs, dict) or not jobs:
         return errors + ["缺 jobs 或 jobs 非映射"]
 
