@@ -10,14 +10,15 @@
 
 ---
 
-## 失败分诊 · COMP-CACHE-01-001 · cache hit 时恢复缓存内容正确
+## 失败分诊 · COMP-CACHE-01-001 · cache hit 时恢复缓存内容正确 confirmed
+**重跑 (dispatch)**: FAILED · [6059ed2e...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/f275475492a241e9853623c5b7d23a66)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (run_status, positive, target=run_status) — 预期 COMPLETED，实际 FAILED
 
-**根因初判**: 环境问题
+**根因初判**: use the cache action in wrong way
 
-**责任人**: Phase 02
+**责任人**: Phase 01
 
 **证据**:
 - **Job 日志全量**（3 行，无 shell 脚本输出）:
@@ -28,6 +29,13 @@
 - **预期行为**: cache hit 时应恢复缓存内容，验证恢复数据正确。
 - **实际行为**: job 在步骤执行前即 FAILED，无 shell 输出，无法判断 cache 行为。
 - **对照 GitCode 规格**: 无对应文档引用（job 未执行到位无法对照规格）。
+
+No:
+1. `uses: cache` — GitCode may not recognize bare `cache` as an action. Should be a full path or built-in name.
+2. `cached.txt` is never created — nothing writes the file before trying to cache it. On first run there's nothing to cache.
+3. Cache only works with `push`/`pull_request` events, not `workflow_dispatch` (Manual) — the cache plugin skips with `Event Validation Error`.
+4. `target: cache_step` — assertion engine doesn't support this kind (assertion_gap).
+
 
 **置信度**: 中 — job 零输出无法确定根因在平台还是 runner 调度，但失败模式符合 runner 环境不可用特征。
 
@@ -42,14 +50,14 @@
 
 ---
 
-## 失败分诊 · COMP-CACHE-01-002 · restore-keys 前缀匹配兜底生效
+## 失败分诊 · COMP-CACHE-01-002 · restore-keys 前缀匹配兜底生效 confirmed
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (status, positive, target=run_status) — 预期 all job/step green，实际 job 'Verify restore keys fallback' status=FAILED
 
-**根因初判**: 需人工判断
+**根因初判**: 产品缺陷, the cache doesnt support the cache
 
-**责任人**: 多方联合
+**责任人**: 平台方
 
 **证据**:
 - **Job 日志全量**（3 行，无 shell 脚本输出）:
@@ -79,7 +87,7 @@
 **判定结果**: FAIL
 **失败断言**: assertions[0] (run_status_not, negative) — PASS (conclusion != COMPLETED, actual=FAILED ✓); assertions[1] (value, positive, target=run_logs) — 预期 log contains '403'，实际 absent
 
-**根因初判**: 用例问题（标记不匹配）
+**根因初判**: you are not in git repo
 
 **责任人**: Phase 01
 
@@ -275,8 +283,9 @@
 ---
 
 ## 失败分诊 · COMP-ARTIFACT-01-001 · artifact 可在同 workflow 的 job 间正确传递
+**重跑 (dispatch)**: FAILED · [ebf8c920...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/ebf8c920549d4bd381569ea2f70c54bd)
 
-**判定结果**: FAIL
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (run_status, positive) — 预期 COMPLETED，实际 FAILED; assertions[1] (value, positive, target=run_logs) — 预期 log contains 'hello artifact'，实际 absent
 
 **根因初判**: 需人工判断
@@ -680,6 +689,7 @@
 ---
 
 ## 失败分诊 · SEC-FORK-01-002 · fork PR 中 secrets 引用返回空值且 job 不崩溃
+**重跑 (dispatch)**: FAILED · [69a627e9...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/69a627e9daa74ac1ba794db6c4e6756b)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (run_status, positive) — 预期 COMPLETED，实际 FAILED
@@ -714,6 +724,7 @@
 ---
 
 ## 失败分诊 · SEC-INJ-01-005 · 表达式求值必须防止双重模板渲染（二次求值）
+**重跑 (dispatch)**: FAILED · [08e4cbc6...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/08e4cbc63e3b418a9475979cf125a4dc)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative, target=run_logs) — FAIL + SECURITY_CRITICAL, 预期 plaintext '2' 0 hits，实际 FOUND; assertions[1] (value, positive) — 预期 log contains 'template_chars_escaped'，实际 absent
@@ -750,6 +761,7 @@
 ---
 
 ## 失败分诊 · SEC-MASK-01-001 · Secret 值在运行日志中必须被自动脱敏为 ***
+**重跑 (dispatch)**: COMPLETED · [3b9c05d7...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/3b9c05d741ef486489c9ea06a4e1b1bd)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'masked_with_asterisks'，实际 absent
@@ -783,6 +795,7 @@
 ---
 
 ## 失败分诊 · SEC-MASK-01-005 · Secret 日志脱敏不可通过多行值输出绕过
+**重跑 (dispatch)**: COMPLETED · [f042e198...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/f042e19867ce4375982a4f881c543e83)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'multiline_masked_with_asterisks'，实际 absent
@@ -816,6 +829,7 @@
 ---
 
 ## 失败分诊 · SEC-NAME-01-001 · Secret/变量名含特殊字符时不可导致意外求值或权限绕过
+**重跑 (dispatch)**: COMPLETED · [61c1ed14...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/61c1ed147a544bae8e05b05725d5b6b7)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (run_status, positive) — 预期 SUCCESS_OR_YAML_ERROR，实际 COMPLETED
@@ -849,6 +863,7 @@
 ---
 
 ## 失败分诊 · SEC-NAME-01-002 · 通过 printenv 或进程枚举获取 ATOMGIT_TOKEN/secrets 时日志中必须保持脱敏
+**重跑 (dispatch)**: FAILED · [1ea72d07...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/1ea72d07dbf04366becc0c98ff2abd47)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'masked_or_not_found'，实际 absent
@@ -878,6 +893,7 @@
 ---
 
 ## 失败分诊 · SEC-PERM-01-003 · 未声明 permissions 时 ATOMGIT_TOKEN 默认权限必须最小化（read-only）
+**重跑 (dispatch)**: FAILED · [53798629...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/53798629398644e58ee9c8df3271ab66)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'write_permission_granted' 0 hits ✓); assertions[1] (run_status, positive) — 预期 COMPLETED，实际 FAILED
@@ -911,8 +927,9 @@
 ---
 
 ## 失败分诊 · SEC-PERM-01-004 · 默认状态下写操作被 403 拒绝
+**重跑 (dispatch)**: success · [14fe1eb6...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/c5a623954a6b426c844a7ce7d00a9361/job/b8b64270d01c4719bbff4246511543eb)
 
-**判定结果**: FAIL
+**判定结果**: success
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'push_successful' 0 hits ✓); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'push_denied_or_403'，实际 absent
 
 **根因初判**: 环境问题（git 用户配置缺失）
@@ -948,13 +965,14 @@
 ---
 
 ## 失败分诊 · SEC-PRTGT-01-001 · pull_request_target 下显式 checkout 不可信 PR 时 secrets 仍应受控
+**重跑 (dispatch)**: FAILED · [ffed6e13...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/b71eb4ad3975410cbf4773957beece98/job/b1d0294ad3c8462eb09190e9f76502e5)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (run_status, positive) — 预期 BLOCKED_OR_PENDING，实际 COMPLETED
 
-**根因初判**: 标记不匹配 — 但需确认 secret 是否被正确隔离
+**根因初判**: secret is not empty
 
-**责任人**: Phase 01 + 平台方
+**责任人**: 平台方
 
 **证据**:
 - **Job 日志全量**（51 行，关键部分第 51 行）:
@@ -980,6 +998,7 @@
 ---
 
 ## 失败分诊 · SEC-PRTGT-01-002 · pull_request_target 无审批不执行 fork PR 代码
+**重跑 (dispatch)**: FAILED · [4b550324...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/4b5503245d07412382f7d6ff8227e585)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'success_without_approval' 0 hits ✓); assertions[1] (run_status, positive) — 预期 PENDING_OR_BLOCKED，实际 COMPLETED
@@ -1012,6 +1031,7 @@
 ---
 
 ## 失败分诊 · SEC-RUN-01-003 · 自托管 Runner 跨项目残留必须被隔离
+**重跑 (dispatch)**: FAILED · [73fe7c52...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/73fe7c5218d74236a61d5620967defe7)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'cross project leak' 0 hits ✓); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'isolated_as_expected'，实际 absent
@@ -1042,6 +1062,7 @@
 ---
 
 ## 失败分诊 · SEC-SIDE-01-002 · Secret 不经 artifact 侧信道绕过脱敏外泄
+**重跑 (dispatch)**: FAILED · [9b1a2c9f...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/9b1a2c9fcefa4db19cccff80004475a4)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (run_status, positive) — 预期 BLOCKED_OR_MASKED，实际 FAILED
@@ -1074,14 +1095,16 @@
 
 ---
 
-## 失败分诊 · SEC-SUPPLY-01-001 · 第三方 Action 引用应支持完整 commit hash 固定
+## 失败分诊 · SEC-SUPPLY-01-001 · 第三方 Action 引用应支持完整 commit hash 固定 confirm
+**重跑 (dispatch)**: FAILED · [0e149f3a...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/0e149f3a3fea438b8dbd0808999a2202)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (run_status, positive) — 预期 SUCCESS_OR_ACTION_EXECUTED，实际 FAILED; assertions[1] (leak, negative) — PASS (plaintext 'unauthorized_action_execution' 0 hits ✓)
 
-**根因初判**: 需人工判断（平台可能不支持 commit hash 引用）
 
-**责任人**: 多方联合
+**根因初判**: there is no the action and this hash  docker/build-push-action@1234567890abcdef1234567890abcdef12345678
+
+**责任人**: phase 01
 
 **证据**:
 - **Job 日志全量**（1 行，零 shell 输出）:
@@ -1104,14 +1127,15 @@
 
 ---
 
-## 失败分诊 · SEC-SUPPLY-01-002 · commit hash 不匹配时第三方 Action 应被拒绝执行
+## 失败分诊 · SEC-SUPPLY-01-002 · commit hash 不匹配时第三方 Action 应被拒绝执行 confirm
+**重跑 (dispatch)**: FAILED · [0ad11491...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/0ad1149178df44fc96ba55cc353d0ffb)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'success' 0 hits ✓); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'action_not_found_or_sha_mismatch'，实际 absent
 
-**根因初判**: 需人工判断
+**根因初判**: there is no the action and this hash docker/build-push-action@1234567890abcdef1234567890abcdef12345678
 
-**责任人**: 多方联合
+**责任人**: phase 01
 
 **证据**:
 - **Job 日志全量**（1 行，零 shell 输出）:
@@ -1134,6 +1158,7 @@
 ---
 
 ## 失败分诊 · SEC-TOCTOU-01-001 · 审批后推送新 commit 不应被已授权特权运行执行
+**重跑 (dispatch)**: COMPLETED · [2643d4c7...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/2643d4c791e6406c9650e255e8af2e79)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'unapproved_commit_executed' 0 hits ✓); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'approved_sha_matched'，实际 absent
@@ -1167,6 +1192,7 @@
 ---
 
 ## 失败分诊 · SEC-TOKEN-01-001 · fork PR 触发 pull_request 时 ATOMGIT_TOKEN 必须仅拥有 read 权限
+**重跑 (dispatch)**: FAILED · [e5677522...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/e567752207134ff69dbe0f2808a4d307)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (value, positive, target=run_logs) — 预期 log contains 'clone_successful'，实际 absent; assertions[1] (leak, negative) — PASS (plaintext 'write_permission_granted' 0 hits ✓)
@@ -1199,7 +1225,8 @@
 
 ---
 
-## 失败分诊 · SEC-TOKEN-01-002 · fork PR 中 ATOMGIT_TOKEN 写操作被平台拒绝
+## 失败分诊 · SEC-TOKEN-01-002 · fork PR 中 ATOMGIT_TOKEN 写操作被平台拒绝  
+**重跑 (dispatch)**: FAILED · [710f696a...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/710f696a9a7e41f09599131c3f19460f)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (run_status, positive) — 预期 COMPLETED，实际 FAILED
@@ -1236,6 +1263,7 @@
 ---
 
 ## 失败分诊 · SEC-WCMD-01-001 · Workflow 命令（如 add-mask）的响应本身不可泄露被遮蔽前的 secret 值
+**重跑 (dispatch)**: COMPLETED · [ae13726e...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/ae13726eb7b642518133c49fdcc49e9d)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'mask_command_without_payload'，实际 absent
@@ -1268,6 +1296,7 @@
 ---
 
 ## 失败分诊 · SEC-WCMD-01-002 · 跨运行 artifact 必须被视为不可信数据
+**重跑 (dispatch)**: FAILED · [12c6941c...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/12c6941c211a4361aec29afc4f9e6aaa)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'auto_executed' 0 hits ✓); assertions[1] (run_status, positive) — 预期 COMPLETED，实际 FAILED
