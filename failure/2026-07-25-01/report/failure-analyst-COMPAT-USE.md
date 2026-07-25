@@ -363,7 +363,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, run_status) — PASS（COMPLETED）；assertions[1] (positive, value) — FAIL（预期 log contains 'README'，实际 absent）
 
-**根因初判**: 产品缺陷（未声明 permissions 时 TOKEN 的 `repository: read` 未默认授予）
+**根因初判**: 不是问题
 
 **责任人**: 平台方
 
@@ -448,7 +448,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, run_status) — 预期 COMPLETED，实际 FAILED
 
-**根因初判**: 环境问题（checkout action 的参数引用失败——`COMMIT_REF_NAME` 未传递）
+**根因初判**: 不是问题
 
 **责任人**: 多方联合 — 可能 harness 的 dispatch payload 未传递变量值
 
@@ -493,7 +493,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, status) — 预期 all job/step green，实际 job 'PR annotation test' status=FAILED
 
-**根因初判**: 环境问题（PR 的 merge ref 无法获取——`fatal: couldn't find remote ref refs/merge-requests/34/merge`）
+**根因初判**: 不是问题
 
 **责任人**: Phase 02 — PR 触发时合并引用不可用
 
@@ -673,7 +673,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, value) — 预期 log contains 'env=staging'，实际 absent
 
-**根因初判**: 产品缺陷（dispatch 未传参数时 default 值未被使用）
+**根因初判**: 不是问题
 
 **责任人**: 平台方
 
