@@ -36,7 +36,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须包含 Secret 名称规则或命名格式相关说明，并列出允许字符（大写字母、数字、下划线）"
 
 teardown:

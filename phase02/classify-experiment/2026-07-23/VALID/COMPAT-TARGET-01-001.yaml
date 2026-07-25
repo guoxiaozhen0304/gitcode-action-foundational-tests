@@ -47,7 +47,7 @@ assertions:
   - type: positive
     target: run_status
     equals: success
-    eval: deterministic
+    eval: llm_assisted
 
 teardown:
   reset: fixture

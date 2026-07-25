@@ -37,7 +37,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须包含出错的原始表达式（或截断后的前 50 字符）和错误类型说明"
 
 teardown:

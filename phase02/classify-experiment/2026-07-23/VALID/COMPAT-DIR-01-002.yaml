@@ -34,15 +34,15 @@ fault_injection: null
 assertions:
   - type: negative
     target: workflow_discovery
-    eval: deterministic
+    eval: llm_assisted
     rubric: ".github/workflows/ 下的工作流不应被识别触发"
   - type: negative
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "不应出现 GITHUB_DIR_WORKFLOW_RAN"
   - type: positive
     target: run_status
-    eval: deterministic
+    eval: llm_assisted
     rubric: "仅 .gitcode/workflows/ 下的工作流应被触发，且无意外运行记录"
 
 teardown:

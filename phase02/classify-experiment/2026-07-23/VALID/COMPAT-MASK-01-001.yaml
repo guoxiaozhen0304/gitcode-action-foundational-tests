@@ -36,7 +36,7 @@ assertions:
   - type: negative
     target: run_logs
     must_not_contain_secret: TEST_SECRET
-    eval: deterministic
+    eval: llm_assisted
   - type: positive
     target: run_logs
     eval: llm_assisted

@@ -47,15 +47,15 @@ fault_injection: null
 assertions:
   - type: positive
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中应出现 ENV_ISOLATED_OK"
   - type: negative
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中不应出现 ENV_ISOLATION_BROKEN"
   - type: positive
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中应出现 ENV_SET_IN_JOB_A"
 
 teardown:

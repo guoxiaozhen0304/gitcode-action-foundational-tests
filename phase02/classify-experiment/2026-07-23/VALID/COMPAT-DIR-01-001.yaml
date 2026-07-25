@@ -37,11 +37,11 @@ assertions:
     equals: completed_success
   - type: positive
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中应出现 GITCODE_DIR_RECOGNIZED_OK"
   - type: positive
     target: workflow_discovery
-    eval: deterministic
+    eval: llm_assisted
     rubric: ".gitcode/workflows/ 下的工作流文件被正确识别"
 
 teardown:

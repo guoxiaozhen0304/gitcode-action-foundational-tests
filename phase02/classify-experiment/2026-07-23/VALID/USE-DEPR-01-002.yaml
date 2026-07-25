@@ -33,7 +33,7 @@ fault_injection: null
 assertions:
   - type: nonfunctional
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错/警告信息必须包含已废弃或 deprecated 字样，并给出至少一条完整的替代命令示例"
 
 teardown:

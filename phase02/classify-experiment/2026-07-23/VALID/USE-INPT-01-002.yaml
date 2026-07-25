@@ -42,7 +42,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须包含 GitCode 仅支持 string 类型或等效说明，并给出在步骤中使用表达式转换类型的替代方案"
 
 teardown:

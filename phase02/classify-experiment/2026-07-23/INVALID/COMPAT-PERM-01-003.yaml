@@ -37,7 +37,7 @@ fault_injection: null
 assertions:
   - type: negative
     target: workflow_parse
-    eval: deterministic
+    eval: llm_assisted
     rubric: "使用 contents 权限项时 workflow 解析/校验阶段应报错"
   - type: positive
     target: run_logs
@@ -45,7 +45,7 @@ assertions:
     rubric: "错误信息应提示 unknown property 或 contents 不被支持"
   - type: negative
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "不应出现 CONTENTS_PERM_ACCEPTED（不应成功执行）"
 
 teardown:

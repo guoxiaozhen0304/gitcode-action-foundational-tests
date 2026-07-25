@@ -36,7 +36,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须包含用户指定的 runs-on 标签原文；若因标签不匹配，应提示未找到匹配标签的 Runner，可用标签包括..."
 
 teardown:

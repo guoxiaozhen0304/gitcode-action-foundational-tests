@@ -54,7 +54,7 @@ assertions:
   - type: positive
     target: run_status
     equals: success
-    eval: deterministic
+    eval: llm_assisted
     rubric: "后续 step 正常执行，job 最终状态为 success"
 
 teardown:

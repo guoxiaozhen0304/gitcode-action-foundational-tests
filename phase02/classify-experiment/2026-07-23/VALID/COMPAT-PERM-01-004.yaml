@@ -45,15 +45,15 @@ assertions:
     equals: completed_success
   - type: positive
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中应出现 REPOSITORY_PERM_OK"
   - type: negative
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中不应出现 REPOSITORY_PERM_FAILED"
   - type: negative
     target: workflow_parse
-    eval: deterministic
+    eval: llm_assisted
     rubric: "不应因 repository 权限项而解析失败"
 
 teardown:

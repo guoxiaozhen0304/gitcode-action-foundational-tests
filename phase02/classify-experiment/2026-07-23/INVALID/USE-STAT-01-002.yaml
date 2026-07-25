@@ -37,7 +37,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须包含 success 或 状态函数关键词，并明示 GitCode 状态函数不带括号"
 
 teardown:

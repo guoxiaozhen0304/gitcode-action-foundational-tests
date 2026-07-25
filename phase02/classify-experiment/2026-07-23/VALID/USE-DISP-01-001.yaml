@@ -41,7 +41,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须指出缺少必填参数 environment 或等效字段名"
 
 teardown:

@@ -61,19 +61,19 @@ fault_injection: null
 assertions:
   - type: positive
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中应出现 WORKSPACE_ISOLATED_OK"
   - type: positive
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中应出现 TMP_ISOLATED_OK"
   - type: negative
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中不应出现 ISOLATION_BROKEN_WORKSPACE"
   - type: negative
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中不应出现 ISOLATION_BROKEN_TMP"
 
 teardown:

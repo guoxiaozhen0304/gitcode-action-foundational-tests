@@ -37,7 +37,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须同时出现 contents 等 GitHub 命名与 repository/pr 等 GitCode 命名，形成对照"
 
 teardown:
