@@ -20,11 +20,15 @@ workflow: |
         - name: generate 100MB file
           run: |
             dd if=/dev/urandom of=artifact.bin bs=1M count=100
+            md5sum artifact.bin > artifact.bin.md5
         - name: upload artifact step
           uses: upload-artifact
           with:
-            name: perf-artifact
-            path: artifact.bin
+            # run_id 后缀唯一命名，避免前次运行残留导致 "name already exists"
+            name: perf-artifact-${{ atomgit.run_id }}
+            path: |
+              artifact.bin
+              artifact.bin.md5
     download:
       name: download artifact job
       runs-on: [ubuntu-latest, x64, small]
@@ -33,10 +37,11 @@ workflow: |
         - name: download artifact step
           uses: download-artifact
           with:
-            name: perf-artifact
+            name: perf-artifact-${{ atomgit.run_id }}
         - name: verify artifact step
           run: |
-            ls -la perf-artifact
+            ls -la artifact.bin
+            md5sum -c artifact.bin.md5 && echo "md5_match=true"
 trigger:
   event: workflow_dispatch
   as: maintainer

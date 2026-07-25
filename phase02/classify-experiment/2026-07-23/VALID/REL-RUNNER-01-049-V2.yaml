@@ -15,22 +15,22 @@ workflow: |
   jobs:
     probe-xlarge:
       name: probe xlarge runner
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [ubuntu-latest, x64, xlarge]
       steps:
         - name: probe xlarge
           run: |
             nproc
             free -m
-            df -BG ${{RUNNER_TEMP}}
+            df -BG ${{ runner.temp }}
     probe-2xlarge:
       name: probe 2xlarge runner
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [ubuntu-latest, x64, 2xlarge]
       steps:
         - name: probe 2xlarge
           run: |
             nproc
             free -m
-            df -BG ${{RUNNER_TEMP}}
+            df -BG ${{ runner.temp }}
 trigger:
   event: workflow_dispatch
   as: maintainer

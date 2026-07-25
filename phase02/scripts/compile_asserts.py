@@ -95,6 +95,15 @@ def compile_one(assertion, case_id):
             return out
         if target in _STEP_STATUS_TARGETS:
             return {"kind": "step_status", "equals": str(eq_val)}
+        # 通用 <前缀>_status / <前缀>_step_status → job/step 级 + name hint（2026-07-25）
+        # 例: upload_status → job_status(name="upload")；cleanup_step_status → step_status(name="cleanup")
+        m = re.match(r"^([a-z0-9_]+?)_step_status$", target)
+        if m:
+            return {"kind": "step_status", "equals": str(eq_val), "name": m.group(1)}
+        m = re.match(r"^([a-z0-9]+)_status$", target)
+        if m and m.group(1) not in ("run", "workflow", "job", "step",
+                                    "parent", "api", "downstream"):
+            return {"kind": "job_status", "equals": str(eq_val), "name": m.group(1)}
 
     # ── 1b) 原始 run_status（无 equals 时兜底）───
     if target == "run_status":
@@ -150,8 +159,8 @@ def compile_one(assertion, case_id):
     #   hash_match        → "hash_match=true/false"
     #   download_content  → "download_content=<值>"（in 列表逐项拼标记，任一命中即 pass）
     #   contains_mixed    → "contains_mixed=true/false"
-    if target == "hash_match" and eq_val is not None:
-        return {"kind": "value", "expect": f"hash_match={eq_val}"}
+    if target in ("hash_match", "md5_match") and eq_val is not None:
+        return {"kind": "value", "expect": f"{target}={eq_val}"}
     if target == "download_content":
         in_list = assertion.get("in")
         if in_list:
