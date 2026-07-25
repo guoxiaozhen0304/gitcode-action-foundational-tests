@@ -242,8 +242,8 @@ def run_pool(run_id, only=None, no_logs=False):
                     wf_use = wf
                     if ev == "schedule":
                         import re as _re
-                        wf_use = _re.sub(r'(-?\s*cron\s*:\s*")[^"]*(")', r'\1* * * * *\2', wf)
-                        wr.log(f"  schedule cron replaced → * * * * *")
+                        wf_use = _re.sub(r'(-?\s*cron\s*:\s*")[^"]*(")', r'\g<1>0 * * * * ?\2', wf)
+                        wr.log(f"  schedule cron replaced → 0 * * * * ?")
                     sha, wf_filename, _ = wr.deploy(ws, cfg, cid, wf_use)
                     if not sha:
                         verdict = {"verdict": "ENV_ERROR", "verdict_flags": [],

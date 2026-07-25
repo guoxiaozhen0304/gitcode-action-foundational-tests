@@ -933,12 +933,12 @@ def trigger_schedule(ws, cfg, case_id, workflow_yaml, fetch_logs=False):
     t0 = time.time()
     # 正则替换 cron 值为每分钟（字符串替换，不 yaml.dump 往返）
     import re as _re
-    wf_replaced = _re.sub(r'(-?\s*cron\s*:\s*")[^"]*(")', r'\1* * * * *\2', workflow_yaml)
+    wf_replaced = _re.sub(r'(-?\s*cron\s*:\s*")[^"]*(")', r'\g<1>0 * * * * ?\2', workflow_yaml)
     try:
         sha, wf_filename, _ = deploy(ws, cfg, case_id, wf_replaced)
         if not sha:
             return _exec_result("ENV_ERROR", case_id, reason="git push 失败", t0=t0)
-        log(f"  schedule deployed (cron→* * * * *), waiting for trigger...")
+        log(f"  schedule deployed (cron→0 * * * * ?), waiting for trigger...")
         run = poll_run(cfg, sha, wf_filename, match_event="Schedule")
         if run is None:
             return _exec_result("NO_RUN", case_id, head_sha=sha, t0=t0)
