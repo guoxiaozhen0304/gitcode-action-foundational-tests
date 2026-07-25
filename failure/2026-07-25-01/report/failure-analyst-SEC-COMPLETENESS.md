@@ -1068,7 +1068,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-SIDE-01-002 · Secret 不经 artifact 侧信道绕过脱敏外泄 confirmed
+## 失败分诊 · SEC-SIDE-01-002 · Secret 不经 artifact 侧信道绕过脱敏外泄 confirm
 **重跑 (dispatch)**: FAILED · [9b1a2c9f...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/e372cfd4a131418cb1b00432a217ff8f/job/19962f85c3be4d7cb165bf8a67a94302)
 
 **判定结果**: FAIL
