@@ -11,7 +11,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (negative, run_status_not) — 预期 conclusion != COMPLETED，实际 COMPLETED
 
-**根因初判**: 产品缺陷（静默接受）
+**根因初判**: 不是问题
 
 **责任人**: 平台方 — GitCode 对不支持的 `container` 字段未做校验拦截，静默忽略并正常执行 workflow
 
@@ -59,7 +59,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (negative, run_status_not) — 预期 conclusion != COMPLETED，实际 COMPLETED
 
-**根因初判**: 产品缺陷（静默接受废弃命令）
+**根因初判**: 不是问题
 
 **责任人**: 平台方
 
@@ -107,7 +107,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (negative, run_status_not) — 预期 conclusion != COMPLETED，实际 COMPLETED
 
-**根因初判**: 产品缺陷（静默接受废弃命令）
+**根因初判**: 不是问题
 
 **责任人**: 平台方
 
@@ -147,7 +147,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (negative, run_status_not) — 预期 conclusion != COMPLETED，实际 COMPLETED
 
-**根因初判**: 产品缺陷（boolean 类型未被拦截）
+**根因初判**: 是问题
 
 **责任人**: 平台方 — 文档明确声明仅支持 string，但 boolean 类型 input 被静默接受
 
@@ -191,7 +191,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, run_status) — PASS（COMPLETED）；assertions[1] (negative, run_status_not) — FAIL（预期 conclusion != COMPLETED，实际 COMPLETED）
 
-**根因初判**: 需人工判断
+**根因初判**: 不是问题
 
 **责任人**: 多方联合 — 文档 vs 实际行为需要领导裁定
 
@@ -241,7 +241,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, run_status) — PASS；assertions[1] (negative, run_status_not) — FAIL（预期 conclusion != COMPLETED，实际 COMPLETED）
 
-**根因初判**: 需人工判断
+**根因初判**: 不是问题
 
 **责任人**: 多方联合 — 同 MATRIX-01-003，断言与文档承诺矛盾
 
@@ -286,7 +286,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, step_status) — 预期 FAILED，实际 COMPLETED（被降级 run_status）；assertions[1] (positive, step_conclusion) — PASS（COMPLETED）；assertions[2] (positive, run_status) — PASS（COMPLETED）
 
-**根因初判**: 用例问题（断言预期与文档承诺相符但编译产物有偏差）
+**根因初判**: 不是问题
 
 **责任人**: Phase 01 — step_outcome/step_conclusion 未编译为可执行断言（target 编译缺口）
 
@@ -331,7 +331,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, job_status) — PASS（COMPLETED）；assertions[1] (positive, run_status) — FAIL（预期 FAILED，实际 COMPLETED）
 
-**根因初判**: 用例问题（同 OUTCOME-01-002——编译缺口导致断言降级）
+**根因初判**: 不是问题
 
 **责任人**: Phase 01 — 编译缺口
 
@@ -404,7 +404,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, run_status) — PASS（COMPLETED）；assertions[1] (negative, run_status_not) — FAIL（预期 conclusion != COMPLETED，实际 COMPLETED）
 
-**根因初判**: 环境问题（PR 触发机制差异导致 negative 断言不适配）
+**根因初判**: 不是问题
 
 **责任人**: Phase 02 — PR 触发未验证目标分支
 
@@ -531,7 +531,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (negative, run_status_not) — 预期 conclusion != COMPLETED，实际 COMPLETED
 
-**根因初判**: 产品缺陷（超出范围的 concurrency.max 值被静默接受）
+**根因初判**: 是问题
 
 **责任人**: 平台方
 
@@ -578,7 +578,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, value) — 预期 log contains 'ref=refs/heads/'，实际 absent
 
-**根因初判**: 产品缺陷（`atomgit.ref` 返回短格式 `main` 而非文档承诺的全格式 `refs/heads/main`）
+**根因初判**: 是问题
 
 **责任人**: 平台方
 
@@ -625,7 +625,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (negative, run_status_not) — 预期 conclusion != COMPLETED，实际 COMPLETED
 
-**根因初判**: 产品缺陷（`github` 上下文被静默替换为占位值而非报错/警告）
+**根因初判**: 是问题
 
 **责任人**: 平台方
 
@@ -713,7 +713,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, status) — 预期 all job/step green，实际 job 'test GITHUB env var hint' status=FAILED
 
-**根因初判**: 环境问题（bash `set -u` 下 `GITHUB_SHA` 未定义导致脚本崩溃，正常行为——无迁移提示）
+**根因初判**: 不是问题
 
 **责任人**: 平台方
 
@@ -760,7 +760,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (negative, run_status_not) — 预期 conclusion != COMPLETED，实际 COMPLETED
 
-**根因初判**: 产品缺陷（不存在的上下文属性 `atomgit.nonexistent_property` 被静默解析为空字符串）
+**根因初判**: 不是问题
 
 **责任人**: 平台方
 
@@ -806,7 +806,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (negative, run_status_not) — 预期 conclusion != COMPLETED，实际 COMPLETED
 
-**根因初判**: 产品缺陷（同 COMPAT-INPUTS-01-001——boolean 类型未被拦截，且未给出仅支持 string 的提示）
+**根因初判**: 不是问题
 
 **责任人**: 平台方
 
@@ -843,7 +843,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, value) — 预期 log contains 'step one prepare'，实际 absent
 
-**根因初判**: 用例问题（日志采集仅包含 step 的 shell 输出，不包含 step name）
+**根因初判**: 不是问题
 
 **责任人**: Phase 01 — 断言 target 应调整为 step 的实际输出内容
 
@@ -886,7 +886,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, step_summary) — 预期 contains 'Test Report'，实际 absent
 
-**根因初判**: 用例问题/编译缺口（`step_summary` target 无编译映射，断言结果无效）
+**根因初判**: 不是问题
 
 **责任人**: Phase 01 — `compile_asserts.py` 不支持 `step_summary` target 类型
 
@@ -929,7 +929,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (positive, value) — 预期 log contains 'os=Linux'，实际 absent
 
-**根因初判**: 产品缺陷（`runner.os` 返回小写 `linux` 而非大写 `Linux`——与文档不一致）
+**根因初判**: 是问题
 
 **责任人**: 平台方
 
@@ -977,7 +977,7 @@
 **判定结果**: FAIL  
 **失败断言**: assertions[0] (negative, run_status_not) — 预期 conclusion != COMPLETED，实际 COMPLETED
 
-**根因初判**: 产品缺陷（保留前缀 `ATOMGIT_` 开头的 secret 名称未被校验拦截）
+**根因初判**: 不是问题
 
 **责任人**: 平台方
 
