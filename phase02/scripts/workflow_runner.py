@@ -458,6 +458,8 @@ def _validate_workflow_syntax(workflow_yaml):
             errors.append(f"job '{jid}' 非映射"); continue
         if not job.get("name"):
             errors.append(f"job '{jid}' 缺 name（平台报 name cannot be empty）")
+        if job.get("uses"):
+            continue  # workflow_call 调用 job：不需要 runs-on/steps，跳过后续检查
         ro = job.get("runs-on")
         if not isinstance(ro, list):
             errors.append(f"job '{jid}' runs-on 须用数组格式 [ubuntu-latest, x64, small]，实得 {type(ro).__name__}")
