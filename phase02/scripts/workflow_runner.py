@@ -178,9 +178,12 @@ def api_get(cfg, path, retries=2):
     raise last or ApiError(f"unknown error on {path}")
 
 
-def api_post(cfg, path, body, retries=1):
-    """POST {api_base}/api/v5/repos/{owner}/{repo}{path}。用 access_token 认证。"""
-    url = f"{cfg.api_base}/api/v5/repos/{cfg.owner}/{cfg.repo}{path}?access_token={cfg.token}"
+def api_post(cfg, path, body, retries=1, token_override=None):
+    """POST {api_base}/api/v5/repos/{owner}/{repo}{path}。用 access_token 认证。
+    token_override: 非空时替换 cfg.token（如 contributor token 场景）。
+    """
+    token = token_override or cfg.token
+    url = f"{cfg.api_base}/api/v5/repos/{cfg.owner}/{cfg.repo}{path}?access_token={token}"
     data = json.dumps(body).encode("utf-8")
     last = None
     for attempt in range(retries + 1):
@@ -881,35 +884,35 @@ def trigger_pr(ws, cfg, case_id, workflow_yaml, fetch_logs=False):
         return _exec_result("ENV_ERROR", case_id, reason=str(e), t0=t0)
 
 
-def trigger_comment(ws, cfg, case_id, workflow_yaml, fetch_logs=False):
-    """评论触发链路：deploy → 建分支+开PR → 发评论（v5 API）→ 轮询 match run。
+def trigger_comment(ws, cfg, case_id, workflow_yaml, fetch_logs=False,
+                    contributor_token=None):
+    """评论触发链路：deploy → 建 Issue → 发评论 → 轮询 run。
 
     issue_comment / pull_request_comment 共用此实现。
-    评论端点为 POST /api/v5/repos/{owner}/{repo}/pulls/{pr_id}/comments（经实测验证 HTTP 201）。
+    contributor_token：非空时用此 token 发评论（模拟 untrusted_contributor）。
+    ★event 名未知：match_event=None 不过滤 event，只按 file_path 匹配。
     """
     t0 = time.time()
     try:
         sha, wf_filename, _ = deploy(ws, cfg, case_id, workflow_yaml)
         if not sha:
             return _exec_result("ENV_ERROR", case_id, reason="git push 失败", t0=t0)
-        cmt_branch = f"cmt-{case_id.lower().replace('_','-')}"
-        rc, out = _sh(f"git checkout -b {cmt_branch}", cwd=ws.repo_dir)
-        rc, out = _sh(f"git push origin {cmt_branch}", cwd=ws.repo_dir)
-        if rc != 0:
-            return _exec_result("ENV_ERROR", case_id, reason=f"git push branch 失败: {out[-200:]}", t0=t0)
-        code, pr_resp = api_post(cfg, "/pulls",
-                                 {"title": f"test: {case_id}", "head": cmt_branch, "base": cfg.branch})
+        # 建 Issue
+        code, issue_resp = api_post(cfg, "/issues",
+                                    {"title": f"test: {case_id}", "body": "trigger"})
         if code not in (200, 201):
-            return _exec_result("ENV_ERROR", case_id, reason=f"创建 PR 失败 HTTP {code}", t0=t0)
-        pr_id = pr_resp.get("number") or pr_resp.get("id") or pr_resp.get("iid")
-        log(f"  PR #{pr_id} created, posting comment...")
-        code, cmt_resp = api_post(cfg, f"/pulls/{pr_id}/comments",
-                                  {"body": f"trigger: {case_id}"})
+            return _exec_result("ENV_ERROR", case_id, reason=f"创建 issue 失败 HTTP {code}", t0=t0)
+        issue_id = issue_resp.get("number") or issue_resp.get("id") or issue_resp.get("iid")
+        log(f"  issue #{issue_id} created")
+        # 发评论（untrusted 用 contributor_token）
+        cmt_token = contributor_token or None
+        code, _ = api_post(cfg, f"/issues/{issue_id}/comments",
+                           {"body": f"trigger: {case_id}"},
+                           token_override=cmt_token)
         if code not in (200, 201):
-            return _exec_result("ENV_ERROR", case_id,
-                                reason=f"发评论失败 HTTP {code}", t0=t0)
-        log(f"  comment posted on PR #{pr_id}")
-        run = poll_run(cfg, sha, wf_filename, match_event="MR")
+            return _exec_result("ENV_ERROR", case_id, reason=f"发 issue 评论失败 HTTP {code}", t0=t0)
+        log(f"  issue comment posted on #{issue_id}")
+        run = poll_run(cfg, sha, wf_filename, match_event=None)
         if run is None:
             return _exec_result("NO_RUN", case_id, head_sha=sha, t0=t0)
         if run.get("status") not in _TERMINAL:

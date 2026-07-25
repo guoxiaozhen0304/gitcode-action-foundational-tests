@@ -186,14 +186,18 @@ def run_pool(run_id, only=None, no_logs=False):
                     ev = (contract_doc.get("trigger") or {}).get("event", "push")
                     trig_as = (contract_doc.get("trigger") or {}).get("as", "maintainer")
                     if trig_as == "untrusted_contributor":
-                        verdict = {"verdict": "INCONCLUSIVE", "verdict_flags": [],
-                                   "reason": "untrusted_contributor 执行路径未实现，拒绝以 maintainer 假验证", "assertion_results": []}
-                        rec = rc.write_result(run_dir, contract_doc, verdict,
-                                              {"status": "INCONCLUSIVE", "case_id": cid})
-                        rc.update_summary(run_dir, rec)
-                        _bump_state(state, "INCONCLUSIVE", run_dir)
-                        _print_verdict(cid, "INCONCLUSIVE(untrusted_contributor guard)")
-                        continue
+                        cp = os.path.expanduser("~/.gitcode-contributor-token")
+                        if ev in ("issue_comment", "pull_request_comment") and os.path.exists(cp):
+                            pass  # 有 contributor token + issue_comment → 放行
+                        else:
+                            verdict = {"verdict": "INCONCLUSIVE", "verdict_flags": [],
+                                       "reason": "untrusted_contributor 执行路径未实现，拒绝以 maintainer 假验证", "assertion_results": []}
+                            rec = rc.write_result(run_dir, contract_doc, verdict,
+                                                  {"status": "INCONCLUSIVE", "case_id": cid})
+                            rc.update_summary(run_dir, rec)
+                            _bump_state(state, "INCONCLUSIVE", run_dir)
+                            _print_verdict(cid, "INCONCLUSIVE(untrusted_contributor guard)")
+                            continue
                     ok2, reason = wr.trigger_supported(ev)
                     if not ok2:
                         verdict = {"verdict": "INCONCLUSIVE", "verdict_flags": [],
@@ -264,8 +268,7 @@ def run_pool(run_id, only=None, no_logs=False):
                         rc_t, out_t = wr._sh(f"git tag {tag} && git push origin {tag}", cwd=ws.repo_dir)
                         if rc_t != 0:
                             wr.log(f"  tag push 失败: {out_t[-150:]}")
-                    if ev in ("pr", "pull_request", "pull_request_target",
-                               "issue_comment", "pull_request_comment"):
+                    if ev in ("pr", "pull_request", "pull_request_target"):
                         pr_branch = f"pr-{cid.lower()[:20].replace('_','-')}-{int(time.time())%100000}"
                         wr._sh(f"git checkout -b {pr_branch}", cwd=ws.repo_dir)
                         rc_t, out_t = wr._sh(f"git push origin {pr_branch}", cwd=ws.repo_dir)
@@ -281,18 +284,28 @@ def run_pool(run_id, only=None, no_logs=False):
                             if code in (200, 201):
                                 pr_id = presp.get("number") or presp.get("id") or presp.get("iid")
                                 wr.log(f"  PR created: id={pr_id}")
-                                if ev in ("issue_comment", "pull_request_comment"):
-                                    code2, _ = wr.api_post(cfg, f"/pulls/{pr_id}/comments",
-                                                           {"body": f"trigger: {cid}"})
-                                    wr.log(f"  comment posted: {'HTTP '+str(code2) if code2 not in (200,201) else 'ok'}")
                             else:
                                 wr.log(f"  创建 PR 失败 HTTP {code}")
                         else:
                             wr.log(f"  pr branch push 失败: {out_t[-150:]}")
-                    # PR 分支操作后，无论成功失败，切回主分支，避免下条用例 deploy 在 PR 分支上
-                    if ev in ("pr", "pull_request", "pull_request_target",
-                               "issue_comment", "pull_request_comment"):
-                        wr._sh(f"git checkout {cfg.branch}", cwd=ws.repo_dir)
+                    if ev in ("issue_comment", "pull_request_comment"):
+                        code, issue_resp = wr.api_post(cfg, "/issues",
+                                                       {"title": f"test: {cid}", "body": "trigger"})
+                        if code in (200, 201):
+                            issue_id = issue_resp.get("number") or issue_resp.get("id") or issue_resp.get("iid")
+                            wr.log(f"  issue #{issue_id} created")
+                            trig_as = (contract_doc.get("trigger") or {}).get("as", "")
+                            cmt_token = None
+                            if trig_as == "untrusted_contributor":
+                                cp = os.path.expanduser("~/.gitcode-contributor-token")
+                                if os.path.exists(cp):
+                                    cmt_token = open(cp, encoding="utf-8").read().strip()
+                            code2, _ = wr.api_post(cfg, f"/issues/{issue_id}/comments",
+                                                   {"body": f"trigger: {cid}"},
+                                                   token_override=cmt_token)
+                            wr.log(f"  issue comment: {'ok' if code2 in (200,201) else 'HTTP '+str(code2)}")
+                        else:
+                            wr.log(f"  创建 issue 失败 HTTP {code}")
                     in_flight.append({"cid": cid, "repo_cfg": cfg, "ws": ws,
                                       "trigger_event": ev,
                                       "sha": sha, "wf_filename": wf_filename,
