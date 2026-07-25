@@ -1069,14 +1069,14 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 ---
 
 ## 失败分诊 · SEC-SIDE-01-002 · Secret 不经 artifact 侧信道绕过脱敏外泄
-**重跑 (dispatch)**: FAILED · [9b1a2c9f...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/9b1a2c9fcefa4db19cccff80004475a4)
+**重跑 (dispatch)**: FAILED · [9b1a2c9f...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/e372cfd4a131418cb1b00432a217ff8f/job/19962f85c3be4d7cb165bf8a67a94302)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (run_status, positive) — 预期 BLOCKED_OR_MASKED，实际 FAILED
 
-**根因初判**: 环境问题（artifact 名称冲突）
+**根因初判**: secret is not empty
 
-**责任人**: Phase 02
+**责任人**: 平台方
 
 **证据**:
 - **Job 日志全量**（26 行，关键部分第 26 行）:
