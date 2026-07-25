@@ -19,6 +19,8 @@ workflow: |
             git clone https://x-access-token:${{ atomgit.token }}@atomgit.com/${{ atomgit.repository }}.git repo
             cd repo
             echo test > test.txt
+            git config --global user.email "you@example.com"
+            git config --global user.name "Your Name"
             git add test.txt
             git commit -m test
             git push origin main || echo push denied as expected

@@ -23,12 +23,14 @@ workflow: |
       steps:
         - name: Push code
           run: |
+            git clone https://x-access-token:${{ atomgit.token }}@atomgit.com/${{ atomgit.repository }}.git repo
+            cd repo
             git config user.email "test@test.com"
             git config user.name "Test"
             echo "change" >> README.md
             git add README.md
             git commit -m "test"
-            git push https://x-access-token:$ATOMGIT_TOKEN@${{ atomgit.server_url }}/${{ atomgit.repository }}.git HEAD:${{ atomgit.ref }}
+            git push https://x-access-token:$ATOMGIT_TOKEN@atomgit.com/${{ atomgit.repository }}.git HEAD:${{ atomgit.ref }}
 
 trigger:
   event: workflow_dispatch
