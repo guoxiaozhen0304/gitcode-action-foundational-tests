@@ -82,12 +82,14 @@ No:
 
 ---
 
-## 失败分诊 · COMP-PERMS-01-001 · permissions 空对象时 ATOMGIT_TOKEN 仅 repository read
+## 失败分诊 · COMP-PERMS-01-001 · permissions 空对象时 ATOMGIT_TOKEN 仅 repository read  confirmed
 
-**判定结果**: FAIL
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/7a8f6fd20eee4a148c350ffff583638b/job/5f5785b1ed5845fa9454463f0d18ba4e)
+
+**判定结果**: success
 **失败断言**: assertions[0] (run_status_not, negative) — PASS (conclusion != COMPLETED, actual=FAILED ✓); assertions[1] (value, positive, target=run_logs) — 预期 log contains '403'，实际 absent
 
-**根因初判**: you are not in git repo
+**根因初判**: 
 
 **责任人**: Phase 01
 
@@ -100,6 +102,9 @@ No:
 - **实际行为**: job FAILED 但零 shell 输出。run_status_not 断言已 PASS (conclusion!=COMPLETED)，说明 write 操作被阻止了（job 未跑完=权限阻止生效）。但 value 断言 '403' absent 是因为 job 根本没有 shell 输出可检查。
 - **对照 GitCode 规格** `token-permissions.md` 第 103 行: "`permissions: {}`（空）| ATOMGIT_TOKEN 仅拥有最小默认权限（repository:read）"
 - **分析**: 负向断言已 PASS，说明平台正确阻止了写操作（permissions: {} → write denied → job FAILED）。value 断言检查 logs 含 '403' 失败是因为 job 在 shell 执行前即终止，不是平台实现问题。
+
+fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/foundational-tests.git/'
+::error::Process exited with code 128
 
 **置信度**: 中 — 负向断言已 PASS 佐证权限控制正确，value 缺失是因 job 提前终止无 log。
 
@@ -114,14 +119,14 @@ No:
 
 ---
 
-## 失败分诊 · COMP-PERMS-01-002 · 声明 repository write 后 TOKEN 可推送代码
-
+## 失败分诊 · COMP-PERMS-01-002 · 声明 repository write 后 TOKEN 可推送代码 confirmed
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/3891a055808d4f5d8989b96fbeb5240c/job/01cb1986b9114777a52acaf09f531feb)
 **判定结果**: FAIL
 **失败断言**: assertions[0] (run_status, positive, target=run_status) — 预期 COMPLETED，实际 FAILED
 
-**根因初判**: 需人工判断
+**根因初判**: no push permission
 
-**责任人**: 多方联合
+**责任人**: 平台方
 
 **证据**:
 - **Job 日志全量**（1 行，无 shell 脚本输出）:
@@ -144,7 +149,7 @@ No:
 
 ---
 
-## 失败分诊 · COMP-PERMS-01-003 · fork PR 的 pull_request 下声明 write 仍仅 read
+## 失败分诊 · COMP-PERMS-01-003 · fork PR 的 pull_request 下声明 write 仍仅 read confirmed
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (run_status_not, negative) — PASS (conclusion != SUCCESS_WITH_WRITE, actual=COMPLETED ✓); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'write failed as expected'，实际 absent
@@ -248,9 +253,9 @@ No:
 
 ---
 
-## 失败分诊 · COMP-SECRET-01-001 · echo secret 在日志中被脱敏为 ***
-
-**判定结果**: FAIL
+## 失败分诊 · COMP-SECRET-01-001 · echo secret 在日志中被脱敏为 *** confirmed
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/351aaec6832f40ea879e6b6f065df368)
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (value, positive, target=run_logs) — 预期 log contains '***'，实际 absent; assertions[1] (config_probe) — PASS (configured)
 
 **根因初判**: 用例问题（断言设计缺陷 — 正常脱敏行为被误判为失败）
@@ -282,8 +287,8 @@ No:
 
 ---
 
-## 失败分诊 · COMP-ARTIFACT-01-001 · artifact 可在同 workflow 的 job 间正确传递
-**重跑 (dispatch)**: FAILED · [ebf8c920...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/ebf8c920549d4bd381569ea2f70c54bd)
+## 失败分诊 · COMP-ARTIFACT-01-001 · artifact 可在同 workflow 的 job 间正确传递 confirmed
+**重跑 (dispatch)**: SUCCESS · [ebf8c920...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/f0bfdb7b132d49188e27cbc46a12c2c7)
 
 **判定结果**: SUCCESS
 **失败断言**: assertions[0] (run_status, positive) — 预期 COMPLETED，实际 FAILED; assertions[1] (value, positive, target=run_logs) — 预期 log contains 'hello artifact'，实际 absent
@@ -313,14 +318,14 @@ No:
 
 ---
 
-## 失败分诊 · COMP-ARTIFACT-01-002 · 下载全部制品功能正常
-
-**判定结果**: FAIL
+## 失败分诊 · COMP-ARTIFACT-01-002 · 下载全部制品功能正常 confirmed
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/a9e43266e1d8438eb9c791b1fa972849)
+**判定结果**: SUCCESS 
 **失败断言**: assertions[0] (run_status, positive) — 预期 COMPLETED，实际 FAILED; assertions[1] (value) — 预期 'app' absent; assertions[2] (value) — 预期 'report' absent
 
-**根因初判**: 需人工判断
+**根因初判**: 
 
-**责任人**: 多方联合
+**责任人**: 
 
 **证据**:
 - **预期行为**: upload 多个 artifact, download all, 验证全部下载成功。
@@ -337,14 +342,14 @@ No:
 
 ---
 
-## 失败分诊 · COMP-ARTIFACT-01-003 · artifact 保留期设置生效
-
-**判定结果**: FAIL
+## 失败分诊 · COMP-ARTIFACT-01-003 · artifact 保留期设置生效 confirmed
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/168aaa22139b4c2d8801f67cdf0e92a2/workflow)
+**判定结果**: PEDING
 **失败断言**: assertions[0] (status, positive) — 预期 all job/step green，实际 job 'Upload with short retention' status=FAILED
 
-**根因初判**: 需人工判断
+**根因初判**: 
 
-**责任人**: 多方联合
+**责任人**: 
 
 **证据**:
 - **预期行为**: upload-artifact 设置 retention-days 短期保留。
@@ -387,12 +392,14 @@ No:
 
 ## 失败分诊 · COMP-SUMMARY-01-001 · ATOMGIT_STEP_SUMMARY Markdown 表格与标题正确渲染
 
-**判定结果**: FAIL
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/0580293ec3e84a32b2b0f43458ccbbbb)
+
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (value, positive, target=run_logs) — 预期 log contains 'Test Summary'，实际 absent; assertions[1] (value) — 预期 log contains '<table>'，实际 absent
 
-**根因初判**: 用例问题（target 类型不支持）
+**根因初判**: dont support Step Summary Markdown 在 UI 中渲染为表格和标题
 
-**责任人**: Phase 01（编译缺口）
+**责任人**: 
 
 **证据**:
 - **Job 日志全量**（4 行，零 shell 输出）:
@@ -760,10 +767,10 @@ No:
 
 ---
 
-## 失败分诊 · SEC-MASK-01-001 · Secret 值在运行日志中必须被自动脱敏为 ***
+## 失败分诊 · SEC-MASK-01-001 · Secret 值在运行日志中必须被自动脱敏为 *** confirmed
 **重跑 (dispatch)**: COMPLETED · [3b9c05d7...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/3b9c05d741ef486489c9ea06a4e1b1bd)
 
-**判定结果**: FAIL
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'masked_with_asterisks'，实际 absent
 
 **根因初判**: 标记不匹配
@@ -794,10 +801,10 @@ No:
 
 ---
 
-## 失败分诊 · SEC-MASK-01-005 · Secret 日志脱敏不可通过多行值输出绕过
+## 失败分诊 · SEC-MASK-01-005 · Secret 日志脱敏不可通过多行值输出绕过 confirmed
 **重跑 (dispatch)**: COMPLETED · [f042e198...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/f042e19867ce4375982a4f881c543e83)
 
-**判定结果**: FAIL
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'multiline_masked_with_asterisks'，实际 absent
 
 **根因初判**: 标记不匹配
@@ -828,15 +835,15 @@ No:
 
 ---
 
-## 失败分诊 · SEC-NAME-01-001 · Secret/变量名含特殊字符时不可导致意外求值或权限绕过
+## 失败分诊 · SEC-NAME-01-001 · Secret/变量名含特殊字符时不可导致意外求值或权限绕过 confirmed
 **重跑 (dispatch)**: COMPLETED · [61c1ed14...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/61c1ed147a544bae8e05b05725d5b6b7)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (run_status, positive) — 预期 SUCCESS_OR_YAML_ERROR，实际 COMPLETED
 
-**根因初判**: 标记不匹配
+**根因初判**: 标记不匹配  secret doesnt support the my-var
 
-**责任人**: Phase 01
+**责任人**: Phase 01  
 
 **证据**:
 - **Job 日志全量**（5 行）:
@@ -862,15 +869,15 @@ No:
 
 ---
 
-## 失败分诊 · SEC-NAME-01-002 · 通过 printenv 或进程枚举获取 ATOMGIT_TOKEN/secrets 时日志中必须保持脱敏
-**重跑 (dispatch)**: FAILED · [1ea72d07...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/1ea72d07dbf04366becc0c98ff2abd47)
+## 失败分诊 · SEC-NAME-01-002 · 通过 printenv 或进程枚举获取 ATOMGIT_TOKEN/secrets 时日志中必须保持脱敏 confirmed
+**重跑 (dispatch)**: SUCCESS · [1ea72d07...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/371a6021781e4109ae861b2dd0c0defb/job/ebe4853b45be4beeb0f85a5ffec347e3)
 
-**判定结果**: FAIL
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'masked_or_not_found'，实际 absent
 
-**根因初判**: 需人工判断
+**根因初判**: 
 
-**责任人**: 多方联合
+**责任人**: 
 
 **证据**:
 - **Job 日志全量**（3 行，零 shell 输出）:
@@ -926,7 +933,7 @@ No:
 
 ---
 
-## 失败分诊 · SEC-PERM-01-004 · 默认状态下写操作被 403 拒绝
+## 失败分诊 · SEC-PERM-01-004 · 默认状态下写操作被 403 拒绝 confirmed
 **重跑 (dispatch)**: success · [14fe1eb6...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/c5a623954a6b426c844a7ce7d00a9361/job/b8b64270d01c4719bbff4246511543eb)
 
 **判定结果**: success
