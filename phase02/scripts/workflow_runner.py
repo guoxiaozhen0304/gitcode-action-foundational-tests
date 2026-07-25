@@ -243,7 +243,7 @@ def list_workflows(cookie, project_path):
 
 def dispatch_workflow(cookie, project_path, workflow_id, file_path,
                       ref, branch, repo_https_url, inputs=None):
-    """手动触发一次 workflow 运行。返回 (status_code, workflow_run_id_or_None)。
+    """手动触发一次 workflow 运行。返回 (status_code, workflow_run_id_or_None, err_msg)。
     接口: POST web-api.gitcode.com/api/v2/projects/{enc}/actions/workflows/{wf_id}/dispatch
     """
     headers = _build_web_headers(cookie)
@@ -261,15 +261,18 @@ def dispatch_workflow(cookie, project_path, workflow_id, file_path,
     try:
         with urllib.request.urlopen(req, timeout=30) as r:
             body = json.loads(r.read().decode("utf-8", errors="replace"))
-        return r.status, body.get("workflow_run_id")
+        return r.status, body.get("workflow_run_id"), ""
     except urllib.error.HTTPError as e:
         try:
             body = json.loads(e.read().decode("utf-8", errors="replace"))
         except Exception:
             body = {}
-        return e.code, body.get("workflow_run_id")
-    except Exception:
-        return -1, None
+        err = body.get("message") or body.get("error") or body.get("msg") or body.get("detail") or ""
+        if not err:
+            err = json.dumps(body, ensure_ascii=False)[:300]
+        return e.code, body.get("workflow_run_id"), str(err)
+    except Exception as ex:
+        return -1, None, f"{type(ex).__name__}: {ex}"
 
 
 # ── git shell ─────────────────────────────────────────────────────
@@ -325,7 +328,7 @@ _CASE_ID_RE = re.compile(r"^(COMP|COMPAT|REL|SEC|USE)-[A-Z0-9]+(?:-[A-Z0-9]+)*-\
 _CASE_DIMS = {"completeness", "compatibility", "reliability", "security", "usability"}
 _CASE_PRIOS = {"P0", "P1", "P2"}
 _CASE_ATYPES = {"positive", "negative", "nonfunctional"}
-_CASE_INTENT_RE = re.compile(r"^INTENT-(COMP|COMPAT|REL|SEC|USE|ACT)-[0-9]+$")
+_CASE_INTENT_RE = re.compile(r"^(INTENT-(COMP|COMPAT|REL|SEC|USE|ACT)(-NEW)?-[0-9]+|KEEP-TC-[0-9~]+)$")
 _CASE_TRIGGER_EVENTS = {"push", "pr", "pull_request", "fork_pr", "pull_request_target",
                         "pull_request_comment", "manual", "schedule", "tag",
                         "workflow_dispatch", "issue_comment"}
@@ -333,6 +336,9 @@ _CASE_TRIGGER_AS = {"maintainer", "untrusted_contributor"}
 _CASE_RESETS = {"fixture", "full_instance", "none"}
 _CASE_FI_AT = {"pre_job", "mid_job", "post_job"}
 _CASE_FI_ACTION = {"kill_runner", "network_partition", "disk_full", "cpu_saturate", "concurrent_flood"}
+# 破坏性 action（会改宿主持久状态，reset=none 不可接受）
+_DESTRUCTIVE_FI_ACTIONS = {"kill_runner", "network_partition", "disk_full", "cpu_saturate"}
+# concurrent_flood：瞬态并发注入、进程退出即恢复，reset=none 可接受
 
 
 def _validate_case_contract(contract):
@@ -408,11 +414,13 @@ def _validate_case_contract(contract):
         if td.get("reset") not in _CASE_RESETS:
             errs.append(f"teardown.reset 非法: {td.get('reset')}（合法值: {sorted(_CASE_RESETS)}）")
 
-    # fault_injection 业务校验：破坏性用例 teardown.reset 不得为 none
+    # fault_injection 校验：仅破坏性 action 不得 reset=none
     fi = contract.get("fault_injection")
     if isinstance(fi, dict):
         if isinstance(td, dict) and td.get("reset") == "none":
-            errs.append("fault_injection 用例 teardown.reset 不得为 none")
+            if fi.get("action") in _DESTRUCTIVE_FI_ACTIONS:
+                errs.append(f"fault_injection action={fi['action']} 为破坏性注入，teardown.reset 不得为 none")
+            # concurrent_flood 等瞬态注入：reset=none 放行
         if fi.get("at") not in _CASE_FI_AT:
             errs.append(f"fault_injection.at 非法: {fi.get('at')}（合法值: {sorted(_CASE_FI_AT)}）")
         if fi.get("action") not in _CASE_FI_ACTION:
@@ -775,12 +783,12 @@ def trigger_dispatch(ws, cfg, case_id, workflow_yaml, fetch_logs=False):
             return _exec_result("INCONCLUSIVE", case_id,
                                 reason=f"list_workflows 未找到匹配 {wf_filename} 的 workflow_id", t0=t0)
         repo_https_url = f"https://gitcode.com/{cfg.owner}/{cfg.repo}.git"
-        code, run_id = dispatch_workflow(cfg.cookie, project_path, wf_id,
+        code, run_id, err_msg = dispatch_workflow(cfg.cookie, project_path, wf_id,
                                          wf_file_path, cfg.branch, cfg.branch,
                                          repo_https_url)
         if code != 200 or not run_id:
-            return _exec_result("ENV_ERROR", case_id,
-                                reason=f"dispatch_workflow 返回 HTTP {code}, run_id={run_id}", t0=t0)
+            reason = f"dispatch_workflow 返回 HTTP {code}: {err_msg}" if err_msg else f"dispatch_workflow 返回 HTTP {code}, run_id={run_id}"
+            return _exec_result("ENV_ERROR", case_id, reason=reason, t0=t0)
         log(f"  dispatch: workflow_run_id={run_id}")
         run = _poll_run_by_id(cfg, run_id)
         if run is None:

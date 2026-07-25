@@ -414,14 +414,36 @@ def _record_direct(run_dir, state, contract_doc, cid, status, reason="", t0=None
 
 
 def _dispatch_inputs(contract_doc):
-    """Return explicit workflow_dispatch inputs from trigger.params, if present."""
+    """Return workflow_dispatch inputs with defaults from workflow on.workflow_dispatch.inputs.
+    trigger.params 覆盖 workflow default（params 优先），无 default 的不补。
+    """
     params = ((contract_doc.get("trigger") or {}).get("params") or {})
     if not isinstance(params, dict):
-        return {}
-    nested = params.get("inputs")
-    if isinstance(nested, dict):
-        return nested
-    return params
+        params = {}
+    user_inputs = params.get("inputs")
+    if not isinstance(user_inputs, dict):
+        user_inputs = {}
+    # 合并 workflow default
+    result = dict(user_inputs)
+    wf_str = contract_doc.get("workflow", "")
+    if wf_str:
+        try:
+            import yaml
+            wf_doc = yaml.safe_load(wf_str)
+        except Exception:
+            wf_doc = {}
+        if isinstance(wf_doc, dict):
+            wf_on = wf_doc.get("on") or wf_doc.get(True)  # YAML 1.1 on→True
+            if wf_on == "workflow_dispatch":
+                pass  # inline string, no inputs
+            elif isinstance(wf_on, dict):
+                wd = wf_on.get("workflow_dispatch", {})
+                if isinstance(wd, dict):
+                    wf_inputs = wd.get("inputs") or {}
+                    for key, spec in wf_inputs.items():
+                        if isinstance(spec, dict) and "default" in spec and key not in result:
+                            result[key] = spec["default"]
+    return result
 
 
 def _start_dispatch(cfg, wf_filename, contract_doc):
@@ -448,11 +470,11 @@ def _start_dispatch(cfg, wf_filename, contract_doc):
         return None, f"list_workflows 未找到匹配 {wf_filename} 的 workflow_id"
 
     repo_https_url = f"https://gitcode.com/{cfg.owner}/{cfg.repo}.git"
-    code, run_id = wr.dispatch_workflow(cfg.cookie, project_path, wf_id, wf_file_path,
-                                        cfg.branch, cfg.branch, repo_https_url,
-                                        inputs=_dispatch_inputs(contract_doc))
+    code, run_id, err_msg = wr.dispatch_workflow(cfg.cookie, project_path, wf_id, wf_file_path,
+                                         cfg.branch, cfg.branch, repo_https_url,
+                                         inputs=_dispatch_inputs(contract_doc))
     if code != 200 or not run_id:
-        return None, f"dispatch_workflow 返回 HTTP {code}, run_id={run_id}"
+        return None, f"dispatch_workflow 返回 HTTP {code}: {err_msg}" if err_msg else f"dispatch_workflow 返回 HTTP {code}, run_id={run_id}"
     wr.log(f"  dispatch: workflow_run_id={run_id}")
     return run_id, ""
 
