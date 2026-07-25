@@ -1,0 +1,28 @@
+assertions:
+- equals: no_run_on_non_default_branch
+  target: run_created
+  type: negative
+dimension: completeness
+dimensions:
+- completeness
+- compatibility
+fault_injection: null
+id: COMP-SCHEDULE-01-002
+intent_ref: INTENT-COMP-005
+priority: P1
+setup:
+  branch_protection: default
+  repo_fixture: multi-branch
+  secrets: []
+  variables: {}
+teardown:
+  reset: none
+title: 非默认分支的 schedule workflow 不应触发
+trigger:
+  as: maintainer
+  event: schedule
+  params: {}
+workflow: "on:\n  schedule:\n    - cron: \"0 30 16 * * ?\"\njobs:\n  verify:\n   \
+  \ name: Verify schedule non default branch\n    runs-on: [dedicate-hosted, x64,\
+  \ large]\n    steps:\n      - name: Echo scheduled\n        run: |\n          echo\
+  \ \"should not run\"\n"

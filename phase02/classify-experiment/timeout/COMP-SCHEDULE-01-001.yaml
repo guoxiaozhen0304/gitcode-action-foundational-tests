@@ -1,0 +1,31 @@
+assertions:
+- equals: success
+  target: run_status
+  type: positive
+- equals: schedule
+  target: run_event
+  type: positive
+dimension: completeness
+dimensions:
+- completeness
+- compatibility
+fault_injection: null
+id: COMP-SCHEDULE-01-001
+intent_ref: INTENT-COMP-005
+priority: P1
+setup:
+  branch_protection: default
+  repo_fixture: default
+  secrets: []
+  variables: {}
+teardown:
+  reset: none
+title: 合法 cron 在默认分支按时触发
+trigger:
+  as: maintainer
+  event: schedule
+  params: {}
+workflow: "on:\n  schedule:\n    - cron: \"0 30 16 * * ?\"\njobs:\n  verify:\n   \
+  \ name: Verify schedule trigger\n    runs-on: [dedicate-hosted, x64, large]\n  \
+  \  steps:\n      - name: Echo scheduled\n        run: |\n          echo \"scheduled\
+  \ run\"\n"

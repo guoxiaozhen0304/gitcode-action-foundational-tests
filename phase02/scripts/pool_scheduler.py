@@ -22,6 +22,20 @@ import sys
 import json
 import time
 from contextlib import ExitStack
+
+# 单用例超时白名单（秒）：这些用例超出全局默认超时，硬编码映射
+_CASE_TIMEOUT_OVERRIDES = {
+    "REL-DISK-01-018": 900, "REL-DISK-01-019": 900, "REL-LOG-01-040": 900,
+    "REL-LONG-01-043": 22000,
+    "REL-TIMEOUT-01-007": 600, "REL-TIMEOUT-01-008": 600, "REL-TIMEOUT-01-010": 600,
+    "REL-FLOOD-01-036": 600, "REL-FLOOD-01-037": 600,
+    "REL-PATHS-01-014": 600, "REL-PATHS-01-015": 600,
+    "COMP-BOUND-01-084": 600, "COMP-PUSH-01-003": 600,
+    "COMP-TRIG-01-076": 600, "COMP-TRIG-01-077": 600, "COMP-TRIG-01-078": 600,
+    "COMPAT-COMM-01-001": 600, "COMPAT-COMM-01-002": 600,
+    "COMPAT-CONTAINER-01-002": 600, "COMPAT-DIR-01-003": 600,
+    "COMPAT-MATRIX-01-005": 600, "COMPAT-TARGET-01-003": 600,
+}
 from concurrent.futures import ThreadPoolExecutor
 
 import yaml
@@ -363,14 +377,15 @@ def run_pool(run_id, only=None, no_logs=False):
                                          require_sha=(ev == "push"))
                     if r is None:
                         # 还没出现
-                        if time.time() - item["t0"] > case_timeout:
+                        _timeout = _CASE_TIMEOUT_OVERRIDES.get(item["cid"], case_timeout)
+                        if time.time() - item["t0"] > _timeout:
                             _resolve_timeout(run_dir, state, item)
                             in_flight.remove(item)
                         continue
                     if r.get("status") in wr._TERMINAL:
                         _resolve_terminal(run_dir, state, item, r, no_logs)
                         in_flight.remove(item)
-                    elif time.time() - item["t0"] > case_timeout:
+                    elif time.time() - item["t0"] > _CASE_TIMEOUT_OVERRIDES.get(item["cid"], case_timeout):
                         _resolve_timeout(run_dir, state, item)
                         in_flight.remove(item)
 
