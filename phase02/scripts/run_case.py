@@ -200,8 +200,16 @@ def main():
         update_summary(run_dir, rec)
         return
 
-    # 触发方式支持性由 workflow_runner.TRIGGER_STATUS 统一裁定（push 已实现，其余→INCONCLUSIVE+具体原因）
+    # 触发方式支持性由 workflow_runner.TRIGGER_STATUS 统一裁定
     ev = (contract.get("trigger") or {}).get("event", "push")
+    trig_as = (contract.get("trigger") or {}).get("as", "maintainer")
+    if trig_as == "untrusted_contributor":
+        wr.log(f"{cid}: trigger.as=untrusted_contributor → INCONCLUSIVE（执行路径未实现，拒绝以 maintainer 假验证）")
+        verdict = {"verdict": "INCONCLUSIVE", "verdict_flags": [],
+                   "reason": "untrusted_contributor 执行路径未实现，拒绝以 maintainer 假验证", "assertion_results": []}
+        rec = write_result(run_dir, contract, verdict, {"status": "INCONCLUSIVE", "case_id": cid})
+        update_summary(run_dir, rec)
+        return
 
     reset = (contract.get("teardown") or {}).get("reset", "fixture")
     wr.log(f"=== 原生执行 {cid} → {cfg.owner}/{cfg.repo}@{cfg.branch} (teardown={reset}) ===")

@@ -184,6 +184,16 @@ def run_pool(run_id, only=None, no_logs=False):
                         continue
 
                     ev = (contract_doc.get("trigger") or {}).get("event", "push")
+                    trig_as = (contract_doc.get("trigger") or {}).get("as", "maintainer")
+                    if trig_as == "untrusted_contributor":
+                        verdict = {"verdict": "INCONCLUSIVE", "verdict_flags": [],
+                                   "reason": "untrusted_contributor 执行路径未实现，拒绝以 maintainer 假验证", "assertion_results": []}
+                        rec = rc.write_result(run_dir, contract_doc, verdict,
+                                              {"status": "INCONCLUSIVE", "case_id": cid})
+                        rc.update_summary(run_dir, rec)
+                        _bump_state(state, "INCONCLUSIVE", run_dir)
+                        _print_verdict(cid, "INCONCLUSIVE(untrusted_contributor guard)")
+                        continue
                     ok2, reason = wr.trigger_supported(ev)
                     if not ok2:
                         verdict = {"verdict": "INCONCLUSIVE", "verdict_flags": [],
