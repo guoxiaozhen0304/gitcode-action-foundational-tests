@@ -479,7 +479,7 @@ def _start_dispatch(cfg, wf_filename, contract_doc):
     project_path = f"{cfg.owner}/{cfg.repo}"
     wf_id = None
     wf_file_path = None
-    for retry in range(6):
+    for retry in range(12):
         if retry > 0:
             time.sleep(5)
         try:
