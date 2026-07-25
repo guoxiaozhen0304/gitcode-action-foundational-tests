@@ -33,7 +33,7 @@ fault_injection: null
 assertions:
   - type: negative
     target: workflow_parse
-    eval: deterministic
+    eval: llm_assisted
     rubric: "单标签字符串 runs-on 应在解析/校验阶段报错"
   - type: positive
     target: run_logs
@@ -41,7 +41,7 @@ assertions:
     rubric: "错误信息应提示必须使用数组格式或标签匹配失败"
   - type: negative
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "不应出现 RUNSON_STRING_ACCEPTED（不应成功调度执行）"
 
 teardown:

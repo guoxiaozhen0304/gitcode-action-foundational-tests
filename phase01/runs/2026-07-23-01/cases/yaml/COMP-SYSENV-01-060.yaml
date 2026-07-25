@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: ATOMGIT 系统环境变量值正确性
-intent_ref: KEEP-TC-197~222
+intent_ref: INTENT-COMP-059
 setup:
   repo_fixture: default
   secrets: []

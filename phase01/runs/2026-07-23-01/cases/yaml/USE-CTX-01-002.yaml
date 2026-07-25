@@ -36,7 +36,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须同时出现 github 与 atomgit 字样，并给出替换建议"
 
 teardown:

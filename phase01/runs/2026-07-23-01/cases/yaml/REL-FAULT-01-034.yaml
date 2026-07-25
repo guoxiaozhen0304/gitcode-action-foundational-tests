@@ -45,4 +45,4 @@ assertions:
     target: run_logs
     contains: "cache miss"
 teardown:
-  reset: none
+  reset: fixture

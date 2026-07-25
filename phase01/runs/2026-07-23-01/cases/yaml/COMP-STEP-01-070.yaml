@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: step 可选字段 id env if with 验证
-intent_ref: KEEP-TC-279~288
+intent_ref: INTENT-COMP-069
 setup:
   repo_fixture: default
   secrets: []

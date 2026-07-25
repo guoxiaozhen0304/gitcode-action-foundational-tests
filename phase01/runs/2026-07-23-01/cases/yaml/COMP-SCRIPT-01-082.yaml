@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: 脚本权限设置与直接执行验证
-intent_ref: KEEP-TC-431~433
+intent_ref: INTENT-COMP-081
 setup:
   repo_fixture: default
   secrets: []

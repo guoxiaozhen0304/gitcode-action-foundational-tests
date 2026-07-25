@@ -45,15 +45,15 @@ assertions:
     equals: completed_success
   - type: positive
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中应出现 ARTIFACT_UPLOADED_OK"
   - type: nonfunctional
     target: artifact_state
-    eval: deterministic
+    eval: llm_assisted
     rubric: "artifact 应在配置保留期内可下载，超期后被清理或不可访问"
   - type: negative
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "不应出现 retention-days 被静默忽略的提示"
 
 teardown:

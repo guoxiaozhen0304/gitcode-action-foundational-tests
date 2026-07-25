@@ -41,7 +41,7 @@ assertions:
   - type: positive
     target: run_status
     equals: success
-    eval: deterministic
+    eval: llm_assisted
     rubric: "pull_request_target 场景下 workflow 能成功引用 secrets.DEPLOY_TOKEN 并执行完毕"
 
 teardown:

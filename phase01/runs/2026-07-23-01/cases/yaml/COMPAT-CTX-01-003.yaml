@@ -35,6 +35,7 @@ assertions:
   - type: positive
     target: run_status
     equals: success
+    eval: llm_assisted
     rubric: "嵌套属性访问不导致 workflow 崩溃"
   - type: positive
     target: run_logs

@@ -41,7 +41,7 @@ assertions:
   - type: negative
     target: run_status
     equals: failure
-    eval: deterministic
+    eval: llm_assisted
     rubric: "第二次触发不应被标记为失败"
   - type: positive
     target: run_status

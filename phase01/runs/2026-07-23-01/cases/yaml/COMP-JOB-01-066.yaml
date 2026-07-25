@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: job 必填字段 name runs-on steps 验证
-intent_ref: KEEP-TC-264~288
+intent_ref: INTENT-COMP-066
 setup:
   repo_fixture: default
   secrets: []

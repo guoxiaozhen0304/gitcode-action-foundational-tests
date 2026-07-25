@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: 路径与分支过滤组合及否定模式边界验证
-intent_ref: KEEP-TC-514~559
+intent_ref: INTENT-COMP-084
 setup:
   repo_fixture: default
   secrets: []

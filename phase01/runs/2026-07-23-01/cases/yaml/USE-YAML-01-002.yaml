@@ -39,7 +39,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须同时包含字段名、所在行号、正确写法示例三项中的至少两项"
 
 teardown:

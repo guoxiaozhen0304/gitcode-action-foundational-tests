@@ -44,4 +44,4 @@ assertions:
     target: job_status
     equals: "failure"
 teardown:
-  reset: none
+  reset: fixture

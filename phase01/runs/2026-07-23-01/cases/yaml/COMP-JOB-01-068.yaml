@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: job strategy 矩阵与 continue-on-error 验证
-intent_ref: KEEP-TC-276~278
+intent_ref: INTENT-COMP-067
 setup:
   repo_fixture: default
   secrets: []

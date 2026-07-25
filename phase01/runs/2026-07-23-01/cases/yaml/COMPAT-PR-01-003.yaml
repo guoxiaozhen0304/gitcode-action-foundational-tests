@@ -3,7 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P1
 title: "PR types 配置后匹配类型不触发与 GitHub 行为差异"
-intent_ref: INTENT-COMPAT-NEW-003
+intent_ref: INTENT-COMPAT-003
 
 setup:
   repo_fixture: default
@@ -40,6 +40,7 @@ assertions:
   - type: positive
     target: run_status
     equals: success
+    eval: llm_assisted
     rubric: "若平台已修复，PR 更新后应触发 workflow 并成功运行"
 
 teardown:

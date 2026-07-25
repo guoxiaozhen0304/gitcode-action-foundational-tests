@@ -39,7 +39,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须包含有效范围 1-5 或 1 到 5"
 
 teardown:

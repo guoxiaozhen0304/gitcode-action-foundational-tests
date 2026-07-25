@@ -35,7 +35,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须同时出现 actions/checkout 与 checkout 对照，或给出 GitCode 官方 Action 使用短名的说明"
 
 teardown:

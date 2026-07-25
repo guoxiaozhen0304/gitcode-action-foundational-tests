@@ -23,7 +23,7 @@ fault_injection: null
 assertions:
   - type: nonfunctional
     target: documentation
-    eval: deterministic
+    eval: llm_assisted
     rubric: "文档与样本对同一能力 vars 上下文的声明必须一致；不一致即视为可理解性缺陷"
 
 teardown:

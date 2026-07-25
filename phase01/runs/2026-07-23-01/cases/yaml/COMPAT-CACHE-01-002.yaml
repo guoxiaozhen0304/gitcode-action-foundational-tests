@@ -48,11 +48,11 @@ fault_injection: null
 assertions:
   - type: negative
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "fork PR 不应成功覆盖主干缓存条目"
   - type: positive
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "日志中应出现明确的缓存隔离或拒绝写入标识"
   - type: negative
     target: run_status

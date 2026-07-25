@@ -3,7 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P1
 title: "PR 目标分支过滤行为差异"
-intent_ref: INTENT-COMPAT-NEW-003
+intent_ref: INTENT-COMPAT-003
 
 setup:
   repo_fixture: default
@@ -36,6 +36,7 @@ assertions:
   - type: positive
     target: run_status
     equals: success
+    eval: llm_assisted
     rubric: "目标分支为 main 的 PR 应触发 workflow 并成功运行"
   - type: negative
     target: run_status

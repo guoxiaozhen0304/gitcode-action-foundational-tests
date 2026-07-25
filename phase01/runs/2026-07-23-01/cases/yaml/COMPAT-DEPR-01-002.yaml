@@ -3,7 +3,7 @@ dimensions: [compatibility, usability]
 dimension: compatibility
 priority: P1
 title: "::add-path:: 废弃命令应被拒绝或给出迁移指引"
-intent_ref: INTENT-COMPAT-NEW-012
+intent_ref: INTENT-COMPAT-012
 
 setup:
   repo_fixture: default

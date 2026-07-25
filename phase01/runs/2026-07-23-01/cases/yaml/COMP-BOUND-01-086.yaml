@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: 矩阵构建 include exclude 与单值边界验证
-intent_ref: KEEP-TC-276~328
+intent_ref: INTENT-COMP-086
 setup:
   repo_fixture: default
   secrets: []

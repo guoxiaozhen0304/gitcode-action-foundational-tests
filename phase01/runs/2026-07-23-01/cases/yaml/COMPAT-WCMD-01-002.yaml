@@ -3,7 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P2
 title: "::group:: 不被支持时应静默降级而非报错"
-intent_ref: INTENT-COMPAT-NEW-009
+intent_ref: INTENT-COMPAT-009
 
 setup:
   repo_fixture: default
@@ -37,6 +37,7 @@ assertions:
   - type: positive
     target: run_status
     equals: success
+    eval: llm_assisted
     rubric: "workflow 不因 group 命令而失败"
   - type: negative
     target: run_logs

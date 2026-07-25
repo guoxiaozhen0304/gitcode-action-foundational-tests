@@ -51,7 +51,7 @@ assertions:
   - type: positive
     target: run_status
     equals: failure
-    eval: deterministic
+    eval: llm_assisted
     rubric: "job 整体状态为 failure"
 
 teardown:

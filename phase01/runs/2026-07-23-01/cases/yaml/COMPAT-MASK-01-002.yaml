@@ -46,7 +46,7 @@ assertions:
   - type: positive
     target: run_status
     equals: success
-    eval: deterministic
+    eval: llm_assisted
     rubric: "环境变量在运行时可被正常读取，step 执行成功"
 
 teardown:

@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: format substring replace 函数边界行为
-intent_ref: KEEP-TC-183~185
+intent_ref: INTENT-COMP-057
 setup:
   repo_fixture: default
   secrets: []

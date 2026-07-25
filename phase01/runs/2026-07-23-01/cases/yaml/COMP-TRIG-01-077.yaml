@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: pull_request_comment 事件关键字段与过滤验证
-intent_ref: KEEP-TC-469~470
+intent_ref: INTENT-COMP-077
 setup:
   repo_fixture: default
   secrets: []

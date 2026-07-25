@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: issue_comment 事件关键字段与 types 验证
-intent_ref: KEEP-TC-075~083
+intent_ref: INTENT-COMP-076
 setup:
   repo_fixture: default
   secrets: []

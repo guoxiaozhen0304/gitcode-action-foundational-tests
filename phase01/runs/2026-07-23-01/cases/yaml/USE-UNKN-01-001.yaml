@@ -35,7 +35,7 @@ fault_injection: null
 assertions:
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "对未知字段的提示必须包含字段名和不支持/unknown 字样；若能识别该字段为 GitHub 特有如 run-name，提示中应追加该字段为 GitHub Actions 特有，GitCode 暂不支持"
 
 teardown:

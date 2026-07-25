@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: 仓库内脚本执行与路径验证
-intent_ref: KEEP-TC-431~433
+intent_ref: INTENT-COMP-081
 setup:
   repo_fixture: default
   secrets: []

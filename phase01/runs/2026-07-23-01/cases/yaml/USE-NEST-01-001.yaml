@@ -35,7 +35,7 @@ assertions:
     equals: COMPLETED
   - type: nonfunctional
     target: error_message
-    eval: deterministic
+    eval: llm_assisted
     rubric: "报错信息必须包含 workflow_call、嵌套、2 层、上限等关键词中的至少两项"
 
 teardown:

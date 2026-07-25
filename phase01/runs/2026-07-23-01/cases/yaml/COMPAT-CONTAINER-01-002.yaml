@@ -3,7 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P1
 title: "container 自定义镜像被拒绝时应给出替代指引"
-intent_ref: INTENT-COMPAT-NEW-001
+intent_ref: INTENT-COMPAT-001
 
 setup:
   repo_fixture: default

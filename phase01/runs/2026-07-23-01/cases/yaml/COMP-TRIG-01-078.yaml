@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: 多事件组合与分支路径过滤验证
-intent_ref: KEEP-TC-423
+intent_ref: INTENT-COMP-078
 setup:
   repo_fixture: default
   secrets: []

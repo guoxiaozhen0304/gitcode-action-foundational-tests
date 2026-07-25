@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: env 优先级链 step 大于 job 大于 workflow
-intent_ref: KEEP-TC-001~004
+intent_ref: INTENT-COMP-050
 setup:
   repo_fixture: default
   secrets: []

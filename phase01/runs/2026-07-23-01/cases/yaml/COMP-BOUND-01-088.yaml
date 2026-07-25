@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: 工作流命令 set-env add-path 与文件写入边界验证
-intent_ref: KEEP-TC-240~246
+intent_ref: INTENT-COMP-088
 setup:
   repo_fixture: default
   secrets: []

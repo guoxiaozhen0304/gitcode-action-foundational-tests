@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: push 事件关键字段与过滤验证
-intent_ref: KEEP-TC-223~233
+intent_ref: INTENT-COMP-072
 setup:
   repo_fixture: default
   secrets: []

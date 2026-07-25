@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: 步骤输出与跨 job 传递边界验证
-intent_ref: KEEP-TC-331~333
+intent_ref: INTENT-COMP-087
 setup:
   repo_fixture: default
   secrets: []

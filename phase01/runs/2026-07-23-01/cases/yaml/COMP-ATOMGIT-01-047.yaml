@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: atomgit 核心上下文属性可访问性
-intent_ref: KEEP-TC-017~057
+intent_ref: INTENT-COMP-047
 setup:
   repo_fixture: default
   secrets: []

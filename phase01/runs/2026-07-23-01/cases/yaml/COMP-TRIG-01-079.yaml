@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: 触发事件 types 取值与过滤边界验证
-intent_ref: KEEP-TC-234~560
+intent_ref: INTENT-COMP-079
 setup:
   repo_fixture: default
   secrets: []

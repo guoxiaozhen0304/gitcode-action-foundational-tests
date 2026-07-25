@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: hashFiles 函数边界行为
-intent_ref: KEEP-TC-186
+intent_ref: INTENT-COMP-055
 setup:
   repo_fixture: default
   secrets: []

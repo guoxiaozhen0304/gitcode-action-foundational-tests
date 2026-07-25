@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: workflow_dispatch 事件关键字段与 inputs 验证
-intent_ref: KEEP-TC-084~085
+intent_ref: INTENT-COMP-074
 setup:
   repo_fixture: default
   secrets: []

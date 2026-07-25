@@ -51,11 +51,11 @@ fault_injection: null
 assertions:
   - type: positive
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "第二次运行日志中应出现 CACHE_HIT"
   - type: negative
     target: run_logs
-    eval: deterministic
+    eval: llm_assisted
     rubric: "命中场景下不应出现持久化失败或 key 冲突报错"
 
 teardown:
