@@ -1,0 +1,68 @@
+id: COMP-CLI-02-001
+dimensions: [completeness]
+dimension: completeness
+priority: P2
+title: "Runner 应提供 GitCode CLI 工具用于 API 交互（复测 TC-502）"
+intent_ref: INTENT-COMP-019
+
+setup:
+  repo_fixture: basic-ci
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    test-cli:
+      name: Test GitCode CLI availability
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Check gitcode CLI exists
+          run: |
+            if command -v gitcode &> /dev/null; then
+              echo "gitcode_cli_found"
+              gitcode --version
+            else
+              echo "gitcode_cli_missing"
+              exit 1
+            fi
+        - name: Check gh CLI exists as fallback
+          run: |
+            if command -v gh &> /dev/null; then
+              echo "gh_cli_found"
+            else
+              echo "gh_cli_missing"
+            fi
+        - name: Attempt PR comment via CLI
+          run: |
+            if command -v gitcode &> /dev/null; then
+              gitcode pr comment 1 --body "test comment" || echo "pr_comment_failed"
+            else
+              echo "no_cli_available"
+            fi
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_logs
+    eval: "deterministic"
+    rubric: "日志包含 gitcode_cli_found 或 gh_cli_found，证明 Runner 提供至少一种 CLI 工具"
+  - type: negative
+    target: run_logs
+    eval: "deterministic"
+    rubric: "不应同时出现 gitcode_cli_missing 和 gh_cli_missing（即至少一种 CLI 可用）"
+  - type: nonfunctional
+    target: run_logs
+    eval: "llm_assisted"
+    rubric: "若 CLI 不存在，报错信息应提示可用替代方案或文档链接，而非简单 command not found"
+
+teardown:
+  reset: fixture

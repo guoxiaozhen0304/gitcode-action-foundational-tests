@@ -1,0 +1,70 @@
+id: COMPAT-LITERAL-02-001
+dimensions: [compatibility]
+dimension: compatibility
+priority: P2
+title: "YAML 字面量整数在 env 与 with 中的解析行为应与 GitHub 一致（复测 TC-163）"
+intent_ref: INTENT-COMPAT-036
+
+setup:
+  repo_fixture: basic-ci
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    literal-test:
+      name: Test integer literal parsing
+      runs-on: [ubuntu-latest, x64, small]
+      env:
+        INT_VAR: 42
+        BOOL_VAR: true
+        FLOAT_VAR: 3.14
+      steps:
+        - name: (TC) checkout
+          uses: checkout
+        - name: Dump env values
+          run: |
+            echo "INT_VAR=$INT_VAR"
+            echo "BOOL_VAR=$BOOL_VAR"
+            echo "FLOAT_VAR=$FLOAT_VAR"
+            echo "literal_dump_done"
+        - name: Use integer in with
+          uses: checkout
+          with:
+            fetch-depth: 1
+        - name: Verify expression context
+          run: |
+            echo "expr_int=${{ env.INT_VAR }}"
+            echo "expr_bool=${{ env.BOOL_VAR }}"
+            echo "expr_float=${{ env.FLOAT_VAR }}"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_logs
+    eval: "deterministic"
+    rubric: "INT_VAR 在 shell 中输出为 42（字符串形式）"
+  - type: positive
+    target: run_logs
+    eval: "deterministic"
+    rubric: "BOOL_VAR 在 shell 中输出为 true（字符串形式）"
+  - type: positive
+    target: run_logs
+    eval: "deterministic"
+    rubric: "FLOAT_VAR 在 shell 中输出为 3.14（字符串形式）"
+  - type: negative
+    target: run_status
+    eval: "deterministic"
+    rubric: "workflow 不应因字面量整数类型而解析失败"
+
+teardown:
+  reset: fixture
