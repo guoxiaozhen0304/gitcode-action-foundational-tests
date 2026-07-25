@@ -1,0 +1,39 @@
+id: SEC-ARTTRUST-01-001
+dimensions: ["security"]
+dimension: security
+priority: P0
+title: "下载的 artifact 不可自动执行（artifact trust boundary）"
+intent_ref: INTENT-SEC-033
+setup:
+  repo_fixture: default
+  secrets: []
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    artifact-trust:
+      name: Test artifact trust boundary
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Download untrusted artifact
+          uses: download-artifact
+          with:
+            name: untrusted-artifact
+        - name: Do not auto execute
+          run: |
+            echo "Artifact downloaded but not executed automatically"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+assertions:
+  - type: positive
+    target: run_status
+    equals: completed
+  - type: negative
+    target: run_logs
+    eval: deterministic
+    rubric: "artifact 不应被自动执行"
+teardown:
+  reset: fixture

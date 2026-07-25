@@ -116,13 +116,12 @@ echo "# trigger: $(date +%s)" >> ".gitcode/workflows/${WF_NAME}"
 git add .gitcode/workflows/
 git commit -m "test: ${CASE_ID}"
 git push origin "$GITCODE_BRANCH" 2>&1 | tail -1
-_log "Pushed: .gitcode/workflows/${WF_NAME}"
+PUSH_SHA=$(git rev-parse HEAD)
+_log "Pushed: ${PUSH_SHA:0:8} (.gitcode/workflows/${WF_NAME})"
 
 # ── 3. Poll for run ─────────────────────────────────────
-# Strategy: match by file_path — each run object contains the workflow file path.
-# Filter runs API response for the exact workflow file we just pushed.
-WF_PATH=".gitcode/workflows/${WF_NAME}"
-_log "Polling for run of ${WF_PATH}..."
+# Match by head_sha (commit hash) — file_path is unreliable (platform reuses workflow_ids).
+_log "Polling for run by sha ${PUSH_SHA:0:8}..."
 sleep 8
 
 RUN_ID_GC=""
@@ -132,9 +131,9 @@ while [ $ELAPSED -lt $TIMEOUT_SECONDS ]; do
   RUN_ID_GC=$(echo "$RESP" | python3 -c "
 import sys, json
 runs = json.load(sys.stdin).get('workflow_runs', [])
-target = '${WF_PATH}'
+target = '${PUSH_SHA}'
 for r in runs:
-    if r.get('file_path', '') == target:
+    if r.get('head_sha', '') == target:
         print(r.get('workflow_run_id', ''))
         break
 " 2>/dev/null || echo "")

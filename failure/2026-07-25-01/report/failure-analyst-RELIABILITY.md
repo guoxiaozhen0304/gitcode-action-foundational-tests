@@ -7,7 +7,7 @@
 **判定结果**: FAIL
 **失败断言**: assertions[0] (status, run_status) — 预期 all job/step green，实际 job 'upload artifact job' status=FAILED
 
-**根因初判**: 环境问题
+**根因初判**: 非问题
 
 **证据**:
 - **Job 日志全量** (REL-ART-01-041.log.txt:30): `::error::Upload artifact failed: Artifact with name already exists: perf-artifact, repoId=10431338, workflowId=2604461c200e4c16b3eb4493b77328f5`
@@ -41,7 +41,7 @@
 **判定结果**: FAIL
 **失败断言**: assertions[0] (status, run_status) — 预期 all job/step green，实际 job 'upload artifact job' status=FAILED
 
-**根因初判**: 环境问题
+**根因初判**: 非问题
 
 **证据**:
 - **Job 日志全量** (REL-ARTPERF-01-053-V2.log.txt:53): `::error::Upload artifact failed: Namespace artifact quota exceeded: namespace=13965860, repoId=10431319, requestedBytes=1074069497, currentUsed=1747613086, max=1073741824`
@@ -75,7 +75,7 @@
 **判定结果**: FAIL
 **失败断言**: assertions[0] (status, run_status) — 预期 all job/step green，实际 job 'compile on 2xlarge' status=FAILED
 
-**根因初判**: 环境问题
+**根因初判**: 非问题
 
 **证据**:
 - **Job 日志全量** (REL-BIGRUNNER-01-066.log.txt:7): 2xlarge job 仅 1 行 timestamp 日志，无执行内容。xlarge job 正常输出 "compiling" 并 sleep 30s 完成。
@@ -245,7 +245,7 @@
 **判定结果**: FAIL
 **失败断言**: assertions[0] (status, run_status) — 预期 all job/step green，实际 job 'probe 2xlarge runner' status=FAILED
 
-**根因初判**: 环境问题
+**根因初判**: 非问题
 
 **证据**:
 - **Job 日志全量** (REL-RUNNER-01-049-V2.log.txt:5-20): xlarge probe 成功输出 `nproc=16`, 内存 `62256 MB total/59159 MB available`, 磁盘 `118G overlay (45% used)`。2xlarge probe 仅 1 行 timestamp（line 21），无执行内容，job FAILED。
