@@ -13,7 +13,7 @@ workflow: |
   jobs:
     env-secret-approved:
       name: Access env secret after approval
-      runs-on: [dedicate-hosted, x64, large]
+      runs-on: [ubuntu-latest, x64, small]
       environment: production
       steps:
         - name: Use env secret

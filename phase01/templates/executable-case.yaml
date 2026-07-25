@@ -15,14 +15,12 @@ setup:                           # 前置状态，由 harness 布置
   variables: {}
   branch_protection: default
 
-# ☆ 约定：不测 trigger 时 on 用 workflow_dispatch；不测 runs-on 时用 [dedicate-hosted, x64, large]
-#    详见 phase01/schema/VALIDATION-RULES.md §1a、§8a
 workflow: |                      # 被测的 workflow 定义（内联，按 GitCode 规范编译）
   on:
     workflow_dispatch:
   jobs:
     echo:
-      runs-on: [dedicate-hosted, x64, large]
+      runs-on: [ubuntu-latest, x64, small]
       steps:
         - name: echo
           run: |

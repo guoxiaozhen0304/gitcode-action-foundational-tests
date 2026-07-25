@@ -15,14 +15,14 @@ workflow: |
   jobs:
     job_a:
       name: job A cancel target
-      runs-on: [dedicate-hosted, x64, large]
+      runs-on: [ubuntu-latest, x64, small]
       steps:
         - name: sleep step
           run: |
             sleep 60
     job_b:
       name: job B failure condition
-      runs-on: [dedicate-hosted, x64, large]
+      runs-on: [ubuntu-latest, x64, small]
       needs: job_a
       if: failure()
       steps:

@@ -17,7 +17,7 @@ workflow: |
   jobs:
     test-environment:
       name: Test environment field
-      runs-on: [dedicate-hosted, x64, large]
+      runs-on: [ubuntu-latest, x64, small]
       environment: prod
       steps:
         - name: Echo env secret
