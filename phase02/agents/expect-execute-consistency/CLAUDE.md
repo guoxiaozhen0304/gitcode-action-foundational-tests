@@ -69,75 +69,41 @@
 
 ## 工作步骤
 
-### Step 1: 解析断言的期望值
+### Step 1: 阅读规格
 
-对每个 assertion，提取：
-- `target`: 观测目标（run_logs, run_status, run_event, job_status, step_status, cache_step 等）
-- `type`: positive / negative / nonfunctional
-- 期望值键: `equals` / `must_contain` / `contains` / `must_not_contain` / `must_not_contain_secret` / `must_not_equal` / `le` / `ge` / `sha_unchanged` / `run_number_increased`
-- `eval`（如有）
-- `rubric`（如有）
+从 `text/<ID>.md` 提取：标题、前置条件、操作步骤、预期结果、**验证点**列表。
 
-### Step 2: 解析 workflow 步骤的实际输出源
+### Step 2: 阅读实现
 
-解析 `workflow` YAML 文本。对每个 job 的每个 step：
-- 提取所有 `run:` 命令 — 识别通过 `echo`、`printf`、`print()`、`Write-Output` 等打印的字符串
-- 提取所有 `uses:` action — action 会产生什么日志输出
-- 识别 `${{ }}` 表达式（运行时求值产生输出）
-- 记录 `if:` 条件（控制步骤是否执行，条件本身即功能执行）
-- 记录 `env:` / `with:` 注入到命令中的值
+从 `yaml/<ID>.yaml` 提取 `workflow:` 中的步骤（run/uses/if/env/with），以及 `assertions:`。
 
-### Step 3: 将每个断言匹配到步骤源
+### Step 3: 逐验证点对照
 
-对每个断言的期望值，扫描所有步骤输出：
+对规格中每条 `[正向]` / `[负向]` 验证点，判断实现步骤是否能验证它。
 
-```
-对每个断言:
-  对每个步骤:
-    该步骤能否产生期望的可观测输出？
-    → YES（真实）: 标记 CONSISTENT，关联步骤
-    → YES（仅 echo，无功能执行）: 标记 VACUOUS，说明原因
-    → YES（action 内部输出）: 标记 CONSISTENT
-    → NO: 继续
+**⚠️ 一致性与可调度性无关。** 不要因为 trigger 是 schedule/pull_request 而标记 BLOCKED。不要因为 secret 未配置或需要第二账号而标记 FIXTURE_GAP。这些问题影响用例能否被 dispatch，但不影响步骤能否验证规格。
 
-  若所有步骤均未匹配:
-    → 标记 MISSING_SOURCE
-```
+判定规则：
 
-`run_status` 断言特殊处理：
-- 解析 workflow 中的失败路径（`exit 1`、`false`、`|| exit`、`set -e`、缺少依赖等）
-- 无失败路径且 `equals: success` → STATUS_GUARANTEED
-- 无失败路径且 `equals: failure` → IMPOSSIBLE
+| 情况 | 判定 |
+|------|------|
+| 步骤真实执行了验证点描述的行为，且断言能观测到结果 | **COVERED** |
+| 步骤仅 echo/printf 字面量，无 if 条件、无 ${{ }}、无 $ATOMGIT_* 写入、无 uses action、无实质命令 | **TRIVIAL** |
+| 验证点是 [负向]（证明某事未发生），但单次 workflow 执行无法证明否定行为 | **UNVERIFIABLE** |
+| 验证点是 [负向]，但 YAML 中有 type=negative 断言直接覆盖 | **COVERED** |
+| 无任何步骤产出验证点需要的输出 | **MISSING** |
 
-### Step 4: 分类断言-步骤关系
+实质命令包括但不限于：curl、pip、npm、python、make、grep、diff、cat >、[[ ]]、$( )、export、if/fi、写入 $ATOMGIT_ENV/PATH/OUTPUT/STEP_SUMMARY。
 
-| 分类 | 含义 |
-|---|---|
-| `CONSISTENT` | 步骤真实执行被测功能并产生断言所需的可观测输出 |
-| `VACUOUS` | 步骤仅 print/echo 期望字符串，未执行被测功能（假测试） |
-| `MISSING_SOURCE` | 无任何步骤产生该期望的可观测输出 |
-| `STATUS_GUARANTEED` | run_status 断言无论如何都成立/不成立 |
-| `IMPOSSIBLE` | 断言在此 workflow 中永远无法满足 |
-| `UNEXERCISED` | 安全断言 — 被测 secret/功能从未被任何步骤使用 |
-| `LLM_DEPENDENT` | 非功能性或 LLM 辅助断言，静态不可评估 |
-| `TRIGGER_BLOCKED` | 触发事件无 dispatch API（schedule、fork PR） |
-| `PLATFORM_GAP` | 已知平台缺陷阻止真实执行（如 vars.* 为空） |
-| `FIXTURE_GAP` | 缺少 setup 无法执行（secret 未配置、缺第二账号、故障注入不可用） |
+### Step 4: 评级
 
-### Step 5: 计算用例级别评级
+逐验证点的判定汇总：
 
-```
-总数     = 断言总数
-真实     = CONSISTENT 断言数
-空洞     = VACUOUS + MISSING_SOURCE + IMPOSSIBLE + STATUS_GUARANTEED + UNEXERCISED
-不可评估 = LLM_DEPENDENT + TRIGGER_BLOCKED + PLATFORM_GAP + FIXTURE_GAP
-
-用例评级:
-  断言一致   = 空洞 == 0 AND 不可评估 == 0
-  存在空洞   = 空洞 > 0 AND 不可评估 == 0
-  不可评估   = 空洞 == 0 AND 真实 == 0 AND 不可评估 > 0
-  混合问题   = 空洞 > 0 AND 不可评估 > 0
-```
+| 评级 | 条件 |
+|------|------|
+| **断言一致** | 所有验证点 COVERED |
+| **部分不符** | 部分 COVERED，部分 TRIVIAL / UNVERIFIABLE / MISSING |
+| **完全不符** | 全部 TRIVIAL / UNVERIFIABLE / MISSING |
 
 ## 输出
 
