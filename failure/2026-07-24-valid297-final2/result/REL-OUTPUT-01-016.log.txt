@@ -1,0 +1,10 @@
+[2026/07/24 22:10:12.793 GMT+08:00] [INFO] Job(1530336324894986240_1530336324874014727) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/aafb3970-0730-4d0e-b5e2-33806c002c6d.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/aafb3970-0730-4d0e-b5e2-33806c002c6d.sh
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/536594c2-8e89-4fb9-a763-d137130824eb.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/536594c2-8e89-4fb9-a763-d137130824eb.sh
+/home/slave1/runner/workers/0.0.4.4.version/_temp/536594c2-8e89-4fb9-a763-d137130824eb.sh: line 1: ${{{{ steps.writer.outputs.data }}}}: bad substitution
+::error::Process exited with code 1

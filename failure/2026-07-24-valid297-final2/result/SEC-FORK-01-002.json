@@ -1,0 +1,35 @@
+{
+  "case_id": "SEC-FORK-01-002",
+  "title": "fork PR 中 secrets 引用返回空值且 job 不崩溃",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-001",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "01f92c4ecd45446c98d11b4b92c3b65a",
+  "run_status": "FAILED",
+  "head_sha": "17c73ed7389e0faeaac4375ac116f1667a18489b",
+  "job_count": 1,
+  "duration_seconds": 131,
+  "log_fingerprint": "0e10c23a1fa9d8c4",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/01f92c4ecd45446c98d11b4b92c3b65a",
+  "assertion_results": [
+    {
+      "kind": "config_probe",
+      "pass": true,
+      "not_configured": false,
+      "expected": "资源已配置（日志无 'configured_len=0'）",
+      "actual": "configured"
+    },
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "COMPLETED",
+      "actual": "FAILED"
+    }
+  ]
+}

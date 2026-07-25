@@ -1,0 +1,28 @@
+{
+  "case_id": "REL-ARTPERF-01-053",
+  "title": "制品传输性能——100MB artifact 上传下载耗时",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-053",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "0f87f6f5ce7240bd8af0512db413971d",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 2,
+  "duration_seconds": 38,
+  "log_fingerprint": "0bbe6efe6f20ce7e",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/0f87f6f5ce7240bd8af0512db413971d",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "all job/step green",
+      "actual": "job 'upload artifact job' status=FAILED"
+    }
+  ]
+}

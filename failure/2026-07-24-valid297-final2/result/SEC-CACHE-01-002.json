@@ -1,0 +1,28 @@
+{
+  "case_id": "SEC-CACHE-01-002",
+  "title": "主仓 cache restore 对 fork cache miss",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-018",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "eb18e54fbef245319186382ca8d9b83d",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 81,
+  "log_fingerprint": "5b4c8968bad33de3",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/eb18e54fbef245319186382ca8d9b83d",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'cache_miss'",
+      "actual": "absent"
+    }
+  ]
+}

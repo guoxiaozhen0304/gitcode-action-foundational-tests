@@ -1,0 +1,12 @@
+[2026/07/24 21:42:26.239 GMT+08:00] [INFO] Job(1530329334881849344_1530329334856683527) duration check: true
+::debug::run-id input: '' (length: 0)
+::debug::Resolved path is /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-4
+::debug::Artifact client initialized for https://actions-results.atomgit.com
+::debug::Resolved workflow id 4a0db05684a14b8b88abf013c9ee1b7e
+Downloading single artifact
+::debug::Listing artifacts for workflow 4a0db05684a14b8b88abf013c9ee1b7e with name filter "untrusted-artifact"
+[Twirp] trace-id: 1a80d8d785e6775e8a9f2b7927076316
+::debug::Found 0 artifact(s)
+::error::Unable to download artifact(s): Artifact 'untrusted-artifact' not found. Available artifacts: (none)
+
+ 

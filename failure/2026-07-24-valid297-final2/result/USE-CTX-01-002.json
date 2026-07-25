@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-CTX-01-002",
+  "title": "使用 github 上下文时报错应提示 atomgit 替代",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-002",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "f2cf93a1282c4f109ea0621d733fda3c",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 40,
+  "log_fingerprint": "71e7ba8d569064e8",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/f2cf93a1282c4f109ea0621d733fda3c",
+  "assertion_results": [
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": false,
+      "expected": "conclusion != COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "case_id": "SEC-SUPPLY-01-002",
+  "title": "commit hash 不匹配时第三方 Action 应被拒绝执行",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-014",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "e2393126ccc74651a64dfdb9ddcd6a3e",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 88,
+  "log_fingerprint": "3379a72ebaba18c6",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/e2393126ccc74651a64dfdb9ddcd6a3e",
+  "assertion_results": [
+    {
+      "kind": "leak",
+      "type": "negative",
+      "target": "run_logs",
+      "pass": true,
+      "is_security_critical": true,
+      "expected": "plaintext 'success' 0 hits",
+      "actual": 0
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'action_not_found_or_sha_mismatch'",
+      "actual": "absent"
+    }
+  ]
+}

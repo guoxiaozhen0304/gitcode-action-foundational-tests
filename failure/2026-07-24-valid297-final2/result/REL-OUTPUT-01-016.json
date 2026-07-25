@@ -1,0 +1,28 @@
+{
+  "case_id": "REL-OUTPUT-01-016",
+  "title": "step output 边界值——ATOMGIT_OUTPUT 写入 1 MB 参数应成功传递",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-016",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "550db0b7cfb040b7a58e140f1f1e339e",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 338,
+  "log_fingerprint": "146eee83d214bc6e",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/550db0b7cfb040b7a58e140f1f1e339e",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "all job/step green",
+      "actual": "job 'output boundary test' status=FAILED"
+    }
+  ]
+}

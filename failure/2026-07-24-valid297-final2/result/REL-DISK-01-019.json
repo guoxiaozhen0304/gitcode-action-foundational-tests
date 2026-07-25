@@ -1,0 +1,36 @@
+{
+  "case_id": "REL-DISK-01-019",
+  "title": "Runner 磁盘越界——small runner 写入 51 GB 应失败并报磁盘满",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-019",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "487f9f3f0d5f4b7791daa0cf780c49b5",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 68,
+  "log_fingerprint": "3d50e8b15bffa7ab",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/487f9f3f0d5f4b7791daa0cf780c49b5",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "FAILED",
+      "actual": "COMPLETED"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'No space left on device'",
+      "actual": "absent"
+    }
+  ]
+}

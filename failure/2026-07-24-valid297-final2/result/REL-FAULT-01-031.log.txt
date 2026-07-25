@@ -1,0 +1,24 @@
+[2026/07/24 22:03:05.971 GMT+08:00] [INFO] Job(1530334534723842048_1530334534702870535) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/efee070f-1ba7-49c8-85ef-707742089f68.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/efee070f-1ba7-49c8-85ef-707742089f68.sh
+step_one_marker
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/d921f518-b4ab-4ba4-8205-1ff4cb373a9d.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/d921f518-b4ab-4ba4-8205-1ff4cb373a9d.sh
+step_two_marker
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/114b9905-072b-4eec-8af9-1d25d30b2937.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/114b9905-072b-4eec-8af9-1d25d30b2937.sh
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/8b9f1d30-1b6c-4c7b-aa5c-ef3c38307a25.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/8b9f1d30-1b6c-4c7b-aa5c-ef3c38307a25.sh
+step_four_marker
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/81540861-1418-4cc6-93be-ef0eb2028a89.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/81540861-1418-4cc6-93be-ef0eb2028a89.sh
+step_five_marker

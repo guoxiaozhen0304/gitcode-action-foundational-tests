@@ -1,0 +1,37 @@
+{
+  "case_id": "SEC-PRTGT-01-002",
+  "title": "pull_request_target 无审批不执行 fork PR 代码",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-002",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "29d8cc7ceb694aaba394f530b45b7756",
+  "run_status": "COMPLETED",
+  "head_sha": "6b018af50209ed0675f397e0d9a58c10f39c4c65",
+  "job_count": 1,
+  "duration_seconds": 63,
+  "log_fingerprint": "24b38d3bacdc260a",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/29d8cc7ceb694aaba394f530b45b7756",
+  "assertion_results": [
+    {
+      "kind": "leak",
+      "type": "negative",
+      "target": "run_logs",
+      "pass": true,
+      "is_security_critical": true,
+      "expected": "plaintext 'success_without_approval' 0 hits",
+      "actual": 0
+    },
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "PENDING_OR_BLOCKED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "case_id": "SEC-NAME-01-001",
+  "title": "Secret/变量名含特殊字符时不可导致意外求值或权限绕过",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-024",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "b78cc8a450014245969d90cae4f4762c",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 55,
+  "log_fingerprint": "5f2ccc268c08a1bb",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/b78cc8a450014245969d90cae4f4762c",
+  "assertion_results": [
+    {
+      "kind": "config_probe",
+      "pass": true,
+      "not_configured": false,
+      "expected": "资源已配置（日志无 'configured_len=0'）",
+      "actual": "configured"
+    },
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "SUCCESS_OR_YAML_ERROR",
+      "actual": "COMPLETED"
+    }
+  ]
+}

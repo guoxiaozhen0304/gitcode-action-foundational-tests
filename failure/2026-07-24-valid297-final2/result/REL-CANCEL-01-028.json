@@ -1,0 +1,28 @@
+{
+  "case_id": "REL-CANCEL-01-028",
+  "title": "手动取消 workflow——运行中取消时 always() cleanup step 仍应执行",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-028",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "c8ab3c988d5a44749b6b8a599aae1b85",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 177,
+  "log_fingerprint": "703fbf4f845a3bf3",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/c8ab3c988d5a44749b6b8a599aae1b85",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "CANCELLED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

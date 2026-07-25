@@ -1,0 +1,36 @@
+{
+  "case_id": "REL-FAULT-01-031",
+  "title": "故障注入——job 执行中 runner 进程被 SIGKILL 后应记录失败并保留已执行日志",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-031",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "2e44fed5e6fe4bc3a198e584da889a40",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 129,
+  "log_fingerprint": "20fb39a5d8c7c88a",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/2e44fed5e6fe4bc3a198e584da889a40",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "FAILED",
+      "actual": "COMPLETED"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'step_one_marker'",
+      "actual": "present"
+    }
+  ]
+}

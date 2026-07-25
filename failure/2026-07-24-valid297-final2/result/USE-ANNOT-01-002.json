@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-ANNOT-01-002",
+  "title": "::error:: 生成的 PR annotation 具备文件路径、行号与可点击跳转",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-021",
+  "phase02_run": "2026-07-24-valid297-final2",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "82aa3bf3f8634c79b1f4c19693e29256",
+  "run_status": "FAILED",
+  "head_sha": "8ccc4f6bbd7c9eb5635597b7e531fd62763a53e2",
+  "job_count": 1,
+  "duration_seconds": 95,
+  "log_fingerprint": "d83f66e21387ae9e",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/82aa3bf3f8634c79b1f4c19693e29256",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "all job/step green",
+      "actual": "job 'PR annotation test' status=FAILED"
+    }
+  ]
+}

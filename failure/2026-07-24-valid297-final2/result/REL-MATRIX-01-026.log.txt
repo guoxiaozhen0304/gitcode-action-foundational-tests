@@ -1,0 +1,18 @@
+[2026/07/24 22:07:28.030 GMT+08:00] [INFO] Job(1530335633362927616_1530335633371316227) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/fc50f268-a9f8-4e98-86c3-9e96f26fee31.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/fc50f268-a9f8-4e98-86c3-9e96f26fee31.sh
+version=1
+
+[2026/07/24 22:07:28.124 GMT+08:00] [INFO] Job(1530335633362927616_1530335633371316226) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/0be63a87-64bc-4100-a119-d8d9db34facd.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/0be63a87-64bc-4100-a119-d8d9db34facd.sh
+version=2
+
+[2026/07/24 22:07:27.904 GMT+08:00] [INFO] Job(1530335633362927616_1530335633371316225) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/d27a0035-eca7-4252-b464-ab098d4ea6e5.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/d27a0035-eca7-4252-b464-ab098d4ea6e5.sh
+version=3
+
