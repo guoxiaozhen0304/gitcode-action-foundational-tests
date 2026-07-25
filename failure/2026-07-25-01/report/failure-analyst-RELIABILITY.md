@@ -24,7 +24,7 @@
 **判定结果**: FAIL
 **失败断言**: assertions[0] (status, run_status) — 预期 all job/step green，实际 job 'artifact concurrent write test' status=FAILED
 
-**根因初判**: 用例问题
+**根因初判**: 非问题
 
 **证据**:
 - **Job 日志全量** (REL-ARTCONC-01-063.log.txt:5-23): 全部 3 个 matrix 实例报 `${{{{ matrix.instance }}}}: bad substitution` 并 exit 1。表达式未求值，shell 收到字面量 `${{{{ matrix.instance }}}}`。
@@ -58,7 +58,7 @@
 **判定结果**: FAIL
 **失败断言**: assertions[0] (status, run_status) — 预期 all job/step green，实际 job 'download artifact job' status=FAILED
 
-**根因初判**: 用例问题
+**根因初判**: 非问题
 
 **证据**:
 - **Job 日志全量** (REL-ARTPERF-01-053.log.txt:45,77-78): upload 成功（Artifact uploaded successfully, ID: 206639953158144, 104889728 bytes），download 成功（100 MB 下载完成，100%），但 verify 步骤 `ls -la perf-artifact` 失败：`ls: cannot access 'perf-artifact': No such file or directory`
@@ -177,7 +177,7 @@
 **判定结果**: FAIL
 **失败断言**: assertions[0] (run_status, run_status) — 预期 FAILED，实际 COMPLETED
 
-**根因初判**: 用例问题
+**根因初判**: 非问题
 
 **证据**:
 - **Job 日志全量** (REL-MATRIX-01-026.log.txt:5,11,17): 全部 3 个 matrix 实例输出 version=1/2/3 并成功完成。无任何 job 失败。
@@ -194,7 +194,7 @@
 **判定结果**: FAIL
 **失败断言**: assertions[0] (run_status, run_status) — 预期 COMPLETED，实际 FAILED
 
-**根因初判**: 用例问题
+**根因初判**: 非问题
 
 **证据**:
 - **Job 日志全量** (REL-MATRIX-01-038.log.txt:5-167): 全部 24 (= 2×2×2×3) 个 matrix 实例报 `os=${{{{ matrix.os }}}}: bad substitution`。表达式 `${{{{ matrix.os }}}}` 未求值。
@@ -211,7 +211,7 @@
 **判定结果**: FAIL
 **失败断言**: assertions[0] (status, run_status) — 预期 all job/step green，实际 job 'matrix 50 combos test' status=FAILED
 
-**根因初判**: 用例问题
+**根因初判**: 非问题
 
 **证据**:
 - **Job 日志全量** (REL-MATRIX-01-039.log.txt:5-349): 全部 50 个 (5×10) matrix 实例报 `v1=${{{{ matrix.v1 }}}}: bad substitution`。
