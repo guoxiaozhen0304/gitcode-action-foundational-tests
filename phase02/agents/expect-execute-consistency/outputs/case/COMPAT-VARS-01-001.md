@@ -1,0 +1,44 @@
+# COMPAT-VARS-01-001
+
+- 标题: vars 上下文若支持应正确返回值
+- 维度: 兼容性 | 优先级: P1
+- 评级: 断言一致
+
+---
+
+## 1. 想测什么（规格）
+
+标题: vars 上下文若支持应正确返回值
+
+- [正向] vars.TEST_VAR 返回配置值
+
+## 2. 实际做了什么（实现）
+
+| # | 步骤名 | 关键内容 | 实质逻辑 |
+|---|--------|------|:---:|
+| 1 | Echo vars TEST_VAR | echo "test_var=${{ vars.TEST_VAR }}" echo "done" | Y |
+
+| 断言类型 | 目标 | 值 |
+|---------|------|----|
+| positive | run_status | success |
+| positive | run_logs |  |
+
+## 3. 触发与运行环境
+
+| 字段 | 值 |
+|------|----|
+| 事件 | workflow_dispatch |
+| 身份 | maintainer |
+| 触发阻塞 | 否 |
+
+## 4. 规格 vs 实现对照
+
+| 验证点 | 覆盖? | 说明 |
+|------|:---:|------|
+| [正向] vars.TEST_VAR 返回配置值 | COVERED | 1 real steps, assertions present |
+
+### 问题
+
+无重大问题。
+
+---
