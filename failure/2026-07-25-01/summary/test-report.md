@@ -1,4 +1,17 @@
-# GitCode Actions 测试报告 · 全局预览
+# GitCode Actions 测试报告 
+
+## 整体结论: 可用
+
+### 重要问题：
+1. workflow 过多时，报申请资源报错
+2. workflow 没有超时机制，一直等待
+3. self-host中，任务申请失败，页面一直显示排队失败
+4. 使用内置token调用api报403
+5. 未声明 permissions 时 ATOMGIT_TOKEN 未注入（401 "token not found"），违反"每次运行自动生成"承诺
+6. Secret 经 artifact 侧信道绕过脱敏外泄
+
+
+全部问题： https://docs.qq.com/sheet/DSnZOT1FreVpxV0pi?tab=i6on0u&nlc=1
 
 **执行批次**: 2026-07-25-01
 **Phase 01 用例来源**: classify-experiment/2026-07-23 (VALID + not_scriptable 合并)
