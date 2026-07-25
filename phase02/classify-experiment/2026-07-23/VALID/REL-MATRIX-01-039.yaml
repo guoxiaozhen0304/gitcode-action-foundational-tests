@@ -23,7 +23,7 @@ workflow: |
       steps:
         - name: verify matrix vars
           run: |
-            echo v1=${{{{ matrix.v1 }}}} v2=${{{{ matrix.v2 }}}}
+            echo v1=${{ matrix.v1 }} v2=${{ matrix.v2 }}
 trigger:
   event: workflow_dispatch
   as: maintainer

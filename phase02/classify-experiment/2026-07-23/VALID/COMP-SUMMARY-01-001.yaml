@@ -25,6 +25,8 @@ workflow: |
             echo "| Metric | Value |" >> "$ATOMGIT_STEP_SUMMARY"
             echo "|---|---|" >> "$ATOMGIT_STEP_SUMMARY"
             echo "| Status | Pass |" >> "$ATOMGIT_STEP_SUMMARY"
+            # 同步输出到 stdout，供日志断言做确定性校验（summary 内容本身不进 run_logs）
+            echo "summary_written=Test Summary"
 
 trigger:
   event: workflow_dispatch
@@ -34,6 +36,9 @@ trigger:
 fault_injection: null
 
 assertions:
+  - type: positive
+    target: run_logs
+    contains: "summary_written=Test Summary"
   - type: positive
     target: step_summary
     contains: Test Summary

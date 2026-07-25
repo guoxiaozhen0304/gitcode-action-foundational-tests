@@ -20,23 +20,39 @@ workflow: |
         - name: generate 100MB file
           run: |
             dd if=/dev/urandom of=artifact.bin bs=1M count=100
+            md5sum artifact.bin > artifact.bin.md5
+        - name: mark upload start
+          run: |
+            echo "upload_start=$(date +%s)"
         - name: upload artifact step
           uses: upload-artifact
           with:
             name: perf-artifact
-            path: artifact.bin
+            path: |
+              artifact.bin
+              artifact.bin.md5
+        - name: mark upload end
+          run: |
+            echo "upload_end=$(date +%s)"
     download:
       name: download artifact job
       runs-on: [ubuntu-latest, x64, small]
       needs: upload
       steps:
+        - name: mark download start
+          run: |
+            echo "download_start=$(date +%s)"
         - name: download artifact step
           uses: download-artifact
           with:
             name: perf-artifact
+        - name: mark download end
+          run: |
+            echo "download_end=$(date +%s)"
         - name: verify artifact step
           run: |
-            ls -la perf-artifact
+            ls -la artifact.bin
+            md5sum -c artifact.bin.md5 && echo "hash_match=true"
 trigger:
   event: workflow_dispatch
   as: maintainer

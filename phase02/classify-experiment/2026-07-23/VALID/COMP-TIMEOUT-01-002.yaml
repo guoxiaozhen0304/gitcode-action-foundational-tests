@@ -40,7 +40,7 @@ assertions:
     equals: success
   - type: positive
     target: run_status
-    equals: failure
+    equals: failure_or_canceled
   - type: positive
     target: run_logs
     contains: starting

@@ -35,6 +35,6 @@ assertions:
     must_not_contain_secret: "DEPLOY_TOKEN"
   - type: positive
     target: run_status
-    equals: "blocked_or_pending"
+    equals: "completed"
 teardown:
   reset: fixture

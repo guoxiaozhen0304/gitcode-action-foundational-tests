@@ -24,6 +24,9 @@ workflow: |
         - name: matrix step
           run: |
             echo version=${{ matrix.version }}
+            # 注入失败：version=2 的实例失败，触发 fail-fast 取消其余实例
+            if [ "${{ matrix.version }}" = "2" ]; then echo "injected failure at version=2"; exit 1; fi
+            sleep 30
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -35,6 +38,6 @@ assertions:
     equals: "failure"
   - type: positive
     target: cancelled_jobs_count
-    equals: "8"
+    equals: "2"
 teardown:
   reset: none
