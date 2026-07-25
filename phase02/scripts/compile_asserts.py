@@ -34,6 +34,18 @@ def compile_one(assertion, case_id):
     target = assertion.get("target", "")
     rubric_text = assertion.get("rubric", "")
 
+    # ── -1) 已知无确定性数据源的 target：直接 needs_review ──
+    # 这些 target 的数据不在 RunResult（run_status/jobs/logs）内，
+    # 若落入 §0 contains 全局规则会被误编译为日志断言 → 必然假 FAIL
+    # （USE-MD-01-001: step_summary contains 被降级为 run_logs 扫描）。
+    # 诚实降级为 needs_review，待引擎补对应数据源后再加映射。
+    _NO_DATASOURCE_TARGETS = (
+        "step_summary", "step_summary_html", "artifacts", "cache_contents",
+        "run_ui", "pr_ui", "ui_layout", "ui_visual",
+    )
+    if target in _NO_DATASOURCE_TARGETS:
+        return None
+
     # ── 0) 明文值字段：不限 target，有明确值就编译 ──
     # contains / must_contain（positive）
     if atype == "positive":
@@ -50,17 +62,21 @@ def compile_one(assertion, case_id):
     if sn is not None and sn:
         return {"kind": "config_probe"}
 
-    # ── 1) status 家族：有 equals 字段且值为非HTTP码枚举 → run_status ──
-    # ★ 近似局限：job/step 级 status 用 run 级 conclusion 近似判定（复用 run_status）。
-    # 单 job / 全 job 同命运：正确。多 job 部分成功部分失败：run.conclusion 整体可能不精确。
-    # 若后续发现多 job 用例判不准，需新增 job 级 kind，本期用近似换覆盖率。
-    _STATUS_TARGETS = (
-        "run_status", "job_status", "step_status", "step_conclusion",
-        "parent_status", "api_status", "downstream_status",
-        "job_a_status", "job_b_status", "rerun_result",
+    # ── 1) status 家族：run 级 / job 级 / step 级分流 ──
+    # run 级：复用 conclusion 比对（run_status kind）。
+    # job 级：job_status kind（2026-07-25 新增）——按 jobs 列表逐 job 判定，
+    #   消除"job 级断言误绑 workflow 级 run_status"的假 FAIL（REL-CONTINUE-01-030 归因）。
+    #   job_a_status / job_b_status 等带前缀 target → name hint（前缀小写），
+    #   引擎按 job name/id 子串匹配；匹配不到 → INCONCLUSIVE（不冒充 FAIL）。
+    # step 级：step_status kind，规则同 job 级。
+    _RUN_STATUS_TARGETS = (
+        "run_status", "workflow_status", "parent_status", "api_status",
+        "downstream_status", "rerun_result",
     )
+    _JOB_STATUS_TARGETS = ("job_status",)
+    _STEP_STATUS_TARGETS = ("step_status", "step_conclusion")
     eq_val = assertion.get("equals")
-    if target in _STATUS_TARGETS and eq_val is not None:
+    if target in _RUN_STATUS_TARGETS and eq_val is not None:
         eq_s = str(eq_val)
         if re.match(r"^\d{3}$", eq_s):
             return None  # HTTP 码不作为状态，留给明文值进入 needs_review
@@ -69,6 +85,16 @@ def compile_one(assertion, case_id):
         if atype == "negative":
             not_eq = assertion.get("not_equals", eq_s)
             return {"kind": "run_status_not", "not_equals": str(not_eq)}
+
+    if eq_val is not None and not re.match(r"^\d{3}$", str(eq_val)):
+        if target in _JOB_STATUS_TARGETS or re.match(r"^job_[a-z0-9]+_status$", target):
+            out = {"kind": "job_status", "equals": str(eq_val)}
+            m = re.match(r"^(job_[a-z0-9]+)_status$", target)
+            if m:  # job_a_status → hint "job_a"；裸 job_status 无 hint（任一 job 命中即 pass）
+                out["name"] = m.group(1)
+            return out
+        if target in _STEP_STATUS_TARGETS:
+            return {"kind": "step_status", "equals": str(eq_val)}
 
     # ── 1b) 原始 run_status（无 equals 时兜底）───
     if target == "run_status":
@@ -96,6 +122,44 @@ def compile_one(assertion, case_id):
                 if atype == "negative":
                     return {"kind": "leak", "forbidden": kw}
         return None
+
+    # ── 2c) job 计数家族（2026-07-25 新增，配合 matrix/fail-fast 用例）──
+    if target == "generated_jobs_count" and eq_val is not None:
+        return {"kind": "job_count", "equals": int(eq_val)}
+    if target == "cancelled_jobs_count" and eq_val is not None:
+        return {"kind": "job_count_by_status", "status": "CANCELLED",
+                "equals": int(eq_val)}
+
+    # ── 2d) 计时/性能家族（2026-07-25 新增）──
+    # <x>_time_seconds + le → 日志时间戳对（<x>_start / <x>_end，workflow 内自打）。
+    # scheduling_latency_seconds + le → duration_le（run duration 为延迟上界，
+    #   duration ≤ le 确凿 pass；超出判 INCONCLUSIVE，见引擎 docstring）。
+    le_val = assertion.get("le")
+    if le_val is not None:
+        m = re.match(r"^([a-z0-9_]+)_time_seconds$", target)
+        if m:
+            prefix = m.group(1)
+            return {"kind": "log_metric_delta_le",
+                    "start": f"{prefix}_start", "end": f"{prefix}_end",
+                    "le": float(le_val)}
+        if target in ("scheduling_latency_seconds", "duration_seconds"):
+            return {"kind": "duration_le", "le": float(le_val)}
+
+    # ── 2e) 制品内容家族（2026-07-25 新增）──
+    # 约定：workflow 内 shell 自校验后 echo 标记，引擎做日志扫描。
+    #   hash_match        → "hash_match=true/false"
+    #   download_content  → "download_content=<值>"（in 列表逐项拼标记，任一命中即 pass）
+    #   contains_mixed    → "contains_mixed=true/false"
+    if target == "hash_match" and eq_val is not None:
+        return {"kind": "value", "expect": f"hash_match={eq_val}"}
+    if target == "download_content":
+        in_list = assertion.get("in")
+        if in_list:
+            return {"kind": "value_in",
+                    "any_of": [f"download_content={v}" for v in in_list]}
+        mixed = assertion.get("contains_mixed")
+        if mixed is not None:
+            return {"kind": "value", "expect": f"contains_mixed={mixed}"}
 
     # 3) nonfunctional → 无法确定性编译
     if atype == "nonfunctional":

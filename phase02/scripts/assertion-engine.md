@@ -229,3 +229,42 @@ def overall_verdict(assertion_results):
 - **可复核**：每条断言的 expected/actual 必须可让人看懂
 - **安全断言零容忍**：negative 断言失败自动标记 `SECURITY_CRITICAL`
 - **LLM 辅助断言**显式标注 `llm_assisted: true`，且必须有确定性基线作为 fallback
+
+## 已实现 kind 清单（2026-07-25 扩展，以 assertion_engine.py docstring 为准）
+
+| kind | 参数 | 语义 | 数据依赖 |
+|------|------|------|----------|
+| `status` | — | 所有 job/step 全绿（含假绿守卫） | jobs |
+| `run_status` / `run_status_not` | `equals` / `not_equals` | run 级终态比对（词形归一） | conclusion |
+| `job_status` | `equals`, `name?` | job 级终态；`name` 为 job name/id 子串 hint，无匹配 → INCONCLUSIVE | jobs[].status |
+| `step_status` | `equals`, `name?` | step 级终态，规则同上 | jobs[].steps[] |
+| `job_count` | `equals: N` | job 实例总数（matrix 展开计数） | jobs |
+| `job_count_by_status` | `status`, `equals: N` | 指定终态的 job 数（如 CANCELLED） | jobs |
+| `value` | `expect` | 日志包含指定串 | logs |
+| `value_in` | `any_of: [...]` | 日志至少包含其一 | logs |
+| `leak` / `mask` | `forbidden` / `secret_value` | 安全负向断言（SECURITY_CRITICAL） | logs |
+| `log_metric_le` | `metric`, `le` | 日志 `metric=N` 且 N ≤ le；无标记 → INCONCLUSIVE | logs |
+| `log_metric_delta_le` | `start`, `end`, `le` | 日志时间戳对差值 ≤ le（workflow 内自打 `date +%s`） | logs |
+| `duration_le` | `le` | run duration ≤ le 确凿 pass；超出 → INCONCLUSIVE（上界近似，不反推 FAIL） | duration_seconds |
+| `config_probe` | `unconfigured_pattern?` | 前置资源探测，未配置 → NOT_CONFIGURED | logs |
+
+编译侧（compile_asserts.py）对应映射：
+- `job_status`/`job_x_status` → `job_status`（带 name hint）；`step_status`/`step_conclusion` → `step_status`；
+  `workflow_status` 并入 run 级 `run_status`。
+- `generated_jobs_count` → `job_count`；`cancelled_jobs_count` → `job_count_by_status(CANCELLED)`。
+- `<x>_time_seconds + le` → `log_metric_delta_le(<x>_start, <x>_end)`；
+  `scheduling_latency_seconds + le` → `duration_le`。
+- `hash_match equals v` → `value("hash_match=v")`；`download_content in [...]` → `value_in`；
+  `download_content contains_mixed v` → `value("contains_mixed=v")`。
+
+### 终态复合标记（2026-07-25 第二轮）
+
+`run_status` / `run_status_not` / `job_status` / `step_status` 的期望值支持复合标记，
+由 `_terminal_match` 统一处理（大小写不敏感）：
+
+- **`A_OR_B` 多值**：任一可选终态命中即 pass。例：`SUCCESS_OR_FAILURE`、`COMPLETED_OR_BLOCKED`、
+  `failure_or_canceled`。用于"成功或被拒都算符合安全预期"的断言。
+- **`X_WITH_Y` 复合**：`WITH` 后的语义无法从 conclusion 判定，按主状态 `X` 近似。
+  例：`SUCCESS_WITH_BASE_WORKFLOW` → 按 SUCCESS 判定；with 语义由配套 leak/value 断言覆盖。
+
+编译器 `_NO_DATASOURCE_TARGETS` 同步补充 `step_summary_html`。

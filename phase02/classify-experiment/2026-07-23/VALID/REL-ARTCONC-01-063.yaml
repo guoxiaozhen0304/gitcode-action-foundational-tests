@@ -16,20 +16,42 @@ workflow: |
     test:
       name: artifact concurrent write test
       runs-on: [ubuntu-latest, x64, small]
+      continue-on-error: true   # 同名并发写可能被平台拒绝（重复名），不阻断 verify 校验最终一致性
       strategy:
         matrix:
           instance: [1,2,3]
       steps:
         - name: generate content
           run: |
-            if [ "${{{{ matrix.instance }}}}" = "1" ]; then python3 -c "print('A'*1048576)" > out.txt; fi
-            if [ "${{{{ matrix.instance }}}}" = "2" ]; then python3 -c "print('B'*1048576)" > out.txt; fi
-            if [ "${{{{ matrix.instance }}}}" = "3" ]; then python3 -c "print('C'*1048576)" > out.txt; fi
+            if [ "${{ matrix.instance }}" = "1" ]; then python3 -c "print('A'*1048576)" > out.txt; fi
+            if [ "${{ matrix.instance }}" = "2" ]; then python3 -c "print('B'*1048576)" > out.txt; fi
+            if [ "${{ matrix.instance }}" = "3" ]; then python3 -c "print('C'*1048576)" > out.txt; fi
         - name: upload artifact step
           uses: upload-artifact
           with:
             name: concurrent-artifact
             path: out.txt
+    verify:
+      name: download and verify content
+      runs-on: [ubuntu-latest, x64, small]
+      needs: test
+      steps:
+        - name: download artifact step
+          uses: download-artifact
+          with:
+            name: concurrent-artifact
+        - name: check content consistency
+          run: |
+            if [ ! -f out.txt ]; then echo "out.txt missing"; exit 1; fi
+            first=$(head -c 1 out.txt)
+            rest=$(tr -d "${first}\n" < out.txt | wc -c)
+            if [ "$rest" = "0" ]; then echo "contains_mixed=false"; else echo "contains_mixed=true"; fi
+            case "$first" in
+              A) echo "download_content=AAA";;
+              B) echo "download_content=BBB";;
+              C) echo "download_content=CCC";;
+              *) echo "download_content=UNKNOWN"; exit 1;;
+            esac
 trigger:
   event: workflow_dispatch
   as: maintainer
