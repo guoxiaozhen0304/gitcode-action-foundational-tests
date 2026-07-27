@@ -1612,3 +1612,61 @@ Oracle 来源: 历史实证（issues-encountered.md #96）；platform-config/REA
 - [x] 历史 bug 回归项与平台性能基准均已纳入（REL-049~066）。
 - [x] 输入退化标注已在 §2 体现。
 
+
+---
+
+## 增补意图（2026-07-27 回填：REL-067/068 悬空引用补定义）
+
+> 以下 2 条意图被 phase01/runs/2026-07-23-01 基底用例引用，但此前未在本库定义，现根据引用用例的操作步骤与预期结果反推补全。
+
+```
+意图 ID:    INTENT-REL-067
+维度标签:   [reliability]
+标题:       项目级 workflow 并发上限——200 条同时触发全部完成无丢失
+
+风险点:     平台宣称项目级 workflow 并发上限为 200 条。若实际容量不足或触发链路在高并发下丢消息，会出现：触发后无对应 run 记录（静默丢失）、因并发超限直接返回 429/500、或大量排队导致流水线饥饿。对依赖高并发 CI（如 monorepo 批量构建）的团队是致命问题。
+预期系统行为: 60s 内并发触发 200 次同一 workflow，全部进入终态（queued → running → completed/failed/cancelled），无静默丢失；失败数 = 0；200 条应全部立即进入 running（queued_count = 0）；总耗时 ≤ 60 min。
+Oracle 来源: 平台规格（platform-config 项目级并发上限 200） | GitHub行为
+
+验证要点:
+  - [正向] completed_count = 200
+  - [正向] failed_count = 0
+  - [正向] queued_count = 0（200 条应全部立即进入 running）
+  - [正向] lost_count = 0
+  - [负向] 不应出现触发后无对应 run 记录（丢失）
+  - [负向] 不应因并发超限而直接返回 429/500 导致触发失败
+
+故障/压力参数: 60s 内通过 API（workflow_dispatch）并发触发 200 次同一 workflow，每次携带唯一递增标识用于对账；等待全部进入终态，统计 completed/failed/queued/lost 计数与总耗时。稳态判据：completed=200、failed=0、queued=0、lost=0、总耗时≤60min。
+恢复预期: 不适用（容量验证，无故障注入）。
+破坏级别: none
+来源输入:   platform-config/README.md 项目级并发上限；用例 REL-PROJLIMIT-01-067
+优先级线索: P1
+关联用例:   REL-PROJLIMIT-01-067
+```
+
+```
+意图 ID:    INTENT-REL-068
+维度标签:   [reliability]
+标题:       项目级 workflow 并发上限越界——201 条同时触发时超限部分进入排队
+
+风险点:     并发上限的价值在于「超限行为可预期」：超出 200 上限的第 201 条应排队等待而非丢失或报错。若平台对超限触发直接丢弃、返回 429/500、或全部放行（上限形同虚设），都会破坏用户对容量模型的预期。
+预期系统行为: 60s 内并发触发 201 次同一 workflow，全部进入终态，无静默丢失；失败数 = 0；至少 1 条 run 先进入 queued 状态排队等待（而非立即 running）；总耗时 ≤ 60 min。
+Oracle 来源: 平台规格（platform-config 项目级并发上限 200） | GitHub行为
+
+验证要点:
+  - [正向] completed_count = 201
+  - [正向] failed_count = 0
+  - [正向] queued_count ≥ 1（超出 200 上限部分应排队）
+  - [正向] lost_count = 0
+  - [负向] 不应出现触发后无对应 run 记录（丢失）
+  - [负向] 不应因并发超限而直接返回 429/500 导致触发失败
+
+故障/压力参数: 60s 内通过 API（workflow_dispatch）并发触发 201 次同一 workflow，每次携带唯一递增标识用于对账；观察超限的 1 条是否进入 queued 排队；统计 completed/failed/queued/lost 计数与总耗时。稳态判据：completed=201、failed=0、queued≥1、lost=0、总耗时≤60min。
+恢复预期: 不适用（容量边界验证，无故障注入）。
+破坏级别: none
+来源输入:   platform-config/README.md 项目级并发上限；用例 REL-PROJLIMIT-01-068
+优先级线索: P1
+关联用例:   REL-PROJLIMIT-01-068
+```
+
+*增补完毕：INTENT-REL-067、INTENT-REL-068，共 2 条。*

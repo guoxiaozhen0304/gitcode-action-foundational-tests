@@ -89,6 +89,18 @@
 | INTENT-COMPAT-033 | Secret 日志脱敏绕过风险：`echo "${{ secrets.X }}"` 可能泄露 | P0 | RISK-SEC-01 / 脱敏绕过 | 已关联 SEC-004~008 | TC-011 |
 | INTENT-COMPAT-034 | `concurrency` 字段结构与语义差异 | P1 | RISK-COMPAT-01 / 并发控制 | 已关联 REL-001~006 | TC-289~293, TC-518~523 |
 | INTENT-COMPAT-035 | `steps` 上下文中的 `outcome` 与 `conclusion` 语义差异 | P1 | RISK-COMPAT-01 / 步骤结果 | 独立 | TC-090~092 |
+| INTENT-COMPAT-NEW-001 | `container` 字段不支持时的报错质量与替代指引 | P1 | RISK-COMPAT-01 / 容器支持 | 独立（2026-07-27 回填） | — |
+| INTENT-COMPAT-NEW-002 | 环境级 secrets 不支持时不应静默降级为项目级 | P0 | RISK-SEC-01 / 环境级 secrets | 独立（2026-07-27 回填） | — |
+| INTENT-COMPAT-NEW-003 | `pull_request` types/paths/branches 过滤不触发差异 | P1 | RISK-COMPAT-01 / PR 触发 | 独立（2026-07-27 回填） | — |
+| INTENT-COMPAT-NEW-004 | `issue_comment` types 命名差异与降级指引 | P1 | RISK-COMPAT-01 / 评论触发 | 独立（2026-07-27 回填） | — |
+| INTENT-COMPAT-NEW-005 | `concurrency.preemption` 配置差异（enable / events 上限） | P1 | RISK-COMPAT-01 / 并发控制 | 已关联 REL-001~006 | — |
+| INTENT-COMPAT-NEW-006 | 跨 Job 引用未声明 output 的返回值差异 | P1 | RISK-COMPAT-01 / outputs | 独立（2026-07-27 回填） | — |
+| INTENT-COMPAT-NEW-007 | `strategy.matrix` 高级用法差异（三维/include/exclude） | P1 | RISK-COMPAT-01 / 矩阵策略 | 独立（2026-07-27 回填） | — |
+| INTENT-COMPAT-NEW-008 | `runs-on` 不支持标签的报错与排队行为 | P1 | RISK-COMPAT-01 / Runner 标签 | 独立（2026-07-27 回填） | — |
+| INTENT-COMPAT-NEW-009 | workflow 命令 add-mask/group/stop-commands 静默降级 | P1 | RISK-COMPAT-01 / workflow 命令 | 独立（2026-07-27 回填） | — |
+| INTENT-COMPAT-NEW-010 | `action.yml` 元数据校验差异（branding 等字段） | P1 | RISK-COMPAT-01 / Action 生态 | 独立（2026-07-27 回填） | — |
+| INTENT-COMPAT-NEW-011 | Runner 未预装 Java 工具链差异（无 setup-java） | P1 | RISK-COMPAT-01 / Runner 环境 | 独立（2026-07-27 回填） | — |
+| INTENT-COMPAT-NEW-012 | 废弃命令 set-env/add-path 拒绝或迁移指引 | P1 | RISK-COMPAT-01 / 废弃命令 | 独立（2026-07-27 回填） | — |
 
 
 ### 维度：security
@@ -203,6 +215,8 @@
 | INTENT-REL-064 | 子任务状态传播——workflow_call 失败/未拉起时不应假阳性完成 | P1 | RISK-REL-01 / 状态传播 | 独立 | TC-426, TC-564 |
 | INTENT-REL-065 | API 限流与一致性——10 QPS 高频查询 run/job 状态不丢数据 | P2 | RISK-REL-01 / API 限流 | 独立 | — |
 | INTENT-REL-066 | 大规格资源调度稳定性——xlarge/2xlarge 反复编译成功率 | P1 | RISK-REL-01 / 大规格调度 | 独立 | TC-447~455 |
+| INTENT-REL-067 | 项目级 workflow 并发上限——200 条同时触发全部完成无丢失 | P1 | RISK-REL-01 / 并发容量 | 独立（2026-07-27 回填） | — |
+| INTENT-REL-068 | 项目级 workflow 并发上限越界——201 条触发超限部分排队 | P1 | RISK-REL-01 / 并发容量 | 独立（2026-07-27 回填） | — |
 
 ### 维度：usability
 

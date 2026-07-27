@@ -875,3 +875,252 @@ Oracle 来源: GitHub行为 | 差异声明
 ---
 
 *产出完毕。待门禁评审。*
+
+---
+
+## 增补意图（2026-07-27 回填：COMPAT-NEW 系列悬空引用补定义）
+
+> 以下 12 条意图被 phase01/runs/2026-07-23-01 基底用例引用，但此前未在本库定义，现根据引用用例的操作步骤与预期结果反推补全。
+
+```
+意图 ID:    INTENT-COMPAT-NEW-001
+维度标签:   [compatibility]
+标题:       `jobs.<id>.container` 字段不支持时的报错质量与替代指引
+
+风险点:     GitHub 支持 `container` 字段指定 job 运行容器镜像（含自定义 Registry 镜像）。GitCode 不支持 container 字段，若平台仅给出模糊的 generic YAML error 或静默忽略该字段，用户会误以为容器环境已生效，实际构建跑在默认 Runner 上，导致依赖容器环境的构建产物错误。
+预期系统行为: 含 `container` 字段的 workflow 应被拒绝，报错明确指出 `container` 字段不被支持、指向正确行号/字段名，并给出替代方案（使用默认 Runner 环境或 runs-on 标签）；自定义镜像场景应说明镜像拉取不被支持。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [负向] 不通过无指引的原始报错（仅 generic YAML error）
+  - [负向] 不通过静默忽略（workflow 被接受但容器未生效）
+  - [正向] 报错包含 `container` 关键字、行号/字段名及可操作建议
+  - [正向] 自定义镜像被拒绝时提示使用默认 Runner 替代
+
+对齐方向:   一致性
+优先级线索: RISK-COMPAT-01
+破坏级别:   none
+关联用例:   COMPAT-CONTAINER-01-001, COMPAT-CONTAINER-01-002
+```
+
+```
+意图 ID:    INTENT-COMPAT-NEW-002
+维度标签:   [compatibility]
+标题:       环境级（environment）secrets 不支持时不应静默降级为项目级
+
+风险点:     GitHub 支持 environment 级 secrets，优先级高于仓库级。若 GitCode 不支持环境级 secrets 却静默将其解析为项目级同名 secret，会改变安全模型（生产环境 secret 被项目级值替代），造成越权或配置错误的双重风险。
+预期系统行为: job 声明 `environment` 并引用环境级 secrets 时，若平台不支持环境级 secrets，应在解析阶段明确报错或警告；项目级 secrets 正常注入；绝不应将环境级引用静默降级为项目级值。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [负向] 不通过静默降级（环境级引用不应返回项目级 secret 的值）
+  - [正向] 系统对环境级 secrets 的缺失给出明确提示
+  - [正向] 项目级 secrets 正常注入
+
+对齐方向:   一致性
+优先级线索: RISK-SEC-01
+破坏级别:   none
+关联用例:   COMPAT-SECRET-01-005
+```
+
+```
+意图 ID:    INTENT-COMPAT-NEW-003
+维度标签:   [compatibility]
+标题:       `pull_request` types/paths/branches 过滤配置后不触发与 GitHub 行为差异
+
+风险点:     GitHub 中配置 `pull_request.types: [open, reopen, update]` 后，匹配类型的 PR 事件应触发独立 Job；types 含 merge 时合并 PR 应触发 pull_request 运行；`paths`/`branches` 过滤应正常生效。GitCode 实际：满足 types 条件的 PR 变更无对应 workflow 运行（已知问题）；合并 PR 只产生 PUSH 运行而无 pull_request 运行；paths 过滤不工作。差异若不被显式记录，迁移用户的 PR 流水线会静默失效。
+预期系统行为: 匹配 types 的 PR 事件（open/reopen/update/merge）应触发独立的 pull_request workflow 运行；paths 匹配的 PR 应触发；branches 目标分支匹配时触发、不匹配时不触发。平台修复后应重新验证。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [负向] 不通过假阴性（满足 types 条件的 PR 变更没有对应 workflow 运行）
+  - [负向] 不通过合并 PR 仅产生 PUSH 运行而无 pull_request 运行
+  - [负向] 不通过修改匹配 paths 的 PR 无 workflow 触发
+  - [正向] 若平台已修复，上述各场景应触发对应 workflow 运行
+  - [正向] branches 过滤：目标分支匹配触发、不匹配不触发
+
+对齐方向:   一致性
+优先级线索: RISK-COMPAT-01
+破坏级别:   none
+关联用例:   COMPAT-PR-01-003, COMPAT-PR-01-004, COMPAT-PR-01-005, COMPAT-PR-01-006
+```
+
+```
+意图 ID:    INTENT-COMPAT-NEW-004
+维度标签:   [compatibility]
+标题:       `issue_comment` types 命名差异（created/edited/deleted）与降级指引
+
+风险点:     GitHub 的 issue_comment types 为 created/edited/deleted。GitCode 采用同名还是异名需以平台为准；若平台不接受合法 types 或不支持某个 type（如 created）时静默忽略 types 配置，会导致所有 issue_comment 事件都触发 workflow，造成误触发与资源浪费。
+预期系统行为: GitCode 合法 types 应被接受并正常触发；不支持的 type 应明确报错并列出可接受的 types 列表，而非静默忽略整个 types 配置。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [正向] GitCode 风格 types 命名被接受且能正常触发
+  - [负向] 不通过因命名差异导致的误报错误
+  - [负向] 不通过静默忽略（types 配置失效、全量触发）
+  - [正向] 报错信息包含可接受的 types 列表
+
+对齐方向:   一致性
+优先级线索: RISK-COMPAT-01
+破坏级别:   none
+关联用例:   COMPAT-COMM-01-001, COMPAT-COMM-01-002
+```
+
+```
+意图 ID:    INTENT-COMPAT-NEW-005
+维度标签:   [compatibility]
+标题:       `concurrency.preemption` 配置差异（enable 行为与 events 上限校验）
+
+风险点:     GitHub 的并发控制通过 `cancel-in-progress` 表达；GitCode 引入 `concurrency.preemption.enable` 与 `preemption.events`（上限 10）。若 preemption 配置不被识别而被静默忽略，用户预期的抢占行为不生效，并发超限时的取消/排队行为与设计不符；events 越界（如 11 个）若不被拒绝，行为未定义。
+预期系统行为: 系统对 preemption 配置的接受或拒绝应给出明确提示；events 越界值应被拒绝并报出有效范围（≤10）。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [正向] 系统接受或拒绝 preemption 配置时给出明确提示
+  - [负向] 不通过 preemption 配置被静默忽略
+  - [正向] events 越界值给出明确报错且包含有效范围提示
+
+对齐方向:   一致性
+优先级线索: RISK-COMPAT-01
+破坏级别:   none
+关联用例:   COMPAT-CONCUR-01-003, COMPAT-CONCUR-01-004
+```
+
+```
+意图 ID:    INTENT-COMPAT-NEW-006
+维度标签:   [compatibility]
+标题:       跨 Job 引用未声明 output 的返回值差异
+
+风险点:     GitHub 中通过 `needs.<job>.outputs.<key>` 引用未声明的 output 返回空字符串，workflow 继续执行。若 GitCode 对该场景报错或返回非空异常值，依赖宽松 output 引用的迁移 workflow 会意外失败。
+预期系统行为: 跨 Job 引用未声明 output 时不导致 workflow 崩溃，返回值与 GitHub 行为一致（空字符串）；差异应被明确记录。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [正向] 引用未声明 output 不导致 workflow 崩溃
+  - [正向] 返回值为空字符串（与 GitHub 一致）
+
+对齐方向:   一致性
+优先级线索: RISK-COMPAT-01
+破坏级别:   none
+关联用例:   COMPAT-OUTPUT-01-001
+```
+
+```
+意图 ID:    INTENT-COMPAT-NEW-007
+维度标签:   [compatibility]
+标题:       `strategy.matrix` 高级用法差异（三维展开 / include 无基础变量 / exclude 全排除）
+
+风险点:     GitHub 支持多维 matrix 展开、include 追加不依赖基础变量的实例、exclude 排除组合（含全排除后空矩阵报错）。GitCode 若不支持这些模式且静默忽略配置，会导致 matrix 实例数与用户预期不符：三维配置失效、include 实例丢失、exclude 全排除后仍生成全部实例。
+预期系统行为: 系统对三维 matrix、无基础变量的 include、exclude 全排除应给出明确响应（接受并正确展开，或拒绝并报错）；空矩阵应明确报错；不应静默忽略任何 matrix 配置。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [正向] 三维 matrix 被接受时正确展开，或被拒绝时明确报错
+  - [正向] include 无基础变量配置被明确接受或拒绝
+  - [正向] exclude 全排除时空矩阵明确报错
+  - [负向] 不通过任何 matrix 配置被静默忽略
+
+对齐方向:   一致性
+优先级线索: RISK-COMPAT-01
+破坏级别:   none
+关联用例:   COMPAT-MATRIX-01-003, COMPAT-MATRIX-01-004, COMPAT-MATRIX-01-005
+```
+
+```
+意图 ID:    INTENT-COMPAT-NEW-008
+维度标签:   [compatibility]
+标题:       `runs-on` 不支持标签（self-hosted / 自定义特征 / 内网环境）的报错与排队行为
+
+风险点:     GitHub 支持 self-hosted 标签与自定义特征标签匹配自托管 Runner。GitCode 若不支持这些标签，job 无限排队且无任何提示是最差体验——用户无法区分「资源紧张排队」与「标签永不匹配」。
+预期系统行为: 对不支持的 runs-on 标签（self-hosted、自定义特征标签如 gpu/nvidia、内网环境标签）应明确报错，说明标签不匹配并给出可用标签列表或标签格式指引；不应无限排队。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [正向] 不支持的标签给出明确报错
+  - [正向] 报错给出可用标签列表或标签格式指引
+  - [负向] 不通过 job 无限排队且无提示
+
+对齐方向:   一致性
+优先级线索: RISK-COMPAT-01
+破坏级别:   none
+关联用例:   COMPAT-RUNNER-01-003, COMPAT-RUNNER-01-004, COMPAT-RUNNER-01-005
+```
+
+```
+意图 ID:    INTENT-COMPAT-NEW-009
+维度标签:   [compatibility]
+标题:       workflow 命令 `::add-mask::` / `::group::` / `::stop-commands::` 不支持时应静默降级
+
+风险点:     GitHub workflow 命令中 add-mask（日志脱敏）、group/endgroup（日志分组折叠）、stop-commands（暂停命令解析）被广泛用于现有 Action 生态。GitCode 若不支持这些命令，最安全的兼容策略是静默降级（忽略命令、workflow 继续），而非报错中断——否则大量引用第三方 Action 的 workflow 会集体失败。
+预期系统行为: 不支持的 workflow 命令应被静默降级（忽略），workflow 不因这些命令失败；差异应被记录（降级意味着 add-mask 的脱敏保护不生效，需提示用户改用 secrets 声明）。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [正向] workflow 不因 add-mask / group / stop-commands 命令而失败
+  - [负向] 不通过这些命令导致 workflow 报错中断
+
+对齐方向:   一致性
+优先级线索: RISK-COMPAT-01
+破坏级别:   none
+关联用例:   COMPAT-WCMD-01-001, COMPAT-WCMD-01-002, COMPAT-WCMD-01-003
+```
+
+```
+意图 ID:    INTENT-COMPAT-NEW-010
+维度标签:   [compatibility]
+标题:       `action.yml` 元数据校验差异（branding 等 GitHub 风格字段）
+
+风险点:     GitHub Action 的 action.yml 允许 branding 等展示性元数据字段。GitCode 对 action.yml 的校验规则若更严格，直接拒绝含 GitHub 风格字段的 Action，会导致存量 Action 生态无法被引用。
+预期系统行为: 不支持的 action.yml 字段应被静默忽略或给出警告，不应导致 Action 无法引用、workflow 失败；系统应给出明确提示说明哪些字段不被支持。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [正向] 不支持的 action.yml 字段不导致 workflow 失败
+  - [正向] 系统给出明确提示说明不支持的字段
+
+对齐方向:   一致性
+优先级线索: RISK-COMPAT-01
+破坏级别:   none
+关联用例:   COMPAT-ACTIONDEV-01-001
+```
+
+```
+意图 ID:    INTENT-COMPAT-NEW-011
+维度标签:   [compatibility]
+标题:       Runner 未预装 Java 工具链与 GitHub 差异（无 setup-java 替代）
+
+风险点:     GitHub Runner 预装 Java/Maven，且提供 setup-java Action 按需切换版本。GitCode Runner 未预装 Java 且 setup-java 插件不存在，Java 项目的迁移 workflow 第一步 `java -version` 即失败，且用户找不到熟悉的替代路径。
+预期系统行为: 系统对缺失的 Java 工具链给出明确提示，并建议替代方案（使用自定义 Runner 或预装环境镜像）。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [正向] 系统对缺失的 Java 工具链给出明确提示
+  - [正向] 提示建议替代方案（自定义 Runner / 预装环境）
+
+对齐方向:   一致性
+优先级线索: RISK-COMPAT-01
+破坏级别:   none
+关联用例:   COMPAT-RUNNER-01-006
+```
+
+```
+意图 ID:    INTENT-COMPAT-NEW-012
+维度标签:   [compatibility]
+标题:       废弃命令 `::set-env::` / `::add-path::` 的处理——拒绝或给出迁移指引
+
+风险点:     `::set-env::` 与 `::add-path::` 因安全风险已被 GitHub 废弃（警告但向后兼容），GitCode 的替代协议为 `ATOMGIT_ENV` / `ATOMGIT_PATH` 文件。若 GitCode 静默忽略这两个命令且 workflow 显示成功，用户会误以为环境变量/PATH 已生效，后续步骤读到错误值且难以排查。
+预期系统行为: 系统应明确拒绝该命令（报错），或给出弃用警告并附替代方案示例（`ATOMGIT_ENV` / `ATOMGIT_PATH` 文件协议）；不应静默忽略且 workflow 成功。
+Oracle 来源: GitHub行为 | 差异声明
+
+验证要点:
+  - [负向] 不通过命令被静默忽略且 workflow 成功（用户误以为生效）
+  - [正向] 系统给出明确响应：报错拒绝、或警告+替代方案
+  - [正向] 警告中包含 `ATOMGIT_ENV` / `ATOMGIT_PATH` 文件协议替代示例
+
+对齐方向:   一致性
+优先级线索: RISK-COMPAT-01
+破坏级别:   none
+关联用例:   COMPAT-DEPR-01-001, COMPAT-DEPR-01-002
+```
+
+*增补完毕：INTENT-COMPAT-NEW-001 ~ INTENT-COMPAT-NEW-012，共 12 条。*
