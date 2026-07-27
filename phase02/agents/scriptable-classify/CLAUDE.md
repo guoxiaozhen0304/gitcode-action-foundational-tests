@@ -32,7 +32,9 @@ harses 可通过 API 直接读取 run_status、event 等字段，或 grep 日志
 | `rerun_context` | rerun API → 对比两次运行的 sha/run_number |
 | `step_summary` | 下载 job log → 解析 step summary 字段 |
 
-**示例**：`SEC-SIDECHAN-02-001` 的第三个断言 `target: artifacts` 需要下载 artifact 后搜索 secret 明文，harness 仅能 grep 日志，无法做到。
+**示例**：
+
+`SEC-SIDECHAN-02-001` 的第三个断言 `target: artifacts` 需要下载 artifact 后搜索 secret 明文，harness 仅能 grep 日志，无法做到。
 
 ```yaml
 assertions:
@@ -41,6 +43,10 @@ assertions:
     eval: "deterministic"
     rubric: "artifact 内容不含 secret 明文"
 ```
+
+`COMP-CALL-01-001`：2 层 workflow_call 嵌套正常执行。验证嵌套调用链需要检查多个子工作流 run 的 status/event，harness 仅能扫描当前 run 的日志和字段，无法跨 run 验证调用链。
+
+`COMP-ARTIFACT-01-003`：artifact 保留期设置生效 (retention-days)。验证保留期实际生效需要检查 artifact service 在过期后 artifact 是否被删除，属于 artifact-level 操作，harness 不支持。
 | 3 | trigger 复杂 | 仅 schedule |
 | 4 | 长时间等待（timing assertions） | `max_queued_to_running_seconds` 等时序断言 |
 | 5 | UI 检查（`ui_visual` / `ui_interaction` / `ui_layout`） | 需要浏览器自动化 |

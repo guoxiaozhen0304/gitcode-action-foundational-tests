@@ -351,8 +351,9 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 ---
 
 ## 失败分诊 · COMP-ARTIFACT-01-003 · artifact 保留期设置生效 confirmed
-[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/168aaa22139b4c2d8801f67cdf0e92a2/workflow)
-**判定结果**: PENDING
+[upload](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/168aaa22139b4c2d8801f67cdf0e92a2/workflow)
+[download](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/489d28b4a7b4483f97ed13f98d613ebb/job/73699e69121f41718f5935ea0a5a69e2)
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (status, positive) — 预期 all job/step green，实际 job 'Upload with short retention' status=FAILED
 
 **根因初判**: 
@@ -506,13 +507,14 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 ---
 
 ## 失败分诊 · SEC-BASE-01-001 · pull_request_target 使用 base 分支的 workflow 版本
-
-**判定结果**: FAIL
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/b2c6b76c46a143de92496425dcdd402c/job/ed3f51d25b884f7e94c5773fa4e9b910)
+[pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/28)
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (value, positive, target=run_logs) — 预期 log contains 'base_branch_workflow_executed'，实际 absent; assertions[1] (leak, negative) — PASS (plaintext 'fork_injected_step' 0 hits ✓)
 
-**根因初判**: 标记不匹配
+**根因初判**: 
 
-**责任人**: Phase 01
+**责任人**: 
 
 **证据**:
 - **Job 日志全量**（5 行）:
@@ -539,13 +541,15 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 ---
 
 ## 失败分诊 · SEC-BASE-01-002 · fork PR 改 workflow 不被 pull_request_target 采用
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/b2c6b76c46a143de92496425dcdd402c/job/ed3f51d25b884f7e94c5773fa4e9b910)
+[pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/28)
+**判定结果**: SUCCESS
 
-**判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'fork_injected_step' 0 hits ✓); assertions[1] (run_status, positive) — 预期 SUCCESS_WITH_BASE_WORKFLOW，实际 COMPLETED
 
-**根因初判**: 标记不匹配
+**根因初判**: 
 
-**责任人**: Phase 01
+**责任人**: 
 
 **证据**:
 - **Job 日志全量**（5 行）:

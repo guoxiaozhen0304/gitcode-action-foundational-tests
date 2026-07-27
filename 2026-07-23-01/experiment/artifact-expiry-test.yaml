@@ -2,23 +2,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  upload:
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: Create artifact
-        run: echo "created-at-$(date -u +%Y%m%dT%H%M%SZ)" > temp.txt
-
-      - name: Upload artifact
-        identifier: upload
-        uses: upload-artifact
-        with:
-          name: temp-artifact
-          path: temp.txt
-          retention-days: 1
-
-      - name: Show artifact uploaded
-        run: echo "Artifact uploaded. Re-run download job later to test expiry."
-
   download:
     needs: upload
     runs-on: [ubuntu-latest, x64, small]
