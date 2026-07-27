@@ -11,7 +11,9 @@
 ---
 
 ## 失败分诊 · COMP-CACHE-01-001 · cache hit 时恢复缓存内容正确 confirmed
-**重跑 (dispatch)**: FAILED · [6059ed2e...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/f275475492a241e9853623c5b7d23a66)
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/b27f6eb5251a49bdbf8dbc91fd95bf58/job/e6f5f0984cbc422bb2383b68595b9514)
+
+key cache-001-1785145768
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (run_status, positive, target=run_status) — 预期 COMPLETED，实际 FAILED
@@ -50,14 +52,16 @@ No:
 
 ---
 
-## 失败分诊 · COMP-CACHE-01-002 · restore-keys 前缀匹配兜底生效 confirmed
+## 失败分诊 · COMP-CACHE-01-002 · restore-keys 前缀匹配兜底生效  confirmed
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/4ab684892c74428c85de43bbf96670c8)
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/1edcd5eb9afa4535a41c5dd41f14e1c0/job/b5af2a760fb84ceebd95e7a77bbd9978)
 
-**判定结果**: FAIL
-**失败断言**: assertions[0] (status, positive, target=run_status) — 预期 all job/step green，实际 job 'Verify restore keys fallback' status=FAILED
+**判定结果**: SUCCESS
 
-**根因初判**: 产品缺陷, the cache doesnt support the cache
 
-**责任人**: 平台方
+**根因初判**: 
+
+**责任人**: 
 
 **证据**:
 - **Job 日志全量**（3 行，无 shell 脚本输出）:
@@ -184,7 +188,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · COMP-PR-01-001 · fork PR 触发 pull_request 时不可读取项目 secrets
+## 失败分诊 · COMP-PR-01-001 · fork PR 触发 pull_request 时不可读取项目 secrets confirmed
 [log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/45f014e99b2c42f4a28f3391e99fa571/job/689c46b860e74a28a686486ed947ac60)
 [pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/26)
 
@@ -223,7 +227,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · COMP-PR-01-003 · fork PR 的 pull_request workflow ATOMGIT_TOKEN 仅 read 权限
+## 失败分诊 · COMP-PR-01-003 · fork PR 的 pull_request workflow ATOMGIT_TOKEN 仅 read 权限 confirmed
 
 [log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/6b931387d26b4a1185b870964ece413b/job/f03c41d48d3e4880a33df43aec88093c)
 [pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/26)
@@ -399,7 +403,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · COMP-SUMMARY-01-001 · ATOMGIT_STEP_SUMMARY Markdown 表格与标题正确渲染
+## 失败分诊 · COMP-SUMMARY-01-001 · ATOMGIT_STEP_SUMMARY Markdown 表格与标题正确渲染 confirmed
 
 [log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/0580293ec3e84a32b2b0f43458ccbbbb)
 
@@ -434,14 +438,14 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · COMP-TIMEOUT-01-002 · 超时的 job 被强制终止并标记为 failure
-
-**判定结果**: FAIL
+## 失败分诊 · COMP-TIMEOUT-01-002 · 超时的 job 被强制终止并标记为 failure confirmed
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/00676b11963549b89450e7ab4ced924b/workflow)
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (run_status_not, negative) — PASS (conclusion != COMPLETED, actual=CANCELED ✓); assertions[1] (run_status, positive) — 预期 FAILED，实际 CANCELED; assertions[2] (value, positive) — PASS (log contains 'starting' ✓)
 
 **根因初判**: 产品缺陷（标记映射）— 平台用 CANCELED 而非 FAILED 标记超时终止
 
-**责任人**: Phase 01（标记不匹配）+ 协同平台方
+**责任人**: Phase 01（标记不匹配）
 
 **证据**:
 - **Job 日志全量**（9 行）:
@@ -506,7 +510,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-BASE-01-001 · pull_request_target 使用 base 分支的 workflow 版本
+## 失败分诊 · SEC-BASE-01-001 · pull_request_target 使用 base 分支的 workflow 版本 confirmed
 [log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/b2c6b76c46a143de92496425dcdd402c/job/ed3f51d25b884f7e94c5773fa4e9b910)
 [pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/28)
 **判定结果**: SUCCESS
@@ -540,7 +544,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-BASE-01-002 · fork PR 改 workflow 不被 pull_request_target 采用
+## 失败分诊 · SEC-BASE-01-002 · fork PR 改 workflow 不被 pull_request_target 采用 confirmed
 [log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/b2c6b76c46a143de92496425dcdd402c/job/ed3f51d25b884f7e94c5773fa4e9b910)
 [pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/28)
 **判定结果**: SUCCESS
@@ -575,14 +579,18 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-CACHE-01-002 · 主仓 cache restore 对 fork cache miss
+## 失败分诊 · SEC-CACHE-01-002 · 主仓 cache restore 对 fork cache miss confirmed
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/e543c19b1e114598b8e86faa1375ae82/job/b99fa8b2367e4a618ad4716d3cf22d39)
+
+
+key:sec-cache-1785145768
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (value, positive, target=run_logs) — 预期 log contains 'cache_miss'，实际 absent
 
-**根因初判**: 环境问题（cache 事件触发条件不满足）
+**根因初判**: there are no doc metion this 
 
-**责任人**: Phase 02
+**责任人**: Phase 01
 
 **证据**:
 - **Job 日志全量**（3 行）:
@@ -674,7 +682,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-FORK-01-001 · fork PR 触发 pull_request 时不可读取项目 secrets confirm
+## 失败分诊 · SEC-FORK-01-001 · fork PR 触发 pull_request 时不可读取项目 secrets confirmed
 [log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/ee5dfabda67747e2918009e6123292a9/job/dfb0bbe6828c4170a6bfa1bb3ec870c4)
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (run_status, positive) — 预期 COMPLETED_OR_BLOCKED，实际 COMPLETED
@@ -707,7 +715,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-FORK-01-002 · fork PR 中 secrets 引用返回空值且 job 不崩溃
+## 失败分诊 · SEC-FORK-01-002 · fork PR 中 secrets 引用返回空值且 job 不崩溃 confirmed
 **重跑 (dispatch)**: FAILED · [69a627e9...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/69a627e9daa74ac1ba794db6c4e6756b)
 
 **判定结果**: FAIL
@@ -742,7 +750,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-INJ-01-005 · 表达式求值必须防止双重模板渲染（二次求值）
+## 失败分诊 · SEC-INJ-01-005 · 表达式求值必须防止双重模板渲染（二次求值） confirmed
 **重跑 (dispatch)**: FAILED · [08e4cbc6...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/08e4cbc63e3b418a9475979cf125a4dc)
 
 **判定结果**: FAIL
@@ -911,7 +919,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-PERM-01-003 · 未声明 permissions 时 ATOMGIT_TOKEN 默认权限必须最小化（read-only）
+## 失败分诊 · SEC-PERM-01-003 · 未声明 permissions 时 ATOMGIT_TOKEN 默认权限必须最小化（read-only）confirmed
 **重跑 (dispatch)**: FAILED · [53798629...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/53798629398644e58ee9c8df3271ab66)
 
 **判定结果**: FAIL
@@ -919,7 +927,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 **根因初判**: 产品缺陷（ATOMGIT_TOKEN 缺失 — 同 SEC-DEFPERM-01-001）
 
-**责任人**: 平台方
+**责任人**: PHASE 01
 
 **证据**:
 - **Job 日志全量**（5 行）:
@@ -983,8 +991,9 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-PRTGT-01-001 · pull_request_target 下显式 checkout 不可信 PR 时 secrets 仍应受控
-**重跑 (dispatch)**: FAILED · [ffed6e13...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/b71eb4ad3975410cbf4773957beece98/job/b1d0294ad3c8462eb09190e9f76502e5)
+## 失败分诊 · SEC-PRTGT-01-001 · pull_request_target 下显式 checkout 不可信 PR 时 secrets 仍应受控 
+**重跑 (dispatch)**: FAILED · [ffed6e13...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/a9dd49e838184598ae4bb38e259a113d/job/2119e73ef3ca4b2e84f6e55ea099a9fe)
+[PR](https://gitcode.com/ComputingActionTest/foundational-tests/pull/26)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (run_status, positive) — 预期 BLOCKED_OR_PENDING，实际 COMPLETED
@@ -1017,7 +1026,8 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 ---
 
 ## 失败分诊 · SEC-PRTGT-01-002 · pull_request_target 无审批不执行 fork PR 代码
-**重跑 (dispatch)**: FAILED · [4b550324...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/4b5503245d07412382f7d6ff8227e585)
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/83f2e03d7232415f8a1888d9d0f04ff6/job/b046a660ce574060a3529b5e047fbb0a)
+[PR](https://gitcode.com/ComputingActionTest/foundational-tests/pull/26)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'success_without_approval' 0 hits ✓); assertions[1] (run_status, positive) — 预期 PENDING_OR_BLOCKED，实际 COMPLETED
@@ -1050,7 +1060,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 ---
 
 ## 失败分诊 · SEC-RUN-01-003 · 自托管 Runner 跨项目残留必须被隔离
-**重跑 (dispatch)**: FAILED · [73fe7c52...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/73fe7c5218d74236a61d5620967defe7)
+
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'cross project leak' 0 hits ✓); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'isolated_as_expected'，实际 absent
@@ -1080,7 +1090,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-SIDE-01-002 · Secret 不经 artifact 侧信道绕过脱敏外泄 confirm
+## 失败分诊 · SEC-SIDE-01-002 · Secret 不经 artifact 侧信道绕过脱敏外泄 confirmed
 **重跑 (dispatch)**: FAILED · [9b1a2c9f...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/e372cfd4a131418cb1b00432a217ff8f/job/19962f85c3be4d7cb165bf8a67a94302)
 
 **判定结果**: FAIL
@@ -1114,7 +1124,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-SUPPLY-01-001 · 第三方 Action 引用应支持完整 commit hash 固定 confirm
+## 失败分诊 · SEC-SUPPLY-01-001 · 第三方 Action 引用应支持完整 commit hash 固定 confirmed
 **重跑 (dispatch)**: FAILED · [0e149f3a...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/0e149f3a3fea438b8dbd0808999a2202)
 
 **判定结果**: FAIL
@@ -1146,7 +1156,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-SUPPLY-01-002 · commit hash 不匹配时第三方 Action 应被拒绝执行 confirm
+## 失败分诊 · SEC-SUPPLY-01-002 · commit hash 不匹配时第三方 Action 应被拒绝执行 confirmed
 **重跑 (dispatch)**: FAILED · [0ad11491...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/0ad1149178df44fc96ba55cc353d0ffb)
 
 **判定结果**: FAIL
@@ -1177,7 +1187,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 ---
 
 ## 失败分诊 · SEC-TOCTOU-01-001 · 审批后推送新 commit 不应被已授权特权运行执行
-**重跑 (dispatch)**: COMPLETED · [2643d4c7...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/2643d4c791e6406c9650e255e8af2e79)
+
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'unapproved_commit_executed' 0 hits ✓); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'approved_sha_matched'，实际 absent
@@ -1210,9 +1220,9 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-TOKEN-01-001 · fork PR 触发 pull_request 时 ATOMGIT_TOKEN 必须仅拥有 read 权限
-**重跑 (dispatch)**: FAILED · [e5677522...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/e567752207134ff69dbe0f2808a4d307)
-
+## 失败分诊 · SEC-TOKEN-01-001 · fork PR 触发 pull_request 时 ATOMGIT_TOKEN 必须仅拥有 read 权限 confirmed
+[pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/26)
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/1ad90cea89b54cb688c0ef5fdf6a1aed/job/6bbcd526f3bc47abaec4c315eea9d4fc)
 **判定结果**: FAIL
 **失败断言**: assertions[0] (value, positive, target=run_logs) — 预期 log contains 'clone_successful'，实际 absent; assertions[1] (leak, negative) — PASS (plaintext 'write_permission_granted' 0 hits ✓)
 
@@ -1245,7 +1255,9 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 ---
 
 ## 失败分诊 · SEC-TOKEN-01-002 · fork PR 中 ATOMGIT_TOKEN 写操作被平台拒绝  
-**重跑 (dispatch)**: FAILED · [710f696a...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/710f696a9a7e41f09599131c3f19460f)
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/9241ee86040c4b6a9ed2107743454212/job/00d0306d72ab48e19b4eb7ff38284936)
+
+[pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/26)
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (run_status, positive) — 预期 COMPLETED，实际 FAILED
