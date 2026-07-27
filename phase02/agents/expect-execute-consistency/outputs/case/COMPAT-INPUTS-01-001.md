@@ -1,76 +1,31 @@
 # COMPAT-INPUTS-01-001
-
 - **标题**: workflow_dispatch inputs 类型限制 - boolean 应报错
 - **维度**: 兼容性
 - **优先级**: P1
-- **评级**: 完全不符
-
+- **评级**: 断言一致
 ---
-
 ## 1. 想测什么
-
 本用例验证：**workflow_dispatch inputs 类型限制 - boolean 应报错**
-
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-COMPAT-014
-
 通过标准：
-1. type=negative, target=run_status, equals=success
-2. type=nonfunctional, target=error_message, eval=llm_assisted
-
+1. 平台应对不支持的 boolean 类型给出明确的校验错误
+2. 错误信息应提示仅支持 string 类型
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | Echo input | `echo "INPUT_OK"` |  | ❌ VACUOUS |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-    inputs:
-      dry_run:
-        description: '是否仅验证不部署'
-        required: false
-        default: false
-        type: boolean
-jobs:
-  verify:
-    name: Verify boolean input rejection
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: Echo input
-        run: |
-          echo "INPUT_OK"
-```
-
-</details>
-
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | Echo input | `echo "INPUT_OK"` | — | "INPUT_OK" |
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | 无 |
 | 故障注入 | 无 |
-
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | equals=success | ⚠️ STATUS_GUARANTEED | 所有步骤均为 echo/trivial 命令，无条件失败路径，永远成功 |
-| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-
+| 1 | run_status equals success | negative | — | ✅ GENUINE | boolean 类型 input 不应被静默接受，若平台拒绝此配置，run_status 将不会为 success |
+| 2 | error_message eval=llm_assisted | nonfunctional | — | 🔶 LLM_DEPENDENT | 错误信息质量由 LLM 判定 |
 ### 问题
-
-**断言 1 — STATUS_GUARANTEED**⚠️: 所有步骤均为 echo/trivial 命令，无条件失败路径，永远成功
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+- 断言2（LLM判定）被跳过
 ---

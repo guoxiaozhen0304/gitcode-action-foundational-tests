@@ -1,70 +1,35 @@
 # REL-CHILDSTATE-01-064-V2
-
 - **标题**: 子任务状态传播——workflow_call 未拉起时父 workflow 不应假阳性完成
-- **维度**: 可靠性
+- **维度**: 稳定性
 - **优先级**: P0
 - **评级**: 断言一致
-
 ---
-
 ## 1. 想测什么
-
-本用例验证：**子任务状态传播——workflow_call 未拉起时父 workflow 不应假阳性完成**
-
+本用例验证：**引用不存在的子 workflow 时父 workflow 应正确标记 failure**
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-REL-064
-
 通过标准：
-1. type=positive, target=parent_status, equals=failure
-2. type=positive, target=downstream_status, equals=skipped
-3. type=negative, target=parent_status, equals=success
+1. 父 workflow 状态=failure
+2. 下游 job 被 skip
+3. 父 workflow 不应显示 success
 
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | should not run | `echo downstream` |  | ❌ VACUOUS |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-jobs:
-  call_child:
-    name: call missing child workflow
-    uses: ./.gitcode/workflows/child_missing.yml
-  downstream:
-    name: downstream job
-    runs-on: [ubuntu-latest, x64, small]
-    needs: call_child
-    steps:
-      - name: should not run
-        run: |
-          echo downstream
-```
-
-</details>
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | call_child | `uses: ./.gitcode/workflows/child_missing.yml` | - | 调用不存在的子 workflow |
+| 2 | downstream should not run | `echo downstream` | needs: call_child | 依赖失败的子 workflow，应 skip |
 
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | [] |
 | 故障注入 | 无 |
 
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | parent_status | positive | equals=failure | ✅ GENUINE | 断言有条件可被步骤验证 |
-| 2 | downstream_status | positive | equals=skipped | ✅ GENUINE | 断言有条件可被步骤验证 |
-| 3 | parent_status | negative | equals=success | ✅ GENUINE | 断言有条件可被步骤验证 |
-
+| 1 | parent_status = failure | positive | - | ✅ GENUINE | `uses:` 引用不存在的子 workflow，平台解析失败 → 真实 failure |
+| 2 | downstream_status = skipped | positive | - | ✅ GENUINE | needs 依赖失败 → 平台自动 skip |
+| 3 | parent_status = success | negative | - | ✅ GENUINE | 子 workflow 不存在，父必然不为 success |
 ---

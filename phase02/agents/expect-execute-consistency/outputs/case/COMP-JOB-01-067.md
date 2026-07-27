@@ -10,79 +10,38 @@
 ## 1. 想测什么
 
 本用例验证：**job 可选字段 env if timeout-minutes needs 验证**
-
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-COMP-066
 
 通过标准：
-1. type=positive, target=run_logs, must_contain="prepare_done"
-2. type=positive, target=run_logs, must_contain="JOB_VAR=job_value"
-3. type=positive, target=run_logs, must_contain="optional_ok"
+1. [正向] job env 在 step 中可访问 —— 断言 JOB_VAR=job_value
+2. [正向] needs 依赖 job 先执行 —— 断言 prepare_done
+3. [正向] timeout-minutes 字段被接受 —— 断言 optional_ok
 
 ## 2. 做了什么
 
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | Prepare | `echo "prepare_done"` |  | ❌ VACUOUS |
-| 2 | Check fields | `echo "JOB_VAR=$JOB_VAR" echo "optional_ok"` |  | ❌ VACUOUS |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-jobs:
-  prepare:
-    name: Prepare job
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: Prepare
-        run: |
-          echo "prepare_done"
-  verify:
-    name: Verify optional fields
-    runs-on: [ubuntu-latest, x64, small]
-    needs: prepare
-    if: ${{ true }}
-    timeout-minutes: 30
-    env:
-      JOB_VAR: job_value
-    steps:
-      - name: Check fields
-        run: |
-          echo "JOB_VAR=$JOB_VAR"
-          echo "optional_ok"
-```
-
-</details>
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 (prepare) | Prepare | `echo "prepare_done"` | - | 字面量 |
+| 2 (verify) | Check fields | `echo "JOB_VAR=$JOB_VAR"` + `echo "optional_ok"` | (job 级) if: ${{ true }}, needs: prepare, timeout-minutes: 30 | env 块定义值和 echo 字面量 |
 
 ## 3. 触发与运行环境
 
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | [] |
 | 故障注入 | 无 |
 
 ## 4. 能否达成目标
 
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | must_contain=prepare_done | ❌ VACUOUS | prepare_done: VACUOUS (步骤仅 echo，未执行功能) |
-| 2 | run_logs | positive | must_contain=JOB_VAR=job_value | ❌ MISSING_SOURCE | JOB_VAR=job_value: MISSING_SOURCE (无步骤产出此字符串) |
-| 3 | run_logs | positive | must_contain=optional_ok | ❌ VACUOUS | optional_ok: VACUOUS (步骤仅 echo，未执行功能) |
+| 1 | run_logs | positive | must_contain: prepare_done | ❌ VACUOUS | prepare job 仅 echo 字面量，无 if:、无 ${{ }}、无 uses:、无 real commands |
+| 2 | run_logs | positive | must_contain: JOB_VAR=job_value | ❌ VACUOUS | 值来自 `env:` 块定义的字面量 job_value，步骤仅回显该预定义值 |
+| 3 | run_logs | positive | must_contain: optional_ok | ❌ VACUOUS | 仅 echo 字面量 |
 
 ### 问题
 
-**断言 1 — VACUOUS**❌: prepare_done: VACUOUS (步骤仅 echo，未执行功能)
+**全部断言 VACUOUS**: prepare job 仅 echo 字面量。verify job 虽有 `needs: prepare`、`if: ${{ true }}`、`timeout-minutes: 30` 等 job 级字段配置，但步骤本身仅 echo 预定义的环境变量值和字面量字符串。env 值 "job_value" 是硬编码在 YAML 中的，步骤不做任何验证。needs 依赖和 timeout-minutes 的效果由 harness 在外部验证，step 内无自检逻辑。
 
-**断言 2 — MISSING_SOURCE**❌: JOB_VAR=job_value: MISSING_SOURCE (无步骤产出此字符串)
-
-**断言 3 — VACUOUS**❌: optional_ok: VACUOUS (步骤仅 echo，未执行功能)
-
----

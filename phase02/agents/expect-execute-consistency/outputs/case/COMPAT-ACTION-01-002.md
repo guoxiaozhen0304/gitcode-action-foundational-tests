@@ -1,86 +1,33 @@
 # COMPAT-ACTION-01-002
-
 - **标题**: checkout 短名等价性——path 参数支持
 - **维度**: 兼容性
 - **优先级**: P1
 - **评级**: 断言一致
-
 ---
-
 ## 1. 想测什么
-
-本用例验证：**checkout 短名等价性——path 参数支持**
-
+本用例验证：**uses: checkout 配合 path 参数可将代码检出到指定子目录**
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-COMPAT-024
-
 通过标准：
-1. type=positive, target=run_status, equals=completed_success
-2. type=positive, target=run_logs, eval=llm_assisted
-3. type=negative, target=run_logs, eval=llm_assisted
-4. type=negative, target=workflow_parse, eval=llm_assisted
-
+1. checkout 步骤成功完成
+2. 指定子目录下存在仓库文件
+3. 不应因使用裸插件名而解析失败
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | (TC) checkout with path | `checkout` |  | ✅ GENUINE |
-| 2 | (TC) verify path exists | `if [ ! -f "subdir/checkout-path/README.md" ]; then   echo "CHECKOUT_PATH_FAILED"` |  | ✅ GENUINE |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-jobs:
-  verify-checkout-path:
-    name: Verify checkout path parameter
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: (TC) checkout with path
-        uses: checkout
-        with:
-          path: subdir/checkout-path
-      - name: (TC) verify path exists
-        run: |
-          if [ ! -f "subdir/checkout-path/README.md" ]; then
-            echo "CHECKOUT_PATH_FAILED"
-            exit 1
-          else
-            echo "CHECKOUT_PATH_OK"
-          fi
-```
-
-</details>
-
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | checkout with path | `uses: checkout with: path: subdir/checkout-path` | — | 检出代码到子目录 |
+| 2 | verify path exists | `if [ ! -f ... ] echo CHECKOUT_PATH_FAILED; exit 1; else echo CHECKOUT_PATH_OK` | — | CHECKOUT_PATH_OK 或 FAILED |
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | [] |
 | 故障注入 | 无 |
-
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | positive | equals=completed_success | ✅ GENUINE | 状态断言 completed_success 可被步骤行为验证 |
-| 2 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-| 3 | run_logs | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-| 4 | workflow_parse | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-
-### 问题
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
-**断言 3 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
-**断言 4 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+| 1 | run_status=completed_success | positive | — | ✅ GENUINE | 步骤含 uses: checkout 和 real fs 检查，if 条件及 exit 1 |
+| 2 | run_logs CHECKOUT_PATH_OK | positive | llm_assisted | 🔶 LLM_DEPENDENT |  |
+| 3 | run_logs 不应出现 FAILED | negative | llm_assisted | 🔶 LLM_DEPENDENT |  |
+| 4 | workflow_parse 不应因裸插件名失败 | negative | llm_assisted | 🔶 LLM_DEPENDENT |  |
 ---

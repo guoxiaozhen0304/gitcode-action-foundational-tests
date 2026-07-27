@@ -1,81 +1,31 @@
 # COMPAT-CTX-01-005
-
 - **标题**: atomgit 缺位字段（job/run_attempt/triggering_actor/ref_protected）求值行为探测
 - **维度**: 兼容性
 - **优先级**: P1
-- **评级**: 完全不符
-
+- **评级**: 断言一致
 ---
-
 ## 1. 想测什么
-
-本用例验证：**atomgit 缺位字段（job/run_attempt/triggering_actor/ref_protected）求值行为探测**
-
+本用例验证：**四个缺位字段的求值行为逐一确定并记录，缺失字段清单进入迁移对照文档**
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-COMPAT-040
-
 通过标准：
-1. type=positive, target=run_logs, must_contain="PROBE_DONE"
-2. type=positive, target=run_logs, eval=llm_assisted
-
+1. 四个缺位字段的求值行为逐一确定并记录
+2. 缺失字段清单进入迁移对照文档
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | Echo job and run attempt  | `echo "CTX_JOB=${{ atomgit.job }}" echo "CTX_RUN_ATTEMPT=${{ atomgit.run_attempt ` |  | ✅ GENUINE |
-| 2 | Echo actor related fields | `echo "CTX_TRIGGERING_ACTOR=${{ atomgit.triggering_actor }}" echo "CTX_REF_PROTEC` |  | ✅ GENUINE |
-| 3 | Compare with env side | `echo "ENV_RUN_ATTEMPT=$ATOMGIT_RUN_ATTEMPT" echo "PROBE_DONE"` |  | ❌ VACUOUS |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-jobs:
-  probe:
-    name: Probe missing atomgit fields
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: Echo job and run attempt fields
-        run: |
-          echo "CTX_JOB=${{ atomgit.job }}"
-          echo "CTX_RUN_ATTEMPT=${{ atomgit.run_attempt }}"
-      - name: Echo actor related fields
-        run: |
-          echo "CTX_TRIGGERING_ACTOR=${{ atomgit.triggering_actor }}"
-          echo "CTX_REF_PROTECTED=${{ atomgit.ref_protected }}"
-      - name: Compare with env side
-        run: |
-          echo "ENV_RUN_ATTEMPT=$ATOMGIT_RUN_ATTEMPT"
-          echo "PROBE_DONE"
-```
-
-</details>
-
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | Echo job and run attempt | `echo "CTX_JOB=${{ atomgit.job }}" ... CTX_RUN_ATTEMPT` | — | CTX_JOB=..., CTX_RUN_ATTEMPT=... |
+| 2 | Echo actor related fields | `echo "CTX_TRIGGERING_ACTOR=${{ atomgit.triggering_actor }}" ...` | — | CTX_TRIGGERING_ACTOR=... |
+| 3 | Compare with env side | `echo "ENV_RUN_ATTEMPT=$ATOMGIT_RUN_ATTEMPT" && echo "PROBE_DONE"` | — | ENV_RUN_ATTEMPT=..., PROBE_DONE |
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | [] |
 | 故障注入 | 无 |
-
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | must_contain=PROBE_DONE | ❌ VACUOUS | PROBE_DONE: VACUOUS (步骤仅 echo，未执行功能) |
-| 2 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-
-### 问题
-
-**断言 1 — VACUOUS**❌: PROBE_DONE: VACUOUS (步骤仅 echo，未执行功能)
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+| 1 | must_contain PROBE_DONE | positive | — | ✅ GENUINE | 步骤使用 ${{ }} 表达式及 shell 环境变量，有真实平台行为 |
+| 2 | run_logs 逐字段记录 | positive | llm_assisted | 🔶 LLM_DEPENDENT |  |
 ---

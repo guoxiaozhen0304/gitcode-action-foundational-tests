@@ -1,71 +1,35 @@
 # USE-PERM-01-002
-
 - **标题**: 使用 GitHub 权限域命名时报错应给出 GitCode 对照表
-- **维度**: 易用性
+- **维度**: usability
 - **优先级**: P1
-- **评级**: 完全不符
-
+- **评级**: 部分不符
 ---
-
 ## 1. 想测什么
-
 本用例验证：**使用 GitHub 权限域命名时报错应给出 GitCode 对照表**
-
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-USE-005
-
 通过标准：
-1. type=negative, target=run_status, equals=COMPLETED
-2. type=nonfunctional, target=error_message, eval=llm_assisted
+1. 不应静默忽略未知权限域
+2. 报错中应列出 GitCode 可用权限域列表
 
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | checkout | `checkout` |  | ✅ GENUINE |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-permissions:
-  contents: read
-on:
-  workflow_dispatch:
-jobs:
-  bad-perm:
-    name: test github permission error
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: checkout
-        uses: checkout
-```
-
-</details>
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | checkout | `uses: checkout` | 无 | 预期平台对 GitHub 权限域名报错 |
 
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | [] |
 | 故障注入 | 无 |
 
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | equals=COMPLETED | ❌ IMPOSSIBLE | 期望 !=success 但无步骤可能失败 |
-| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 1 | run_status equals COMPLETED | negative | `uses: checkout` + 非法 permissions 字段，平台校验真实行为 | ✅ GENUINE | `uses:` 调用 + permissions 校验涉及平台真实行为 |
+| 2 | error_message eval=llm_assisted | nonfunctional | LLM 判定报错对照内容 | 🔶 LLM_DEPENDENT | 需 LLM 辅助判定报错内容 |
 
 ### 问题
-
-**断言 1 — IMPOSSIBLE**❌: 期望 !=success 但无步骤可能失败
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+断言 2 依赖 LLM 辅助判定，无法在当前分析中确证。
 ---

@@ -1,47 +1,34 @@
 # USE-VARS-01-001
-
 - **标题**: vars 上下文在文档与样本中的声明必须一致
-- **维度**: 易用性
+- **维度**: usability
 - **优先级**: P1
-- **评级**: 断言一致
-
+- **评级**: 完全不符
 ---
-
 ## 1. 想测什么
-
 本用例验证：**vars 上下文在文档与样本中的声明必须一致**
-
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-USE-014
-
 通过标准：
-1. type=nonfunctional, target=documentation, eval=llm_assisted
+1. 若支持，文档示例可运行且样本注释已移除已知不支持
+2. 若不支持，文档中不应出现 vars 使用示例
 
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| — | workflow: null | 无 workflow 步骤 | — | 纯文档/样本一致性分析 |
 
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | [] |
 | 故障注入 | 无 |
 
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | documentation | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 1 | documentation eval=llm_assisted | nonfunctional | LLM 判定文档与样本 vars 声明一致性 | 🔶 LLM_DEPENDENT | 唯一断言为 LLM 辅助判定 |
 
 ### 问题
-
-**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+唯一断言为 nonfunctional + llm_assisted，无 workflow 执行步骤，完全依赖 LLM 判定文档-样本一致性。
 ---

@@ -1,70 +1,35 @@
 # USE-LBL-01-001
-
 - **标题**: runs-on 标签完全不匹配时应给出明确失败原因与可用标签列表
-- **维度**: 易用性
+- **维度**: usability
 - **优先级**: P1
-- **评级**: 完全不符
-
+- **评级**: 部分不符
 ---
-
 ## 1. 想测什么
-
 本用例验证：**runs-on 标签完全不匹配时应给出明确失败原因与可用标签列表**
-
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-USE-025
-
 通过标准：
-1. type=negative, target=run_status, equals=COMPLETED
-2. type=nonfunctional, target=error_message, eval=llm_assisted
+1. 不应无限 queued 且无提示
+2. 错误信息中是否包含用户指定的标签文本
 
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | step | `echo "hello"` |  | ❌ VACUOUS |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-jobs:
-  bad:
-    name: unmatched runner labels
-    runs-on: [nonexistent-os, x64, small]
-    steps:
-      - name: step
-        run: |
-          echo "hello"
-```
-
-</details>
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | step | `echo "hello"` | 无 | job 因 runner 标签不匹配而无法调度 |
 
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | [] |
 | 故障注入 | 无 |
 
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | equals=COMPLETED | ❌ IMPOSSIBLE | 期望 !=success 但无步骤可能失败 |
-| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 1 | run_status equals COMPLETED | negative | 步骤代码虽仅为 echo，但 runner 标签不匹配的行为由平台调度器决定 | ✅ GENUINE | 平台调度匹配行为是真实行为，非步骤代码可自证 |
+| 2 | error_message eval=llm_assisted | nonfunctional | LLM 辅助判定报错内容 | 🔶 LLM_DEPENDENT | 需 LLM 语义判定报错是否包含标签原文与可用列表 |
 
 ### 问题
-
-**断言 1 — IMPOSSIBLE**❌: 期望 !=success 但无步骤可能失败
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+断言 2 依赖 LLM 辅助判定，无法在当前分析中确证。
 ---

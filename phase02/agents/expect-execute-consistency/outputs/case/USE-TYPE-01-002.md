@@ -1,74 +1,35 @@
 # USE-TYPE-01-002
-
 - **标题**: 使用 GitHub types 命名 opened/synchronize 时应给出可理解提示
-- **维度**: 易用性
+- **维度**: usability
 - **优先级**: P1
-- **评级**: 完全不符
-
+- **评级**: 部分不符
 ---
-
 ## 1. 想测什么
-
 本用例验证：**使用 GitHub types 命名 opened/synchronize 时应给出可理解提示**
-
 - 触发事件: `pull_request`
 - 规格引用: INTENT-USE-009
-
 通过标准：
-1. type=negative, target=run_status, equals=COMPLETED
-2. type=nonfunctional, target=error_message, eval=llm_assisted
+1. 不应静默通过校验并在运行时永远不被触发
+2. 报错中应列出 merge/open/reopen/update 并指出对应关系
 
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | echo event | `echo "hello"` |  | ❌ VACUOUS |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-    branches: [main]
-jobs:
-  bad-types:
-    name: test github types error
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: echo event
-        run: |
-          echo "hello"
-```
-
-</details>
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | echo event | `echo "hello"` | 无 | 预期 YAML 校验报错 |
 
 ## 3. 触发与运行环境
-
-| 触发事件 | `pull_request` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | pull_request |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | [] |
 | 故障注入 | 无 |
 
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | equals=COMPLETED | ❌ IMPOSSIBLE | 期望 !=success 但无步骤可能失败 |
-| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 1 | run_status equals COMPLETED | negative | 步骤纯 echo，但 types 命名校验由平台执行 | ✅ GENUINE | 平台对 pull_request types 的校验是真实行为 |
+| 2 | error_message eval=llm_assisted | nonfunctional | LLM 判定报错对照关系提示 | 🔶 LLM_DEPENDENT | 需 LLM 辅助判定报错内容 |
 
 ### 问题
-
-**断言 1 — IMPOSSIBLE**❌: 期望 !=success 但无步骤可能失败
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+断言 2 依赖 LLM 辅助判定，无法在当前分析中确证。
 ---

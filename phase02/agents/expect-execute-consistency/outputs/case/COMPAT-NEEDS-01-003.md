@@ -1,89 +1,33 @@
 # COMPAT-NEEDS-01-003
-
 - **标题**: matrix 上游 job 的 needs outputs 聚合语义与未声明 output 边界
 - **维度**: 兼容性
 - **优先级**: P1
 - **评级**: 断言一致
-
 ---
-
 ## 1. 想测什么
-
 本用例验证：**matrix 上游 job 的 needs outputs 聚合语义与未声明 output 边界**
-
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-COMPAT-041
-
 通过标准：
-1. type=positive, target=run_logs, must_contain="PROBE_DONE"
-2. type=positive, target=run_logs, eval=llm_assisted
-3. type=positive, target=run_logs, eval=llm_assisted
-
+1. matrix 上游聚合取值确定且语义明确
+2. 未声明 output 引用返回空而非报错
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | Emit per instance mark | `echo "mark=instance-${{ matrix.idx }}" >> "$ATOMGIT_OUTPUT"` |  | ✅ GENUINE |
-| 2 | Read aggregated and undec | `echo "AGG_MARK=${{ needs.gen.outputs.mark }}" echo "UNDECLARED=${{ needs.gen.out` |  | ✅ GENUINE |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-jobs:
-  gen:
-    name: Matrix upstream producing outputs
-    runs-on: [ubuntu-latest, x64, small]
-    strategy:
-      matrix:
-        idx: [1, 2]
-    outputs:
-      mark: ${{ steps.emit.outputs.mark }}
-    steps:
-      - name: Emit per instance mark
-        id: emit
-        run: |
-          echo "mark=instance-${{ matrix.idx }}" >> "$ATOMGIT_OUTPUT"
-  consume:
-    name: Consume matrix aggregated output
-    needs: gen
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: Read aggregated and undeclared outputs
-        run: |
-          echo "AGG_MARK=${{ needs.gen.outputs.mark }}"
-          echo "UNDECLARED=${{ needs.gen.outputs.never_declared }}"
-          echo "PROBE_DONE"
-```
-
-</details>
-
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | gen: Emit per instance mark | `echo "mark=instance-${{ matrix.idx }}" >> "$ATOMGIT_OUTPUT"` | — | mark=instance-1/2 |
+| 2 | consume: Read aggregated and undeclared outputs | `echo "AGG_MARK=${{ needs.gen.outputs.mark }}"` 及 UNDECLARED/PROBE_DONE | — | AGG_MARK=<值>, UNDECLARED=<空> |
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | 无 |
 | 故障注入 | 无 |
-
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | must_contain=PROBE_DONE | ✅ GENUINE | PROBE_DONE: GENUINE |
-| 2 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-| 3 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-
+| 1 | run_logs must_contain "PROBE_DONE" | positive | — | ✅ GENUINE | ${{ needs.gen.outputs.mark }} 和 ${{ needs.gen.outputs.never_declared }} 均为真实表达式，若解析失败则不输出 |
+| 2 | run_logs eval=llm_assisted | positive | — | 🔶 LLM_DEPENDENT | AGG_MARK 取值由 LLM 判定 |
+| 3 | run_logs eval=llm_assisted | positive | — | 🔶 LLM_DEPENDENT | UNDECLARED 空值由 LLM 判定 |
 ### 问题
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
-**断言 3 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+- 断言2、3（LLM判定）被跳过；断言1 为 GENUINE
 ---

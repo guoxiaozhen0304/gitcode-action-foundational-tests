@@ -1,70 +1,35 @@
 # USE-EXPR-01-001
-
 - **标题**: 引用不存在的上下文属性时报错应包含原始表达式与错误类型
-- **维度**: 易用性
+- **维度**: usability
 - **优先级**: P1
-- **评级**: 完全不符
-
+- **评级**: 部分不符
 ---
-
 ## 1. 想测什么
-
 本用例验证：**引用不存在的上下文属性时报错应包含原始表达式与错误类型**
-
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-USE-024
-
 通过标准：
-1. type=negative, target=run_status, equals=COMPLETED
-2. type=nonfunctional, target=error_message, eval=llm_assisted
+1. 不应静默求值为空字符串
+2. 报错中是否包含原始表达式和错误位置
 
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | bad expression | `echo "val=${{ atomgit.nonexistent_property }}"` |  | ✅ GENUINE |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-jobs:
-  bad:
-    name: undefined context property
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: bad expression
-        run: |
-          echo "val=${{ atomgit.nonexistent_property }}"
-```
-
-</details>
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | bad expression | `echo "val=${{ atomgit.nonexistent_property }}"` | 无 | 预期报错而非静默 |
 
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | [] |
 | 故障注入 | 无 |
 
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | equals=COMPLETED | ❌ IMPOSSIBLE | 期望 !=success 但无步骤可能失败 |
-| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 1 | run_status equals COMPLETED | negative | 步骤含 `${{ }}` 表达式且引用不存在属性 | ✅ GENUINE | 表达式求值涉及平台真实行为，错误路径由平台决定 |
+| 2 | error_message eval=llm_assisted | nonfunctional | LLM 辅助判定报错内容 | 🔶 LLM_DEPENDENT | 需 LLM 语义判定报错是否包含原始表达式与错误类型 |
 
 ### 问题
-
-**断言 1 — IMPOSSIBLE**❌: 期望 !=success 但无步骤可能失败
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+断言 2 依赖 LLM 辅助判定，无法在当前分析中确证。
 ---

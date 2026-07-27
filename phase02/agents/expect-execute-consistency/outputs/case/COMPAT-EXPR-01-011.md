@@ -1,69 +1,31 @@
 # COMPAT-EXPR-01-011
-
 - **标题**: join() 函数缺失时的降级行为
 - **维度**: 兼容性
 - **优先级**: P1
 - **评级**: 断言一致
-
 ---
-
 ## 1. 想测什么
-
 本用例验证：**join() 函数缺失时的降级行为**
-
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-COMPAT-010
-
 通过标准：
-1. type=negative, target=run_logs
-2. type=nonfunctional, target=error_message, eval=llm_assisted
-
+1. 平台对不支持的 join() 函数给出明确的校验错误或运行时错误
+2. 不应静默求值并返回意外结果
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | Test join function in run | `RESULT="${{ join(['a', 'b', 'c'], '-') }}" echo "join-result=$RESULT"` |  | ✅ GENUINE |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-jobs:
-  test-join:
-    name: Test join function availability
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: Test join function in run block
-        run: |
-          RESULT="${{ join(['a', 'b', 'c'], '-') }}"
-          echo "join-result=$RESULT"
-```
-
-</details>
-
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | Test join function in run block | `RESULT="${{ join(['a', 'b', 'c'], '-') }}"` 后 `echo "join-result=$RESULT"` | — | join-result=a-b-c 或错误 |
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | 无 |
 | 故障注入 | 无 |
-
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | negative |  | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
-| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-
+| 1 | run_logs must_not_contain "join-result=a-b-c" | negative | — | ✅ GENUINE | 步骤使用 ${{ join(...) }} 真实表达式；若平台不支持 join() 则不会输出此字符串，若静默支持则断言失败 |
+| 2 | error_message eval=llm_assisted | nonfunctional | — | 🔶 LLM_DEPENDENT | 错误信息质量由 LLM 判定 |
 ### 问题
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+- 断言2（LLM判定）被跳过
 ---

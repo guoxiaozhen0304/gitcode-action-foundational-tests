@@ -1,76 +1,32 @@
 # COMPAT-MIGRATE-01-001
-
 - **标题**: GitHub 风格 permissions 块迁移报错应给出可操作指引
 - **维度**: 兼容性
 - **优先级**: P1
-- **评级**: 断言一致
-
+- **评级**: 完全不符
 ---
-
 ## 1. 想测什么
-
 本用例验证：**GitHub 风格 permissions 块迁移报错应给出可操作指引**
-
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-COMPAT-031
-
 通过标准：
-1. type=negative, target=validation_error, eval=llm_assisted
-2. type=positive, target=error_message, eval=llm_assisted
-
+1. 系统拒绝该 workflow（GitCode 不支持 permissions 块）
+2. 报错信息应明确指出 permissions 字段不被支持
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | checkout source | `checkout` |  | ✅ GENUINE |
-| 2 | echo hello | `echo "hello"` |  | ❌ VACUOUS |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-jobs:
-  migrate-permissions:
-    name: Test permissions block error
-    runs-on: [ubuntu-latest, x64, small]
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - name: checkout source
-        uses: checkout
-      - name: echo hello
-        run: |
-          echo "hello"
-```
-
-</details>
-
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | checkout source | uses: checkout | — | — |
+| 2 | echo hello | `echo "hello"` | — | "hello" |
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | 无 |
 | 故障注入 | 无 |
-
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | validation_error | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-| 2 | error_message | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-
+| 1 | validation_error eval=llm_assisted | negative | — | 🔶 LLM_DEPENDENT | permissions 拒绝行为由 LLM 判定 |
+| 2 | error_message eval=llm_assisted | positive | — | 🔶 LLM_DEPENDENT | 报错信息质量由 LLM 判定 |
 ### 问题
-
-**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+全部断言均为 LLM_DEPENDENT
 ---

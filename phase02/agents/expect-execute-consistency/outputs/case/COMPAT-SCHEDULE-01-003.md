@@ -1,72 +1,33 @@
 # COMPAT-SCHEDULE-01-003
-
 - **标题**: schedule 在非默认分支不触发与 GitHub 差异
 - **维度**: 兼容性
 - **优先级**: P1
 - **评级**: 断言一致
-
 ---
-
 ## 1. 想测什么
-
 本用例验证：**schedule 在非默认分支不触发与 GitHub 差异**
-
 - 触发事件: `schedule`
 - 规格引用: INTENT-COMPAT-013
-
 通过标准：
-1. type=negative, target=run_status, eval=llm_assisted
-2. type=positive, target=run_status, eval=llm_assisted
+1. [负向] develop 分支的 schedule workflow 不应触发
+2. [正向] 默认分支的 schedule workflow 正常触发
 
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | Echo branch | `echo "branch=${{ atomgit.ref_name }}" echo "done"` |  | ✅ GENUINE |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  schedule:
-    - cron: '0 2 * * *'
-jobs:
-  test-schedule-non-default:
-    name: Test schedule on non-default branch
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: Echo branch
-        run: |
-          echo "branch=${{ atomgit.ref_name }}"
-          echo "done"
-```
-
-</details>
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | Echo branch | `echo "branch=${{ atomgit.ref_name }}"` → `echo "done"` | - | `branch=<value>`, `done` |
 
 ## 3. 触发与运行环境
-
-| 触发事件 | `schedule` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | schedule |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | [] |
 | 故障注入 | 无 |
 
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-| 2 | run_status | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-
-### 问题
-
-**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+| 1 | run_status | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 需 LLM 评估非默认分支是否触发 |
+| 2 | run_status | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 需 LLM 评估默认分支是否触发 |
 
 ---

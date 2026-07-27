@@ -1,76 +1,32 @@
 # SEC-FORK-01-002
-
 - **标题**: fork PR 中 secrets 引用返回空值且 job 不崩溃
 - **维度**: 安全性
 - **优先级**: P0
-- **评级**: 部分不符
-
+- **评级**: 断言一致
 ---
-
 ## 1. 想测什么
-
-本用例验证：**fork PR 中 secrets 引用返回空值且 job 不崩溃**
-
-- 触发事件: `pull_request`
+本用例验证：**fork PR 下 secrets.API_KEY 返回空，环境变量未设置，job 成功完成**
+- 触发事件: `pull_request` (as untrusted_contributor)
 - 规格引用: INTENT-SEC-001
-
 通过标准：
-1. type=negative, target=run_logs, must_not_contain_secret="API_KEY"
-2. type=positive, target=run_status, equals=success
-
+1. 日志不含 API_KEY 明文
+2. run_status 为 success
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | Check env empty | `if [ -z "$API_KEY" ]; then   echo "API_KEY is empty as expected" else   echo "AP` |  | ✅ GENUINE |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  pull_request:
-    branches: [main]
-jobs:
-  test-empty:
-    name: Test empty secret
-    runs-on: [ubuntu-latest, x64, small]
-    env:
-      API_KEY: ${{ secrets.API_KEY }}
-    steps:
-      - name: Check env empty
-        run: |
-          if [ -z "$API_KEY" ]; then
-            echo "API_KEY is empty as expected"
-          else
-            echo "API_KEY is not empty"
-            exit 1
-          fi
-```
-
-</details>
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | Check env empty | `if [ -z "$API_KEY" ]; then echo "API_KEY is empty..."; else echo "API_KEY is not empty"; exit 1; fi` | env: API_KEY=${{ secrets.API_KEY }} | 空值检测 |
 
 ## 3. 触发与运行环境
-
-| 触发事件 | `pull_request` |
-| 触发身份 | `untrusted_contributor` |
-| Repo 环境 | `with-secrets` |
-| Secrets | `['API_KEY']` |
+| 触发事件 | pull_request |
+| 触发身份 | untrusted_contributor |
+| Repo 环境 | with-secrets |
+| Secrets | API_KEY |
 | 故障注入 | 无 |
-
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | negative | !secret=API_KEY | ❌ UNEXERCISED | 断言 secret 不泄露但无步骤使用 API_KEY |
-| 2 | run_status | positive | equals=success | ✅ GENUINE | 存在真实可执行步骤，有行为观测价值 |
-
+| 1 | 不含 API_KEY 明文 | negative | run_logs must_not_contain_secret | ✅ GENUINE | env 中使用 ${{ secrets.API_KEY }} → NEVER VACUOUS；fork PR 隔离机制 |
+| 2 | run_status success | positive | run_status equals "success" | ✅ GENUINE | 步骤有 if/exit 1 分支；fork PR 下 secret 为空 → 打印 "API_KEY is empty" → success |
 ### 问题
-
-**断言 1 — UNEXERCISED**❌: 断言 secret 不泄露但无步骤使用 API_KEY
-
+(无)
 ---

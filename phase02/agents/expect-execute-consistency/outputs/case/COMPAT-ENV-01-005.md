@@ -1,83 +1,32 @@
 # COMPAT-ENV-01-005
-
 - **标题**: RUNNER_* 系列环境变量在 GitCode Runner 上的注入情况探测
 - **维度**: 兼容性
 - **优先级**: P1
-- **评级**: 完全不符
-
+- **评级**: 断言一致
 ---
-
 ## 1. 想测什么
-
-本用例验证：**RUNNER_* 系列环境变量在 GitCode Runner 上的注入情况探测**
-
+本用例验证：**六个 RUNNER_* 变量取值逐一确定并记录，不注入的列入差异清单**
 - 触发事件: `workflow_dispatch`
 - 规格引用: INTENT-COMPAT-044
-
 通过标准：
-1. type=positive, target=run_logs, must_contain="PROBE_DONE"
-2. type=positive, target=run_logs, eval=llm_assisted
-3. type=negative, target=run_logs, eval=llm_assisted
-
+1. 六个 RUNNER_* 变量取值逐一确定
+2. 不应出现部分有值部分为空的不一致
+3. 缺失变量清单进入迁移对照表
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | Echo RUNNER identificatio | `echo "RUNNER_OS=[$RUNNER_OS]" echo "RUNNER_ARCH=[$RUNNER_ARCH]" echo "RUNNER_NAM` |  | ❌ VACUOUS |
-| 2 | Echo RUNNER path and capa | `echo "RUNNER_TEMP=[$RUNNER_TEMP]" echo "RUNNER_TOOL_CACHE=[$RUNNER_TOOL_CACHE]" ` |  | ❌ VACUOUS |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-jobs:
-  probe:
-    name: Probe RUNNER series env vars
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: Echo RUNNER identification vars
-        run: |
-          echo "RUNNER_OS=[$RUNNER_OS]"
-          echo "RUNNER_ARCH=[$RUNNER_ARCH]"
-          echo "RUNNER_NAME=[$RUNNER_NAME]"
-      - name: Echo RUNNER path and capability vars
-        run: |
-          echo "RUNNER_TEMP=[$RUNNER_TEMP]"
-          echo "RUNNER_TOOL_CACHE=[$RUNNER_TOOL_CACHE]"
-          echo "RUNNER_ENVIRONMENT=[$RUNNER_ENVIRONMENT]"
-          echo "PROBE_DONE"
-```
-
-</details>
-
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | Echo RUNNER identification vars | `echo "RUNNER_OS=[$RUNNER_OS]" ... RUNNER_NAME` | — | RUNNER_OS=[...], RUNNER_ARCH=[...], RUNNER_NAME=[...] |
+| 2 | Echo RUNNER path and capability vars | `echo "RUNNER_TEMP=[$RUNNER_TEMP]" ... PROBE_DONE` | — | RUNNER_TEMP=[...], RUNNER_TOOL_CACHE=[...], RUNNER_ENVIRONMENT=[...], PROBE_DONE |
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | [] |
 | 故障注入 | 无 |
-
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | must_contain=PROBE_DONE | ❌ VACUOUS | PROBE_DONE: VACUOUS (步骤仅 echo，未执行功能) |
-| 2 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-| 3 | run_logs | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
-
-### 问题
-
-**断言 1 — VACUOUS**❌: PROBE_DONE: VACUOUS (步骤仅 echo，未执行功能)
-
-**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
-**断言 3 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
-
+| 1 | must_contain PROBE_DONE | positive | — | ✅ GENUINE | 步骤使用多个 shell 环境变量（RUNNER_*），真实验证平台注入行为 |
+| 2 | run_logs 逐字记录 RUNNER_* 值 | positive | llm_assisted | 🔶 LLM_DEPENDENT |  |
+| 3 | run_logs 半套兼容检测 | negative | llm_assisted | 🔶 LLM_DEPENDENT |  |
 ---

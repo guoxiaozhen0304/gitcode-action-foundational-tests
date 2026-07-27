@@ -150,14 +150,14 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 ---
 
 ## 失败分诊 · COMP-PERMS-01-003 · fork PR 的 pull_request 下声明 write 仍仅 read confirmed
-[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/3addc0e10e1243f39c24a58833ad9f33/workflow)
-[pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/15)
-**判定结果**: SUCCESS
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/144ee3f2cba0475994465c38c46aa236/job/17e41551d3cf47af82f7393ed8fb3eab)
+[pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/26)
+**判定结果**: FAIL
 **失败断言**: assertions[0] (run_status_not, negative) — PASS (conclusion != SUCCESS_WITH_WRITE, actual=COMPLETED ✓); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'write failed as expected'，实际 absent
 
-**根因初判**: 产品缺陷（平台行为与文档承诺一致，但断言标记不匹配）
+**根因初判**:  use comment api , not push repo
 
-**责任人**: 
+**责任人**: PHASE 01
 
 **证据**:
 - **Job 日志全量**（5 行）:
@@ -185,8 +185,11 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 ---
 
 ## 失败分诊 · COMP-PR-01-001 · fork PR 触发 pull_request 时不可读取项目 secrets
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/45f014e99b2c42f4a28f3391e99fa571/job/689c46b860e74a28a686486ed947ac60)
+[pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/26)
 
-**判定结果**: FAIL
+
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (run_status, positive) — 预期 SUCCESS_OR_BLOCKED，实际 COMPLETED
 
 **根因初判**: 产品缺陷 — fork PR secret 隔离未生效
@@ -222,10 +225,14 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ## 失败分诊 · COMP-PR-01-003 · fork PR 的 pull_request workflow ATOMGIT_TOKEN 仅 read 权限
 
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/6b931387d26b4a1185b870964ece413b/job/f03c41d48d3e4880a33df43aec88093c)
+[pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/26)
+
+
 **判定结果**: FAIL
 **失败断言**: assertions[0] (run_status, positive) — 预期 SUCCESS_OR_FAILURE，实际 COMPLETED
 
-**根因初判**: 标记不匹配
+**根因初判**: 标记不匹配  comment is not required permission
 
 **责任人**: Phase 01
 
@@ -345,7 +352,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ## 失败分诊 · COMP-ARTIFACT-01-003 · artifact 保留期设置生效 confirmed
 [log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/168aaa22139b4c2d8801f67cdf0e92a2/workflow)
-**判定结果**: PEDING
+**判定结果**: PENDING
 **失败断言**: assertions[0] (status, positive) — 预期 all job/step green，实际 job 'Upload with short retention' status=FAILED
 
 **根因初判**: 

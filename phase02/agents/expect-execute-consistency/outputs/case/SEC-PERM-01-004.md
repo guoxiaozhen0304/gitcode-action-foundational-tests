@@ -1,69 +1,32 @@
 # SEC-PERM-01-004
-
 - **标题**: 默认状态下写操作被 403 拒绝
 - **维度**: 安全性
 - **优先级**: P0
-- **评级**: 断言一致
-
+- **评级**: 部分不符
 ---
-
 ## 1. 想测什么
-
-本用例验证：**默认状态下写操作被 403 拒绝**
-
-- 触发事件: `workflow_dispatch`
+本用例验证：**默认无 permissions 时 push 返回权限拒绝**
+- 触发事件: `workflow_dispatch` (as maintainer)
 - 规格引用: INTENT-SEC-017
-
 通过标准：
-1. type=negative, target=run_logs
-2. type=positive, target=run_logs, equals=push_denied_or_403
-
+1. 不含 push_successful
+2. push 被拒或 403
 ## 2. 做了什么
-
-workflow 中每个步骤的实际行为：
-
-| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
-|---|--------|-----------|------|------|
-| 1 | Attempt push without perm | `git clone https://x-access-token:${{ atomgit.token }}@atomgit.com/${{ atomgit.re` |  | ✅ GENUINE |
-
-<details>
-<summary>完整 workflow YAML</summary>
-
-```yaml
-on:
-  workflow_dispatch:
-jobs:
-  default-write-denied:
-    name: Test default write denied
-    runs-on: [ubuntu-latest, x64, small]
-    steps:
-      - name: Attempt push without permissions
-        run: |
-          git clone https://x-access-token:${{ atomgit.token }}@atomgit.com/${{ atomgit.repository }}.git repo
-          cd repo
-          echo test > test.txt
-          git add test.txt
-          git commit -m test
-          git push origin main || echo push denied as expected
-```
-
-</details>
+| # | 步骤名 | 命令 | 条件 (if) | 输出 |
+|---|--------|------|------|------|
+| 1 | Attempt push without permissions | `git clone ... ; cd repo; git add/commit/push origin main \|\| echo push denied as expected` | — | push 结果 |
 
 ## 3. 触发与运行环境
-
-| 触发事件 | `workflow_dispatch` |
-| 触发身份 | `maintainer` |
-| Repo 环境 | `default` |
-| Secrets | `[]` |
+| 触发事件 | workflow_dispatch |
+| 触发身份 | maintainer |
+| Repo 环境 | default |
+| Secrets | (无) |
 | 故障注入 | 无 |
-
 ## 4. 能否达成目标
-
-逐条断言对比步骤实际输出：
-
 | # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | negative |  | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
-| 2 | run_logs | positive | equals=push_denied_or_403 | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
-
+| 1 | 不含 push_successful | negative | run_logs must_not_contain | ✅ GENUINE | git clone + push 使用 ${{ atomgit.token }} → NEVER VACUOUS |
+| 2 | push_denied_or_403 | positive | run_logs equals | ❌ VACUOUS | git push 失败时输出 "push denied as expected"，非 "push_denied_or_403" 标签 |
+### 问题
+断言 2 VACUOUS：步骤输出自然语言字符串，断言期望下划线标签。
 ---
