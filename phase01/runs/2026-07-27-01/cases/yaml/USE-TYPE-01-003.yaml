@@ -1,0 +1,45 @@
+id: USE-TYPE-01-003
+dimensions: ["usability", "compatibility"]
+dimension: usability
+priority: P1
+title: "pull_request_comment 与 pr_comment 事件名双轨的文档说明"
+intent_ref: INTENT-USE-036
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    pr_comment:
+      types: [created]
+  jobs:
+    probe:
+      name: alias pr comment trigger
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: marker step
+          run: |
+            echo "triggered via alias event name"
+
+trigger:
+  event: pull_request_comment
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: validation_result
+    eval: "deterministic"
+    criterion: "记录平台对 pr_comment 别名的接受情况；行为等价性裁定归 COMP-024，本条仅记录接受事实供文档一致性判定"
+  - type: negative
+    target: documentation
+    eval: "deterministic"
+    criterion: "trigger-events.md 未提及 pr_comment 别名而样本在用即不合格；comments 与 keyword 过滤字段双名同理"
+
+teardown:
+  reset: fixture

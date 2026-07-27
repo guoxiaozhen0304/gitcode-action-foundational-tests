@@ -1,0 +1,39 @@
+id: SEC-COMM-01-002
+dimensions: ["security", "compatibility"]
+dimension: security
+priority: P1
+title: "引用/反讽/代码块内嵌指令文本绝不应造成 pull_request_comment 预期外触发"
+intent_ref: INTENT-SEC-042
+setup:
+  repo_fixture: default
+workflow: |
+  on:
+    pull_request_comment:
+      types: [created]
+      comments: ['^/deploy fixture-environment$']
+  jobs:
+    comment-gate:
+      name: Comment regex boundary check
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Mark trigger
+          run: |
+            echo "TRIGGERED_BY_COMMENT: command accepted"
+trigger:
+  event: pull_request_comment
+  as: untrusted_contributor
+  params:
+    boundary_comments: [quote_block_embedded, ironic_statement, code_block_embedded]
+fault_injection: null
+assertions:
+  - type: positive
+    target: run_trigger
+    equals: "exact_command_triggers"
+  - type: negative
+    target: run_trigger
+    must_not_equal: "triggered_by_quoted_or_embedded_text"
+  - type: nonfunctional
+    target: trigger_audit
+    equals: "trigger_traceable_to_comment_content"
+teardown:
+  reset: fixture

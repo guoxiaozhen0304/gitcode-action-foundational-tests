@@ -1,0 +1,47 @@
+id: COMP-VARREF-01-084
+dimensions: [completeness]
+dimension: completeness
+priority: P2
+title: ${gitcode_*} 与 ${PIPELINE_*} 非标准插值的求值行为记录
+intent_ref: INTENT-COMP-032
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+fault_injection: null
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: Probe legacy interpolation
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Probe interpolation styles
+          run: |
+            echo 'GC_LIT=${gitcode_SOURCE_BRANCH}'
+            echo 'PL_LIT=${PIPELINE_RUN_ID}'
+            echo "GC_SHELL=${gitcode_SOURCE_BRANCH}"
+            echo "PL_SHELL=${PIPELINE_RUN_ID}"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: GC_LIT=
+  - type: positive
+    target: run_logs
+    must_contain: PL_LIT=
+  - type: nonfunctional
+    target: interpolation_eval
+    eval: llm_assisted
+    rubric: 对比 LIT 行（shell 单引号保留字面）与 SHELL 行（shell 展开为空）：若 LIT 行中占位符被替换则为平台运行前求值，逐字记录运行时值；与 USE-038 文档面证据合并
+  - type: negative
+    target: silent_literal
+    eval: llm_assisted
+    rubric: 未求值的占位符不应以字面量形态静默流入下游 job 参数且无任何提示
+teardown:
+  reset: fixture

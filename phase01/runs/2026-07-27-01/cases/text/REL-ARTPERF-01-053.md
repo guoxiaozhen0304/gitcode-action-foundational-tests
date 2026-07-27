@@ -1,0 +1,25 @@
+用例 ID:   REL-ARTPERF-01-053
+维度标签:   [reliability]
+维度:      稳定性
+优先级:    P1
+溯源意图:  INTENT-REL-053
+参照来源:  inputs/gitcode-spec/core-concepts/workflow-job-step-action.md; inputs/gitcode-spec/writing-pipelines/configure-jobs.md
+母意图:    —
+标题:      制品传输性能——100MB artifact 上传下载耗时
+
+前置条件:
+  - 仓库具备 artifact 使用权限
+
+操作步骤:
+  1. 触发含 100MB artifact upload/download 的 workflow
+
+预期结果:
+  - 上传/下载均成功且 hash 100% 匹配
+  - 上传≤30s 下载≤30s
+
+验证点:
+  - [正向] 上传≤30s
+  - [正向] 下载≤30s
+  - [正向] hash 100% 匹配（下载后文件名为原始文件名 artifact.bin，非 artifact 名称 perf-artifact）
+
+清理:      重置 fixture 仓库

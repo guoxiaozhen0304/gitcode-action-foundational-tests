@@ -1,0 +1,45 @@
+id: USE-DOC-01-003
+dimensions: ["usability"]
+dimension: usability
+priority: P0
+title: "trigger-events 每分钟 cron 示例与最短间隔 5 分钟声明自相矛盾"
+intent_ref: INTENT-USE-033
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    schedule:
+      - cron: "* * * * *"
+  jobs:
+    probe:
+      name: per-minute cron doc example
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: marker step
+          run: |
+            echo "scheduled"
+
+trigger:
+  event: schedule
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: negative
+    target: documentation
+    eval: "deterministic"
+    criterion: "trigger-events.md 不应在最短间隔 5 分钟提示下方给出 * * * * * 每分钟示例；存在即不合格"
+  - type: positive
+    target: validation_result
+    eval: "deterministic"
+    criterion: "记录平台对该 cron 的接受或拒绝行为，与文档两处声明逐一比对，任一不符即记文档缺陷"
+
+teardown:
+  reset: fixture

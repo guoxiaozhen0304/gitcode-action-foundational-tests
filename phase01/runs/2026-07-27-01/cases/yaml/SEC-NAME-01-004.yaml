@@ -1,0 +1,35 @@
+id: SEC-NAME-01-004
+dimensions: ["security"]
+dimension: security
+priority: P1
+title: "与系统变量同名的用户自定义值绝不应覆盖 job 环境中的平台注入值"
+intent_ref: INTENT-SEC-041
+setup:
+  repo_fixture: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    shadow-check:
+      name: System variable shadowing check
+      runs-on: [ubuntu-latest, x64, small]
+      env:
+        ATOMGIT_ENV: /tmp/fixture-shadow-path
+      steps:
+        - name: Verify system variable integrity
+          run: |
+            echo "SYSTEM_VAR_CHECK: comparing system variable values against platform injected values"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+assertions:
+  - type: positive
+    target: job_env
+    equals: "system_var_integrity_preserved"
+  - type: negative
+    target: job_env
+    must_not_equal: "user_value_shadows_system_var"
+teardown:
+  reset: fixture

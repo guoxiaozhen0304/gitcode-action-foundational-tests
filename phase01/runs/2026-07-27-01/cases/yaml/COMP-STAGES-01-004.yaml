@@ -1,0 +1,54 @@
+id: COMP-STAGES-01-004
+dimensions: [completeness, usability]
+dimension: completeness
+priority: P1
+title: map 形式 stages 按定义顺序串行执行（回归保护）
+intent_ref: INTENT-COMP-019
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+fault_injection: null
+workflow: |
+  on:
+    workflow_dispatch:
+  stages:
+    build_stage:
+      jobs:
+        build:
+          name: Stage one job
+          runs-on: [ubuntu-latest, x64, small]
+          steps:
+            - name: Mark stage one
+              run: |
+                echo "STAGE_ONE_DONE"
+    test_stage:
+      jobs:
+        test:
+          name: Stage two job
+          runs-on: [ubuntu-latest, x64, small]
+          steps:
+            - name: Mark stage two
+              run: |
+                echo "STAGE_TWO_DONE"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+assertions:
+  - type: positive
+    target: run_status
+    equals: success
+  - type: positive
+    target: run_logs
+    must_contain: STAGE_ONE_DONE
+  - type: positive
+    target: run_logs
+    must_contain: STAGE_TWO_DONE
+  - type: nonfunctional
+    target: stage_order
+    eval: llm_assisted
+    rubric: 依据 job 日志时间戳判定：test_stage 的开始时间应晚于 build_stage 的结束时间（串行语义保持）
+teardown:
+  reset: fixture
