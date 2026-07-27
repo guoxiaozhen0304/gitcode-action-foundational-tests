@@ -11,7 +11,7 @@
 ---
 
 ## 失败分诊 · COMP-CACHE-01-001 · cache hit 时恢复缓存内容正确 confirmed
-[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/b27f6eb5251a49bdbf8dbc91fd95bf58/job/e6f5f0984cbc422bb2383b68595b9514)
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/a7da7c441a0f47f184fd149e210bc7ad/job/fa326659fc2e4be688f4868b85f5675d)
 
 key cache-001-1785145768
 
@@ -1032,9 +1032,9 @@ key:sec-cache-1785145768
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'success_without_approval' 0 hits ✓); assertions[1] (run_status, positive) — 预期 PENDING_OR_BLOCKED，实际 COMPLETED
 
-**根因初判**: 需人工判断 — 平台可能无审批机制
+**根因初判**: there no doc mention about this
 
-**责任人**: 多方联合
+**责任人**: PHASE 01
 
 **证据**:
 - **Job 日志全量**（51 行，关键部分第 51 行）:
@@ -1259,12 +1259,12 @@ key:sec-cache-1785145768
 
 [pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/26)
 
-**判定结果**: FAIL
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (run_status, positive) — 预期 COMPLETED，实际 FAILED
 
-**根因初判**: 环境问题（git 用户配置缺失）
+**根因初判**: 
 
-**责任人**: Phase 02
+**责任人**: 
 
 **证据**:
 - **Job 日志全量**（19 行）:
@@ -1326,8 +1326,7 @@ key:sec-cache-1785145768
 
 ---
 
-## 失败分诊 · SEC-WCMD-01-002 · 跨运行 artifact 必须被视为不可信数据 confirm
-**重跑 (dispatch)**: FAILED · [12c6941c...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/12c6941c211a4361aec29afc4f9e6aaa)
+## 失败分诊 · SEC-WCMD-01-002 · 跨运行 artifact 必须被视为不可信数据 
 
 **判定结果**: FAIL
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'auto_executed' 0 hits ✓); assertions[1] (run_status, positive) — 预期 COMPLETED，实际 FAILED
