@@ -66,6 +66,7 @@
 |------|------|------|
 | 用例规格（期望） | `phase01/runs/2026-07-23-01/cases/text/*.md` | 前置条件、操作步骤、预期结果、验证点 |
 | 用例 YAML（实现） | `phase01/runs/2026-07-23-01/cases/yaml/*.yaml` | workflow 步骤、断言、触发条件、setup |
+| 可访问用例 | `phase02/agents/expect-execute-consistency/outputs/accessable/*.yaml` | 断言一致（170 例）用例的 YAML 副本，可直接用于 dispatch |
 | 反馈 | `phase02/agents/expect-execute-consistency/feedback.md` | 历史报告的反馈记录 |
 
 

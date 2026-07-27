@@ -14,7 +14,7 @@ workflow: |
   jobs:
     override-test:
       name: Test job level override
-      runs-on: [dedicate-hosted, x64, large]
+      runs-on: [ubuntu-latest, x64, small]
       permissions:
         repository: read
       steps:

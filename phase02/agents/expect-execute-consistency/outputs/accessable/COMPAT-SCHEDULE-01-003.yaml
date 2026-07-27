@@ -18,7 +18,7 @@ workflow: |
   jobs:
     test-schedule-non-default:
       name: Test schedule on non-default branch
-      runs-on: [dedicate-hosted, x64, large]
+      runs-on: [ubuntu-latest, x64, small]
       steps:
         - name: Echo branch
           run: |

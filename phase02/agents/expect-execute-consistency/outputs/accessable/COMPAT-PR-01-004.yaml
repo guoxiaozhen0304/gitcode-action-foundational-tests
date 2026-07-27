@@ -3,7 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P1
 title: "PR types 含 merge 时不触发与 GitHub 行为差异"
-intent_ref: INTENT-COMPAT-NEW-003
+intent_ref: INTENT-COMPAT-003
 
 setup:
   repo_fixture: default
@@ -18,7 +18,7 @@ workflow: |
   jobs:
     test-pr-merge:
       name: Test PR merge trigger
-      runs-on: [dedicate-hosted, x64, large]
+      runs-on: [ubuntu-latest, x64, small]
       steps:
         - name: Echo trigger info
           run: |
@@ -40,6 +40,7 @@ assertions:
   - type: positive
     target: run_status
     equals: success
+    eval: llm_assisted
     rubric: "若平台已修复，合并后应触发 pull_request 运行并成功"
 
 teardown:
