@@ -17,7 +17,7 @@ workflow: |
   jobs:
     test:
       name: Test services field
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       services:
         redis:
           image: redis:latest

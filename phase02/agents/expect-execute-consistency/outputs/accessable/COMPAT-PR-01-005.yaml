@@ -3,7 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P1
 title: "PR paths 过滤不工作时的兼容性差异"
-intent_ref: INTENT-COMPAT-003
+intent_ref: INTENT-COMPAT-NEW-003
 
 setup:
   repo_fixture: default
@@ -18,7 +18,7 @@ workflow: |
   jobs:
     test-pr-paths:
       name: Test PR paths filter
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       steps:
         - name: Echo trigger info
           run: |
@@ -40,7 +40,6 @@ assertions:
   - type: positive
     target: run_status
     equals: success
-    eval: llm_assisted
     rubric: "若平台已修复，匹配路径的 PR 应触发 workflow 并成功运行"
 
 teardown:

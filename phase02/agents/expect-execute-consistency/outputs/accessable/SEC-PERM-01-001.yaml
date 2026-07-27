@@ -12,7 +12,7 @@ workflow: |
   jobs:
     perm-read:
       name: Test permissions read only
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       permissions:
         repository: read
         pr: none

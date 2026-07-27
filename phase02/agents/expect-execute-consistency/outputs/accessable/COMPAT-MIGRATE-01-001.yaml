@@ -17,7 +17,7 @@ workflow: |
   jobs:
     migrate-permissions:
       name: Test permissions block error
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       permissions:
         contents: read
         pull-requests: write

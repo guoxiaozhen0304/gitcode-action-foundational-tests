@@ -23,7 +23,7 @@ fault_injection: null
 assertions:
   - type: negative
     target: documentation
-    eval: llm_assisted
+    eval: deterministic
     rubric: "独立出现的 GITHUB_ 前缀（非引用、非对照表场景）数量应为 0"
 
 teardown:

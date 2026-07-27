@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: cron 表达式格式与位置边界验证
-intent_ref: INTENT-COMP-085
+intent_ref: KEEP-TC-475~512
 setup:
   repo_fixture: default
   secrets: []
@@ -19,7 +19,7 @@ workflow: |
   jobs:
     verify:
       name: Verify cron boundary
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       steps:
         - name: Echo ok
           run: |

@@ -17,7 +17,7 @@ workflow: |
   jobs:
     caller:
       name: third level nested call
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       steps:
         - name: call reusable
           uses: ./.gitcode/workflows/reusable-level1.yml

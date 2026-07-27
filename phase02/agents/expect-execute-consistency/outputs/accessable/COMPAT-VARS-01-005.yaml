@@ -18,7 +18,7 @@ workflow: |
   jobs:
     test-vars-if:
       name: Test vars in if condition
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       steps:
         - name: Step always runs
           run: |

@@ -12,7 +12,7 @@ workflow: |
   jobs:
     perm-write-denied:
       name: Test write denied under read
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       permissions:
         repository: read
       steps:

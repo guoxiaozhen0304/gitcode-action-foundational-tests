@@ -17,7 +17,7 @@ workflow: |
   jobs:
     test-success-paren:
       name: Test success with/without parens
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       steps:
         - name: Step with parens
           if: ${{ success() }}

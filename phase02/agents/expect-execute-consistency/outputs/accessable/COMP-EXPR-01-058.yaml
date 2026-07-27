@@ -3,7 +3,7 @@ dimensions: [completeness]
 dimension: completeness
 priority: P1
 title: 表达式运算符与优先级边界行为
-intent_ref: INTENT-COMP-058
+intent_ref: KEEP-TC-160~175
 setup:
   repo_fixture: default
   secrets: []
@@ -16,7 +16,7 @@ workflow: |
   jobs:
     verify:
       name: Verify operator precedence
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       steps:
         - name: Equality
           if: ${{ atomgit.ref_name == 'main' || true }}

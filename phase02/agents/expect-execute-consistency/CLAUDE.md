@@ -83,7 +83,11 @@
 
 对规格中每条 `[正向]` / `[负向]` 验证点，判断实现步骤是否能验证它。
 
-**⚠️ 一致性与可调度性无关。** 不要因为 trigger 是 schedule/pull_request 而标记 BLOCKED。不要因为 secret 未配置或需要第二账号而标记 FIXTURE_GAP。这些问题影响用例能否被 dispatch，但不影响步骤能否验证规格。
+**⚠️ 一致性与可调度性无关。** 以下 trigger 事件均可调度，不要因为 trigger 类型而标记 BLOCKED：
+- `push`、`workflow_dispatch`、`pull_request`、`pull_request_target`、`issue_comment`、`schedule`
+- 不要因为 secret 未配置或需要第二账号而标记 FIXTURE_GAP。
+
+**⚠️ 平台验证型用例：** 如果 workflow YAML 本身存在语法错误（缩进错误、非法字段等），且断言要求 `run_status != COMPLETED`（期望平台拒绝该 YAML），则该断言应判为 **COVERED** — 用例通过 `batch_validate.py` 即可验证平台是否拒绝畸形 YAML，不需要实际 dispatch。
 
 判定规则：
 

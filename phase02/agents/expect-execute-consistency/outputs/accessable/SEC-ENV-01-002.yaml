@@ -13,7 +13,7 @@ workflow: |
   jobs:
     env-secret-denied:
       name: Access env secret before approval
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       environment: production
       steps:
         - name: Try use env secret

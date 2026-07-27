@@ -15,7 +15,7 @@ workflow: |
   jobs:
     test:
       name: steps count 50 test
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       steps:
         - name: step 01
           run: |

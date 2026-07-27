@@ -2,7 +2,7 @@
 
 - 标题: YAML 缩进错误时报错应指出具体行号与列号
 - 维度: usability | 优先级: P1
-- 评级: 混合问题
+- 评级: 部分不符
 
 ---
 
@@ -32,12 +32,11 @@
 
 | 验证点 | 覆盖? | 说明 |
 |------|:---:|------|
-| [negative] run_status equals: COMPLETED | UNCOVERED | [负向] 未找到可能导致非成功状态的步骤，单次调度无法证明 !=success |
-| [nonfunctional] error_message  | LLM_DEPENDENT | 非功能性/LLM辅助断言，不可静态评估: 报错信息必须同时包含字段名、所在行号、正确写法示例三项中的至少两项 |
+| [negative] run_status equals: COMPLETED | ✅ COVERED | workflow 含有故意缩进错误的 YAML，平台解析失败后 run_status != COMPLETED，可通过 batch_validate.py 验证 |
+| [nonfunctional] error_message  | ⚠️ LLM_DEPENDENT | 非功能性/LLM辅助断言，不可静态评估: 报错信息必须同时包含字段名、所在行号、正确写法示例三项中的至少两项 |
 
 ### 问题
 
-- **断言 1 - UNVERIFIABLE**: [负向] 未找到可能导致非成功状态的步骤，单次调度无法证明 !=success
 - **断言 2 - LLM_DEPENDENT**: 非功能性/LLM辅助断言，不可静态评估: 报错信息必须同时包含字段名、所在行号、正确写法示例三项中的至少两项
 
 ---

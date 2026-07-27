@@ -3,7 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P2
 title: "action.yml 元数据校验与 GitHub 差异"
-intent_ref: INTENT-COMPAT-010
+intent_ref: INTENT-COMPAT-NEW-010
 
 setup:
   repo_fixture: default
@@ -17,7 +17,7 @@ workflow: |
   jobs:
     test-action-meta:
       name: Test action metadata
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       steps:
         - name: Checkout action repo
           uses: checkout

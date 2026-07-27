@@ -20,14 +20,14 @@ workflow: |
       jobs:
         fail-job:
           name: Intentional fail
-          runs-on: [ubuntu-latest, x64, small]
+          runs-on: [dedicate-hosted, x64, large]
           steps:
             - name: Force failure
               run: |
                 exit 1
         should-skip:
           name: Should be skipped
-          runs-on: [ubuntu-latest, x64, small]
+          runs-on: [dedicate-hosted, x64, large]
           steps:
             - name: Echo skipped
               run: |
@@ -36,7 +36,7 @@ workflow: |
       jobs:
         deploy:
           name: Deploy
-          runs-on: [ubuntu-latest, x64, small]
+          runs-on: [dedicate-hosted, x64, large]
           steps:
             - name: Echo deploy
               run: |

@@ -18,7 +18,7 @@ workflow: |
   jobs:
     migrate-run-name:
       name: Test run-name block error
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       steps:
         - name: checkout source
           uses: checkout

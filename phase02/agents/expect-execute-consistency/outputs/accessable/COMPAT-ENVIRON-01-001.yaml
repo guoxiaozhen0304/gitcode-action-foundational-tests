@@ -17,7 +17,7 @@ workflow: |
   jobs:
     test:
       name: Test environment field
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       environment: production
       steps:
         - name: Echo hello

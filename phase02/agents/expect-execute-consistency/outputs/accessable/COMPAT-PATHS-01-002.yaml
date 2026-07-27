@@ -320,7 +320,7 @@ workflow: |
   jobs:
     verify:
       name: Verify paths over boundary 301
-      runs-on: [ubuntu-latest, x64, small]
+      runs-on: [dedicate-hosted, x64, large]
       steps:
         - name: Echo paths ok
           run: |

@@ -19,14 +19,14 @@ workflow: |
       jobs:
         build-a:
           name: Build A
-          runs-on: [ubuntu-latest, x64, small]
+          runs-on: [dedicate-hosted, x64, large]
           steps:
             - name: Build A step
               run: |
                 echo "build-a"
         build-b:
           name: Build B
-          runs-on: [ubuntu-latest, x64, small]
+          runs-on: [dedicate-hosted, x64, large]
           steps:
             - name: Build B step
               run: |
@@ -35,7 +35,7 @@ workflow: |
       jobs:
         test:
           name: Test
-          runs-on: [ubuntu-latest, x64, small]
+          runs-on: [dedicate-hosted, x64, large]
           steps:
             - name: Test step
               run: |

@@ -3,7 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P2
 title: "内网环境 Runner 不支持时的差异"
-intent_ref: INTENT-COMPAT-008
+intent_ref: INTENT-COMPAT-NEW-008
 
 setup:
   repo_fixture: default

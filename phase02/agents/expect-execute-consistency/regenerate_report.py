@@ -53,17 +53,18 @@ def parse_case(fp: Path) -> dict | None:
         dim = DIM_CNS.get(dim, dim)
 
     reason = ""
-    m = re.search(r"## 4\. 规格 vs 实现对照\s*\n\n.*?说明\s*\n(.*?)(?:\n\n|### 问题|\n\n---)", text, re.DOTALL)
+    m = re.search(r"## 4\. 规格 vs 实现对照\s*?\n\|(.*?)(?:\n\n###|\n---|\n\n\n)", text, re.DOTALL)
     if m:
-        reason_table = m.group(1)
+        table = "|" + m.group(1)
         reasons = []
-        for row in reason_table.strip().split("\n")[1:]:
+        for row in table.strip().split("\n"):
             parts = row.split("|")
-            if len(parts) >= 4:
+            # Table format: | 验证点 | 覆盖? | 说明 |
+            if len(parts) >= 4 and "---" not in parts[2]:
                 vp = parts[1].strip()
                 verdict = parts[2].strip()
-                note = parts[3].strip()
-                if verdict:
+                note = parts[3].strip() if len(parts) > 3 else ""
+                if verdict and verdict != "覆盖?":
                     reasons.append(f"{vp}: {verdict} — {note}")
         reason = "; ".join(reasons[:3])
     if not reason:
@@ -111,7 +112,7 @@ def main():
     lines = [
         "# 断言-步骤一致性报告",
         "",
-        f"**用例总数**: {total}（已分析 {analyzable} 例，另有 {len(spec_missing)} 例缺文本规格）",
+        f"**用例总数**: {analyzable}",
         "",
         "---",
         "",
