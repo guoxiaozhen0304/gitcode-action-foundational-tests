@@ -1,6 +1,6 @@
 # 断言-步骤一致性报告
 
-**用例总数**: 419（已分析 369 例，另有 50 例缺文本规格）
+**用例总数**: 369（已分析 369 例，另有 0 例缺文本规格）
 
 ---
 
@@ -409,60 +409,3 @@
 | 26 | [USE-UNKN-01-001](case/USE-UNKN-01-001.md) | 未知字段如 run-name 不应被静默忽略而应给出警告或错误 |  |
 | 27 | [USE-UNKN-01-002](case/USE-UNKN-01-002.md) | 未知字段报错若识别为 GitHub 特有应追加迁移提示 |  |
 | 28 | [USE-VARS-01-001](case/USE-VARS-01-001.md) | vars 上下文在文档与样本中的声明必须一致 |  |
-
-## 规格缺失 — 无 Phase 01 文本用例（50 例）
-
-以下用例缺少对应 Phase 01 文本规格，无法进行规格-实现对照分析：
-
-| # | Case ID | 标题 |
-|---|---------|------|
-| 1 | [SEC-DOS-01-002](case/SEC-DOS-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 2 | [USE-ACTION-01-001](case/USE-ACTION-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 3 | [USE-ACTION-01-002](case/USE-ACTION-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 4 | [USE-ACTION-01-003](case/USE-ACTION-01-003.md) | 该用例规格文件缺失，无法分析 |
-| 5 | [USE-AUDIT-01-001](case/USE-AUDIT-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 6 | [USE-CONF-01-001](case/USE-CONF-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 7 | [USE-CONF-01-002](case/USE-CONF-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 8 | [USE-CONF-01-003](case/USE-CONF-01-003.md) | 该用例规格文件缺失，无法分析 |
-| 9 | [USE-CONF-01-004](case/USE-CONF-01-004.md) | 该用例规格文件缺失，无法分析 |
-| 10 | [USE-CONF-01-005](case/USE-CONF-01-005.md) | 该用例规格文件缺失，无法分析 |
-| 11 | [USE-DEF-01-001](case/USE-DEF-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 12 | [USE-DEF-01-002](case/USE-DEF-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 13 | [USE-DEF-01-003](case/USE-DEF-01-003.md) | 该用例规格文件缺失，无法分析 |
-| 14 | [USE-ERR-01-001](case/USE-ERR-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 15 | [USE-ERR-01-002](case/USE-ERR-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 16 | [USE-FIELD-01-001](case/USE-FIELD-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 17 | [USE-MIGRATE-01-001](case/USE-MIGRATE-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 18 | [USE-NAME-01-001](case/USE-NAME-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 19 | [USE-NAME-01-002](case/USE-NAME-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 20 | [USE-OPTI-01-001](case/USE-OPTI-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 21 | [USE-OPTI-01-002](case/USE-OPTI-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 22 | [USE-OPTI-01-003](case/USE-OPTI-01-003.md) | 该用例规格文件缺失，无法分析 |
-| 23 | [USE-PR-01-001](case/USE-PR-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 24 | [USE-PR-01-002](case/USE-PR-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 25 | [USE-PUSH-01-001](case/USE-PUSH-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 26 | [USE-REPORT-01-001](case/USE-REPORT-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 27 | [USE-REPORT-01-002](case/USE-REPORT-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 28 | [USE-REPORT-01-003](case/USE-REPORT-01-003.md) | 该用例规格文件缺失，无法分析 |
-| 29 | [USE-REUS-01-001](case/USE-REUS-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 30 | [USE-REUS-01-002](case/USE-REUS-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 31 | [USE-REUSABLE-01-001](case/USE-REUSABLE-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 32 | [USE-REUSABLE-01-002](case/USE-REUSABLE-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 33 | [USE-RUNNER-01-001](case/USE-RUNNER-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 34 | [USE-RUNNER-01-002](case/USE-RUNNER-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 35 | [USE-RUNNER-01-003](case/USE-RUNNER-01-003.md) | 该用例规格文件缺失，无法分析 |
-| 36 | [USE-SCHED-01-001](case/USE-SCHED-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 37 | [USE-SCHED-01-002](case/USE-SCHED-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 38 | [USE-SECRET-01-001](case/USE-SECRET-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 39 | [USE-SECRET-01-002](case/USE-SECRET-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 40 | [USE-STATUS-01-001](case/USE-STATUS-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 41 | [USE-STATUS-01-002](case/USE-STATUS-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 42 | [USE-STATUS-01-003](case/USE-STATUS-01-003.md) | 该用例规格文件缺失，无法分析 |
-| 43 | [USE-STEP-01-001](case/USE-STEP-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 44 | [USE-STEP-01-002](case/USE-STEP-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 45 | [USE-STEPSUM-01-001](case/USE-STEPSUM-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 46 | [USE-TIMEOUT-01-001](case/USE-TIMEOUT-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 47 | [USE-TOKEN-01-001](case/USE-TOKEN-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 48 | [USE-TOKEN-01-002](case/USE-TOKEN-01-002.md) | 该用例规格文件缺失，无法分析 |
-| 49 | [USE-TRIG-01-001](case/USE-TRIG-01-001.md) | 该用例规格文件缺失，无法分析 |
-| 50 | [USE-TRIG-01-002](case/USE-TRIG-01-002.md) | 该用例规格文件缺失，无法分析 |

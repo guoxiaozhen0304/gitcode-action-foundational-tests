@@ -65,8 +65,8 @@
 | 来源 | 路径 | 说明 |
 |------|------|------|
 | 用例规格（期望） | `phase01/runs/2026-07-23-01/cases/text/*.md` | 前置条件、操作步骤、预期结果、验证点 |
-| 用例 YAML（实现） | `phase01/runs/2026-07-23-01/cases/yaml/*.yaml` | workflow 步骤、断言、触发条件、setup |
-|feedback|phase02/agents/expect-execute-consistency/feedback.md|feedback of the history report, manmanly add|
+| 用例 YAML（实现） | `phase02/agents/expect-execute-consistency/outputs/accessable/*.yaml` | workflow 步骤、断言、触发条件、setup（从 phase01 YAML 复制） |
+| 反馈 | `phase02/agents/expect-execute-consistency/feedback.md` | 历史报告的反馈记录 |
 
 
 ## 工作步骤

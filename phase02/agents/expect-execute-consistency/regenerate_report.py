@@ -9,7 +9,10 @@ from pathlib import Path
 from collections import Counter
 
 CASE_DIR = Path(__file__).resolve().parent / "outputs" / "case"
+YAML_DIR = Path(__file__).resolve().parent / "outputs" / "accessable"
 REPORT_PATH = Path(__file__).resolve().parent / "outputs" / "consistency-report.md"
+
+YAML_IDS = {p.stem for p in YAML_DIR.glob("*.yaml")}
 
 DIM_CNS = {
     "completeness": "完备性",
@@ -84,6 +87,8 @@ def main():
     spec_missing = []
 
     for f in sorted(CASE_DIR.glob("*.md")):
+        if f.stem not in YAML_IDS:
+            continue
         info = parse_case(f)
         if not info:
             continue
