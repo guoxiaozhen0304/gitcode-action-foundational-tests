@@ -150,13 +150,14 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 ---
 
 ## 失败分诊 · COMP-PERMS-01-003 · fork PR 的 pull_request 下声明 write 仍仅 read confirmed
-
-**判定结果**: FAIL
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/3addc0e10e1243f39c24a58833ad9f33/workflow)
+[pr](https://gitcode.com/ComputingActionTest/foundational-tests/pull/15)
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (run_status_not, negative) — PASS (conclusion != SUCCESS_WITH_WRITE, actual=COMPLETED ✓); assertions[1] (value, positive, target=run_logs) — 预期 log contains 'write failed as expected'，实际 absent
 
 **根因初判**: 产品缺陷（平台行为与文档承诺一致，但断言标记不匹配）
 
-**责任人**: Phase 01
+**责任人**: 
 
 **证据**:
 - **Job 日志全量**（5 行）:
@@ -662,8 +663,8 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-FORK-01-001 · fork PR 触发 pull_request 时不可读取项目 secrets
-
+## 失败分诊 · SEC-FORK-01-001 · fork PR 触发 pull_request 时不可读取项目 secrets confirm
+[log](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/ee5dfabda67747e2918009e6123292a9/job/dfb0bbe6828c4170a6bfa1bb3ec870c4)
 **判定结果**: FAIL
 **失败断言**: assertions[0] (config_probe) — PASS (configured); assertions[1] (run_status, positive) — 预期 COMPLETED_OR_BLOCKED，实际 COMPLETED
 
