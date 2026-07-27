@@ -9,7 +9,7 @@ from pathlib import Path
 from collections import Counter
 
 CASE_DIR = Path(__file__).resolve().parent / "outputs" / "case"
-YAML_DIR = Path(__file__).resolve().parent / "outputs" / "accessable"
+YAML_DIR = Path("/home/chenqi252/code/gitcode-ci/workspace-gitcode-action/gitcode-action-foundational-tests/phase01/runs/2026-07-23-01/cases/yaml")
 REPORT_PATH = Path(__file__).resolve().parent / "outputs" / "consistency-report.md"
 
 YAML_IDS = {p.stem for p in YAML_DIR.glob("*.yaml")}
