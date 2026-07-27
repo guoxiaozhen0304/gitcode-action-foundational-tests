@@ -12,7 +12,8 @@
 
 操作步骤:
   1. 定义含 shell / working-directory / continue-on-error / timeout-minutes 的 step
-  2. 验证各字段生效
+  2. working-directory 步骤输出当前目录（pwd）验证目录切换生效
+  3. continue-on-error 步骤执行失败命令（exit 1），后续步骤仍执行以证明 job 未中断
 
 预期结果:
   - shell 指定执行器，working-directory 指定执行目录，continue-on-error true 时步骤失败不终止 job，timeout-minutes 限制步骤时长
@@ -20,6 +21,6 @@
 验证点:
   - [正向] shell bash 和 sh 均可执行
   - [正向] working-directory 改变执行目录
-  - [正向] continue-on-error true 被接受
+  - [正向] continue-on-error true 被接受且失败后 job 继续
 
 清理:      重置 fixture 仓库

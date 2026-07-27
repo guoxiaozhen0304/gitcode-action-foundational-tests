@@ -19,7 +19,8 @@
   - 即使 job A 异常崩溃，清理钩子仍应执行
 
 验证点:
-  - [负向] job B 绝不应能读取到 job A 残留的敏感文件
+  - [负向] job B 绝不应能读取到 job A 残留的敏感文件（日志绝不应出现 residual found）
+  - [正向] job B 日志包含 cleaned as expected
   - [非功能] 即使 job A 异常崩溃，清理钩子仍应执行
 
 清理:      重置 fixture 仓库

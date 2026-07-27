@@ -32,5 +32,13 @@ assertions:
   - type: positive
     target: run_logs
     must_contain: job_fields_ok
+  - type: negative
+    target: workflow_parse
+    eval: llm_assisted
+    rubric: "变体 V1：提交缺 name 的 job 定义时平台应拒绝，报 jobs[id].name 空值错误，不应静默接受"
+  - type: negative
+    target: workflow_parse
+    eval: llm_assisted
+    rubric: "变体 V2：提交缺 steps 的 job 定义时平台应拒绝，提示 steps 为必填，不应静默接受"
 teardown:
   reset: fixture

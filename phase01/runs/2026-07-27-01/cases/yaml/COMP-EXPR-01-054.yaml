@@ -30,6 +30,9 @@ workflow: |
           if: ${{ endsWith(atomgit.ref_name, 'ain') }}
           run: |
             echo "endswith_passed"
+        - name: Case mismatch check
+          run: |
+            echo "CASE_MATCH=${{ contains('main', 'MAIN') }}"
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -44,5 +47,8 @@ assertions:
   - type: positive
     target: run_logs
     must_contain: endswith_passed
+  - type: positive
+    target: run_logs
+    must_contain: CASE_MATCH=false
 teardown:
   reset: fixture

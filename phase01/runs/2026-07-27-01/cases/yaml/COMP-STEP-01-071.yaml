@@ -27,11 +27,15 @@ workflow: |
           run: |
             echo "sh_ok"
         - name: Working directory
-          working-directory: .
+          working-directory: /tmp
           run: |
-            echo "wd_ok"
+            echo "PWD_NOW=$(pwd)"
         - name: Continue on error
           continue-on-error: true
+          run: |
+            echo "before_fail"
+            exit 1
+        - name: After continue
           run: |
             echo "continue_ok"
 trigger:
@@ -40,6 +44,9 @@ trigger:
   params: {}
 assertions:
   - type: positive
+    target: run_status
+    equals: success
+  - type: positive
     target: run_logs
     must_contain: bash_ok
   - type: positive
@@ -47,7 +54,10 @@ assertions:
     must_contain: sh_ok
   - type: positive
     target: run_logs
-    must_contain: wd_ok
+    must_contain: PWD_NOW=/tmp
+  - type: positive
+    target: run_logs
+    must_contain: before_fail
   - type: positive
     target: run_logs
     must_contain: continue_ok

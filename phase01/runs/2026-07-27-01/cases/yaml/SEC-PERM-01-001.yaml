@@ -23,7 +23,10 @@ workflow: |
       steps:
         - name: Attempt write
           run: |
-            curl -s -o /dev/null -w "%{http_code}" -X POST \n            "https://api.gitcode.com/api/v5/repos/${{ atomgit.repository }}/issues" \n            -H "Authorization: token ${{ atomgit.token }}" \n            -d '{"title": "test"}'
+            curl -s -o /dev/null -w "%{http_code}" -X POST \
+              "https://api.gitcode.com/api/v5/repos/${{ atomgit.repository }}/issues" \
+              -H "Authorization: token ${{ atomgit.token }}" \
+              -d '{"title": "test"}'
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -32,9 +35,9 @@ fault_injection: null
 assertions:
   - type: positive
     target: run_logs
-    equals: "read_operations_successful"
+    contains: "403"
   - type: negative
     target: run_logs
-    must_not_contain: "write_permission_granted"
+    must_not_contain: "201"
 teardown:
   reset: fixture

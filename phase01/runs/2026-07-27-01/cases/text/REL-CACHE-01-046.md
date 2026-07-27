@@ -11,7 +11,9 @@
   - 仓库具备 cache 使用权限
 
 操作步骤:
-  1. 连续 10 次触发同一 workflow，每次使用不同 cache key 写入 100 MB 缓存
+  1. 连续 10 次 dispatch 触发同一 workflow，cache key 取每次运行唯一值（YAML 层为 cache-运行序号），
+     每次写入 100 MB 缓存，共产生 10 个不同 key
+  2. 随后由 harness 分别以最新 key 与最旧 key 各发起一次读取性运行，观测命中状态
 
 预期结果:
   - 最新写入的缓存 key 可命中

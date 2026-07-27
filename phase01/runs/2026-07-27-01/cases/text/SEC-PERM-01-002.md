@@ -15,11 +15,11 @@
   2. 触发 workflow 并执行 push 操作
 
 预期结果:
-  - push 操作返回 403 权限拒绝
+  - push 操作返回 403 权限拒绝（步骤输出 push denied as expected）
   - token 的 effective scope 与声明一致
 
 验证点:
-  - [负向] 写操作绝不应在 read-only 声明下成功
-  - [正向] 返回明确的权限拒绝错误
+  - [负向] 写操作绝不应在 read-only 声明下成功（日志中绝不应出现 push 成功的 ref 更新记录）
+  - [正向] 返回明确的权限拒绝错误（日志包含 push denied as expected）
 
 清理:      重置 fixture 仓库

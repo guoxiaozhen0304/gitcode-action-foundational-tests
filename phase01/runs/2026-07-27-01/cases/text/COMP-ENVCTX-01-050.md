@@ -13,6 +13,7 @@
 操作步骤:
   1. 在 workflow / job / step 三级定义同名 env 变量
   2. 在 step 中输出该变量值验证优先级
+  3. 另设一台不定义 job 级 env 的 job，输出该变量验证继承 workflow 级值
 
 预期结果:
   - step 级 env 覆盖 job 级，job 级覆盖 workflow 级

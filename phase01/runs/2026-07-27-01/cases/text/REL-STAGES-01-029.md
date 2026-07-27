@@ -11,7 +11,8 @@
   - 仓库具备 stages 使用权限
 
 操作步骤:
-  1. 触发含 stage 且 3 个 jobs 并行执行的 workflow，1 个 job 故意失败
+  1. 触发含两个 stage 的 workflow：第一阶段 3 个 jobs 并行，其中 job A 故意失败；
+     第二阶段含 1 个 job（用于验证 fail_fast 后不进入下一阶段）
 
 预期结果:
   - 失败 job 状态=failure

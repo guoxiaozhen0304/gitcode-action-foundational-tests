@@ -11,7 +11,8 @@
   - 仓库具备 workflow 运行权限
 
 操作步骤:
-  1. 触发含 3x3 matrix 且 fail-fast=true 的 workflow，其中 1 个实例故意失败
+  1. 触发含 3x3=9 实例 matrix 且 fail-fast=true 的 workflow，其中 1 个指定实例（x=1,y=1）故意失败，
+     其余实例 sleep 30 秒使其在失败发生时尚未完成
 
 预期结果:
   - 失败 job 状态=failure

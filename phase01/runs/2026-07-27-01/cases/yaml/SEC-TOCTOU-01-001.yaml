@@ -16,18 +16,20 @@ workflow: |
       steps:
         - name: Check commit SHA
           run: |
-            echo "Running commit: ${{ atomgit.sha }}"
+            echo "EXECUTED_SHA=${{ atomgit.sha }}"
 trigger:
   event: workflow_dispatch
   as: maintainer
-  params: {}
+  params:
+    approval_flow: "harness 先触发并审批运行，记录审批锁定的 commit SHA；随后在执行前推送新 commit，再观察运行实际执行的 SHA"
 fault_injection: null
 assertions:
   - type: negative
-    target: run_logs
-    must_not_contain: "unapproved_commit_executed"
+    target: executed_commit_sha
+    must_not_equal: "post_approval_commit_sha"
   - type: positive
-    target: run_logs
-    equals: "approved_sha_matched"
+    target: executed_commit_sha
+    equals: "approved_locked_sha"
+    eval: deterministic
 teardown:
   reset: fixture

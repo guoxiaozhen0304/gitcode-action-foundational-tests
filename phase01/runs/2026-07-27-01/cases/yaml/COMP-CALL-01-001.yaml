@@ -16,12 +16,8 @@ workflow: |
     workflow_dispatch:
   jobs:
     caller:
-      name: Call reusable workflow
-      runs-on: [ubuntu-latest, x64, small]
-      steps:
-        - name: Echo before call
-          run: |
-            echo "calling reusable workflow"
+      name: Call reusable sub workflow
+      uses: ./.gitcode/workflows/reusable-sub.yml
 
 trigger:
   event: workflow_dispatch
@@ -34,6 +30,9 @@ assertions:
   - type: positive
     target: run_status
     equals: success
+  - type: positive
+    target: run_logs
+    must_contain: sub_workflow_marker
 
 teardown:
   reset: none

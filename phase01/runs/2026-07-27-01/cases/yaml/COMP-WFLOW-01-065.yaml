@@ -21,6 +21,14 @@ workflow: |
         - name: Main step
           run: |
             echo "main_done"
+    failing:
+      name: Failing main job
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Force failure
+          run: |
+            echo "main_fail_injected"
+            exit 1
   post:
     run_always: true
     steps:
@@ -32,6 +40,9 @@ trigger:
   as: maintainer
   params: {}
 assertions:
+  - type: positive
+    target: run_status
+    equals: failure
   - type: positive
     target: run_logs
     must_contain: main_done

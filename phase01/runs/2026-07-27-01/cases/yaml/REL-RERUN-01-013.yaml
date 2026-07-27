@@ -29,5 +29,8 @@ assertions:
   - type: positive
     target: rerun_request
     equals: "rejected"
+  - type: negative
+    target: new_run_created
+    equals: "true"
 teardown:
   reset: none

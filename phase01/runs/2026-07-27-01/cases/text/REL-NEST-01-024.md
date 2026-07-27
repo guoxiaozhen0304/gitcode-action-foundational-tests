@@ -8,7 +8,7 @@
 标题:      workflow_call 嵌套越界——3 层嵌套调用应被拒绝
 
 前置条件:
-  - fixture 仓库包含 level1/level2/level3.yml
+  - fixture 仓库（reusable-workflow-3layer）包含 level1_deep/level2/level3.yml 三层嵌套链，level1_deep.yml 调用 level2.yml、level2.yml 调用 level3.yml，嵌套链文件均已存在于 fixture 仓库
 
 操作步骤:
   1. 触发主 workflow，尝试 A→B→C→D（3 层嵌套）

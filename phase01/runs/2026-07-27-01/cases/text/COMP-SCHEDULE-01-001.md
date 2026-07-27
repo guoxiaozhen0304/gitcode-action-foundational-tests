@@ -14,10 +14,12 @@
 操作步骤:
   1. 配置 schedule 触发 workflow
   2. 等待到达 cron 设定时间
+  3. workflow 步骤内输出当前 UTC 时间戳与触发事件名
+  4. 从日志读取 UTC 时间戳，与 cron 预期 UTC 时间比对
 
 预期结果:
-  - workflow 在设定时间被触发
-  - 运行成功完成
+  - workflow 在设定时间被触发（event 为 schedule）
+  - 运行成功完成，日志中的 UTC 时间戳与 cron 预期 UTC 时间一致（允许调度延迟容差）
 
 验证点:
   - [正向] 运行记录存在且 event 为 schedule

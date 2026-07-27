@@ -30,6 +30,13 @@ workflow: |
         - name: Job inherit
           run: |
             echo "JOB_VAR=$MY_VAR"
+    verify-inherit:
+      name: Verify workflow level env fallback
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Workflow inherit
+          run: |
+            echo "WF_VAR=$MY_VAR"
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -41,5 +48,8 @@ assertions:
   - type: positive
     target: run_logs
     must_contain: JOB_VAR=job_value
+  - type: positive
+    target: run_logs
+    must_contain: WF_VAR=workflow_value
 teardown:
   reset: fixture

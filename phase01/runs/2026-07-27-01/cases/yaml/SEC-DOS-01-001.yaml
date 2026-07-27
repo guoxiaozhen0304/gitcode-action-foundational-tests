@@ -32,7 +32,7 @@ assertions:
     target: run_status
     must_not_equal: "success"
   - type: positive
-    target: run_logs
-    equals: "size_limit_exceeded_error"
+    target: job_status
+    equals: "failure"
 teardown:
   reset: fixture

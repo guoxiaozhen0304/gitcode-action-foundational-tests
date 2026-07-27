@@ -15,11 +15,12 @@
   2. 触发 workflow 并查看上传结果
 
 预期结果:
-  - 超过大小上限的 artifact/cache 上传绝不应成功写入
-  - 超限时应给出明确报错（大小限制值），不应静默截断或卡死
+  - 超过大小上限的 artifact/cache 上传绝不应成功写入（运行状态绝不应为 success）
+  - 超限时 job 以 failure 结束，并给出明确报错（大小限制值），不应静默截断或卡死
 
 验证点:
-  - [负向] 超过大小上限的 artifact/cache 上传绝不应成功写入
+  - [负向] 超过大小上限的 artifact/cache 上传绝不应成功写入（run 状态绝不应为 success）
+  - [正向] 超限 job 的最终状态为 failure（job_status 可观测）
   - [非功能] 超限时应给出明确报错（大小限制值），不应静默截断或卡死
 
 清理:      重置 fixture 仓库

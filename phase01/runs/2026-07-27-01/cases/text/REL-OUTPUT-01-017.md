@@ -18,7 +18,8 @@
   - 不应静默截断
 
 验证点:
-  - [正向] step 状态=failure 或日志含 1MB/超出限制
+  - [正向] step 状态=failure 或日志含超出大小限制的报错/告警（具体措辞以平台实际输出为准，
+    如 limit/exceed/too large/truncated/1MB 等，日志关键字判据交 LLM 辅助评判）
   - [负向] 不应静默截断且无提示
 
 清理:      无需特殊清理

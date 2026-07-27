@@ -12,8 +12,9 @@
   - workflow 使用 workflow_dispatch 触发
 
 操作步骤:
-  1. 在 workflow 的 step 中通过表达式引用 atomgit 核心属性
-  2. 运行 workflow 并检查日志输出
+  1. 在 workflow 的 step 中通过表达式引用 atomgit 核心属性并输出
+  2. 在步骤内计算 sha 字符串长度、判断 ref_name 是否带 refs/ 前缀并输出判断结果
+  3. 运行 workflow 并检查日志输出
 
 预期结果:
   - atomgit.sha / ref / ref_name / ref_type / event_name / repository / run_number / run_attempt / workflow / server_url / api_url / workspace / actor / repositoryUrl / base_ref 均可正常访问并输出非空值

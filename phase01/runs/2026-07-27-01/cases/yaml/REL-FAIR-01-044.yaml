@@ -13,8 +13,43 @@ workflow: |
   on:
     workflow_dispatch:
   jobs:
-    test:
-      name: reliability test job
+    wx_job1:
+      name: workflow X job 1
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step
+          run: |
+            sleep 30
+    wx_job2:
+      name: workflow X job 2
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step
+          run: |
+            sleep 30
+    wx_job3:
+      name: workflow X job 3
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step
+          run: |
+            sleep 30
+    wy_job1:
+      name: workflow Y job 1
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step
+          run: |
+            sleep 30
+    wy_job2:
+      name: workflow Y job 2
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step
+          run: |
+            sleep 30
+    wy_job3:
+      name: workflow Y job 3
       runs-on: [ubuntu-latest, x64, small]
       steps:
         - name: sleep step

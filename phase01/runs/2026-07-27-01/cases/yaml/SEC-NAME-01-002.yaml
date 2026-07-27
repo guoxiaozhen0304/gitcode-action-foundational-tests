@@ -32,6 +32,6 @@ assertions:
     must_not_contain_secret: "API_KEY"
   - type: positive
     target: run_logs
-    equals: "masked_or_not_found"
+    contains: "not found"
 teardown:
   reset: fixture

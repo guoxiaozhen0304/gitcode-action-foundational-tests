@@ -8,12 +8,13 @@
 标题:      runs-on 标签体系——三段式数组正常匹配
 
 前置条件:
-  - 平台存在匹配 [dedicate-hosted, x64, large] 标签的 Runner
+  - 平台存在匹配所声明三段式标签组合的 Runner
 
 操作步骤:
-  1. 在工作流中声明 `runs-on: [dedicate-hosted, x64, large]`
+  1. 在工作流中以三段式数组格式声明 runs-on 标签
   2. 触发工作流，观察 Runner 调度行为
   3. 确认 job 被分配到满足所有标签的 Runner 上执行
+  4. 步骤内输出真实 runner 上下文（runner.os / runner.arch / runner.name）作为执行证据
 
 预期结果:
   - 三段式数组格式被平台正确解析

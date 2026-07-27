@@ -30,9 +30,9 @@ fault_injection: null
 assertions:
   - type: negative
     target: run_logs
-    must_not_contain: "push_successful"
+    must_not_contain: "main -> main"
   - type: positive
     target: run_logs
-    equals: "push_denied_or_403"
+    contains: "push denied as expected"
 teardown:
   reset: fixture

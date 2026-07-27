@@ -8,11 +8,12 @@
 标题:      stages 阶段间串行、阶段内 job 并行执行
 
 前置条件:
-  - workflow 定义多个 stages，每个 stage 含多个 jobs
+  - workflow 定义多个 stages（map 格式），每个 stage 含多个 jobs
 
 操作步骤:
   1. 触发 workflow
-  2. 观察 stages 和 jobs 的执行顺序
+  2. 各 job 步骤输出 Unix 时间戳（date +%s），使执行先后关系在日志层面可观测
+  3. 比对日志时间戳：stage 2 的开始时间应晚于 stage 1 各 job 的结束时间；同 stage 内各 job 开始时间应相近
 
 预期结果:
   - stage 1 的所有 job 完成后，stage 2 才开始

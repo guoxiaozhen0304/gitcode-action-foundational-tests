@@ -22,9 +22,9 @@ workflow: |
       steps:
         - name: generate content
           run: |
-            if [ "${{{{ matrix.instance }}}}" = "1" ]; then python3 -c "print('A'*1048576)" > out.txt; fi
-            if [ "${{{{ matrix.instance }}}}" = "2" ]; then python3 -c "print('B'*1048576)" > out.txt; fi
-            if [ "${{{{ matrix.instance }}}}" = "3" ]; then python3 -c "print('C'*1048576)" > out.txt; fi
+            if [ "${{ matrix.instance }}" = "1" ]; then python3 -c "print('A'*1048576)" > out.txt; fi
+            if [ "${{ matrix.instance }}" = "2" ]; then python3 -c "print('B'*1048576)" > out.txt; fi
+            if [ "${{ matrix.instance }}" = "3" ]; then python3 -c "print('C'*1048576)" > out.txt; fi
         - name: upload artifact step
           uses: upload-artifact
           with:

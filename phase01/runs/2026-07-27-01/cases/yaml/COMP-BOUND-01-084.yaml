@@ -25,8 +25,9 @@ workflow: |
       name: Verify filter boundary
       runs-on: [ubuntu-latest, x64, small]
       steps:
-        - name: Echo ok
+        - name: Print trigger context
           run: |
+            echo "TRIGGER_REF=${{ atomgit.ref }}"
             echo "filter_boundary_ok"
 trigger:
   event: push
@@ -38,6 +39,10 @@ assertions:
     equals: success
   - type: positive
     target: run_logs
-    must_contain: filter_boundary_ok
+    must_contain: TRIGGER_REF=refs/
+  - type: negative
+    target: run_logs
+    eval: llm_assisted
+    rubric: "排除侧观测：推送到被否定模式排除的分支 feature/experimental，或仅修改被排除路径 src/docs/** 时，不应产生本 workflow 的新运行记录"
 teardown:
   reset: fixture

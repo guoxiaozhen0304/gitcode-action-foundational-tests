@@ -28,9 +28,9 @@ fault_injection: null
 assertions:
   - type: negative
     target: run_logs
-    must_not_contain: "metadata_service_response"
+    must_not_contain: "instance-id"
   - type: positive
     target: run_logs
-    equals: "access_denied_or_timeout"
+    contains: "access denied or timeout"
 teardown:
   reset: full_instance

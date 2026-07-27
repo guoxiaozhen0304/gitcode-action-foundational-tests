@@ -8,7 +8,8 @@
 标题:      子任务状态传播——workflow_call 失败时父 workflow 不应假阳性完成
 
 前置条件:
-  - fixture 仓库包含可失败的子 workflow
+  - fixture 仓库（reusable-workflow）包含可复用子 workflow child_fail.yml：
+    on=workflow_call，内含单个 job，其步骤执行 exit 1 使其必然失败
 
 操作步骤:
   1. 触发父 workflow，其通过 workflow_call 调用会失败的子 workflow

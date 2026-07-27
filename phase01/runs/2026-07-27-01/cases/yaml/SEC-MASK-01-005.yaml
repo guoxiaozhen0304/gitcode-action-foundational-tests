@@ -29,6 +29,6 @@ assertions:
     must_not_contain_secret: "MULTI_LINE_SECRET"
   - type: positive
     target: run_logs
-    equals: "multiline_masked_with_asterisks"
+    contains: "***"
 teardown:
   reset: fixture

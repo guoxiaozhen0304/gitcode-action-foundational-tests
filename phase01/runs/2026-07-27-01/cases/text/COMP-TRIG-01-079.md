@@ -11,14 +11,17 @@
   - 仓库已启用 AtomGit Action
 
 操作步骤:
-  1. 配置 pull_request 和 merge_requests 的 types
-  2. 验证允许值和非法值处理
+  1. 配置 on.pull_request 的 types 为允许值（open / merge）
+  2. 以 open 类型 PR 事件触发，步骤内读取当前事件 action 并判断其是否命中 types 白名单，输出判断结果
+  3. 变体：将 types 配置为非法值（如 opened）提交 workflow，观察平台校验行为
 
 预期结果:
-  - pull_request types 允许 merge / open / reopen / update，merge_requests types 允许 close / merge / open / reopen / update，非法 types 被平台拒绝
+  - pull_request types 允许 open / merge / reopen / update，合法 types 通过校验，触发事件的 action 命中白名单
+  - 非法 types 变体被平台拒绝并提示允许取值
+  - 未指定 types 时默认行为生效（全部类型触发）
 
 验证点:
-  - [正向] 合法 types 通过校验
+  - [正向] 合法 types 通过校验，触发事件的 action 命中白名单
   - [负向] 非法 types 被平台拒绝
   - [正向] 默认 types 在未指定时生效
 

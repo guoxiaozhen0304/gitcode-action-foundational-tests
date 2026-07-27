@@ -19,7 +19,7 @@ workflow: |
       steps:
         - name: generate 50MB log
           run: |
-            for i in $(seq 1 50000); do echo LOG_LINE_${{i}} $(date +%s%N); done
+            for i in $(seq 1 50000); do echo LOG_LINE_${i} $(date +%s%N); done
 trigger:
   event: workflow_dispatch
   as: maintainer

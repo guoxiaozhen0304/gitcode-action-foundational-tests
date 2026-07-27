@@ -20,9 +20,10 @@ workflow: |
       name: Verify schedule trigger
       runs-on: [ubuntu-latest, x64, small]
       steps:
-        - name: Echo scheduled
+        - name: Echo scheduled timestamp
           run: |
-            echo "scheduled run"
+            echo "SCHEDULED_RUN_UTC=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "EVENT_NAME=${{ atomgit.event_name }}"
 
 trigger:
   event: schedule
@@ -38,6 +39,13 @@ assertions:
   - type: positive
     target: run_event
     equals: schedule
+  - type: positive
+    target: run_logs
+    must_contain: SCHEDULED_RUN_UTC=
+  - type: nonfunctional
+    target: trigger_time
+    eval: llm_assisted
+    rubric: "日志中的 SCHEDULED_RUN_UTC 时间戳应与 cron 0 2 * * * 预期的 UTC 时间一致（允许平台调度延迟容差）"
 
 teardown:
   reset: none

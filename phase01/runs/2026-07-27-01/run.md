@@ -57,6 +57,10 @@
 | 2026-07-27 | STOP① 用户裁决 4 项落实：REL-069 升 P0（+RISK-REL-02）；USE×5 恢复 P0（+RISK-USE-02）；19 条 P2 接受；增补 COMPAT-054 闭环 B1 | ✅ |
 | 2026-07-27 | NPU增补：REL-086~091（xlsx NPU用例 sheet 盲区），用户裁决 6/6 准入、维持 P1 | ✅ |
 | 2026-07-27 | NPU用例展开：+9 条（REL-K8S-046~051、REL-VCJOB-001/002、REL-CLUSTER-001），schema 9/9 通过，全集 498 条 | ✅ |
+| 2026-07-27 | 一致性修订：依据 phase02 consistency-report 研判 199 条 flagged，修订 79 条（41 必修订+38 建议）+漏网 3 条（ARTCONC-063/MATRIX-039/LOGPERF-051-V2），schema 498/498 复验通过 | ✅ |
+| 2026-07-27 | 一致性分析器口径回写 feedback.md（6 类误报模式+6 类真实缺陷模式） | ✅ |
+| 2026-07-27 | 重跑一致性分析：5 批复验 73/80 一致，残留 7 条+对照 1 条当日二次修复，最终 80/80 断言一致 | ✅ |
+| 2026-07-27 | consistency-report-revised.md 产出（修订有效率 100%，feedback 校准生效验证） | ✅ |
 
 ## 状态
 `delivered`

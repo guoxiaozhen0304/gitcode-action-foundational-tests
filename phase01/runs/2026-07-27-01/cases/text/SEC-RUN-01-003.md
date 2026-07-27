@@ -19,7 +19,8 @@
   - runner 清理失败时应标记为不可用
 
 验证点:
-  - [负向] 项目 B 的 job 绝不应读取到项目 A 残留的敏感文件或环境变量
+  - [负向] 项目 B 的 job 绝不应读取到项目 A 残留的敏感文件或环境变量（日志绝不应出现 cross project leak）
+  - [正向] 项目 B 的 job 日志包含 isolated as expected
   - [非功能] runner 清理失败时应标记为不可用，避免调度下一 job
 
 清理:      重置 full_instance

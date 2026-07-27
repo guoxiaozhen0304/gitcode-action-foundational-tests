@@ -17,11 +17,11 @@ workflow: |
       name: image pull 500MB test
       runs-on: [ubuntu-latest, x64, small]
       container:
-        image: python:3.11-slim
+        image: node:18
       steps:
-        - name: check python version
+        - name: check node version
           run: |
-            python --version
+            node --version
 trigger:
   event: workflow_dispatch
   as: maintainer

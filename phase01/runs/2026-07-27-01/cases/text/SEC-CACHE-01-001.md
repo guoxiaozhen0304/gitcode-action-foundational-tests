@@ -11,15 +11,16 @@
   - 仓库配置了 cache
 
 操作步骤:
-  1. 以 fork 贡献者身份提交一个写入 cache 的 workflow
-  2. 在主仓提交一个读取相同 cache key 的 workflow
+  1. 以 fork 贡献者身份提交一个写入 cache 的 workflow（写入固定 cache key），并触发运行
+  2. harness 二段执行流程：第一段在 fork PR 上运行本用例 YAML 中的写入侧 workflow；第二段由 harness 在主仓提交并运行一个读取侧 workflow——该读取侧 workflow 在 main 分支上以相同 cache key 执行 cache restore 并输出是否命中（命中输出 cache hit，未命中输出 cache miss）
+  3. 观察第二段主仓运行的 cache restore 结果
 
 预期结果:
-  - 主仓 workflow 的 cache restore 不应命中 fork PR 写入的缓存
+  - 主仓 workflow 的 cache restore 不应命中 fork PR 写入的缓存（读取侧输出 cache miss）
   - 缓存键应带仓库级隔离前缀
 
 验证点:
-  - [负向] 主仓 workflow 在 fork PR 写入 cache 后，绝不应命中到该缓存
+  - [负向] 主仓 workflow 在 fork PR 写入 cache 后，绝不应命中到该缓存（cache restore 绝不应命中 fork 写入的 key）
   - [非功能] 缓存命中率监控应显示跨仓库命中为 0
 
 清理:      重置 fixture 仓库

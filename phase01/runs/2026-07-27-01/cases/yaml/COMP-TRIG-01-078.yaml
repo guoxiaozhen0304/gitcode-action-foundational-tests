@@ -23,8 +23,10 @@ workflow: |
       name: Verify multi event and filters
       runs-on: [ubuntu-latest, x64, small]
       steps:
-        - name: Echo ok
+        - name: Print trigger context
           run: |
+            echo "TRIGGER_EVENT=${{ atomgit.event_name }}"
+            echo "TRIGGER_REF=${{ atomgit.ref }}"
             echo "multi_event_ok"
 trigger:
   event: push
@@ -36,6 +38,13 @@ assertions:
     equals: success
   - type: positive
     target: run_logs
+    must_contain: TRIGGER_EVENT=push
+  - type: positive
+    target: run_logs
     must_contain: multi_event_ok
+  - type: negative
+    target: workflow_parse
+    eval: llm_assisted
+    rubric: "变体：on.push 同时配置 paths 与 paths-ignore 提交时，平台应拒绝该 workflow 或忽略其中之一（以平台实测为准），不应两者同时静默生效"
 teardown:
   reset: fixture

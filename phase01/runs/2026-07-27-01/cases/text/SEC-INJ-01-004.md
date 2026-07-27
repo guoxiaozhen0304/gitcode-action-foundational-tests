@@ -12,7 +12,8 @@
 
 操作步骤:
   1. 提交一个由 push 触发的 workflow，在 run 中引用 commit message
-  2. 推送一条含 shell 元字符的 commit
+  2. 同一 workflow 中补一个对照步骤：先把 commit message 存入中间环境变量，再在 run 中以 $VAR 引用（安全写法）
+  3. 推送一条含 shell 元字符的 commit
 
 预期结果:
   - commit message 中的 shell 元字符不应被解释为命令执行

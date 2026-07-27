@@ -12,8 +12,9 @@
   - 存在可触发 PR 的条件
 
 操作步骤:
-  1. 配置 pull_request 触发并定义 types 和 branches
-  2. 创建或更新 PR 验证触发
+  1. 配置 pull_request 触发并定义 types（open / update / reopen）和 branches
+  2. 创建或更新 PR 验证触发，输出 event.pull_request 各字段
+  3. 步骤内读取当前事件 action，判断其是否属于 types 白名单并输出判断结果；非匹配 type（如 close）的 PR 事件不应触发本 workflow
 
 预期结果:
   - pull_request 事件触发 workflow，types 过滤生效，branches 过滤目标分支，atomgit.event.pull_request 各字段可访问

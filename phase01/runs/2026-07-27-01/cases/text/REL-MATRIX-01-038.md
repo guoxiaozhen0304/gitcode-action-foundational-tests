@@ -11,7 +11,7 @@
   - 仓库具备 workflow 运行权限
 
 操作步骤:
-  1. 触发含 4 维×5 值=20 组合的 matrix workflow
+  1. 触发含 3 维（os 2 值 × arch 2 值 × compiler 5 值）=20 组合的 matrix workflow
 
 预期结果:
   - 20 个 jobs 全部生成

@@ -11,8 +11,9 @@
   - 存在一条包含 shell 元字符的评论
 
 操作步骤:
-  1. 提交一个由 issue_comment 触发的 workflow，在 run 中引用评论 body
+  1. 提交一个由 issue_comment 触发的 workflow（types 覆盖 created 与 edited），在 run 中引用评论 body
   2. 提交一条含 shell 元字符的评论触发 workflow
+  3. 编辑该评论（edited 重触发），再次观察运行日志
 
 预期结果:
   - 评论 body 中的 shell 元字符不应被解释为命令执行

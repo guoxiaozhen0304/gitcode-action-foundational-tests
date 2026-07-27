@@ -12,7 +12,8 @@
 
 操作步骤:
   1. 提交一个 workflow，在 run 脚本中直接内联引用 PR 标题
-  2. 在 fork PR 场景下触发该 workflow
+  2. 同一 workflow 中补一个对照步骤：先把 PR 标题存入中间环境变量，再在 run 中以 $VAR 引用（安全写法）
+  3. 在 fork PR 场景下触发该 workflow
 
 预期结果:
   - PR 标题中的特殊字符不应被解释为 shell 命令执行

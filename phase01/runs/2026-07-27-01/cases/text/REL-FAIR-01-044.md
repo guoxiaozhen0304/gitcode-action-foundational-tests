@@ -11,7 +11,8 @@
   - 仓库具备同时触发多个 workflow 的权限
 
 操作步骤:
-  1. 同时触发 workflow X 和 workflow Y，各含 3 个 jobs，每 job sleep 30 秒
+  1. 同时触发 workflow X 和 workflow Y，各含 3 个 jobs（共 6 个），每 job sleep 30 秒
+     （YAML 层以单文件内 wx_job1..3 / wy_job1..3 表达，执行时由 harness 拆分为两个 workflow 文件同时触发）
 
 预期结果:
   - 2 个 workflow 的 jobs 启动时间差 ≤60 秒

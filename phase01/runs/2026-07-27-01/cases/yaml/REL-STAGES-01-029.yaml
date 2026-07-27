@@ -13,7 +13,7 @@ workflow: |
   on:
     workflow_dispatch:
   stages:
-    - name: test_stage
+    test_stage:
       fail_fast: true
       jobs:
         job_a:
@@ -37,6 +37,15 @@ workflow: |
             - name: sleep step
               run: |
                 sleep 30
+    next_stage:
+      jobs:
+        job_d:
+          name: next stage job D
+          runs-on: [ubuntu-latest, x64, small]
+          steps:
+            - name: should not run
+              run: |
+                echo next stage entered
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -49,5 +58,8 @@ assertions:
   - type: positive
     target: cancelled_jobs_count
     ge: "2"
+  - type: negative
+    target: next_stage_status
+    equals: "started"
 teardown:
   reset: none

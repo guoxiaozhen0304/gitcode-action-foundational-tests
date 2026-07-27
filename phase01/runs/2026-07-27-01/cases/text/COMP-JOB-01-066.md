@@ -11,8 +11,9 @@
   - 仓库已启用 AtomGit Action
 
 操作步骤:
-  1. 定义含 name / runs-on / steps 的 job
-  2. 验证缺任一字段时平台拒绝
+  1. 定义含 name / runs-on / steps 的完整 job，验证通过校验并执行
+  2. 变体 V1：提交缺 name 的 job 定义，观察平台校验行为（预期拒绝）
+  3. 变体 V2：提交缺 steps 的 job 定义，观察平台校验行为（预期拒绝）
 
 预期结果:
   - job 必须包含 name / runs-on / steps，缺 name 时报空值错误，缺 runs-on 或 steps 时平台拒绝

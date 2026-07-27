@@ -18,6 +18,11 @@ workflow: |
         - name: Inline branch name
           run: |
             echo "Branch is ${{ atomgit.head_ref }}"
+        - name: Safe via intermediate env
+          env:
+            HEAD_REF: ${{ atomgit.head_ref }}
+          run: |
+            echo "Branch via env is $HEAD_REF"
 trigger:
   event: pull_request
   as: untrusted_contributor

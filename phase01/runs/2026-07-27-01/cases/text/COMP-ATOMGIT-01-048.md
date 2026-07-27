@@ -12,8 +12,9 @@
   - workflow 配置为 push 触发
 
 操作步骤:
-  1. 在 push 触发的 workflow 中引用 atomgit.event 下各字段
-  2. 运行 workflow 并检查日志
+  1. 在 push 触发的 workflow 中引用 atomgit.event 下各字段并输出
+  2. 在步骤内对 before / after 做 40 位十六进制正则校验、输出 commits 内容长度
+  3. 运行 workflow 并检查日志
 
 预期结果:
   - push 事件下 atomgit.event.ref / before / after / commits / base_ref / created / deleted 等字段可正常访问并输出非空或合理值

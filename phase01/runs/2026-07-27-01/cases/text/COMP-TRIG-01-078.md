@@ -11,11 +11,13 @@
   - 仓库已启用 AtomGit Action
 
 操作步骤:
-  1. 配置 push 和 workflow_dispatch 多事件组合
-  2. 验证 push 时 branches 和 paths 过滤
+  1. 配置 push 和 workflow_dispatch 多事件组合，push 带 branches 与 paths 过滤
+  2. 推送匹配分支与路径的提交，观察触发并输出触发事件上下文
+  3. 变体：在同一 on.push 下同时配置 paths 与 paths-ignore 提交，观察平台行为（拒绝或忽略其一）
 
 预期结果:
-  - 同一 workflow 可配置多个事件，push 的 branches 和 paths 同时过滤，paths 与 paths-ignore 互斥
+  - 同一 workflow 可配置多个事件，push 的 branches 和 paths 同时过滤
+  - paths 与 paths-ignore 互斥：共存时平台拒绝该 workflow 或忽略其中之一，不应两者同时静默生效
 
 验证点:
   - [正向] 多事件组合通过校验

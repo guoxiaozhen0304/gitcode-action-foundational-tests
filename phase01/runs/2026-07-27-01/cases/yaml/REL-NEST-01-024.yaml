@@ -5,7 +5,7 @@ priority: P1
 title: "workflow_call 嵌套越界——3 层嵌套调用应被拒绝"
 intent_ref: INTENT-REL-024
 setup:
-  repo_fixture: default
+  repo_fixture: reusable-workflow-3layer
   secrets: []
   variables: {}
   branch_protection: default

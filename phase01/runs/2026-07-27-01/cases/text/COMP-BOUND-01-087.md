@@ -11,11 +11,13 @@
   - 仓库已启用 AtomGit Action
 
 操作步骤:
-  1. 在 step 中通过 ATOMGIT_OUTPUT 写入输出
+  1. 在 step 中通过 ATOMGIT_OUTPUT 写入输出（key1 / key2 两个键值对）
   2. 在同 job 后续 step 中引用 steps.id.outputs
+  3. 在 job outputs 中仅映射 key1，下游 job 通过 needs 引用已声明的 key1 与未声明的 key2
 
 预期结果:
   - ATOMGIT_OUTPUT 写入的键值对可在同 job 后续 step 中通过 steps.id.outputs 引用
+  - 跨 job 引用时仅 job outputs 中声明的键可传递，未声明的键引用为空
 
 验证点:
   - [正向] ATOMGIT_OUTPUT 写入后同 job 可读取

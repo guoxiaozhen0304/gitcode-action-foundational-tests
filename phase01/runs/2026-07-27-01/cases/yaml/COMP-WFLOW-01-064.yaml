@@ -25,6 +25,14 @@ workflow: |
             - name: Build step
               run: |
                 echo "build_done"
+        build-fail:
+          name: Build failing job
+          runs-on: [ubuntu-latest, x64, small]
+          steps:
+            - name: Force fail
+              run: |
+                echo "build_fail_injected"
+                exit 1
     test:
       name: Test Stage
       fail_fast: false
@@ -42,10 +50,17 @@ trigger:
   params: {}
 assertions:
   - type: positive
-    target: run_logs
-    must_contain: build_done
+    target: run_status
+    equals: failure
   - type: positive
     target: run_logs
-    must_contain: test_done
+    must_contain: build_done
+  - type: negative
+    target: run_logs
+    must_not_contain: test_done
+  - type: nonfunctional
+    target: workflow_parse
+    eval: llm_assisted
+    rubric: "变体：缺省 stages 字段的 workflow（仅顶层 jobs）应被平台接受，等价于单 stage 执行"
 teardown:
   reset: fixture

@@ -8,7 +8,7 @@
 标题:      workflow_call 嵌套边界——2 层嵌套调用应成功执行
 
 前置条件:
-  - fixture 仓库包含 level1.yml 和 level2.yml 两个可重用 workflow
+  - fixture 仓库（reusable-workflow）包含 level1.yml 和 level2.yml 两个可重用 workflow，level1.yml 通过 workflow_call 调用 level2.yml，嵌套链文件均已存在于 fixture 仓库
 
 操作步骤:
   1. 触发主 workflow，该 workflow 通过 workflow_call 调用 level1，level1 再调用 level2

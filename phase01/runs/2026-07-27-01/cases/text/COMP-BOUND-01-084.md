@@ -11,11 +11,14 @@
   - 仓库已启用 AtomGit Action
 
 操作步骤:
-  1. 配置 push 的 branches 和 paths 组合过滤，使用否定模式
-  2. 验证仅肯定模式触发，否定模式需与肯定模式组合
+  1. 配置 push 的 branches（main、feature/**、!feature/experimental）与 paths（src/**、!src/docs/**）组合过滤
+  2. 推送匹配肯定模式且未被否定模式排除的提交，观察 workflow 触发并输出触发分支上下文
+  3. 变体（排除侧观测）：推送到被否定模式排除的分支 feature/experimental，或仅修改被排除路径 src/docs/**，观察是否产生本 workflow 的新运行（预期不产生）
 
 预期结果:
-  - branches 和 paths 同时存在时为 AND 关系，否定模式 ! 需与肯定模式组合，仅否定模式不触发
+  - branches 和 paths 同时存在时为 AND 关系，否定模式 ! 需与肯定模式组合生效
+  - 命中肯定模式且未被排除时触发 workflow，日志可见触发分支
+  - 仅命中否定模式排除项时不触发 workflow
 
 验证点:
   - [正向] branches + paths 组合过滤生效

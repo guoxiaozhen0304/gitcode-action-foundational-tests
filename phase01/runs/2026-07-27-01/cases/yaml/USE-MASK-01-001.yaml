@@ -7,7 +7,7 @@ intent_ref: INTENT-USE-016
 
 setup:
   repo_fixture: default
-  secrets: []
+  secrets: ["TEST_SECRET"]
   variables: {}
   branch_protection: default
 
@@ -24,6 +24,9 @@ workflow: |
         - name: echo secret via env
           run: |
             echo "secret length=${#SECRET_VAL}"
+        - name: echo secret value
+          run: |
+            echo "secret value is $SECRET_VAL"
 
 trigger:
   event: workflow_dispatch
@@ -35,6 +38,9 @@ fault_injection: null
 assertions:
   - type: positive
     target: run_logs
+    contains: "***"
+  - type: positive
+    target: run_logs
     must_not_contain_secret: TEST_SECRET
   - type: nonfunctional
     target: documentation
@@ -43,4 +49,3 @@ assertions:
 
 teardown:
   reset: none
-

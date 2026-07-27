@@ -10,6 +10,25 @@ setup:
   secrets: []
   variables: {}
   branch_protection: default
+  reusable_workflows:
+    .gitcode/workflows/reusable-level1.yml: |
+      on:
+        workflow_call:
+      jobs:
+        level1:
+          name: level1 reusable
+          uses: ./.gitcode/workflows/reusable-level2.yml
+    .gitcode/workflows/reusable-level2.yml: |
+      on:
+        workflow_call:
+      jobs:
+        level2:
+          name: level2 reusable
+          runs-on: [ubuntu-latest, x64, small]
+          steps:
+            - name: echo level2
+              run: |
+                echo "level2 executed"
 
 workflow: |
   on:
@@ -17,10 +36,7 @@ workflow: |
   jobs:
     caller:
       name: second level nested call
-      runs-on: [ubuntu-latest, x64, small]
-      steps:
-        - name: call reusable
-          uses: ./.gitcode/workflows/reusable-level1.yml
+      uses: ./.gitcode/workflows/reusable-level1.yml
 
 trigger:
   event: workflow_dispatch
@@ -33,7 +49,9 @@ assertions:
   - type: positive
     target: run_status
     equals: COMPLETED
+  - type: positive
+    target: run_logs
+    contains: "level2 executed"
 
 teardown:
   reset: none
-

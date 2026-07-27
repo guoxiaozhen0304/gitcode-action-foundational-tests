@@ -28,7 +28,7 @@ fault_injection: null
 assertions:
   - type: negative
     target: cache_restore
-    must_not_hit: "fork_cache_key"
+    must_not_hit: "test-cache-key"
   - type: positive
     target: run_status
     equals: "completed"

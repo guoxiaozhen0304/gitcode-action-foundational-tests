@@ -22,7 +22,9 @@ workflow: |
         - name: (TC) echo runner info
           run: |
             echo "RUNSON_ARRAY_OK"
-            echo "Runner labels: dedicate-hosted x64 large"
+            echo "RUNNER_OS=${{ runner.os }}"
+            echo "RUNNER_ARCH=${{ runner.arch }}"
+            echo "RUNNER_NAME=${{ runner.name }}"
 
 trigger:
   event: workflow_dispatch
@@ -37,8 +39,10 @@ assertions:
     equals: completed_success
   - type: positive
     target: run_logs
-    eval: llm_assisted
-    rubric: "日志中应出现 RUNSON_ARRAY_OK"
+    must_contain: RUNSON_ARRAY_OK
+  - type: positive
+    target: run_logs
+    must_contain: RUNNER_OS=
   - type: negative
     target: workflow_parse
     eval: llm_assisted

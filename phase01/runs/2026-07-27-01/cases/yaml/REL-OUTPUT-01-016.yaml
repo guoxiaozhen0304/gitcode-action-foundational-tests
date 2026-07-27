@@ -24,8 +24,8 @@ workflow: |
             echo "data=$(cat out.txt)" >> $ATOMGIT_OUTPUT
         - name: read 1MB output
           run: |
-            echo "${{{{ steps.writer.outputs.data }}}}"
-            test $(echo "${{{{ steps.writer.outputs.data }}}}" | wc -c) -ge 1048576
+            echo "${{ steps.writer.outputs.data }}"
+            test $(echo "${{ steps.writer.outputs.data }}" | wc -c) -ge 1048576
 trigger:
   event: workflow_dispatch
   as: maintainer

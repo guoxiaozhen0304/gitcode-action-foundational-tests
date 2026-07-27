@@ -12,14 +12,18 @@ setup:
 workflow: |
   on:
     workflow_dispatch:
+    push:
   jobs:
     test:
       name: YAML cache invalidation test
       runs-on: [ubuntu-latest, x64, small]
       steps:
-        - name: echo marker
+        - name: echo marker v1
           run: |
             echo marker_v1
+        - name: echo marker v2
+          run: |
+            echo marker_v2
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -27,10 +31,13 @@ trigger:
 fault_injection: null
 assertions:
   - type: positive
-    target: run_logs
+    target: run1_logs
+    contains: "marker_v1"
+  - type: positive
+    target: run2_logs
     contains: "marker_v2"
   - type: negative
-    target: run_logs
+    target: run2_logs
     contains: "marker_v1"
 teardown:
   reset: fixture

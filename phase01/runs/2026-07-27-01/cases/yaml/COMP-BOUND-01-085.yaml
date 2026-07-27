@@ -21,9 +21,17 @@ workflow: |
       name: Verify cron boundary
       runs-on: [ubuntu-latest, x64, small]
       steps:
-        - name: Echo ok
+        - name: Validate cron expressions
           run: |
-            echo "cron_boundary_ok"
+            python3 - <<'PYEOF'
+            import re
+            crons = ["*/5 * * * *", "0 2,14 * * *", "0 9-17 * * 1-5"]
+            pat = re.compile(r"^[0-9*,/-]+$")
+            for c in crons:
+                parts = c.split()
+                ok = len(parts) == 5 and all(pat.match(p) for p in parts)
+                print("CRON_VALID=%s %s" % (c, ok))
+            PYEOF
 trigger:
   event: schedule
   as: maintainer
@@ -34,6 +42,12 @@ assertions:
     equals: success
   - type: positive
     target: run_logs
-    must_contain: cron_boundary_ok
+    must_contain: "CRON_VALID=*/5 * * * * True"
+  - type: positive
+    target: run_logs
+    must_contain: "CRON_VALID=0 2,14 * * * True"
+  - type: positive
+    target: run_logs
+    must_contain: "CRON_VALID=0 9-17 * * 1-5 True"
 teardown:
   reset: fixture

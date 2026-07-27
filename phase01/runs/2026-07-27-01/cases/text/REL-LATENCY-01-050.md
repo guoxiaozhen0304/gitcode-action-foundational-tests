@@ -12,7 +12,9 @@
   - runner 池存在空闲 runner
 
 操作步骤:
-  1. 在空闲 runner 条件下连续触发 30 次单 job workflow，记录 queued→running 延迟
+  1. 在空闲 runner 条件下连续 dispatch 触发 N=30 次单 job workflow（YAML 层 sleep job 探针保留，
+     每次运行即一个采样点），记录每次运行的 queued→running 延迟
+  2. 采样口径：取 30 个采样点计算 P50/P95 分位数作为判定值（非单次运行判定）
 
 预期结果:
   - P95 延迟有界

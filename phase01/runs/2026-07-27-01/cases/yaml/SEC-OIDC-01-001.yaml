@@ -25,9 +25,11 @@ fault_injection: null
 assertions:
   - type: negative
     target: platform_docs
-    must_not_contain: "long_term_cloud_token_default"
+    eval: llm_assisted
+    rubric: "平台文档/规格绝不应将可长期复用的高权限云部署凭证描述为默认推荐方案；若发现此类描述判为不通过"
   - type: positive
     target: platform_docs
-    equals: "oidc_limitation_documented"
+    eval: llm_assisted
+    rubric: "平台文档应明确标注 OIDC 支持状态：若不支持须显式说明该限制并给出替代安全方案（如短时凭据、最小权限 token）；若支持须说明 token 的短时效与一次性特征。缺任一要素判为不通过"
 teardown:
   reset: none

@@ -32,6 +32,10 @@ trigger:
 fault_injection: null
 
 assertions:
+  - type: negative
+    target: run_status
+    eval: llm_assisted
+    rubric: "不应静默接受 environment 字段并正常运行；提交后应产生解析错误或警告而非成功运行"
   - type: nonfunctional
     target: error_message
     eval: llm_assisted

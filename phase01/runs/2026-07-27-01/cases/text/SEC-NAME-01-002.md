@@ -17,9 +17,11 @@
 预期结果:
   - printenv 输出到日志时，secret 值必须被脱敏
   - 即使通过 env | grep 过滤，过滤后的值也应被脱敏
+  - 若 secret 未以环境变量形式暴露，步骤输出 not found
 
 验证点:
   - [负向] printenv 输出到日志时，secret 值必须被脱敏，绝不应保留原值
+  - [正向] 日志包含步骤实际输出 not found（secret 未暴露）或脱敏标记
   - [非功能] 即使通过 env | grep 过滤，过滤后的值也应被脱敏
 
 清理:      重置 fixture 仓库

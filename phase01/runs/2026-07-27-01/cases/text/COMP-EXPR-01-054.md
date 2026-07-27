@@ -13,6 +13,7 @@
 操作步骤:
   1. 在 step 的 if 条件或 env 中使用 contains / startsWith / endsWith 函数
   2. 覆盖空串、不匹配、边界匹配等场景
+  3. 输出 contains 大小写不匹配（如 'main' 对 'MAIN'）的求值结果并验证为假
 
 预期结果:
   - contains 子串匹配正确，startsWith 前缀匹配正确，endsWith 后缀匹配正确，区分大小写

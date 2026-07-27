@@ -11,7 +11,7 @@
   - 仓库具备 container 使用权限
 
 操作步骤:
-  1. 触发使用 ~500MB 镜像的 container job，测量拉取耗时
+  1. 触发使用 ~500MB 量级镜像（YAML 层选用标准版基础镜像 node:18，压缩后约 350-400MB、解压约 1GB；非 slim 变体）的 container job，测量拉取耗时
 
 预期结果:
   - 500MB 镜像在 2min 内完成拉取并启动

@@ -19,7 +19,8 @@
   - job B 不应继承 job A 的设置
 
 验证点:
-  - [负向] job B 绝不应继承到 job A 设置的环境变量或 /tmp 残留
+  - [负向] job B 绝不应继承到 job A 设置的环境变量或 /tmp 残留（日志绝不应出现 isolation broken）
+  - [正向] job B 日志包含 isolated as expected
   - [非功能] 自托管 runner 上应执行与官方 runner 同等级别的清理
 
 清理:      重置 fixture 仓库

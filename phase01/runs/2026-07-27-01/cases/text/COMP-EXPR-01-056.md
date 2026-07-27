@@ -12,7 +12,8 @@
 
 操作步骤:
   1. 在 run 中使用 toJson 序列化 atomgit.event 和 env 上下文
-  2. 验证输出为合法 JSON 字符串
+  2. 序列化完整 atomgit 上下文，验证嵌套键（如 event）出现在 JSON 输出中
+  3. 验证输出为合法 JSON 字符串
 
 预期结果:
   - toJson 将对象序列化为合法 JSON 字符串，字符串含转义

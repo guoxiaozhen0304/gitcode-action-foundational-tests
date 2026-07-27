@@ -29,6 +29,6 @@ assertions:
     must_not_contain_secret: "API_KEY"
   - type: positive
     target: run_logs
-    equals: "mask_command_without_payload"
+    contains: "***"
 teardown:
   reset: fixture

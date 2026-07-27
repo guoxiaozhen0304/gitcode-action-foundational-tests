@@ -5,7 +5,7 @@ priority: P2
 title: "缓存加速比——cache 命中 vs 未命中构建耗时对比"
 intent_ref: INTENT-REL-054
 setup:
-  repo_fixture: default
+  repo_fixture: with-cache
   secrets: []
   variables: {}
   branch_protection: default
@@ -21,15 +21,10 @@ workflow: |
           uses: cache
           with:
             path: node_modules
-            key: cache-deps-${{ matrix.run }}
+            key: cache-deps-fixed
         - name: install deps
           run: |
             npm ci || true
-        - name: save cache
-          uses: cache
-          with:
-            path: node_modules
-            key: cache-deps-${{ matrix.run }}
 trigger:
   event: workflow_dispatch
   as: maintainer
