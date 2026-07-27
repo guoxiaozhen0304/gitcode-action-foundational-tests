@@ -19,14 +19,31 @@
 | # | 规则 | 说明 |
 |---|------|------|
 | 1 | trigger.event = `schedule` | 无按需 dispatch API |
-| 2 | trigger.event = `pull_request` / `pull_request_target` / `issue_comment` | 平台不触发这些事件 |
-| 3 | trigger.as = `untrusted_contributor` | 需要 fork PR 编排（虽有多账号 token，但 infra 未实现） |
-| 4 | 步骤中包含 `services:` | 容器 service 启动慢且不稳定 |
-| 5 | fault_injection != null | 故障注入基础设施不可用 |
-| 6 | assertions 中有 `ui_visual` / `ui_interaction` / `ui_layout` | 需要浏览器自动化 |
-| 7 | assertions 中有 `max_queued_to_running_seconds` / `avg_queued_to_running_seconds` | 时序性断言不可自动化 |
-| 8 | assertions 中有 `eval: llm_assisted` | 需要 LLM 评估 |
-| 9 | setup.secrets 中有非 ATOMGIT_TOKEN 的 secret | secret 未在 .env 配置 |
+| 2 | 复杂步骤 — assertion target 需要复杂验证 | harness 仅支持 run_logs/run_status/job_status/step_status/run_event/workflow_parse 这类日志扫描或字段读取 |
+
+**什么是复杂步骤**：
+
+harses 可通过 API 直接读取 run_status、event 等字段，或 grep 日志匹配字符串。但以下 target 需要额外操作，harses 不支持：
+
+| target | 需要的操作 |
+|--------|------|
+| `artifacts` / `artifact_content` / `artifact_download` | 下载 artifact zip → 解压 → 读取内容 |
+| `cache_step` / `cache_pollution` | 跨多次运行对比缓存状态 |
+| `rerun_context` | rerun API → 对比两次运行的 sha/run_number |
+| `step_summary` | 下载 job log → 解析 step summary 字段 |
+
+**示例**：`SEC-SIDECHAN-02-001` 的第三个断言 `target: artifacts` 需要下载 artifact 后搜索 secret 明文，harness 仅能 grep 日志，无法做到。
+
+```yaml
+assertions:
+  - type: negative
+    target: artifacts    # ← complex: 需要 artifact_download
+    eval: "deterministic"
+    rubric: "artifact 内容不含 secret 明文"
+```
+| 3 | trigger 复杂 | 仅 schedule |
+| 4 | 长时间等待（timing assertions） | `max_queued_to_running_seconds` 等时序断言 |
+| 5 | UI 检查（`ui_visual` / `ui_interaction` / `ui_layout`） | 需要浏览器自动化 |
 
 ## 工作步骤
 
