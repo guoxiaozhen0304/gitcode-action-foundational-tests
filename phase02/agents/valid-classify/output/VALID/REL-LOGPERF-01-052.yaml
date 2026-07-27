@@ -1,0 +1,43 @@
+id: REL-LOGPERF-01-052
+dimensions: [reliability]
+dimension: reliability
+priority: P1
+title: "日志实时性——运行中 job 的日志流式可见延迟应有界且与完成后日志一致"
+intent_ref: INTENT-REL-084
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    test:
+      name: streaming log probe job
+      runs-on: [ubuntu-latest, x64, small]
+      timeout-minutes: 20
+      steps:
+        - name: emit timestamped lines step
+          run: |
+            for i in $(seq 1 120); do echo "TS_$(date +%s)_LINE_$i"; sleep 5; done
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params:
+    line_count: 120
+    line_interval_seconds: 5
+    poll_interval_seconds: 10
+fault_injection: null
+assertions:
+  - type: positive
+    target: streaming_log_is_prefix_of_final
+    equals: "true"
+  - type: nonfunctional
+    target: first_line_visibility_seconds
+    le: "30"
+  - type: nonfunctional
+    target: p95_catchup_latency_seconds
+    le: "60"
+teardown:
+  reset: none

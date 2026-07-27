@@ -1,0 +1,54 @@
+id: COMPAT-NEEDS-01-002
+dimensions: [compatibility]
+dimension: compatibility
+priority: P1
+title: "needs 上游 job 被跳过时的 result 取值语义"
+intent_ref: INTENT-COMPAT-041
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    skipme:
+      name: Upstream job always skipped
+      if: ${{ false }}
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Never executed
+          run: |
+            echo "SHOULD_NOT_PRINT"
+    downstream:
+      name: Downstream reads skipped result
+      needs: skipme
+      if: ${{ always() }}
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Read result of skipped upstream
+          run: |
+            echo "SKIPPED_RESULT=${{ needs.skipme.result }}"
+            echo "PROBE_DONE"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: "PROBE_DONE"
+  - type: positive
+    target: run_logs
+    eval: llm_assisted
+    rubric: "SKIPPED_RESULT 应与 GitHub 语义一致取 skipped；取其他值或为空记录为差异并文档化"
+
+teardown:
+  reset: fixture

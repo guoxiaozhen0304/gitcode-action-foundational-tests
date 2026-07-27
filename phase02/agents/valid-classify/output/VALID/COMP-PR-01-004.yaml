@@ -1,0 +1,46 @@
+id: COMP-PR-01-004
+dimensions: [completeness]
+dimension: completeness
+priority: P1
+title: pre-merge ref 在 PR 存续期可解析且语义裁定
+intent_ref: INTENT-COMP-033
+setup:
+  repo_fixture: pr-merge-ref
+  secrets: []
+  variables: {}
+  branch_protection: default
+fault_injection: null
+workflow: |
+  on:
+    pull_request:
+      branches: [main]
+  jobs:
+    checkoutmerge:
+      name: Checkout pre merge ref
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Checkout merge ref
+          uses: checkout
+          with:
+            ref: refs/merge-requests/1/merge
+        - name: Inspect content
+          run: |
+            cat pre_merge_marker.txt
+            echo "REF_CONTENT_DUMPED"
+trigger:
+  event: pull_request
+  as: maintainer
+  params: {}
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: PRE_MERGE_MARKER
+  - type: positive
+    target: run_logs
+    must_contain: REF_CONTENT_DUMPED
+  - type: nonfunctional
+    target: ref_semantics
+    eval: llm_assisted
+    rubric: 裁定 refs/merge-requests/N/merge 指向（merge commit 合并预览 vs 源分支头）并逐字记录；与 COMPAT-039 共享 PR 夹具与证据链，不重复造数
+teardown:
+  reset: fixture

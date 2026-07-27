@@ -1,0 +1,38 @@
+id: COMP-TRIG-01-080
+dimensions: [completeness, compatibility]
+dimension: completeness
+priority: P2
+title: 触发事件别名 pr_comment 的有效性与等价性记录
+intent_ref: INTENT-COMP-024
+setup:
+  repo_fixture: pr-comment-alias
+  secrets: []
+  variables: {}
+  branch_protection: default
+fault_injection: null
+workflow: |
+  on:
+    pr_comment:
+  jobs:
+    oncomment:
+      name: Handle pr comment
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Mark comment trigger
+          run: |
+            echo "PR_COMMENT_TRIGGERED"
+trigger:
+  event: pull_request_comment
+  as: maintainer
+  params: {}
+assertions:
+  - type: nonfunctional
+    target: alias_handling
+    eval: llm_assisted
+    rubric: 逐字记录 on.pr_comment 的处理（保存校验报错 / 接受且评论可触发 / 静默忽略）；若可触发，与 pull_request_comment 逐点对比等价性
+  - type: negative
+    target: silent_ignore
+    eval: llm_assisted
+    rubric: 非法事件名不应静默保存导致 workflow 永不触发且无任何可见提示
+teardown:
+  reset: fixture

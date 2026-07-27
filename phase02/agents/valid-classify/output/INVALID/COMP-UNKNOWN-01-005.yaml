@@ -1,0 +1,45 @@
+id: COMP-UNKNOWN-01-005
+dimensions: [completeness]
+dimension: completeness
+priority: P2
+title: 顶层 inputs 与 manual_override 字段的实际处理记录
+intent_ref: INTENT-COMP-031
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+fault_injection: null
+workflow: |
+  on:
+    workflow_dispatch:
+  inputs:
+    branch_name:
+      default: main
+      manual_override: true
+  jobs:
+    probe:
+      name: Probe top level inputs
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Echo top input
+          run: |
+            echo "TOP_INPUT=${{ inputs.branch_name }}"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: TOP_INPUT=
+  - type: nonfunctional
+    target: top_inputs_handling
+    eval: llm_assisted
+    rubric: 逐字记录顶层 inputs 是否被识别（校验报错 / 静默忽略 / 注入 inputs 上下文）及 manual_override 对手动触发表单的影响；与 INTENT-COMP-020 / USE-037 证据互证
+  - type: negative
+    target: silent_ignore
+    eval: llm_assisted
+    rubric: 不应出现参数看似声明实则无效的静默忽略且无任何提示
+teardown:
+  reset: fixture

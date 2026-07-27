@@ -1,0 +1,48 @@
+id: COMPAT-RUNSON-01-006
+dimensions: [compatibility, usability]
+dimension: compatibility
+priority: P1
+title: "Runner OS 多样性探测：macos-latest 的调度结局（不支持应明确报错）"
+intent_ref: INTENT-COMPAT-054
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: Probe macos runner availability
+      runs-on: [macos-latest, x64, small]
+      steps:
+        - name: Mark if scheduled on macos
+          run: |
+            echo "MACOS_RUNNER_SCHEDULED"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_status
+    eval: llm_assisted
+    rubric: "macos-latest 结局确定：调度成功（日志含 MACOS_RUNNER_SCHEDULED）或校验/调度期明确报错并列出受支持 OS 清单"
+  - type: negative
+    target: run_status
+    eval: llm_assisted
+    rubric: "不应表现为 job 无限 queued 且无任何提示"
+  - type: nonfunctional
+    target: run_status
+    eval: llm_assisted
+    rubric: "与 COMPAT-RUNSON-01-005 结论合并，确定 GitCode 支持的 OS 取值全集并回写 parity-matrix 与迁移对照表"
+
+teardown:
+  reset: fixture

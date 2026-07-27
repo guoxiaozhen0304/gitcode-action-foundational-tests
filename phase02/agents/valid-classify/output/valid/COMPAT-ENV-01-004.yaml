@@ -1,0 +1,57 @@
+id: COMPAT-ENV-01-004
+dimensions: [compatibility, security]
+dimension: compatibility
+priority: P1
+title: "ATOMGIT_ENV 覆写系统默认变量的防护（对齐 GitHub 同名禁止）"
+intent_ref: INTENT-COMPAT-043
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: Probe env file override protection
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Record original workspace
+          run: |
+            echo "ORIG_WORKSPACE=$ATOMGIT_WORKSPACE" >> orig_marker.txt
+            cat orig_marker.txt
+        - name: Attempt override via env file
+          run: |
+            echo "ATOMGIT_WORKSPACE=/tmp/override-probe" >> "$ATOMGIT_ENV"
+            echo "CUSTOM_PROBE=custom-ok" >> "$ATOMGIT_ENV"
+        - name: Read values in later step
+          run: |
+            echo "WORKSPACE_NOW=$ATOMGIT_WORKSPACE"
+            echo "CUSTOM_NOW=$CUSTOM_PROBE"
+            echo "PROBE_DONE"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: negative
+    target: run_logs
+    eval: llm_assisted
+    rubric: "WORKSPACE_NOW 不应等于 /tmp/override-probe；若等于则被污染值生效，与 GitHub 同名禁止不一致，记为兼容兼安全缺陷"
+  - type: positive
+    target: run_logs
+    must_contain: "CUSTOM_NOW=custom-ok"
+  - type: positive
+    target: run_logs
+    eval: llm_assisted
+    rubric: "覆写系统变量的尝试应在日志中产生警告或拒绝痕迹；完全静默成功且无防护记为缺陷"
+
+teardown:
+  reset: fixture
