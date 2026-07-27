@@ -1,45 +1,70 @@
 # SEC-ENV-01-002
 
-- 标题: 环境级 secret 审批前 workflow 不可读取
-- 维度: 安全性 | 优先级: P0
-- 评级: 断言一致
+- **标题**: 环境级 secret 审批前 workflow 不可读取
+- **维度**: 安全性
+- **优先级**: P0
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-前置条件:
-  - 仓库配置了环境级 secret PROD_TOKEN
-  - 环境审批规则已启用，尚未审批
-操作步骤:
-  1. 1. 提交一个引用环境级 secret 的 workflow
-  2. 2. 在审批前触发 workflow
-预期结果:
-  - workflow job 无法读取到环境 secret 的值
-  - job 应处于挂起或失败状态
+本用例验证：**环境级 secret 审批前 workflow 不可读取**
 
-## 2. 实际做了什么（实现）
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-SEC-027
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Try use env secret | if [ -z "$PROD_TOKEN" ]; then   echo "secret not accessible before approval" else   echo "secret accessible unexpectedly"   exit 1 fi  | 是 |
+通过标准：
+1. type=negative, target=run_logs
+2. type=positive, target=run_status, equals=pending_or_failed
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Try use env secret | `if [ -z "$PROD_TOKEN" ]; then   echo "secret not accessible before approval" els` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  env-secret-denied:
+    name: Access env secret before approval
+    runs-on: [ubuntu-latest, x64, small]
+    environment: production
+    steps:
+      - name: Try use env secret
+        run: |
+          if [ -z "$PROD_TOKEN" ]; then
+            echo "secret not accessible before approval"
+          else
+            echo "secret accessible unexpectedly"
+            exit 1
+          fi
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `with-env-secrets` |
+| Secrets | `['PROD_TOKEN']` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [negative] run_logs must_not_contain: secret accessible unexpectedly | COVERED | 步骤 [Try use env secret] 执行真实功能时输出该值 |
-| [positive] run_status equals: pending_or_failed | COVERED | 步骤含实际命令或 action，运行状态取决于真实执行结果 |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-- 无
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | negative |  | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
+| 2 | run_status | positive | equals=pending_or_failed | ✅ GENUINE | 状态断言 pending_or_failed 可被步骤行为验证 |
 
 ---

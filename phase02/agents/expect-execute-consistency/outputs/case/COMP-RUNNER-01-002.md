@@ -1,71 +1,69 @@
 # COMP-RUNNER-01-002
 
-- 标题: runs-on default 等效 ubuntu-latest x64 small
-- 维度: 完备性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: runs-on default 等效 ubuntu-latest x64 small
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**runs-on default 等效 ubuntu-latest x64 small**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-010
+
+通过标准：
+1. type=positive, target=run_status, equals=success
+2. type=positive, target=runner_spec, equals=small
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo runner info | `echo "os=$RUNNER_OS" echo "arch=$RUNNER_ARCH"` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  verify:
+    name: Verify default label
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Echo runner info
+        run: |
+          echo "os=$RUNNER_OS"
+          echo "arch=$RUNNER_ARCH"
 ```
-用例 ID:   COMP-RUNNER-01-002
-维度标签:   [completeness, compatibility]
-维度:      completeness
-优先级:    P1
-溯源意图:  INTENT-COMP-010
-参照来源:  inputs/gitcode-spec/runner-management/selecting-runner-labels.md; inputs/platform-config/instance-config.md
-母意图:    —
-标题:      runs-on default 等效 ubuntu-latest x64 small
 
-前置条件:
-  - 平台支持 default 快捷标签
-
-操作步骤:
-  1. 配置 runs-on: default
-  2. 触发 workflow
-
-预期结果:
-  - job 被调度到 small 规格 Runner
-  - 运行成功
-
-验证点:
-  - [正向] 运行状态为 success
-  - [正向] Runner 规格与 small（2核8G）一致
-
-清理:      none
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | Echo runner info (verify) | echo "os=$RUNNER_OS" echo "arch=$RUNNER_ARCH"  | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 运行状态为 success | 覆盖 | workflow can potentially fail |
-| Runner 规格与 small（2核8G）一致 | 覆盖 | workflow can potentially fail |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | positive | success | CONSISTENT | workflow can potentially fail |
-| 2 | runner_spec | positive | small | CONSISTENT | real step logic exists |
+| 1 | run_status | positive | equals=success | ⚠️ STATUS_GUARANTEED | 所有步骤均为 echo/trivial 命令，无条件失败路径，永远成功 |
+| 2 | runner_spec | positive | equals=small | ✅ GENUINE | 断言有条件可被步骤验证 |
 
 ### 问题
 
-- 所有验证点均被覆盖，步骤与断言一致
+**断言 1 — STATUS_GUARANTEED**⚠️: 所有步骤均为 echo/trivial 命令，无条件失败路径，永远成功
 
 ---

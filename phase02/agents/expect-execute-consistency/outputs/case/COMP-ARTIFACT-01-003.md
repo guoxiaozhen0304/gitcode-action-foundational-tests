@@ -1,108 +1,71 @@
 # COMP-ARTIFACT-01-003
 
-- 标题: artifact 保留期设置生效
-- 维度: 完备性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: artifact 保留期设置生效
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-前置条件:
-- workflow 设置 retention-days: 1
+本用例验证：**artifact 保留期设置生效**
 
-操作步骤:
-1. 上传 artifact 并设置 retention-days: 1
-2. 等待超过保留期后尝试下载
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-015
 
-预期结果:
-- 超过保留期后 artifact 不可下载
+通过标准：
+1. type=positive, target=artifact_available, equals=yes_within_retention
+2. type=negative, target=artifact_available_after_expiry, equals=no_after_1_day
 
-验证点:
-- [正向] 保留期内可下载 artifact
-- [负向] 超过保留期后下载返回 404
+## 2. 做了什么
 
-## 2. 实际做了什么（实现）
+workflow 中每个步骤的实际行为：
 
-| # | 步骤名 | 关键内容（前80字） | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Create artifact | echo "temp" > temp.txt | 是 |
-| 2 | Upload artifact | uses: upload-artifact with name: temp-artifact, path: temp.txt, retention-days: 1 | 是 |
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Create artifact | `echo "temp" > temp.txt` |  | ❌ VACUOUS |
+| 2 | Upload artifact | `upload-artifact` |  | ✅ GENUINE |
 
 <details>
 <summary>完整 workflow YAML</summary>
 
 ```yaml
-id: COMP-ARTIFACT-01-003
-dimensions: [completeness, reliability]
-dimension: completeness
-priority: P1
-title: artifact 保留期设置生效
-intent_ref: INTENT-COMP-015
-
-setup:
-  repo_fixture: default
-  secrets: []
-  variables: {}
-  branch_protection: default
-
-workflow: |
-  on:
-    workflow_dispatch:
-  jobs:
-    upload:
-      name: Upload with short retention
-      runs-on: [ubuntu-latest, x64, small]
-      steps:
-        - name: Create artifact
-          run: |
-            echo "temp" > temp.txt
-        - name: Upload artifact
-          uses: upload-artifact
-          with:
-            name: temp-artifact
-            path: temp.txt
-            retention-days: 1
-
-trigger:
-  event: workflow_dispatch
-  as: maintainer
-  params: {}
-
-fault_injection: null
-
-assertions:
-  - type: positive
-    target: artifact_available
-    equals: yes_within_retention
-  - type: negative
-    target: artifact_available_after_expiry
-    equals: no_after_1_day
-
-teardown:
-  reset: none
+on:
+  workflow_dispatch:
+jobs:
+  upload:
+    name: Upload with short retention
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Create artifact
+        run: |
+          echo "temp" > temp.txt
+      - name: Upload artifact
+        uses: upload-artifact
+        with:
+          name: temp-artifact
+          path: temp.txt
+          retention-days: 1
 ```
 
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo | default |
-| Secrets | (none) |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 保留期内可下载 artifact | ✅ COVERED | 断言 artifact_available=yes_within_retention |
-| [负向] 超过保留期后下载返回 404 | ✅ COVERED | negative assertion: artifact_available_after_expiry=no_after_1_day |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-- 无
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | artifact_available | positive | equals=yes_within_retention | ✅ GENUINE | 断言有条件可被步骤验证 |
+| 2 | artifact_available_after_expiry | negative | equals=no_after_1_day | ✅ GENUINE | 断言有条件可被步骤验证 |
 
 ---

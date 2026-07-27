@@ -1,48 +1,37 @@
 # COMP-SYSENV-01-059
 
-- 标题: ATOMGIT 系统环境变量关键变量存在性
-- 维度: 完备性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: ATOMGIT 系统环境变量关键变量存在性
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-SYSENV-01-059
-维度标签:   [completeness]
-维度:      完备性
-优先级:    P1
-溯源意图:  KEEP-TC-197~222
-参照来源:  inputs/existing-cases/cases.md
-母意图:    —
-标题:      ATOMGIT 系统环境变量关键变量存在性
+本用例验证：**ATOMGIT 系统环境变量关键变量存在性**
 
-前置条件:
-  - 仓库已启用 AtomGit Action
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-059
 
-操作步骤:
-  1. 在 step 的 run 中输出所有 ATOMGIT_* 环境变量是否存在
-  2. 运行 workflow 检查日志
+通过标准：
+1. type=positive, target=run_logs, must_contain="SHA_SET=yes"
+2. type=positive, target=run_logs, must_contain="REF_SET=yes"
+3. type=positive, target=run_logs, must_contain="EVENT_NAME_SET=yes"
+4. type=positive, target=run_logs, must_contain="WORKSPACE_SET=yes"
+5. type=positive, target=run_logs, must_contain="REPO_SET=yes"
+6. type=positive, target=run_logs, must_contain="RUN_ID_SET=yes"
 
-预期结果:
-  - ATOMGIT_SHA / REF / REF_NAME / REF_TYPE / EVENT_NAME / EVENT_PATH / WORKSPACE / REPOSITORY / RUN_ID / RUN_NUMBER / WORKFLOW / SERVER_URL / API_URL / OUTPUT / ENV / PATH / STEP_SUMMARY 均存在且非空
+## 2. 做了什么
 
-验证点:
-  - [正向] 关键 ATOMGIT_* 变量在日志中显示非空
-  - [负向] 无关键变量缺失
+workflow 中每个步骤的实际行为：
 
-清理:      重置 fixture 仓库
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Check critical vars | `echo "SHA_SET=$([ -n "$ATOMGIT_SHA" ] && echo yes || echo no)" echo "REF_SET=$([` |  | ❌ VACUOUS |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Check critical vars | run: echo "SHA_SET=$([ -n "$ATOMGIT_SHA" ] && echo yes    echo no)"
-echo "REF_SET=$([ -n "$ATOMGIT_REF" ] && echo yes    echo no)"
-echo "REF_NAME_SET=$([ - | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -64,28 +53,43 @@ jobs:
           echo "RUN_NUM_SET=$([ -n "$ATOMGIT_RUN_NUMBER" ] && echo yes || echo no)"
           echo "SERVER_SET=$([ -n "$ATOMGIT_SERVER_URL" ] && echo yes || echo no)"
           echo "API_SET=$([ -n "$ATOMGIT_API_URL" ] && echo yes || echo no)"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 关键 ATOMGIT_* 变量在日志中显示非空 | ✅ COVERED | steps have real logic |
-| [负向] 无关键变量缺失 | ✅ COVERED | steps have real logic |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | must_contain=SHA_SET=yes | ❌ MISSING_SOURCE | SHA_SET=yes: MISSING_SOURCE (无步骤产出此字符串) |
+| 2 | run_logs | positive | must_contain=REF_SET=yes | ❌ MISSING_SOURCE | REF_SET=yes: MISSING_SOURCE (无步骤产出此字符串) |
+| 3 | run_logs | positive | must_contain=EVENT_NAME_SET=yes | ❌ MISSING_SOURCE | EVENT_NAME_SET=yes: MISSING_SOURCE (无步骤产出此字符串) |
+| 4 | run_logs | positive | must_contain=WORKSPACE_SET=yes | ❌ MISSING_SOURCE | WORKSPACE_SET=yes: MISSING_SOURCE (无步骤产出此字符串) |
+| 5 | run_logs | positive | must_contain=REPO_SET=yes | ❌ MISSING_SOURCE | REPO_SET=yes: MISSING_SOURCE (无步骤产出此字符串) |
+| 6 | run_logs | positive | must_contain=RUN_ID_SET=yes | ❌ MISSING_SOURCE | RUN_ID_SET=yes: MISSING_SOURCE (无步骤产出此字符串) |
 
 ### 问题
 
-无
+**断言 1 — MISSING_SOURCE**❌: SHA_SET=yes: MISSING_SOURCE (无步骤产出此字符串)
+
+**断言 2 — MISSING_SOURCE**❌: REF_SET=yes: MISSING_SOURCE (无步骤产出此字符串)
+
+**断言 3 — MISSING_SOURCE**❌: EVENT_NAME_SET=yes: MISSING_SOURCE (无步骤产出此字符串)
+
+**断言 4 — MISSING_SOURCE**❌: WORKSPACE_SET=yes: MISSING_SOURCE (无步骤产出此字符串)
+
+**断言 5 — MISSING_SOURCE**❌: REPO_SET=yes: MISSING_SOURCE (无步骤产出此字符串)
+
+**断言 6 — MISSING_SOURCE**❌: RUN_ID_SET=yes: MISSING_SOURCE (无步骤产出此字符串)
 
 ---

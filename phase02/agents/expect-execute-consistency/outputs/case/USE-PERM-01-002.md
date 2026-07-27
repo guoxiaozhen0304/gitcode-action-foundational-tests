@@ -1,42 +1,71 @@
 # USE-PERM-01-002
 
-- 标题: 使用 GitHub 权限域命名时报错应给出 GitCode 对照表
-- 维度: usability/compatibility | 优先级: P1
-- 评级: 混合问题
+- **标题**: 使用 GitHub 权限域命名时报错应给出 GitCode 对照表
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-前置条件:
-  - workflow 文件位于 .gitcode/workflows/
-操作步骤:
-  1. 1. 在 workflow 中使用 permissions: contents: read
-预期结果:
-  YAML 校验报错，提示 GitCode 支持的权限域列表，并指出命名差异
+本用例验证：**使用 GitHub 权限域命名时报错应给出 GitCode 对照表**
 
-## 2. 实际做了什么（实现）
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-USE-005
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | checkout | uses: checkout | 是 |
+通过标准：
+1. type=negative, target=run_status, equals=COMPLETED
+2. type=nonfunctional, target=error_message, eval=llm_assisted
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | checkout | `checkout` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+permissions:
+  contents: read
+on:
+  workflow_dispatch:
+jobs:
+  bad-perm:
+    name: test github permission error
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: checkout
+        uses: checkout
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [negative] run_status equals: COMPLETED | COVERED | 步骤含实际命令/action，失败状态取决于真实执行 |
-| [nonfunctional] error_message  | LLM_DEPENDENT | 非功能性/LLM辅助断言，不可静态评估: 报错信息必须同时出现 contents 等 GitHub 命名与 repository/pr 等 GitCode 命名，形成对照 |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | negative | equals=COMPLETED | ❌ IMPOSSIBLE | 期望 !=success 但无步骤可能失败 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- **断言 2 - LLM_DEPENDENT**: 非功能性/LLM辅助断言，不可静态评估: 报错信息必须同时出现 contents 等 GitHub 命名与 repository/pr 等 GitCode 命名，形成对照
+**断言 1 — IMPOSSIBLE**❌: 期望 !=success 但无步骤可能失败
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

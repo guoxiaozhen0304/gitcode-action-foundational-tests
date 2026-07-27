@@ -64,8 +64,8 @@
 
 | 来源 | 路径 | 说明 |
 |------|------|------|
-| 用例规格（期望） | `phase01/runs/2026-07-23-01/cases/text/*.md` | 前置条件、操作步骤、预期结果、验证点 |
-| 用例 YAML（实现） | `phase01/runs/2026-07-23-01/cases/yaml/*.yaml` | workflow 步骤、断言、触发条件、setup |
+| 用例规格（期望） | `phase01/runs/2026-07-27-01/cases/text/*.md` | 前置条件、操作步骤、预期结果、验证点 |
+| 用例 YAML（实现） | `phase01/runs/2026-07-27-01/cases/yaml/*.yaml` | workflow 步骤、断言、触发条件、setup |
 | 反馈 | `phase02/agents/expect-execute-consistency/feedback.md` | 历史报告的反馈记录 |
 
 
@@ -113,13 +113,7 @@
 
 ## 输出
 
-### 可访问 YAML
 
-断言一致（170 例）的 YAML 副本，直接可用于 dispatch：
-
-| 路径 | 说明 |
-|------|------|
-| `phase02/agents/expect-execute-consistency/outputs/accessable/*.yaml` | 断言一致的用例 YAML |
 
 ### 汇总报告
 
@@ -227,7 +221,15 @@ workflow 中每个步骤的实际行为：
 
 **断言 N — VACUOUS**: 步骤仅 echo 了期望字符串，未执行被测功能
 > ⚠️ 这条断言在运行时会 PASS，但行为是假的。
-```
+
+
+### 可访问 YAML
+
+断言一致（170 例）的 YAML 副本，直接可用于 dispatch：
+
+| 路径 | 说明 |
+|------|------|
+| `phase02/agents/expect-execute-consistency/outputs/accessable/*.yaml` | 断言一致的用例 YAML |
 
 
 ## 护栏

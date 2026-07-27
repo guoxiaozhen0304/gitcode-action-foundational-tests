@@ -1,0 +1,45 @@
+id: REL-CANCEL-01-029
+dimensions: [reliability]
+dimension: reliability
+priority: P1
+title: "多并发 run 中取消指定 run——取消应按 run_id 寻址而非栈序误杀最新一条"
+intent_ref: INTENT-REL-070
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    test:
+      name: cancel target correctness job
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: long sleep step
+          run: |
+            sleep 300
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params:
+    concurrent_runs: 3
+    cancel_target: run_index_2
+    cancel_after_seconds: 30
+fault_injection: null
+assertions:
+  - type: positive
+    target: target_run_status
+    equals: "canceled"
+  - type: positive
+    target: sibling_run_status
+    equals: "success"
+  - type: negative
+    target: sibling_run_status
+    equals: "canceled"
+  - type: nonfunctional
+    target: cancel_convergence_seconds
+    le: "60"
+teardown:
+  reset: fixture

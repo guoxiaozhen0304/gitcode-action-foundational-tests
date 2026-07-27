@@ -1,48 +1,33 @@
 # COMP-TRIG-01-073
 
-- 标题: pull_request 事件关键字段与 types 验证
-- 维度: 完备性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: pull_request 事件关键字段与 types 验证
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-TRIG-01-073
-维度标签:   [completeness]
-维度:      完备性
-优先级:    P1
-溯源意图:  KEEP-TC-061~083
-参照来源:  inputs/existing-cases/cases.md
-母意图:    —
-标题:      pull_request 事件关键字段与 types 验证
+本用例验证：**pull_request 事件关键字段与 types 验证**
 
-前置条件:
-  - 仓库已启用 AtomGit Action
-  - 存在可触发 PR 的条件
+- 触发事件: `pull_request`
+- 规格引用: INTENT-COMP-073
 
-操作步骤:
-  1. 配置 pull_request 触发并定义 types 和 branches
-  2. 创建或更新 PR 验证触发
+通过标准：
+1. type=positive, target=run_logs, must_contain="PR_NUM="
+2. type=positive, target=run_logs, must_contain="pr_ok"
 
-预期结果:
-  - pull_request 事件触发 workflow，types 过滤生效，branches 过滤目标分支，atomgit.event.pull_request 各字段可访问
+## 2. 做了什么
 
-验证点:
-  - [正向] PR 创建时触发 workflow
-  - [正向] event.pull_request.number 非空
-  - [正向] types 仅匹配指定类型
+workflow 中每个步骤的实际行为：
 
-清理:      重置 fixture 仓库
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Print PR fields | `echo "PR_NUM=${{ atomgit.event.pull_request.number }}" echo "PR_TITLE=${{ atomgi` |  | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Print PR fields | run: echo "PR_NUM=${{ atomgit.event.pull_request.number }}" && echo "PR_TITLE=${{ atomgit.event.pull_request.title }}" && echo "PR_STATE=${{ atomgit.event.pull_request.state }}" && echo "pr_ok" | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -60,30 +45,25 @@ jobs:
           echo "PR_TITLE=${{ atomgit.event.pull_request.title }}"
           echo "PR_STATE=${{ atomgit.event.pull_request.state }}"
           echo "pr_ok"
-
 ```
 
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | pull_request |
-| as | maintainer |
+| 触发事件 | `pull_request` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|--------|:-----:|------|
-| [正向] PR 创建时触发 workflow | ✅ COVERED | 步骤通过 ${{ atomgit.event.pull_request.number }} 表达式访问 PR 事件上下文，真实演练了 pull_request 触发后的字段可用性 |
-| [正向] event.pull_request.number 非空 | ✅ COVERED | 步骤 echo "PR_NUM=${{ atomgit.event.pull_request.number }}" 真实输出 PR number，断言可通过 must_contain: PR_NUM= 验证 |
-| [正向] types 仅匹配指定类型 | ❌ MISSING | 步骤仅打印当前事件的字段值，无任何逻辑对比或验证 types 过滤（如检测不在 [open, update, reopen] 中的 type 是否被拒绝） |
+逐条断言对比步骤实际输出：
 
-### 问题
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | must_contain=PR_NUM= | ✅ GENUINE | PR_NUM=: GENUINE |
+| 2 | run_logs | positive | must_contain=pr_ok | ✅ GENUINE | pr_ok: GENUINE |
 
-- [正向] types 仅匹配指定类型: MISSING — 步骤未实现 type 过滤验证逻辑，仅被动打印当前事件上下文字段。要验证 types 过滤，需要多场景对比或条件判断
-
-## 5. 评级理由
-
-三个验证点中两个 COVERED（步骤通过 ${{ }} 表达式真实访问 PR 事件上下文），一个 MISSING（types 过滤验证未实现），评级为部分不符。
+---

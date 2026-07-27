@@ -1,69 +1,72 @@
 # USE-ANNOT-01-001
 
-- 标题: workflow 命令 ::error:: 与 ::warning:: 在日志中保留原文
-- 维度: 易用性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: workflow 命令 ::error:: 与 ::warning:: 在日志中保留原文
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**workflow 命令 ::error:: 与 ::warning:: 在日志中保留原文**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-USE-021
+
+通过标准：
+1. type=positive, target=run_logs, contains="::error file=src/main.js,line=10::Missing semicolon"
+2. type=positive, target=run_logs, contains="::warning file=src/util.js,line=5::Deprecated function"
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | emit error and warning | `echo "::error file=src/main.js,line=10::Missing semicolon" echo "::warning file=` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  annot-test:
+    name: annotation command test
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: emit error and warning
+        run: |
+          echo "::error file=src/main.js,line=10::Missing semicolon"
+          echo "::warning file=src/util.js,line=5::Deprecated function"
+          echo "::notice::General notice"
 ```
-用例 ID:   USE-ANNOT-01-001
-维度标签:   ['usability']
-维度:      usability
-优先级:    P1
-溯源意图:  INTENT-USE-021
-参照来源:  inputs/gitcode-spec/core-concepts/workflow-job-step-action.md; inputs/gitcode-spec/writing-pipelines/configure-jobs.md
-母意图:    —
-标题:      workflow 命令 ::error:: 与 ::warning:: 在日志中保留原文
 
-前置条件:
-  - workflow 在 GitCode Runner 上执行
-
-操作步骤:
-  1. 在 run 步骤中输出 ::error:: 和 ::warning:: 命令
-
-预期结果:
-  日志中保留原始命令文本，不静默吞掉
-
-验证点:
-  - [正向] 日志中包含 ::error:: 原始文本
-  - [正向] 日志中包含 ::warning:: 原始文本
-
-清理:      无
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | emit error and warning (annot-test) | echo "::error file=src/main.js,line=10::Missing semicolon" echo "::warning file=src/util.js,line=5:: | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 日志中包含 ::error:: 原始文本 | 覆盖 | produced by step 'emit error and warning': executes real command |
-| 日志中包含 ::warning:: 原始文本 | 覆盖 | produced by step 'emit error and warning': executes real command |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | ::error file=src/main.js,line=10::Missing semicolo | CONSISTENT | produced by step 'emit error and warning': executes real command |
-| 2 | run_logs | positive | ::warning file=src/util.js,line=5::Deprecated func | CONSISTENT | produced by step 'emit error and warning': executes real command |
+| 1 | run_logs | positive | contains=::error file=src/main.js,line= | ❌ VACUOUS | ::error file=src/main.js: VACUOUS (步骤仅 echo，未执行功能); line=10::Missing semicolon:  |
+| 2 | run_logs | positive | contains=::warning file=src/util.js,lin | ❌ VACUOUS | ::warning file=src/util.js: VACUOUS (步骤仅 echo，未执行功能); line=5::Deprecated functio |
 
 ### 问题
 
-- 所有验证点均被覆盖，步骤与断言一致
+**断言 1 — VACUOUS**❌: ::error file=src/main.js: VACUOUS (步骤仅 echo，未执行功能); line=10::Missing semicolon: VACUOUS (步骤仅 echo，未执行功能)
+
+**断言 2 — VACUOUS**❌: ::warning file=src/util.js: VACUOUS (步骤仅 echo，未执行功能); line=5::Deprecated function: VACUOUS (步骤仅 echo，未执行功能)
 
 ---

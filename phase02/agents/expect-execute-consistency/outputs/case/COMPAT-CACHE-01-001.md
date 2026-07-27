@@ -1,58 +1,35 @@
 # COMPAT-CACHE-01-001
 
-- 标题: cache 行为等价性——缓存命中场景
-- 维度: 兼容性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: cache 行为等价性——缓存命中场景
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMPAT-CACHE-01-001
-维度标签:   [compatibility]
-维度:      兼容性
-优先级:    P1
-溯源意图:  INTENT-COMPAT-025
-参照来源:  inputs/gitcode-spec/core-concepts/artifacts-and-cache.md
-母意图:    —
-标题:      cache 行为等价性——缓存命中场景
+本用例验证：**cache 行为等价性——缓存命中场景**
 
-前置条件:
-  - 仓库已启用 cache 插件
-  - 首次运行已生成缓存条目
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-025
 
-操作步骤:
-  1. 在工作流中使用 `uses: cache` 配置 key 和 path
-  2. 首次运行生成缓存后，再次触发同一工作流
-  3. 观察第二次运行的缓存恢复行为
+通过标准：
+1. type=positive, target=run_logs, eval=llm_assisted
+2. type=negative, target=run_logs, eval=llm_assisted
 
-预期结果:
-  - 第二次运行时 cache 步骤识别到已有缓存并命中
-  - 命中后无需重新生成，直接恢复缓存目录内容
-  - cache 插件裸名写法行为与 GitHub 全名写法等价
+## 2. 做了什么
 
-验证点:
-  - [正向] 第二次运行日志中出现缓存命中标识
-  - [正向] 缓存目录内容正确恢复
-  - [负向] 不应因 key 匹配而实际未恢复内容
+workflow 中每个步骤的实际行为：
 
-清理:      fixture
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | (TC) restore cache | `cache` |  | ✅ GENUINE |
+| 2 | (TC) verify cache state | `if [ -f "$HOME/.cache/test-dir/marker.txt" ]; then   echo "CACHE_HIT" else   ech` |  | ✅ GENUINE |
+| 3 | (TC) save cache | `cache` | ${{ always() }} | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | (TC) restore cache | uses: cache | 是 |
-| 2 | (TC) verify cache state | run: if [ -f "$HOME/.cache/test-dir/marker.txt" ]; then
-  echo "CACHE_HIT"
-else
-  echo "CACHE_MISS"
-  mkdir -p "$HOME/.cache/test-dir"
-  echo "marker" > "$ | 是 |
-| 3 | (TC) save cache | uses: cache | if: ${{ always() }} | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -83,29 +60,31 @@ jobs:
         with:
           path: ~/.cache/test-dir
           key: compat-cache-test-${{ atomgit.run_id }}
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 第二次运行日志中出现缓存命中标识 | ✅ COVERED | steps have real logic |
-| [正向] 缓存目录内容正确恢复 | ✅ COVERED | steps have real logic |
-| [负向] 不应因 key 匹配而实际未恢复内容 | ✅ COVERED | negative assertion in YAML assertions |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | run_logs | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-无
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

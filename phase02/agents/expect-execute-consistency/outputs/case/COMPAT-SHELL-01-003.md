@@ -1,47 +1,71 @@
 # COMPAT-SHELL-01-003
 
-- 标题: Windows runner 默认 shell 差异
-- 维度: 兼容性 | 优先级: P2
-- 评级: 部分不符
+- **标题**: Windows runner 默认 shell 差异
+- **维度**: 兼容性
+- **优先级**: P2
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: Windows runner 默认 shell 差异
+本用例验证：**Windows runner 默认 shell 差异**
 
-- [正向] 默认 shell 正确执行 Windows 命令
-- [正向] 若默认 shell 不是 powershell，系统应给出明确说明
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-001
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=run_logs, eval=llm_assisted
+2. type=positive, target=run_logs, eval=llm_assisted
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Echo OS | echo %OS% echo "done" | - |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | run_logs |  |
-| positive | run_logs |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo OS | `echo %OS% echo "done"` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test-windows-shell:
+    name: Test Windows default shell
+    runs-on: [windows-latest, x64, small]
+    steps:
+      - name: Echo OS
+        run: |
+          echo %OS%
+          echo "done"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 默认 shell 正确执行 Windows 命令 | WEAK | assertions present but all steps trivial |
-| [正向] 若默认 shell 不是 powershell，系统应给出明确说明 | WEAK | assertions present but all steps trivial |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [正向] 默认 shell 正确执行 Windows 命令: assertions present but all steps trivial
-- [正向] 若默认 shell 不是 powershell，系统应给出明确说明: assertions present but all steps trivial
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

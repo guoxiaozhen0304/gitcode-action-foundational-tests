@@ -1,90 +1,47 @@
 # USE-DIR-01-002
 
-- 标题: .github/workflows/ 下 workflow 未被识别时应给出目录差异提示
-- 维度: usability | 优先级: P1
-- 评级: 完全不符
+- **标题**: .github/workflows/ 下 workflow 未被识别时应给出目录差异提示
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-前置条件:
-  - 仓库同时存在 .github/workflows/ 和 .gitcode/workflows/
-  - 前者含 workflow 后者为空
+本用例验证：**.github/workflows/ 下 workflow 未被识别时应给出目录差异提示**
 
-操作步骤:
-  1. 将 workflow 文件误放到 .github/workflows/ 目录
-  2. 推送代码触发 push 事件
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-USE-001
 
-预期结果:
-  系统在某处（运行页面、日志或校验信息）提示 .gitcode/workflows/ 为正确目录，而非静默忽略
+通过标准：
+1. type=nonfunctional, target=system_message, eval=llm_assisted
 
-验证点:
-  - [负向] 不应无任何提示地忽略 .github/workflows/ 下的文件
-  - [非功能] 提示信息中应包含 .gitcode/workflows 字样
+## 2. 做了什么
 
-## 2. 实际做了什么（实现）
+workflow 中每个步骤的实际行为：
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| - | (无步骤) | - | - |
-
-<details><summary>完整 workflow YAML</summary>
-
-```yaml
-id: USE-DIR-01-002
-dimensions: ["usability"]
-dimension: usability
-priority: P1
-title: ".github/workflows/ 下 workflow 未被识别时应给出目录差异提示"
-intent_ref: INTENT-USE-001
-
-setup:
-  repo_fixture: default
-  secrets: []
-  variables: {}
-  branch_protection: default
-
-workflow: null
-
-trigger:
-  event: workflow_dispatch
-  as: maintainer
-  params: {}
-
-fault_injection: null
-
-assertions:
-  - type: nonfunctional
-    target: system_message
-    eval: llm_assisted
-    rubric: "提示信息必须同时包含 .github/workflows 与 .gitcode/workflows 对照字样，并指明 GitCode 使用 .gitcode/workflows 目录存放工作流文件"
-
-teardown:
-  reset: none
-```
-
-</details>
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo | default |
-| Secrets | (none) |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] 不应无任何提示地忽略 .github/workflows/ 下的文件 | ❌ UNVERIFIABLE | workflow=null，无步骤产出；single dispatch cannot prove negation |
-| [非功能] 提示信息中应包含 .gitcode/workflows 字样 | ❌ MISSING | workflow=null，无步骤能产生 system_message；断言 eval=llm_assisted |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | system_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [负向] 不应无任何提示地忽略: UNVERIFIABLE — workflow=null, no steps, single dispatch cannot prove negation
-- [非功能] 提示信息应包含 .gitcode/workflows: MISSING — workflow=null, no steps could produce system messages; assertion is llm_assisted
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

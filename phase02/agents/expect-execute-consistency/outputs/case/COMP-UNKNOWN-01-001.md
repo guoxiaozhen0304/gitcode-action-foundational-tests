@@ -1,48 +1,33 @@
 # COMP-UNKNOWN-01-001
 
-- 标题: 包含未知顶层字段的 workflow 触发 YAML 校验失败
-- 维度: 完备性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: 包含未知顶层字段的 workflow 触发 YAML 校验失败
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-UNKNOWN-01-001
-维度标签:   [completeness, compatibility]
-维度:      completeness
-优先级:    P1
-溯源意图:  INTENT-COMP-002
-参照来源:  inputs/gitcode-spec/core-concepts/trigger-events.md
-母意图:    —
-标题:      包含未知顶层字段的 workflow 触发 YAML 校验失败
+本用例验证：**包含未知顶层字段的 workflow 触发 YAML 校验失败**
 
-前置条件:
-  - 仓库具备提交 workflow 的权限
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-002
 
-操作步骤:
-  1. 提交包含未知顶层字段（如 unknown_field: true）的 workflow
-  2. 尝试触发该 workflow
+通过标准：
+1. type=positive, target=run_status, equals=validation_failed
+2. type=nonfunctional, target=error_message, eval=llm_assisted
 
-预期结果:
-  - 平台在校验阶段报错，拒绝执行该 workflow
-  - 错误信息应指明不支持的字段名或行号
+## 2. 做了什么
 
-验证点:
-  - [正向] workflow 提交后触发校验失败
-  - [非功能] 错误信息包含字段名及不支持语义
+workflow 中每个步骤的实际行为：
 
-清理:      none
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo step | `echo "should not run"` |  | ❌ VACUOUS |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Echo step | run: echo "should not run"
- | 否 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 unknown_field: true
@@ -51,34 +36,34 @@ on:
 jobs:
   test:
     name: Test unknown field
-    runs-on: [dedicate-hosted, x64, large]
+    runs-on: [ubuntu-latest, x64, small]
     steps:
       - name: Echo step
         run: |
           echo "should not run"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] workflow 提交后触发校验失败 | ⚠️ PARTIAL | steps exist but all trivial (echo only) |
-| [非功能] 错误信息包含字段名及不支持语义 | ⚠️ PARTIAL | steps exist but all trivial (echo only) |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | positive | equals=validation_failed | ✅ GENUINE | 状态断言 validation_failed 可被步骤行为验证 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [正向] workflow 提交后触发校验失败: PARTIAL - all steps are trivial echo
-- [非功能] 错误信息包含字段名及不支持语义: PARTIAL - all steps are trivial echo
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

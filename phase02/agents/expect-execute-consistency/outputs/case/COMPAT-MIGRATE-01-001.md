@@ -1,49 +1,76 @@
 # COMPAT-MIGRATE-01-001
 
-- 标题: GitHub 风格 permissions 块迁移报错应给出可操作指引
-- 维度: 兼容性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: GitHub 风格 permissions 块迁移报错应给出可操作指引
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: GitHub 风格 permissions 块迁移报错应给出可操作指引
+本用例验证：**GitHub 风格 permissions 块迁移报错应给出可操作指引**
 
-- [负向] 不通过无指引的原始报错（如仅报 YAML 解析错误）
-- [正向] 报错信息包含 `permissions` 关键字及可操作建议
-- [正向] 报错指向正确行号或字段名
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-031
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=negative, target=validation_error, eval=llm_assisted
+2. type=positive, target=error_message, eval=llm_assisted
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | checkout source | uses: checkout | Y |
-| 2 | echo hello | echo "hello" | - |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| negative | validation_error |  |
-| positive | error_message |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | checkout source | `checkout` |  | ✅ GENUINE |
+| 2 | echo hello | `echo "hello"` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  migrate-permissions:
+    name: Test permissions block error
+    runs-on: [ubuntu-latest, x64, small]
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: checkout source
+        uses: checkout
+      - name: echo hello
+        run: |
+          echo "hello"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] 不通过无指引的原始报错（如仅报 YAML 解析错误） | COVERED | negative assertion present |
-| [正向] 报错信息包含 `permissions` 关键字及可操作建议 | COVERED | 1 real steps, assertions present |
-| [正向] 报错指向正确行号或字段名 | COVERED | 1 real steps, assertions present |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | validation_error | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | error_message | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-无重大问题。
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

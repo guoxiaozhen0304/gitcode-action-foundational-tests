@@ -1,69 +1,76 @@
 # USE-INPT-01-002
 
-- 标题: 使用 boolean 类型 input 时报错应提示仅支持 string
-- 维度: 易用性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: 使用 boolean 类型 input 时报错应提示仅支持 string
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**使用 boolean 类型 input 时报错应提示仅支持 string**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-USE-008
+
+通过标准：
+1. type=negative, target=run_status, equals=COMPLETED
+2. type=nonfunctional, target=error_message, eval=llm_assisted
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | echo input | `echo "dry_run=${{ inputs.dry_run }}"` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: dry run flag
+        type: boolean
+        required: false
+        default: false
+jobs:
+  bad-input:
+    name: test boolean input error
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: echo input
+        run: |
+          echo "dry_run=${{ inputs.dry_run }}"
 ```
-用例 ID:   USE-INPT-01-002
-维度标签:   ['usability', 'compatibility']
-维度:      usability/compatibility
-优先级:    P1
-溯源意图:  INTENT-USE-008
-参照来源:  inputs/gitcode-spec/
-母意图:    —
-标题:      使用 boolean 类型 input 时报错应提示仅支持 string
 
-前置条件:
-  - workflow 文件位于 .gitcode/workflows/
-
-操作步骤:
-  1. 声明 workflow_dispatch inputs 的 type: boolean
-
-预期结果:
-  YAML 校验报错，明确说明 GitCode 仅支持 string 类型，并给出转换指引
-
-验证点:
-  - [负向] 不应静默降级为 string
-  - [非功能] 报错中应包含 string 与类型转换相关提示
-
-清理:      无
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | echo input (bad-input) | echo "dry_run=${{ inputs.dry_run }}"  | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 不应静默降级为 string | 覆盖 | negative status assertion |
-| 报错中应包含 string 与类型转换相关提示 | 覆盖 | 非功能断言存在(LLM评估) |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | COMPLETED | CONSISTENT | negative status assertion |
-| 2 | error_message | nonfunctional | 报错信息必须包含 GitCode 仅支持 string 类型或等效说明，并给出在 | LLM_DEPENDENT | LLM/nonfunctional assertion: 报错信息必须包含 GitCode 仅支持 string 类型或等效说明，并给出在步骤中使用表达式转换类 |
+| 1 | run_status | negative | equals=COMPLETED | ❌ IMPOSSIBLE | 期望 !=success 但无步骤可能失败 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- 所有验证点均被覆盖，步骤与断言一致
+**断言 1 — IMPOSSIBLE**❌: 期望 !=success 但无步骤可能失败
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

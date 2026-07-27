@@ -1,69 +1,70 @@
 # USE-LBL-01-001
 
-- 标题: runs-on 标签完全不匹配时应给出明确失败原因与可用标签列表
-- 维度: 易用性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: runs-on 标签完全不匹配时应给出明确失败原因与可用标签列表
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**runs-on 标签完全不匹配时应给出明确失败原因与可用标签列表**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-USE-025
+
+通过标准：
+1. type=negative, target=run_status, equals=COMPLETED
+2. type=nonfunctional, target=error_message, eval=llm_assisted
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | step | `echo "hello"` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  bad:
+    name: unmatched runner labels
+    runs-on: [nonexistent-os, x64, small]
+    steps:
+      - name: step
+        run: |
+          echo "hello"
 ```
-用例 ID:   USE-LBL-01-001
-维度标签:   ['usability']
-维度:      usability
-优先级:    P1
-溯源意图:  INTENT-USE-025
-参照来源:  inputs/gitcode-spec/runner-management/selecting-runner-labels.md; inputs/platform-config/instance-config.md
-母意图:    —
-标题:      runs-on 标签完全不匹配时应给出明确失败原因与可用标签列表
 
-前置条件:
-  - 仓库无匹配该标签组合的 runner
-
-操作步骤:
-  1. 使用完全不存在的标签组合如 [nonexistent-os, x64, small]
-
-预期结果:
-  系统在合理超时后失败，报错包含用户指定的标签和可用 runner 类型列表
-
-验证点:
-  - [负向] 不应无限 queued 且无提示
-  - [非功能] 错误信息中是否包含用户指定的标签文本
-
-清理:      无
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | step (bad) | echo "hello"  | VACUOUS |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 不应无限 queued 且无提示 | 覆盖 | negative status assertion |
-| 错误信息中是否包含用户指定的标签文本 | 覆盖 | 非功能断言存在(LLM评估) |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | COMPLETED | CONSISTENT | negative status assertion |
-| 2 | error_message | nonfunctional | 报错信息必须包含用户指定的 runs-on 标签原文；若因标签不匹配，应提示未找 | LLM_DEPENDENT | LLM/nonfunctional assertion: 报错信息必须包含用户指定的 runs-on 标签原文；若因标签不匹配，应提示未找到匹配标签的 Runn |
+| 1 | run_status | negative | equals=COMPLETED | ❌ IMPOSSIBLE | 期望 !=success 但无步骤可能失败 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- 所有验证点均被覆盖，步骤与断言一致
+**断言 1 — IMPOSSIBLE**❌: 期望 !=success 但无步骤可能失败
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

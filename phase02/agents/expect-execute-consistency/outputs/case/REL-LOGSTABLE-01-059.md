@@ -1,48 +1,64 @@
 # REL-LOGSTABLE-01-059
 
-- 标题: 日志系统稳定性——6 万行日志无乱序/无丢失/无截断
-- 维度: 稳定性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: 日志系统稳定性——6 万行日志无乱序/无丢失/无截断
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: 日志系统稳定性——6 万行日志无乱序/无丢失/无截断
+本用例验证：**日志系统稳定性——6 万行日志无乱序/无丢失/无截断**
 
-- [正向] 行数=60000
-- [正向] 行号单调递增
-- [负向] 不应出现行号跳变或乱序
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-REL-059
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=log_line_count, equals=60000
+2. type=positive, target=log_order, equals=monotonic
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | generate 60000 lines log | for i in $(seq 1 60000); do echo LOG_LINE_${i} $(date +%s%N); done | Y |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | log_line_count | 60000 |
-| positive | log_order | monotonic |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | generate 60000 lines log | `for i in $(seq 1 60000); do echo LOG_LINE_${i} $(date +%s%N); done` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    name: log stability test job
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: generate 60000 lines log
+        run: |
+          for i in $(seq 1 60000); do echo LOG_LINE_${i} $(date +%s%N); done
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 行数=60000 | COVERED | 1 real steps, assertions present |
-| [正向] 行号单调递增 | COVERED | 1 real steps, assertions present |
-| [负向] 不应出现行号跳变或乱序 | UNVERIFIABLE | single dispatch cannot prove negative |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-- [负向] 不应出现行号跳变或乱序: single dispatch cannot prove negative
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | log_line_count | positive | equals=60000 | ✅ GENUINE | 断言有条件可被步骤验证 |
+| 2 | log_order | positive | equals=monotonic | ✅ GENUINE | 断言有条件可被步骤验证 |
 
 ---

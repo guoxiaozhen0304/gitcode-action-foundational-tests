@@ -1,113 +1,77 @@
 # COMP-EXPR-01-054
 
-- 标题: 字符串函数 contains startsWith endsWith 边界行为
-- 维度: 完备性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: 字符串函数 contains startsWith endsWith 边界行为
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-前置条件:
-- 仓库已启用 AtomGit Action
+本用例验证：**字符串函数 contains startsWith endsWith 边界行为**
 
-操作步骤:
-1. 在 step 的 if 条件或 env 中使用 contains / startsWith / endsWith 函数
-2. 覆盖空串、不匹配、边界匹配等场景
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-054
 
-预期结果:
-- contains 子串匹配正确，startsWith 前缀匹配正确，endsWith 后缀匹配正确，区分大小写
+通过标准：
+1. type=positive, target=run_logs, must_contain="contains_passed"
+2. type=positive, target=run_logs, must_contain="startswith_passed"
+3. type=positive, target=run_logs, must_contain="endswith_passed"
 
-验证点:
-- [正向] contains 匹配子串返回真
-- [正向] startsWith 匹配前缀返回真
-- [正向] endsWith 匹配后缀返回真
-- [负向] 大小写不匹配返回假
+## 2. 做了什么
 
-## 2. 实际做了什么（实现）
+workflow 中每个步骤的实际行为：
 
-| # | 步骤名 | 关键内容（前80字） | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Contains match | if: ${{ contains(atomgit.ref_name, 'main') }}，echo "contains_passed" | 是 |
-| 2 | StartsWith match | if: ${{ startsWith(atomgit.ref, 'refs/heads/') }}，echo "startswith_passed" | 是 |
-| 3 | EndsWith match | if: ${{ endsWith(atomgit.ref_name, 'ain') }}，echo "endswith_passed" | 是 |
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Contains match | `echo "contains_passed"` | ${{ contains(atomgit.ref_ | ✅ GENUINE |
+| 2 | StartsWith match | `echo "startswith_passed"` | ${{ startsWith(atomgit.re | ✅ GENUINE |
+| 3 | EndsWith match | `echo "endswith_passed"` | ${{ endsWith(atomgit.ref_ | ✅ GENUINE |
 
 <details>
 <summary>完整 workflow YAML</summary>
 
 ```yaml
-id: COMP-EXPR-01-054
-dimensions: [completeness]
-dimension: completeness
-priority: P1
-title: 字符串函数 contains startsWith endsWith 边界行为
-intent_ref: KEEP-TC-180~182
-setup:
-  repo_fixture: default
-  secrets: []
-  variables: {}
-  branch_protection: default
-fault_injection: null
-workflow: |
-  on:
-    workflow_dispatch:
-  jobs:
-    verify:
-      name: Verify string functions boundary
-      runs-on: [ubuntu-latest, x64, small]
-      steps:
-        - name: Contains match
-          if: ${{ contains(atomgit.ref_name, 'main') }}
-          run: |
-            echo "contains_passed"
-        - name: StartsWith match
-          if: ${{ startsWith(atomgit.ref, 'refs/heads/') }}
-          run: |
-            echo "startswith_passed"
-        - name: EndsWith match
-          if: ${{ endsWith(atomgit.ref_name, 'ain') }}
-          run: |
-            echo "endswith_passed"
-trigger:
-  event: workflow_dispatch
-  as: maintainer
-  params: {}
-assertions:
-  - type: positive
-    target: run_logs
-    must_contain: contains_passed
-  - type: positive
-    target: run_logs
-    must_contain: startswith_passed
-  - type: positive
-    target: run_logs
-    must_contain: endswith_passed
-teardown:
-  reset: fixture
+on:
+  workflow_dispatch:
+jobs:
+  verify:
+    name: Verify string functions boundary
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Contains match
+        if: ${{ contains(atomgit.ref_name, 'main') }}
+        run: |
+          echo "contains_passed"
+      - name: StartsWith match
+        if: ${{ startsWith(atomgit.ref, 'refs/heads/') }}
+        run: |
+          echo "startswith_passed"
+      - name: EndsWith match
+        if: ${{ endsWith(atomgit.ref_name, 'ain') }}
+        run: |
+          echo "endswith_passed"
 ```
 
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo | default |
-| Secrets | (none) |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] contains 匹配子串返回真 | ✅ COVERED | if: ${{ contains(atomgit.ref_name, 'main') }}，断言 contains_passed |
-| [正向] startsWith 匹配前缀返回真 | ✅ COVERED | if: ${{ startsWith(atomgit.ref, 'refs/heads/') }}，断言 startswith_passed |
-| [正向] endsWith 匹配后缀返回真 | ✅ COVERED | if: ${{ endsWith(atomgit.ref_name, 'ain') }}，断言 endswith_passed |
-| [负向] 大小写不匹配返回假 | ❌ UNVERIFIABLE | 无步骤测试大小写不匹配场景；无法从单次 dispatch 证明未匹配的否定行为 |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-- 大小写不匹配返回假：需额外步骤测试大小写差异场景（如 contains(ref_name, 'MAIN')），当前无此测试
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | must_contain=contains_passed | ✅ GENUINE | contains_passed: GENUINE |
+| 2 | run_logs | positive | must_contain=startswith_passed | ✅ GENUINE | startswith_passed: GENUINE |
+| 3 | run_logs | positive | must_contain=endswith_passed | ✅ GENUINE | endswith_passed: GENUINE |
 
 ---

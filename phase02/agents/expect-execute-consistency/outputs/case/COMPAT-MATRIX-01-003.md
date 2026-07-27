@@ -1,52 +1,33 @@
 # COMPAT-MATRIX-01-003
 
-- 标题: matrix 三维展开不被支持时的差异
-- 维度: 兼容性 | 优先级: P2
-- 评级: 断言一致
+- **标题**: matrix 三维展开不被支持时的差异
+- **维度**: 兼容性
+- **优先级**: P2
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMPAT-MATRIX-01-003
-维度标签:   [compatibility]
-维度:      兼容性
-优先级:    P2
-溯源意图:  INTENT-COMPAT-NEW-007
-参照来源:  inputs/gitcode-spec/core-concepts/workflow-job-step-action.md; inputs/gitcode-spec/writing-pipelines/configure-jobs.md
-母意图:    —
-标题:      matrix 三维展开不被支持时的差异
+本用例验证：**matrix 三维展开不被支持时的差异**
 
-前置条件:
-  - 仓库已启用 Actions
-  - 测试者持有 maintainer 权限
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-NEW-007
 
-操作步骤:
-  1. 创建一个 workflow，配置三维 matrix（如 os × node × browser）
-  2. 提交并触发 workflow
+通过标准：
+1. type=positive, target=run_status, eval=llm_assisted
+2. type=negative, target=run_status, eval=llm_assisted
 
-预期结果:
-  - GitHub 行为：三维 matrix 应正常展开为多个 job 实例
-  - GitCode 行为：可能不支持三维展开
-  - 应明确记录差异
+## 2. 做了什么
 
-验证点:
-  - [正向] 系统对三维 matrix 给出明确响应（接受或拒绝）
-  - [负向] 不通过静默忽略导致 matrix 配置失效
+workflow 中每个步骤的实际行为：
 
-清理:      无
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo matrix values | `echo "os=${{ matrix.os }}" echo "node=${{ matrix.node }}" echo "browser=${{ matr` |  | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Echo matrix values | run: echo "os=${{ matrix.os }}"
-echo "node=${{ matrix.node }}"
-echo "browser=${{ matrix.browser }}"
- | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -66,28 +47,31 @@ jobs:
           echo "os=${{ matrix.os }}"
           echo "node=${{ matrix.node }}"
           echo "browser=${{ matrix.browser }}"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 系统对三维 matrix 给出明确响应（接受或拒绝） | ✅ COVERED | steps have real logic |
-| [负向] 不通过静默忽略导致 matrix 配置失效 | ✅ COVERED | negative assertion in YAML assertions |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | run_status | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-无
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

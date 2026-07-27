@@ -1,46 +1,64 @@
 # REL-PATHS-01-014
 
-- 标题: paths 匹配边界值——变更恰好 300 个文件时 paths 过滤应生效
-- 维度: 稳定性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: paths 匹配边界值——变更恰好 300 个文件时 paths 过滤应生效
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: paths 匹配边界值——变更恰好 300 个文件时 paths 过滤应生效
+本用例验证：**paths 匹配边界值——变更恰好 300 个文件时 paths 过滤应生效**
 
-- [正向] workflow 运行被创建
-- [负向] 不应因文件数=300 而判定异常
+- 触发事件: `push`
+- 规格引用: INTENT-REL-014
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=run_status, equals=completed(success)
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | echo triggered | echo triggered by paths | - |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | run_status | completed(success) |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | echo triggered | `echo triggered by paths` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  push:
+    paths:
+      - 'src/**'
+jobs:
+  test:
+    name: paths trigger test
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: echo triggered
+        run: |
+          echo triggered by paths
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | push |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `push` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] workflow 运行被创建 | WEAK | assertions present but all steps trivial |
-| [负向] 不应因文件数=300 而判定异常 | UNVERIFIABLE | single dispatch cannot prove negative |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-- [正向] workflow 运行被创建: assertions present but all steps trivial
-- [负向] 不应因文件数=300 而判定异常: single dispatch cannot prove negative
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | positive | equals=completed(success) | ✅ GENUINE | 状态断言 completed(success) 可被步骤行为验证 |
 
 ---

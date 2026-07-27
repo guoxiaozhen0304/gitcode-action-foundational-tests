@@ -1,69 +1,70 @@
 # USE-SECNAME-01-001
 
-- 标题: Secret 名称以 ATOMGIT_ 开头时应给出命名规则错误
-- 维度: 易用性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: Secret 名称以 ATOMGIT_ 开头时应给出命名规则错误
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**Secret 名称以 ATOMGIT_ 开头时应给出命名规则错误**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-USE-028
+
+通过标准：
+1. type=negative, target=run_status, equals=COMPLETED
+2. type=nonfunctional, target=error_message, eval=llm_assisted
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | use reserved prefix secre | `echo "token=${{ secrets.ATOMGIT_TOKEN }}"` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  bad:
+    name: secret name rule violation
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: use reserved prefix secret
+        run: |
+          echo "token=${{ secrets.ATOMGIT_TOKEN }}"
 ```
-用例 ID:   USE-SECNAME-01-001
-维度标签:   ['usability', 'security']
-维度:      usability/security
-优先级:    P1
-溯源意图:  INTENT-USE-028
-参照来源:  inputs/security-knowledge/issues.md; inputs/github-reference/security/
-母意图:    —
-标题:      Secret 名称以 ATOMGIT_ 开头时应给出命名规则错误
 
-前置条件:
-  - workflow 文件位于 .gitcode/workflows/
-
-操作步骤:
-  1. 在 workflow 中引用 ${{ secrets.ATOMGIT_TOKEN }}
-
-预期结果:
-  系统在校验或运行时给出明确的命名规则提示，区分名称违规与未配置
-
-验证点:
-  - [负向] 不应仅报 Secret not found
-  - [非功能] 报错中是否包含 Secret 名称规则、大写字母/数字/下划线、不得以 ATOMGIT_ 开头等提示
-
-清理:      无
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | use reserved prefix secret (bad) | echo "token=${{ secrets.ATOMGIT_TOKEN }}"  | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 不应仅报 Secret not found | 覆盖 | negative status assertion |
-| 报错中是否包含 Secret 名称规则、大写字母/数字/下划线、不得以 ATOMGIT_ 开头等提示 | 覆盖 | 非功能断言存在(LLM评估) |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | COMPLETED | CONSISTENT | negative status assertion |
-| 2 | error_message | nonfunctional | 报错信息必须包含 Secret 名称规则或命名格式相关说明，并列出允许字符（大写 | LLM_DEPENDENT | LLM/nonfunctional assertion: 报错信息必须包含 Secret 名称规则或命名格式相关说明，并列出允许字符（大写字母、数字、下划线） |
+| 1 | run_status | negative | equals=COMPLETED | ❌ IMPOSSIBLE | 期望 !=success 但无步骤可能失败 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- 所有验证点均被覆盖，步骤与断言一致
+**断言 1 — IMPOSSIBLE**❌: 期望 !=success 但无步骤可能失败
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

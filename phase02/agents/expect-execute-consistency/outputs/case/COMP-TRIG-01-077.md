@@ -1,51 +1,33 @@
 # COMP-TRIG-01-077
 
-- 标题: pull_request_comment 事件关键字段与过滤验证
-- 维度: 完备性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: pull_request_comment 事件关键字段与过滤验证
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-TRIG-01-077
-维度标签:   [completeness]
-维度:      完备性
-优先级:    P1
-溯源意图:  KEEP-TC-469~470
-参照来源:  inputs/existing-cases/cases.md
-母意图:    —
-标题:      pull_request_comment 事件关键字段与过滤验证
+本用例验证：**pull_request_comment 事件关键字段与过滤验证**
 
-前置条件:
-  - 仓库已启用 AtomGit Action
-  - 存在 PR
+- 触发事件: `pull_request_comment`
+- 规格引用: INTENT-COMP-077
 
-操作步骤:
-  1. 配置 pull_request_comment 触发并定义 types
-  2. 在 PR 下创建评论验证触发
+通过标准：
+1. type=positive, target=run_logs, must_contain="PR_NUM="
+2. type=positive, target=run_logs, must_contain="pr_comment_ok"
 
-预期结果:
-  - pull_request_comment 事件触发 workflow，types 允许 created / edited / deleted，atomgit.event.comment 和 pull_request 字段可访问
+## 2. 做了什么
 
-验证点:
-  - [正向] PR 评论创建时触发
-  - [正向] event.comment.body 非空
-  - [正向] event.pull_request.number 非空
+workflow 中每个步骤的实际行为：
 
-清理:      重置 fixture 仓库
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Print PR comment fields | `echo "PR_NUM=${{ atomgit.event.pull_request.number }}" echo "COMMENT_BODY=${{ at` |  | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Print PR comment fields | run: echo "PR_NUM=${{ atomgit.event.pull_request.number }}"
-echo "COMMENT_BODY=${{ atomgit.event.comment.body }}"
-echo "pr_comment_ok"
- | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -61,29 +43,25 @@ jobs:
           echo "PR_NUM=${{ atomgit.event.pull_request.number }}"
           echo "COMMENT_BODY=${{ atomgit.event.comment.body }}"
           echo "pr_comment_ok"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | pull_request_comment |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `pull_request_comment` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] PR 评论创建时触发 | ✅ COVERED | steps have real logic |
-| [正向] event.comment.body 非空 | ✅ COVERED | steps have real logic |
-| [正向] event.pull_request.number 非空 | ✅ COVERED | steps have real logic |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-无
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | must_contain=PR_NUM= | ✅ GENUINE | PR_NUM=: GENUINE |
+| 2 | run_logs | positive | must_contain=pr_comment_ok | ✅ GENUINE | pr_comment_ok: GENUINE |
 
 ---

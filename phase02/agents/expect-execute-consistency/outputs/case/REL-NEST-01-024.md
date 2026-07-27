@@ -1,48 +1,63 @@
 # REL-NEST-01-024
 
-- 标题: workflow_call 嵌套越界——3 层嵌套调用应被拒绝
-- 维度: 稳定性 | 优先级: P1
-- 评级: 完全不符
+- **标题**: workflow_call 嵌套越界——3 层嵌套调用应被拒绝
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: workflow_call 嵌套越界——3 层嵌套调用应被拒绝
+本用例验证：**workflow_call 嵌套越界——3 层嵌套调用应被拒绝**
 
-- [正向] 运行状态=failure
-- [正向] 日志明确提示嵌套超限
-- [负向] 不应死循环或挂起
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-REL-024
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=run_status, equals=completed(failure)
+2. type=positive, target=run_logs, contains="嵌套"
 
-(无步骤)
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | run_status | completed(failure) |
-| positive | run_logs |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  call_level1:
+    name: call level 1 workflow
+    uses: ./.gitcode/workflows/level1_deep.yml
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 运行状态=failure | NOT COVERED | no steps in workflow |
-| [正向] 日志明确提示嵌套超限 | NOT COVERED | no steps in workflow |
-| [负向] 不应死循环或挂起 | UNVERIFIABLE | single dispatch cannot prove negative |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | positive | equals=completed(failure) | ✅ GENUINE | 状态断言 completed(failure) 可被步骤行为验证 |
+| 2 | run_logs | positive | contains=嵌套 | ❌ MISSING_SOURCE | 嵌套: MISSING_SOURCE (无步骤产出此字符串) |
 
 ### 问题
 
-- [正向] 运行状态=failure: no steps in workflow
-- [正向] 日志明确提示嵌套超限: no steps in workflow
-- [负向] 不应死循环或挂起: single dispatch cannot prove negative
+**断言 2 — MISSING_SOURCE**❌: 嵌套: MISSING_SOURCE (无步骤产出此字符串)
 
 ---

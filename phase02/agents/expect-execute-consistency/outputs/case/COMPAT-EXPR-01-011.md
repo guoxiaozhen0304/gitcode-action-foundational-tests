@@ -1,74 +1,69 @@
 # COMPAT-EXPR-01-011
 
-- 标题: join() 函数缺失时的降级行为
-- 维度: 兼容性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: join() 函数缺失时的降级行为
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**join() 函数缺失时的降级行为**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-010
+
+通过标准：
+1. type=negative, target=run_logs
+2. type=nonfunctional, target=error_message, eval=llm_assisted
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Test join function in run | `RESULT="${{ join(['a', 'b', 'c'], '-') }}" echo "join-result=$RESULT"` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test-join:
+    name: Test join function availability
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Test join function in run block
+        run: |
+          RESULT="${{ join(['a', 'b', 'c'], '-') }}"
+          echo "join-result=$RESULT"
 ```
-用例 ID:   COMPAT-EXPR-01-011
-维度标签:   [compatibility, usability]
-维度:      兼容性
-优先级:    P1
-溯源意图:  INTENT-COMPAT-010
-参照来源:  inputs/gitcode-spec/core-concepts/variables-secrets-context-expressions.md; inputs/gitcode-spec/syntax-reference/expressions.md; inputs/gitcode-spec/syntax-reference/context.md
-母意图:    —
-标题:      join() 函数缺失时的降级行为
 
-前置条件:
-  - 仓库已启用 Actions
-  - 测试分支存在
-
-操作步骤:
-  1. 在 workflow run 块中引用 GitHub 支持的 join() 表达式函数
-  2. 提交并推送该 workflow
-  3. 观察平台解析与运行行为
-
-预期结果:
-  - 平台对不支持的 join() 函数给出明确的校验错误或运行时错误
-  - 错误信息应指明该函数在 GitCode 中不可用
-  - 不应静默求值并返回意外结果
-
-验证点:
-  - [负向] 不支持函数不应静默通过并返回意外值
-  - [正向] 错误信息应足够清晰，帮助迁移者识别函数缺失
-
-清理:      fixture
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | Test join function in run block (test-join) | RESULT="${{ join(['a', 'b', 'c'], '-') }}" echo "join-result=$RESULT"  | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 不支持函数不应静默通过并返回意外值 | 覆盖 | log assertion without specific string check |
-| 错误信息应足够清晰，帮助迁移者识别函数缺失 | 未覆盖 | 缺少正向断言 |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | negative |  | CONSISTENT | log assertion without specific string check |
-| 2 | error_message | nonfunctional | 若 join() 函数不可用，错误信息应明确指出函数缺失，而非 generic  | LLM_DEPENDENT | LLM/nonfunctional assertion: 若 join() 函数不可用，错误信息应明确指出函数缺失，而非 generic 语法错误 |
+| 1 | run_logs | negative |  | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- 验证点 `错误信息应足够清晰，帮助迁移者识别函数缺失` → 未覆盖: 缺少正向断言
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

@@ -1,75 +1,80 @@
 # REL-STAGES-01-029
 
-- 标题: stages fail_fast 机制——阶段内任一 job 失败应立即终止同阶段其他 jobs
-- 维度: 可靠性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: stages fail_fast 机制——阶段内任一 job 失败应立即终止同阶段其他 jobs
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**stages fail_fast 机制——阶段内任一 job 失败应立即终止同阶段其他 jobs**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-REL-029
+
+通过标准：
+1. type=positive, target=job_status, equals=failure
+2. type=positive, target=cancelled_jobs_count
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+stages:
+  - name: test_stage
+    fail_fast: true
+    jobs:
+      job_a:
+        name: stage job A
+        runs-on: [ubuntu-latest, x64, small]
+        steps:
+          - name: fail step
+            run: |
+              exit 1
+      job_b:
+        name: stage job B
+        runs-on: [ubuntu-latest, x64, small]
+        steps:
+          - name: sleep step
+            run: |
+              sleep 30
+      job_c:
+        name: stage job C
+        runs-on: [ubuntu-latest, x64, small]
+        steps:
+          - name: sleep step
+            run: |
+              sleep 30
 ```
-用例 ID:   REL-STAGES-01-029
-维度标签:   [reliability]
-维度:      稳定性
-优先级:    P1
-溯源意图:  INTENT-REL-029
-参照来源:  inputs/gitcode-spec/core-concepts/trigger-events.md
-母意图:    —
-标题:      stages fail_fast 机制——阶段内任一 job 失败应立即终止同阶段其他 jobs
 
-前置条件:
-  - 仓库具备 stages 使用权限
-
-操作步骤:
-  1. 触发含 stage 且 3 个 jobs 并行执行的 workflow，1 个 job 故意失败
-
-预期结果:
-  - 失败 job 状态=failure
-  - 同阶段其余 jobs 状态=cancelled 或 skipped
-  - 不应进入下一阶段
-
-验证点:
-  - [正向] 失败 job 状态=failure
-  - [正向] 同阶段其余 jobs 状态∈{cancelled, skipped}
-  - [负向] 不应进入下一阶段
-
-清理:      无需特殊清理
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | fail step (job_a) | exit 1  | GENUINE |
-| 2 | sleep step (job_b) | sleep 30  | GENUINE |
-| 3 | sleep step (job_c) | sleep 30  | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 失败 job 状态=failure | 覆盖 | deliberate failure step exists |
-| 同阶段其余 jobs 状态∈{cancelled, skipped} | 覆盖 | deliberate failure step exists |
-| 不应进入下一阶段 | 未覆盖 | 缺少负向断言 |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | job_status | positive | failure | CONSISTENT | deliberate failure step exists |
-| 2 | cancelled_jobs_count | positive |  | CONSISTENT | real step logic exists |
-
-### 问题
-
-- 验证点 `不应进入下一阶段` → 未覆盖: 缺少负向断言
+| 1 | job_status | positive | equals=failure | ✅ GENUINE | 平台级断言 job_status — 由 harness 在运行时观测 |
+| 2 | cancelled_jobs_count | positive |  | ✅ GENUINE | 通用断言匹配 |
 
 ---

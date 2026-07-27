@@ -1,74 +1,76 @@
 # COMPAT-EXPR-01-013
 
-- 标题: success() 带括号与不带括号的兼容性差异
-- 维度: 兼容性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: success() 带括号与不带括号的兼容性差异
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**success() 带括号与不带括号的兼容性差异**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-004
+
+通过标准：
+1. type=positive, target=run_logs, eval=llm_assisted
+2. type=positive, target=error_message, eval=llm_assisted
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Step with parens | `echo "with_parens"` | ${{ success() }} | ✅ GENUINE |
+| 2 | Step without parens | `echo "without_parens"` | ${{ success }} | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test-success-paren:
+    name: Test success with/without parens
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Step with parens
+        if: ${{ success() }}
+        run: |
+          echo "with_parens"
+      - name: Step without parens
+        if: ${{ success }}
+        run: |
+          echo "without_parens"
 ```
-用例 ID:   COMPAT-EXPR-01-013
-维度标签:   [compatibility]
-维度:      兼容性
-优先级:    P1
-溯源意图:  INTENT-COMPAT-004
-参照来源:  inputs/gitcode-spec/core-concepts/variables-secrets-context-expressions.md; inputs/gitcode-spec/syntax-reference/expressions.md; inputs/gitcode-spec/syntax-reference/context.md
-母意图:    —
-标题:      success() 带括号与不带括号的兼容性差异
 
-前置条件:
-  - 仓库已启用 Actions
-  - 测试者持有 maintainer 权限
-
-操作步骤:
-  1. 创建一个 workflow，if 条件分别使用 `${{ success() }}` 和 `${{ success }}`
-  2. 触发 workflow
-
-预期结果:
-  - GitHub 行为：success() 和 success 都可用（有括号和无括号等价）
-  - GitCode 行为：可能仅支持带括号形式
-  - 应明确记录差异
-
-验证点:
-  - [正向] 若支持无括号形式，应正常求值
-  - [正向] 若不支持，应给出明确的语法错误提示
-
-清理:      无
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | Step with parens (test-success-paren) | echo "with_parens"  | GENUINE |
-| 2 | Step without parens (test-success-paren) | echo "without_parens"  | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 若支持无括号形式，应正常求值 | 覆盖 | LLM/nonfunctional assertion: 若支持无括号形式，应正常求值并执行 |
-| 若不支持，应给出明确的语法错误提示 | 覆盖 | LLM/nonfunctional assertion: 若支持无括号形式，应正常求值并执行 |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | 若支持无括号形式，应正常求值并执行 | LLM_DEPENDENT | LLM/nonfunctional assertion: 若支持无括号形式，应正常求值并执行 |
-| 2 | error_message | positive | 若不支持无括号形式，应给出明确的语法错误提示 | LLM_DEPENDENT | LLM/nonfunctional assertion: 若不支持无括号形式，应给出明确的语法错误提示 |
+| 1 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | error_message | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- 所有验证点均被覆盖，步骤与断言一致
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

@@ -1,49 +1,33 @@
 # COMPAT-CTX-01-002
 
-- 标题: 使用 atomgit.ref 上下文应正确返回触发引用
-- 维度: 兼容性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: 使用 atomgit.ref 上下文应正确返回触发引用
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMPAT-CTX-01-002
-维度标签:   [compatibility]
-维度:      兼容性
-优先级:    P1
-溯源意图:  INTENT-COMPAT-016
-参照来源:  inputs/gitcode-spec/core-concepts/trigger-events.md
-母意图:    COMPAT-CTX-01-001
-标题:      使用 atomgit.ref 上下文应正确返回触发引用
+本用例验证：**使用 atomgit.ref 上下文应正确返回触发引用**
 
-前置条件:
-  - 仓库已启用 Actions
-  - 测试分支存在
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-016
 
-操作步骤:
-  1. 在 workflow 的 run 步骤中引用 ${{ atomgit.ref }}
-  2. 提交并推送该 workflow
-  3. 触发 workflow 运行
+通过标准：
+1. type=positive, target=run_status, equals=success
+2. type=positive, target=run_logs, eval=llm_assisted
 
-预期结果:
-  - atomgit.ref 应正确返回触发事件的引用（如 refs/heads/main）
+## 2. 做了什么
 
-验证点:
-  - [正向] 日志中 atomgit_ref 的值不为空且符合预期格式
+workflow 中每个步骤的实际行为：
 
-清理:      fixture
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo atomgit ref | `echo "atomgit_ref=${{ atomgit.ref }}" echo "done"` |  | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Echo atomgit ref | run: echo "atomgit_ref=${{ atomgit.ref }}"
-echo "done"
- | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -57,27 +41,29 @@ jobs:
         run: |
           echo "atomgit_ref=${{ atomgit.ref }}"
           echo "done"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 日志中 atomgit_ref 的值不为空且符合预期格式 | ✅ COVERED | steps have real logic |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | positive | equals=success | ✅ GENUINE | 存在真实可执行步骤，有行为观测价值 |
+| 2 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-无
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

@@ -1,0 +1,36 @@
+id: SEC-TOKEN-01-004
+dimensions: ["security"]
+dimension: security
+priority: P1
+title: "残留于 cache/artifact 的 token 在新 run 中绝不应通过鉴权"
+intent_ref: INTENT-SEC-037
+setup:
+  repo_fixture: with-artifacts
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    residue-check:
+      name: Residual token must not authenticate
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Attempt auth with residual token
+          run: |
+            echo "RESIDUAL_TOKEN_AUTH_ATTEMPT: harness supplies residual token from prior run artifact"
+        - name: Confirm current run token works
+          run: |
+            echo "CURRENT_RUN_TOKEN_CHECK: in scope read with own token"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+assertions:
+  - type: positive
+    target: run_logs
+    equals: "current_run_token_operational"
+  - type: negative
+    target: api_response
+    must_not_equal: "http_2xx_with_residual_token"
+teardown:
+  reset: fixture

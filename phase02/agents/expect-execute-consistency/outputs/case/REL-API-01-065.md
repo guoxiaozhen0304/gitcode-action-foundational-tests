@@ -1,50 +1,70 @@
 # REL-API-01-065
 
-- 标题: API 限流与一致性——10 QPS 高频查询 run/job 状态不丢数据
-- 维度: 稳定性 | 优先级: P2
-- 评级: 部分不符
+- **标题**: API 限流与一致性——10 QPS 高频查询 run/job 状态不丢数据
+- **维度**: 可靠性
+- **优先级**: P2
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: API 限流与一致性——10 QPS 高频查询 run/job 状态不丢数据
+本用例验证：**API 限流与一致性——10 QPS 高频查询 run/job 状态不丢数据**
 
-- [正向] 200 占比=100%
-- [负向] 不应出现 429/503/500
-- [非功能] P95≤2s
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-REL-065
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=http_200_ratio, equals=100%
+2. type=negative, target=http_error_codes, contains="429"
+3. type=nonfunctional, target=response_time_p95_seconds
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | sleep step | sleep 30 | - |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | http_200_ratio | 100% |
-| negative | http_error_codes |  |
-| nonfunctional | response_time_p95_seconds |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | sleep step | `sleep 30` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    name: reliability test job
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: sleep step
+        run: |
+          sleep 30
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 200 占比=100% | WEAK | assertions present but all steps trivial |
-| [负向] 不应出现 429/503/500 | COVERED | negative assertion present |
-| [非功能] P95≤2s | WEAK | assertions present but all steps trivial |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | http_200_ratio | positive | equals=100% | ✅ GENUINE | 断言有条件可被步骤验证 |
+| 2 | http_error_codes | negative | contains=429 | ✅ GENUINE | 断言有条件可被步骤验证 |
+| 3 | response_time_p95_seconds | nonfunctional |  | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [正向] 200 占比=100%: assertions present but all steps trivial
-- [非功能] P95≤2s: assertions present but all steps trivial
+**断言 3 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

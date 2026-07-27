@@ -1,47 +1,33 @@
 # COMP-TIMEOUT-01-001
 
-- 标题: 未声明 timeout-minutes 的 job 在 360 分钟内正常完成
-- 维度: 完备性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: 未声明 timeout-minutes 的 job 在 360 分钟内正常完成
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-TIMEOUT-01-001
-维度标签:   [completeness, reliability]
-维度:      completeness
-优先级:    P1
-溯源意图:  INTENT-COMP-008
-参照来源:  inputs/gitcode-spec/core-concepts/workflow-job-step-action.md; inputs/gitcode-spec/writing-pipelines/configure-jobs.md
-母意图:    —
-标题:      未声明 timeout-minutes 的 job 在 360 分钟内正常完成
+本用例验证：**未声明 timeout-minutes 的 job 在 360 分钟内正常完成**
 
-前置条件:
-  - workflow 未声明 timeout-minutes
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-008
 
-操作步骤:
-  1. 触发 workflow
-  2. 观察运行是否成功
+通过标准：
+1. type=positive, target=run_status, equals=success
+2. type=nonfunctional, target=run_duration
 
-预期结果:
-  - job 在默认 360 分钟超时范围内成功完成
+## 2. 做了什么
 
-验证点:
-  - [正向] 运行状态为 success
-  - [非功能] 运行耗时远小于 360 分钟
+workflow 中每个步骤的实际行为：
 
-清理:      none
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Quick step | `echo "done"` |  | ❌ VACUOUS |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Quick step | run: echo "done"
- | 否 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -54,29 +40,31 @@ jobs:
       - name: Quick step
         run: |
           echo "done"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 运行状态为 success | ⚠️ PARTIAL | steps exist but all trivial (echo only) |
-| [非功能] 运行耗时远小于 360 分钟 | ⚠️ PARTIAL | steps exist but all trivial (echo only) |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | positive | equals=success | ⚠️ STATUS_GUARANTEED | 所有步骤均为 echo/trivial 命令，无条件失败路径，永远成功 |
+| 2 | run_duration | nonfunctional |  | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [正向] 运行状态为 success: PARTIAL - all steps are trivial echo
-- [非功能] 运行耗时远小于 360 分钟: PARTIAL - all steps are trivial echo
+**断言 1 — STATUS_GUARANTEED**⚠️: 所有步骤均为 echo/trivial 命令，无条件失败路径，永远成功
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

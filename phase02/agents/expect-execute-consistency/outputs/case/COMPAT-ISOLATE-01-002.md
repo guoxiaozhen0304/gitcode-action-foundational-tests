@@ -1,59 +1,35 @@
 # COMPAT-ISOLATE-01-002
 
-- 标题: Runner 环境隔离——跨 job 环境变量隔离
-- 维度: 兼容性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: Runner 环境隔离——跨 job 环境变量隔离
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMPAT-ISOLATE-01-002
-维度标签:   [compatibility, reliability]
-维度:      兼容性
-优先级:    P1
-溯源意图:  INTENT-COMPAT-028
-参照来源:  inputs/gitcode-spec/runner-management/selecting-runner-labels.md; inputs/platform-config/instance-config.md
-母意图:    COMPAT-ISOLATE-01-001
-标题:      Runner 环境隔离——跨 job 环境变量隔离
+本用例验证：**Runner 环境隔离——跨 job 环境变量隔离**
 
-前置条件:
-  - 平台提供多 job 工作流执行能力
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-028
 
-操作步骤:
-  1. 在 job A 中通过 `echo "KEY=VALUE_A" >> "$ATOMGIT_ENV"` 设置环境变量
-  2. 在 job B 中读取同名环境变量 KEY
-  3. 验证 job B 读取不到 job A 设置的值
+通过标准：
+1. type=positive, target=run_logs, eval=llm_assisted
+2. type=negative, target=run_logs, eval=llm_assisted
+3. type=positive, target=run_logs, eval=llm_assisted
 
-预期结果:
-  - job B 中环境变量 KEY 为空或不同于 VALUE_A
-  - $ATOMGIT_ENV 的作用域仅限于当前 job，不泄漏到后续 job
-  - 环境变量隔离行为与 GitHub Actions 的 job 级隔离语义一致
+## 2. 做了什么
 
-验证点:
-  - [负向] job B 中不应读取到 job A 通过 ATOMGIT_ENV 设置的值
-  - [正向] job 内部步骤可正常读取本 job 设置的 ATOMGIT_ENV 变量
-  - [正向] 环境变量隔离机制与预期语义一致
+workflow 中每个步骤的实际行为：
 
-清理:      fixture
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | (TC) set env in job A | `echo "ISOLATION_TEST_KEY=VALUE_FROM_JOB_A" >> "$ATOMGIT_ENV" echo "ENV_SET_IN_JO` |  | ❌ VACUOUS |
+| 2 | (TC) verify env not leake | `if [ "${ISOLATION_TEST_KEY:-}" = "VALUE_FROM_JOB_A" ]; then   echo "ENV_ISOLATIO` |  | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | (TC) set env in job A | run: echo "ISOLATION_TEST_KEY=VALUE_FROM_JOB_A" >> "$ATOMGIT_ENV"
-echo "ENV_SET_IN_JOB_A"
- | 是 |
-| 2 | (TC) verify env not leaked | run: if [ "${ISOLATION_TEST_KEY:-}" = "VALUE_FROM_JOB_A" ]; then
-  echo "ENV_ISOLATION_BROKEN"
-  exit 1
-else
-  echo "ENV_ISOLATED_OK"
-fi
- | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -80,29 +56,34 @@ jobs:
           else
             echo "ENV_ISOLATED_OK"
           fi
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] job B 中不应读取到 job A 通过 ATOMGIT_ENV 设置的值 | ✅ COVERED | negative assertion in YAML assertions |
-| [正向] job 内部步骤可正常读取本 job 设置的 ATOMGIT_ENV 变量 | ✅ COVERED | steps have real logic |
-| [正向] 环境变量隔离机制与预期语义一致 | ✅ COVERED | steps have real logic |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | run_logs | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 3 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-无
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 3 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

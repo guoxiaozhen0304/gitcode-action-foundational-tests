@@ -1,46 +1,70 @@
 # COMPAT-RUNNER-01-005
 
-- 标题: 内网环境 Runner 不支持时的差异
-- 维度: 兼容性 | 优先级: P2
-- 评级: 部分不符
+- **标题**: 内网环境 Runner 不支持时的差异
+- **维度**: 兼容性
+- **优先级**: P2
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: 内网环境 Runner 不支持时的差异
+本用例验证：**内网环境 Runner 不支持时的差异**
 
-- [正向] 系统对内网标签给出明确报错
-- [负向] 不通过无限排队
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-NEW-008
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=error_message, eval=llm_assisted
+2. type=negative, target=run_status, eval=llm_assisted
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Echo hello | echo "hello" | - |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | error_message |  |
-| negative | run_status |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo hello | `echo "hello"` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test-intranet:
+    name: Test intranet runner
+    runs-on: [intranet, x64]
+    steps:
+      - name: Echo hello
+        run: |
+          echo "hello"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 系统对内网标签给出明确报错 | WEAK | assertions present but all steps trivial |
-| [负向] 不通过无限排队 | COVERED | negative assertion present |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | error_message | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | run_status | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [正向] 系统对内网标签给出明确报错: assertions present but all steps trivial
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

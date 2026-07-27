@@ -1,49 +1,67 @@
 # REL-FAULT-01-035
 
-- 标题: 故障注入——artifact 下载服务 503 不可用时 job 应失败并报依赖服务错误
-- 维度: 稳定性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: 故障注入——artifact 下载服务 503 不可用时 job 应失败并报依赖服务错误
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: 故障注入——artifact 下载服务 503 不可用时 job 应失败并报依赖服务错误
+本用例验证：**故障注入——artifact 下载服务 503 不可用时 job 应失败并报依赖服务错误**
 
-- [正向] download-artifact step 状态=failure
-- [正向] 日志含服务不可用错误
-- [正向] job 状态=failure
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-REL-035
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=step_status, equals=failure
+2. type=positive, target=run_logs, contains="503"
+3. type=positive, target=job_status, equals=failure
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | download artifact step | uses: download-artifact | Y |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | step_status | failure |
-| positive | run_logs |  |
-| positive | job_status | failure |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | download artifact step | `download-artifact` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    name: fault injection artifact 503
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: download artifact step
+        uses: download-artifact
+        with:
+          name: missing-artifact
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | `{'at': 'mid_job', 'action': 'concurrent_flood', 'params': {'service': 'artifact_download', 'response': 503, 'target_step': 1}, 'recovery_expectation': 'explicit_error_and_rerun_success'}` |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] download-artifact step 状态=failure | COVERED | 1 real steps, assertions present |
-| [正向] 日志含服务不可用错误 | COVERED | 1 real steps, assertions present |
-| [正向] job 状态=failure | COVERED | 1 real steps, assertions present |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-无重大问题。
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | step_status | positive | equals=failure | ✅ GENUINE | 断言有条件可被步骤验证 |
+| 2 | run_logs | positive | contains=503 | ✅ GENUINE | 503: GENUINE (uses action 内部输出) |
+| 3 | job_status | positive | equals=failure | ✅ GENUINE | 平台级断言 job_status — 由 harness 在运行时观测 |
 
 ---

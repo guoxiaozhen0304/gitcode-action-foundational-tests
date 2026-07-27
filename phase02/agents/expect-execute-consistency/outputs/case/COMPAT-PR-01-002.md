@@ -1,46 +1,71 @@
 # COMPAT-PR-01-002
 
-- 标题: pull_request types 命名差异 - GitHub 风格 types 应报错
-- 维度: 兼容性 | 优先级: P0
-- 评级: 部分不符
+- **标题**: pull_request types 命名差异 - GitHub 风格 types 应报错
+- **维度**: 兼容性
+- **优先级**: P0
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: pull_request types 命名差异 - GitHub 风格 types 应报错
+本用例验证：**pull_request types 命名差异 - GitHub 风格 types 应报错**
 
-- [负向] GitHub 风格 types 不应被静默接受
-- [正向] 错误信息应明确指出类型名称不兼容并给出正确写法
+- 触发事件: `pull_request`
+- 规格引用: INTENT-COMPAT-011
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=negative, target=run_status, equals=success
+2. type=nonfunctional, target=error_message, eval=llm_assisted
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Echo PR event | echo "PR_EVENT_TYPE=${{ atomgit.event.action }}" echo "PR_TYPES_OK" | Y |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| negative | run_status | success |
-| nonfunctional | error_message |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo PR event | `echo "PR_EVENT_TYPE=${{ atomgit.event.action }}" echo "PR_TYPES_OK"` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, closed, reopened]
+jobs:
+  verify:
+    name: Verify GitHub style types rejection
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Echo PR event
+        run: |
+          echo "PR_EVENT_TYPE=${{ atomgit.event.action }}"
+          echo "PR_TYPES_OK"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | pull_request |
-| 身份 | maintainer |
-| 触发阻塞 | 是 (trigger event "pull_request" requires platform scheduling) |
+| 触发事件 | `pull_request` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] GitHub 风格 types 不应被静默接受 | COVERED | negative assertion present |
-| [正向] 错误信息应明确指出类型名称不兼容并给出正确写法 | WEAK | 1 real steps but no assertions |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | negative | equals=success | ✅ GENUINE | 存在真实可执行步骤，有行为观测价值 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [正向] 错误信息应明确指出类型名称不兼容并给出正确写法: 1 real steps but no assertions
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

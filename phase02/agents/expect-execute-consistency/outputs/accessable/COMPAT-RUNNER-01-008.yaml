@@ -1,0 +1,52 @@
+id: COMPAT-RUNNER-01-008
+dimensions: [compatibility]
+dimension: compatibility
+priority: P1
+title: "与 GitHub hosted image 的关键能力差距（docker 守护进程、浏览器）探测"
+intent_ref: INTENT-COMPAT-047
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: Probe docker and browser capability
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Probe docker daemon
+          run: |
+            docker info 2>&1 | head -5 || echo "DOCKER_MISSING"
+        - name: Probe browsers
+          run: |
+            which google-chrome 2>&1 || echo "CHROME_MISSING"
+            which firefox 2>&1 || echo "FIREFOX_MISSING"
+            echo "CAPABILITY_PROBE_DONE"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: "CAPABILITY_PROBE_DONE"
+  - type: positive
+    target: run_logs
+    eval: llm_assisted
+    rubric: "docker info 与浏览器探测得到确定结论；不可用的能力列入与 GitHub hosted image 的差距清单并进入迁移文档"
+  - type: nonfunctional
+    target: run_logs
+    eval: llm_assisted
+    rubric: "差距清单（docker-in-docker、浏览器 E2E 依赖）写入迁移对照文档"
+
+teardown:
+  reset: fixture

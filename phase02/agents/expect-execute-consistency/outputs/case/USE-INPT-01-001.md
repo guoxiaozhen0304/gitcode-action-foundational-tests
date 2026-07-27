@@ -1,68 +1,72 @@
 # USE-INPT-01-001
 
-- 标题: 使用 string 类型 input 时正常通过校验
-- 维度: 易用性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: 使用 string 类型 input 时正常通过校验
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**使用 string 类型 input 时正常通过校验**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-USE-008
+
+通过标准：
+1. type=positive, target=run_status, equals=COMPLETED
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | echo input | `echo "env=${{ inputs.env }}"` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: target environment
+        type: string
+        required: true
+        default: staging
+jobs:
+  test-input:
+    name: test string input
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: echo input
+        run: |
+          echo "env=${{ inputs.env }}"
 ```
-用例 ID:   USE-INPT-01-001
-维度标签:   ['usability', 'compatibility']
-维度:      usability/compatibility
-优先级:    P1
-溯源意图:  INTENT-USE-008
-参照来源:  inputs/gitcode-spec/writing-pipelines/workflow-file-location-structure.md
-母意图:    —
-标题:      使用 string 类型 input 时正常通过校验
 
-前置条件:
-  - workflow 文件合法
-
-操作步骤:
-  1. 声明 workflow_dispatch inputs 的 type: string
-
-预期结果:
-  YAML 校验通过，可手动触发
-
-验证点:
-  - [正向] 运行可手动触发
-  - [正向] 输入参数正常传递
-
-清理:      无
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | echo input (test-input) | echo "env=${{ inputs.env }}"  | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 运行可手动触发 | 覆盖 | status assertion: COMPLETED |
-| 输入参数正常传递 | 覆盖 | status assertion: COMPLETED |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | positive | COMPLETED | CONSISTENT | status assertion: COMPLETED |
+| 1 | run_status | positive | equals=COMPLETED | ❌ IMPOSSIBLE | 期望 !=success 但无步骤可能失败 |
 
 ### 问题
 
-- 所有验证点均被覆盖，步骤与断言一致
+**断言 1 — IMPOSSIBLE**❌: 期望 !=success 但无步骤可能失败
 
 ---

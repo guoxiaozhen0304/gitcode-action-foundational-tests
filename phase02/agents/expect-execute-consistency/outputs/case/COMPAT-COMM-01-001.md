@@ -1,49 +1,33 @@
 # COMPAT-COMM-01-001
 
-- 标题: issue_comment types 命名差异 - GitCode 合法 types 应被接受
-- 维度: 兼容性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: issue_comment types 命名差异 - GitCode 合法 types 应被接受
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-```
-用例 ID:   COMPAT-COMM-01-001
-维度标签:   [compatibility]
-维度:      兼容性
-优先级:    P1
-溯源意图:  INTENT-COMPAT-NEW-004
-参照来源:  inputs/gitcode-spec/core-concepts/trigger-events.md
-母意图:    —
-标题:      issue_comment types 命名差异 - GitCode 合法 types 应被接受
+本用例验证：**issue_comment types 命名差异 - GitCode 合法 types 应被接受**
 
-前置条件:
-  - 仓库已启用 Actions
-  - 测试者持有 maintainer 权限
+- 触发事件: `issue_comment`
+- 规格引用: INTENT-COMPAT-NEW-004
 
-操作步骤:
-  1. 创建一个 workflow，on 配置为 `issue_comment.types: [created, edited]`（GitCode 风格命名）
-  2. 提交并触发 issue_comment 事件
+通过标准：
+1. type=positive, target=run_status, equals=success, eval=llm_assisted
+2. type=negative, target=validation_error, eval=llm_assisted
 
-预期结果:
-  - GitCode 合法 types（created/edited/deleted）应被接受并正常触发
-  - 不应因命名差异导致 workflow 被拒绝
+## 2. 做了什么
 
-验证点:
-  - [正向] GitCode 风格 types 命名被接受
-  - [负向] 不通过因命名差异导致的误报错误
+workflow 中每个步骤的实际行为：
 
-清理:      无
-```
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo trigger info | `echo "event_name=${{ atomgit.event_name }}" echo "done"` |  | ✅ GENUINE |
 
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Echo trigger info | run: echo "event_name=${{ atomgit.event_name }}" / echo "done" | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -64,23 +48,25 @@ jobs:
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | issue_comment |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `issue_comment` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|--------|:-----:|------|
-| [正向] GitCode 风格 types 命名被接受 | ✅ COVERED | 步骤使用 `${{ atomgit.event_name }}` 表达式（平台上下文求值即功能执行），workflow 正常完成即证明 types 命名被平台接受 |
-| [负向] 不通过因命名差异导致的误报错误 | ✅ COVERED | YAML 中有 `type=negative, target=validation_error` 断言直接覆盖，workflow 运行成功即无校验错误 |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | positive | equals=success | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | validation_error | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-无。
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
-## 5. 评级理由
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
-所有验证点均被步骤真实覆盖：步骤使用 `${{ }}` 表达式输出动态值（平台上下文求值），属于实质逻辑；负向验证点有对应的 YAML 断言覆盖。整体判定为**断言一致**。
+---

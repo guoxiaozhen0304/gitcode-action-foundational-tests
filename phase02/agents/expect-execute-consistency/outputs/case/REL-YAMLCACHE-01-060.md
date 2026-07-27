@@ -1,78 +1,70 @@
 # REL-YAMLCACHE-01-060
 
-- 标题: Workflow YAML 缓存失效——修改后无旧代码残留
-- 维度: 可靠性 | 优先级: P1
-- 评级: 完全不符
+- **标题**: Workflow YAML 缓存失效——修改后无旧代码残留
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**Workflow YAML 缓存失效——修改后无旧代码残留**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-REL-060
+
+通过标准：
+1. type=positive, target=run_logs, contains="marker_v2"
+2. type=negative, target=run_logs, contains="marker_v1"
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | echo marker | `echo marker_v1` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    name: YAML cache invalidation test
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: echo marker
+        run: |
+          echo marker_v1
 ```
-用例 ID:   REL-YAMLCACHE-01-060
-维度标签:   [reliability]
-维度:      稳定性
-优先级:    P1
-溯源意图:  INTENT-REL-060
-参照来源:  inputs/gitcode-spec/core-concepts/workflow-job-step-action.md; inputs/gitcode-spec/writing-pipelines/configure-jobs.md
-母意图:    —
-标题:      Workflow YAML 缓存失效——修改后无旧代码残留
 
-前置条件:
-  - 仓库具备 workflow 修改与触发权限
-
-操作步骤:
-  1. 第一轮执行记录输出 marker_v1
-  2. 修改 workflow 输出为 marker_v2 并 push
-  3. 立即触发 workflow
-
-预期结果:
-  - 新触发运行日志中出现 marker_v2
-  - 不应出现 marker_v1 缓存残留
-
-验证点:
-  - [正向] 日志打印 marker_v2
-  - [负向] 不应打印 marker_v1
-
-清理:      重置 fixture 仓库
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | echo marker (test) | echo marker_v1  | VACUOUS |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 日志打印 marker_v2 | 空洞 | no step produces 'marker_v2' |
-| 不应打印 marker_v1 | 空洞 | step echo marker only echoes 'marker_v1', no real logic |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | marker_v2 | MISSING_SOURCE | no step produces 'marker_v2' |
-| 2 | run_logs | negative | marker_v1 | VACUOUS | step echo marker only echoes 'marker_v1', no real logic |
+| 1 | run_logs | positive | contains=marker_v2 | ❌ MISSING_SOURCE | marker_v2: MISSING_SOURCE (无步骤产出此字符串) |
+| 2 | run_logs | negative | contains=marker_v1 | ❌ VACUOUS | marker_v1: VACUOUS (步骤仅 echo，未执行功能) |
 
 ### 问题
 
-- 验证点 `日志打印 marker_v2` → 空洞: no step produces 'marker_v2'
+**断言 1 — MISSING_SOURCE**❌: marker_v2: MISSING_SOURCE (无步骤产出此字符串)
 
-- 验证点 `不应打印 marker_v1` → 空洞: step echo marker only echoes 'marker_v1', no real logic
-
-- 断言 `[positive] run_logs` → MISSING_SOURCE: no step produces 'marker_v2'
-
-- 断言 `[negative] run_logs` → VACUOUS: step echo marker only echoes 'marker_v1', no real logic
+**断言 2 — VACUOUS**❌: marker_v1: VACUOUS (步骤仅 echo，未执行功能)
 
 ---

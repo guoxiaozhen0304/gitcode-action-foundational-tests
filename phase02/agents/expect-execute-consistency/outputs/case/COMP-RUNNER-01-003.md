@@ -1,72 +1,70 @@
 # COMP-RUNNER-01-003
 
-- 标题: 不存在的标签组合导致 job 排队或失败
-- 维度: 完备性 | 优先级: P1
-- 评级: 完全不符
+- **标题**: 不存在的标签组合导致 job 排队或失败
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**不存在的标签组合导致 job 排队或失败**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-010
+
+通过标准：
+1. type=negative, target=run_status, equals=success
+2. type=nonfunctional, target=error_message, eval=llm_assisted
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo | `echo "should not run"` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  verify:
+    name: Verify invalid label
+    runs-on: [nonexistent-os, x64, small]
+    steps:
+      - name: Echo
+        run: |
+          echo "should not run"
 ```
-用例 ID:   COMP-RUNNER-01-003
-维度标签:   [completeness, compatibility]
-维度:      completeness
-优先级:    P1
-溯源意图:  INTENT-COMP-010
-参照来源:  inputs/gitcode-spec/runner-management/selecting-runner-labels.md; inputs/platform-config/instance-config.md
-母意图:    —
-标题:      不存在的标签组合导致 job 排队或失败
 
-前置条件:
-  - 平台不存在该标签组合对应的 Runner
-
-操作步骤:
-  1. 配置不存在的 runs-on 标签
-  2. 触发 workflow
-
-预期结果:
-  - job 无法被调度，最终排队超时或失败
-
-验证点:
-  - [负向] job 不应成功执行
-  - [非功能] 系统应给出标签无匹配的提示
-
-清理:      none
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | Echo (verify) | echo "should not run"  | VACUOUS |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| job 不应成功执行 | 空洞 | no failure path exists, status=success guaranteed |
-| 系统应给出标签无匹配的提示 | 覆盖 | 非功能断言存在(LLM评估) |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | success | IMPOSSIBLE | no failure path exists, status=success guaranteed |
-| 2 | error_message | nonfunctional | 错误信息应提示无匹配 Runner 或标签格式指引 | LLM_DEPENDENT | LLM/nonfunctional assertion: 错误信息应提示无匹配 Runner 或标签格式指引 |
+| 1 | run_status | negative | equals=success | ⚠️ STATUS_GUARANTEED | 所有步骤均为 echo/trivial 命令，无条件失败路径，永远成功 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- 验证点 `job 不应成功执行` → 空洞: no failure path exists, status=success guaranteed
+**断言 1 — STATUS_GUARANTEED**⚠️: 所有步骤均为 echo/trivial 命令，无条件失败路径，永远成功
 
-- 断言 `[negative] run_status` → IMPOSSIBLE: no failure path exists, status=success guaranteed
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

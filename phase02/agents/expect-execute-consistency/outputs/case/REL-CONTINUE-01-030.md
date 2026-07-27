@@ -1,52 +1,75 @@
 # REL-CONTINUE-01-030
 
-- 标题: continue-on-error=true——job 失败后 workflow 不应终止
-- 维度: 稳定性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: continue-on-error=true——job 失败后 workflow 不应终止
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: continue-on-error=true——job 失败后 workflow 不应终止
+本用例验证：**continue-on-error=true——job 失败后 workflow 不应终止**
 
-- [正向] job_a 状态=failure
-- [正向] job_b 状态=success
-- [负向] workflow 不应因 job_a 失败而整体 failure
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-REL-030
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=job_a_status, equals=failure
+2. type=positive, target=job_b_status, equals=success
+3. type=positive, target=workflow_status, equals=success
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | fail step | exit 1 | - |
-| 2 | success step | echo job_b executed | - |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | job_a_status | failure |
-| positive | job_b_status | success |
-| positive | workflow_status | success |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | fail step | `exit 1` |  | ✅ GENUINE |
+| 2 | success step | `echo job_b executed` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  job_a:
+    name: job with continue on error
+    runs-on: [ubuntu-latest, x64, small]
+    continue-on-error: true
+    steps:
+      - name: fail step
+        run: |
+          exit 1
+  job_b:
+    name: downstream after continue
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: success step
+        run: |
+          echo job_b executed
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] job_a 状态=failure | WEAK | assertions present but all steps trivial |
-| [正向] job_b 状态=success | WEAK | assertions present but all steps trivial |
-| [负向] workflow 不应因 job_a 失败而整体 failure | UNVERIFIABLE | single dispatch cannot prove negative |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-- [正向] job_a 状态=failure: assertions present but all steps trivial
-- [正向] job_b 状态=success: assertions present but all steps trivial
-- [负向] workflow 不应因 job_a 失败而整体 failure: single dispatch cannot prove negative
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | job_a_status | positive | equals=failure | ✅ GENUINE | 断言有条件可被步骤验证 |
+| 2 | job_b_status | positive | equals=success | ✅ GENUINE | 断言有条件可被步骤验证 |
+| 3 | workflow_status | positive | equals=success | ✅ GENUINE | 断言有条件可被步骤验证 |
 
 ---

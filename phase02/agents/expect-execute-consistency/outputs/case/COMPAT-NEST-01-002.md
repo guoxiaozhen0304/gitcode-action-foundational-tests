@@ -1,44 +1,65 @@
 # COMPAT-NEST-01-002
 
-- 标题: workflow_call 嵌套层数 - 3 层越界应报错
-- 维度: 兼容性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: workflow_call 嵌套层数 - 3 层越界应报错
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: workflow_call 嵌套层数 - 3 层越界应报错
+本用例验证：**workflow_call 嵌套层数 - 3 层越界应报错**
 
-- [负向] 3 层嵌套不应被静默接受
-- [正向] 错误信息应明确指出嵌套层数限制
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-015
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=negative, target=run_status, equals=success
+2. type=nonfunctional, target=error_message, eval=llm_assisted
 
-(无步骤)
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| negative | run_status | success |
-| nonfunctional | error_message |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  call-level2:
+    name: Call level 2 reusable workflow
+    uses: ./.gitcode/workflows/level2.yml
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `reusable-workflow-3layer` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] 3 层嵌套不应被静默接受 | COVERED | negative assertion present |
-| [正向] 错误信息应明确指出嵌套层数限制 | NOT COVERED | no steps in workflow |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | negative | equals=success | ⚠️ STATUS_GUARANTEED | 所有步骤均为 echo/trivial 命令，无条件失败路径，永远成功 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [正向] 错误信息应明确指出嵌套层数限制: no steps in workflow
+**断言 1 — STATUS_GUARANTEED**⚠️: 所有步骤均为 echo/trivial 命令，无条件失败路径，永远成功
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

@@ -1,73 +1,71 @@
 # USE-DEPR-01-001
 
-- 标题: 使用 ATOMGIT_OUTPUT 文件协议时正常生效
-- 维度: 易用性 | 优先级: P1
-- 评级: 完全不符
+- **标题**: 使用 ATOMGIT_OUTPUT 文件协议时正常生效
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**使用 ATOMGIT_OUTPUT 文件协议时正常生效**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-USE-010
+
+通过标准：
+1. type=positive, target=run_logs, contains="val=myvalue"
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | set output | `echo "mykey=myvalue" >> "$ATOMGIT_OUTPUT"` |  | ❌ VACUOUS |
+| 2 | read output | `echo "val=${{ steps.out.outputs.mykey }}"` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test-output:
+    name: test ATOMGIT_OUTPUT protocol
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: set output
+        id: out
+        run: |
+          echo "mykey=myvalue" >> "$ATOMGIT_OUTPUT"
+      - name: read output
+        run: |
+          echo "val=${{ steps.out.outputs.mykey }}"
 ```
-用例 ID:   USE-DEPR-01-001
-维度标签:   ['usability', 'compatibility']
-维度:      usability/compatibility
-优先级:    P1
-溯源意图:  INTENT-USE-010
-参照来源:  inputs/gitcode-spec/core-concepts/workflow-job-step-action.md; inputs/gitcode-spec/writing-pipelines/configure-jobs.md
-母意图:    —
-标题:      使用 ATOMGIT_OUTPUT 文件协议时正常生效
 
-前置条件:
-  - workflow 在 GitCode Runner 上执行
-
-操作步骤:
-  1. 在 run 步骤中使用 echo key=val >> $ATOMGIT_OUTPUT
-
-预期结果:
-  输出参数正确设置，下游步骤可引用
-
-验证点:
-  - [正向] 下游步骤通过 steps.*.outputs.key 获取到值
-  - [正向] 运行成功完成
-
-清理:      无
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | set output (test-output) | echo "mykey=myvalue" >> "$ATOMGIT_OUTPUT"  | GENUINE |
-| 2 | read output (test-output) | echo "val=${{ steps.out.outputs.mykey }}"  | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 下游步骤通过 steps.*.outputs.key 获取到值 | 空洞 | no step produces 'val=myvalue' |
-| 运行成功完成 | 空洞 | no step produces 'val=myvalue' |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | val=myvalue | MISSING_SOURCE | no step produces 'val=myvalue' |
+| 1 | run_logs | positive | contains=val=myvalue | ❌ MISSING_SOURCE | val=myvalue: MISSING_SOURCE (无步骤产出此字符串) |
 
 ### 问题
 
-- 验证点 `下游步骤通过 steps.*.outputs.key 获取到值` → 空洞: no step produces 'val=myvalue'
-
-- 验证点 `运行成功完成` → 空洞: no step produces 'val=myvalue'
-
-- 断言 `[positive] run_logs` → MISSING_SOURCE: no step produces 'val=myvalue'
+**断言 1 — MISSING_SOURCE**❌: val=myvalue: MISSING_SOURCE (无步骤产出此字符串)
 
 ---

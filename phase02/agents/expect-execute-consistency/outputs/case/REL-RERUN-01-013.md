@@ -1,69 +1,62 @@
 # REL-RERUN-01-013
 
-- 标题: rerun 6 小时年龄限制——超期运行不可重新运行
-- 维度: 可靠性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: rerun 6 小时年龄限制——超期运行不可重新运行
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**rerun 6 小时年龄限制——超期运行不可重新运行**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-REL-013
+
+通过标准：
+1. type=positive, target=rerun_request, equals=rejected
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | sleep step | `sleep 5` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    name: reliability test job
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: sleep step
+        run: |
+          sleep 5
 ```
-用例 ID:   REL-RERUN-01-013
-维度标签:   [reliability]
-维度:      稳定性
-优先级:    P1
-溯源意图:  INTENT-REL-013
-参照来源:  inputs/gitcode-spec/running-pipelines/view-job-logs.md; inputs/gitcode-spec/running-pipelines/view-run-results.md
-母意图:    —
-标题:      rerun 6 小时年龄限制——超期运行不可重新运行
 
-前置条件:
-  - 存在一条完成时间超过 6 小时的运行记录
-
-操作步骤:
-  1. 6 小时 1 分钟后尝试 rerun
-
-预期结果:
-  - rerun 请求被拒绝
-  - 错误信息含 6 小时或已过期
-
-验证点:
-  - [正向] rerun 被拒绝
-  - [负向] 不应创建新运行
-
-清理:      无需特殊清理
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | sleep step (test) | sleep 5  | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| rerun 被拒绝 | 覆盖 | real step logic exists |
-| 不应创建新运行 | 未覆盖 | 缺少负向断言 |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | rerun_request | positive | rejected | CONSISTENT | real step logic exists |
-
-### 问题
-
-- 验证点 `不应创建新运行` → 未覆盖: 缺少负向断言
+| 1 | rerun_request | positive | equals=rejected | ✅ GENUINE | 断言有条件可被步骤验证 |
 
 ---

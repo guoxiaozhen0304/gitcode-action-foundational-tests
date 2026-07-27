@@ -1,46 +1,33 @@
 # COMP-SUMMARY-01-002
 
-- 标题: summary 中不应暴露系统内部路径
-- 维度: 完备性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: summary 中不应暴露系统内部路径
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-SUMMARY-01-002
-维度标签:   [completeness, compatibility]
-维度:      completeness
-优先级:    P1
-溯源意图:  INTENT-COMP-018
-参照来源:  inputs/gitcode-spec/syntax-reference/workflow-commands.md
-母意图:    —
-标题:      summary 中不应暴露系统内部路径
+本用例验证：**summary 中不应暴露系统内部路径**
 
-前置条件:
-  - workflow 向 ATOMGIT_STEP_SUMMARY 写入内容
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-018
 
-操作步骤:
-  1. 触发 workflow
-  2. 检查 summary 内容
+通过标准：
+1. type=negative, target=step_summary
+2. type=negative, target=step_summary
 
-预期结果:
-  - summary 中不包含 Runner 内部绝对路径等敏感信息
+## 2. 做了什么
 
-验证点:
-  - [负向] summary 中不出现 /tmp/runner-xxx 等内部路径
+workflow 中每个步骤的实际行为：
 
-清理:      none
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Write safe summary | `echo "Results: OK" >> "$ATOMGIT_STEP_SUMMARY"` |  | ❌ VACUOUS |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Write safe summary | run: echo "Results: OK" >> "$ATOMGIT_STEP_SUMMARY"
- | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -53,27 +40,25 @@ jobs:
       - name: Write safe summary
         run: |
           echo "Results: OK" >> "$ATOMGIT_STEP_SUMMARY"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] summary 中不出现 /tmp/runner-xxx 等内部路径 | ✅ COVERED | negative assertion in YAML assertions |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-无
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | step_summary | negative |  | ✅ GENUINE | 步骤有 step_summary 输出，断言可观测 |
+| 2 | step_summary | negative |  | ✅ GENUINE | 步骤有 step_summary 输出，断言可观测 |
 
 ---

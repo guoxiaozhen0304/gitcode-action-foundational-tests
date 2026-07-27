@@ -1,72 +1,65 @@
 # SEC-BASE-01-002
 
-- 标题: fork PR 改 workflow 不被 pull_request_target 采用
-- 维度: 安全性 | 优先级: P0
-- 评级: 断言一致
+- **标题**: fork PR 改 workflow 不被 pull_request_target 采用
+- **维度**: 安全性
+- **优先级**: P0
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**fork PR 改 workflow 不被 pull_request_target 采用**
+
+- 触发事件: `pull_request_target`
+- 规格引用: INTENT-SEC-035
+
+通过标准：
+1. type=negative, target=run_logs
+2. type=positive, target=run_status, equals=success_with_base_workflow
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Base step only | `echo "Only base steps run"` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  pull_request_target:
+    branches: [main]
+jobs:
+  reject-fork-wf:
+    name: Reject fork workflow changes
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Base step only
+        run: |
+          echo "Only base steps run"
 ```
-用例 ID:   SEC-BASE-01-002
-维度标签:   [security]
-维度:      安全性
-优先级:    P0
-溯源意图:  INTENT-SEC-035
-参照来源:  inputs/gitcode-spec/core-concepts/trigger-events.md
-母意图:    SEC-BASE-01-001
-标题:      fork PR 改 workflow 不被 pull_request_target 采用
 
-前置条件:
-  - fork PR 分支修改了 workflow 文件
-
-操作步骤:
-  1. 在 fork PR 分支新增一个输出 secret 的步骤到 workflow
-  2. 触发 pull_request_target 事件
-  3. 检查运行日志中是否出现该步骤
-
-预期结果:
-  - fork PR 注入的步骤未出现在执行记录中
-  - 运行采用的 workflow 内容哈希/步骤集与 base 分支一致
-
-验证点:
-  - [负向] pull_request_target 绝不应执行来自不可信 fork 的 workflow 定义
-  - [正向] 运行采用的 workflow 内容哈希/步骤集与 base 分支一致
-
-清理:      重置 fixture 仓库
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | Base step only (reject-fork-wf) | echo "Only base steps run"  | VACUOUS |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | pull_request_target |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `pull_request_target` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `with-secrets` |
+| Secrets | `['DEPLOY_TOKEN']` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| pull_request_target 绝不应执行来自不可信 fork 的 workflow 定义 | 覆盖 | log assertion without specific string check |
-| 运行采用的 workflow 内容哈希/步骤集与 base 分支一致 | 覆盖 | status assertion: success_with_base_workflow |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | negative |  | CONSISTENT | log assertion without specific string check |
-| 2 | run_status | positive | success_with_base_workflow | CONSISTENT | status assertion: success_with_base_workflow |
-
-### 问题
-
-- 所有验证点均被覆盖，步骤与断言一致
+| 1 | run_logs | negative |  | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
+| 2 | run_status | positive | equals=success_with_base_workflow | ✅ GENUINE | 状态断言 success_with_base_workflow 可被步骤行为验证 |
 
 ---

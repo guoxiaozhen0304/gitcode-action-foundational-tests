@@ -1,0 +1,30 @@
+id: SEC-AUDIT-01-001
+dimensions: ["security"]
+dimension: security
+priority: P1
+title: "敏感操作（secret/权限/rerun/审批/评论触发）必须全部留有不可擦除的审计记录"
+intent_ref: INTENT-SEC-046
+setup:
+  repo_fixture: default
+workflow: null
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params:
+    ops: [secret_create, secret_update, permission_change, rerun, env_approval, comment_trigger]
+fault_injection: null
+assertions:
+  - type: positive
+    target: audit_log
+    equals: "records_present_all_op_classes"
+  - type: negative
+    target: audit_log
+    must_not_equal: "sensitive_op_without_trace"
+  - type: negative
+    target: audit_log
+    must_not_equal: "operator_delete_accepted"
+  - type: nonfunctional
+    target: audit_log
+    equals: "retention_and_export_determinable"
+teardown:
+  reset: fixture

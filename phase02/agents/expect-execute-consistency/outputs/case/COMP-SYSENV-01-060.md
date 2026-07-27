@@ -1,48 +1,34 @@
 # COMP-SYSENV-01-060
 
-- 标题: ATOMGIT 系统环境变量值正确性
-- 维度: 完备性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: ATOMGIT 系统环境变量值正确性
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-SYSENV-01-060
-维度标签:   [completeness]
-维度:      完备性
-优先级:    P1
-溯源意图:  KEEP-TC-197~222
-参照来源:  inputs/existing-cases/cases.md
-母意图:    —
-标题:      ATOMGIT 系统环境变量值正确性
+本用例验证：**ATOMGIT 系统环境变量值正确性**
 
-前置条件:
-  - 仓库已启用 AtomGit Action
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-059
 
-操作步骤:
-  1. 在 step 中比对 ATOMGIT_* 环境变量与 atomgit 上下文值的一致性
-  2. 验证各变量值格式正确
+通过标准：
+1. type=positive, target=run_logs, must_contain="SHA_MATCH=yes"
+2. type=positive, target=run_logs, must_contain="REF_MATCH=yes"
+3. type=positive, target=run_logs, must_contain="EVENT_MATCH=yes"
 
-预期结果:
-  - ATOMGIT_SHA 与 atomgit.sha 一致，ATOMGIT_REF 与 atomgit.ref 一致，ATOMGIT_EVENT_NAME 与 atomgit.event_name 一致
+## 2. 做了什么
 
-验证点:
-  - [正向] ATOMGIT_SHA 等于 atomgit.sha
-  - [正向] ATOMGIT_REF 等于 atomgit.ref
-  - [正向] ATOMGIT_RUN_NUMBER 与 atomgit.run_number 一致
+workflow 中每个步骤的实际行为：
 
-清理:      重置 fixture 仓库
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Compare values | `echo "SHA_MATCH=$([ "$ATOMGIT_SHA" = "${{ atomgit.sha }}" ] && echo yes || echo ` |  | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Compare values | run: echo "SHA_MATCH=$([ "$ATOMGIT_SHA" = "${{ atomgit.sha }}" ] && echo yes    echo no)"
-echo "REF_MATCH=$([ "$ATOMGIT_REF" = "${{ atomgit.ref }}" ] && ec | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -58,29 +44,34 @@ jobs:
           echo "REF_MATCH=$([ "$ATOMGIT_REF" = "${{ atomgit.ref }}" ] && echo yes || echo no)"
           echo "EVENT_MATCH=$([ "$ATOMGIT_EVENT_NAME" = "${{ atomgit.event_name }}" ] && echo yes || echo no)"
           echo "REPO_MATCH=$([ "$ATOMGIT_REPOSITORY" = "${{ atomgit.repository }}" ] && echo yes || echo no)"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] ATOMGIT_SHA 等于 atomgit.sha | ✅ COVERED | steps have real logic |
-| [正向] ATOMGIT_REF 等于 atomgit.ref | ✅ COVERED | steps have real logic |
-| [正向] ATOMGIT_RUN_NUMBER 与 atomgit.run_number 一致 | ✅ COVERED | steps have real logic |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | must_contain=SHA_MATCH=yes | ❌ MISSING_SOURCE | SHA_MATCH=yes: MISSING_SOURCE (无步骤产出此字符串) |
+| 2 | run_logs | positive | must_contain=REF_MATCH=yes | ❌ MISSING_SOURCE | REF_MATCH=yes: MISSING_SOURCE (无步骤产出此字符串) |
+| 3 | run_logs | positive | must_contain=EVENT_MATCH=yes | ❌ MISSING_SOURCE | EVENT_MATCH=yes: MISSING_SOURCE (无步骤产出此字符串) |
 
 ### 问题
 
-无
+**断言 1 — MISSING_SOURCE**❌: SHA_MATCH=yes: MISSING_SOURCE (无步骤产出此字符串)
+
+**断言 2 — MISSING_SOURCE**❌: REF_MATCH=yes: MISSING_SOURCE (无步骤产出此字符串)
+
+**断言 3 — MISSING_SOURCE**❌: EVENT_MATCH=yes: MISSING_SOURCE (无步骤产出此字符串)
 
 ---

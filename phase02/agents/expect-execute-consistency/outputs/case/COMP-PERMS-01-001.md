@@ -1,52 +1,33 @@
 # COMP-PERMS-01-001
 
-- 标题: permissions 空对象时 ATOMGIT_TOKEN 仅 repository read
-- 维度: 完备性 | 优先级: P0
-- 评级: 断言一致
+- **标题**: permissions 空对象时 ATOMGIT_TOKEN 仅 repository read
+- **维度**: 完备性
+- **优先级**: P0
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-PERMS-01-001
-维度标签:   [completeness, security]
-维度:      completeness
-优先级:    P0
-溯源意图:  INTENT-COMP-013
-参照来源:  inputs/security-knowledge/issues.md; inputs/github-reference/security/
-母意图:    —
-标题:      permissions 空对象时 ATOMGIT_TOKEN 仅 repository read
+本用例验证：**permissions 空对象时 ATOMGIT_TOKEN 仅 repository read**
 
-前置条件:
-  - 仓库具备写权限测试条件
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-013
 
-操作步骤:
-  1. 配置 permissions: {}
-  2. 尝试使用 ATOMGIT_TOKEN 推送代码
+通过标准：
+1. type=negative, target=run_status, equals=success
+2. type=positive, target=run_logs, contains=403
 
-预期结果:
-  - 写操作因权限不足失败
-  - TOKEN 仅拥有 repository:read 权限
+## 2. 做了什么
 
-验证点:
-  - [正向] permissions: {} 下无法执行写操作
-  - [负向] 推送代码应返回 403
+workflow 中每个步骤的实际行为：
 
-清理:      none
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Attempt write | `git config user.email "test@test.com" git config user.name "Test" echo "change" ` |  | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Attempt write | run: git config user.email "test@test.com"
-git config user.name "Test"
-echo "change" >> README.md
-git add README.md
-git commit -m "test"
-git push https://x | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -65,28 +46,25 @@ jobs:
           git add README.md
           git commit -m "test"
           git push https://x-access-token:$ATOMGIT_TOKEN@${{ atomgit.server_url }}/${{ atomgit.repository }}.git HEAD:${{ atomgit.ref }}
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] permissions: {} 下无法执行写操作 | ✅ COVERED | steps have real logic |
-| [负向] 推送代码应返回 403 | ✅ COVERED | negative assertion in YAML assertions |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-无
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | negative | equals=success | ✅ GENUINE | 存在真实可执行步骤，有行为观测价值 |
+| 2 | run_logs | positive | contains=403 | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
 
 ---

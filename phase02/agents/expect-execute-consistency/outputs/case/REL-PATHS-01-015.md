@@ -1,46 +1,64 @@
 # REL-PATHS-01-015
 
-- 标题: paths 匹配越界值——第 301 个变更文件不参与 paths 匹配判断
-- 维度: 稳定性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: paths 匹配越界值——第 301 个变更文件不参与 paths 匹配判断
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: paths 匹配越界值——第 301 个变更文件不参与 paths 匹配判断
+本用例验证：**paths 匹配越界值——第 301 个变更文件不参与 paths 匹配判断**
 
-- [正向] workflow 不触发
-- [负向] 第 301 个文件不应触发 workflow
+- 触发事件: `push`
+- 规格引用: INTENT-REL-015
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=run_status, equals=not_triggered
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | echo triggered | echo triggered by paths | - |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | run_status | not_triggered |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | echo triggered | `echo triggered by paths` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  push:
+    paths:
+      - 'src/**'
+jobs:
+  test:
+    name: paths trigger test
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: echo triggered
+        run: |
+          echo triggered by paths
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | push |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `push` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] workflow 不触发 | WEAK | assertions present but all steps trivial |
-| [负向] 第 301 个文件不应触发 workflow | UNVERIFIABLE | single dispatch cannot prove negative |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-- [正向] workflow 不触发: assertions present but all steps trivial
-- [负向] 第 301 个文件不应触发 workflow: single dispatch cannot prove negative
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | positive | equals=not_triggered | ✅ GENUINE | 状态断言 not_triggered 可被步骤行为验证 |
 
 ---

@@ -1,71 +1,64 @@
 # SEC-ARTF-01-002
 
-- 标题: 跨仓库 artifact 下载返回 403 或 404
-- 维度: 安全性 | 优先级: P0
-- 评级: 断言一致
+- **标题**: 跨仓库 artifact 下载返回 403 或 404
+- **维度**: 安全性
+- **优先级**: P0
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**跨仓库 artifact 下载返回 403 或 404**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-SEC-019
+
+通过标准：
+1. type=negative, target=run_logs
+2. type=positive, target=run_logs, equals=403_or_404
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Attempt download fork art | `curl -s -o /dev/null -w "%{http_code}" \n            "https://api.gitcode.com/ap` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  artifact-download:
+    name: Download artifact from main repo
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Attempt download fork artifact
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" \n            "https://api.gitcode.com/api/v8/repos/${{ atomgit.repository }}/actions/artifacts/FORK_ARTIFACT_ID/zip?access_token=${{ atomgit.token }}"
 ```
-用例 ID:   SEC-ARTF-01-002
-维度标签:   [security]
-维度:      安全性
-优先级:    P0
-溯源意图:  INTENT-SEC-019
-参照来源:  inputs/gitcode-spec/core-concepts/workflow-job-step-action.md; inputs/gitcode-spec/writing-pipelines/configure-jobs.md
-母意图:    SEC-ARTF-01-001
-标题:      跨仓库 artifact 下载返回 403 或 404
 
-前置条件:
-  - fork PR 已上传 artifact
-
-操作步骤:
-  1. 在主仓 workflow 中尝试下载 fork PR 的 artifact ID
-  2. 查看下载结果
-
-预期结果:
-  - 下载返回 404 或权限拒绝
-  - 不应静默返回空包或成功
-
-验证点:
-  - [负向] 跨仓库 artifact 下载绝不应成功
-  - [正向] 返回明确的 404 或 403 错误
-
-清理:      重置 fixture 仓库
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | Attempt download fork artifact (artifact-download) | curl -s -o /dev/null -w "%{http_code}" \n            "https://api.gitcode.com/api/v8/repos/${{ atomg | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `with-artifacts` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 跨仓库 artifact 下载绝不应成功 | 覆盖 | log assertion without specific string check |
-| 返回明确的 404 或 403 错误 | 覆盖 | log assertion without specific string check |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | negative |  | CONSISTENT | log assertion without specific string check |
-| 2 | run_logs | positive | 403_or_404 | CONSISTENT | log assertion without specific string check |
-
-### 问题
-
-- 所有验证点均被覆盖，步骤与断言一致
+| 1 | run_logs | negative |  | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
+| 2 | run_logs | positive | equals=403_or_404 | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
 
 ---

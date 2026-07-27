@@ -1,0 +1,46 @@
+id: REL-MATRIX-01-040
+dimensions: [reliability]
+dimension: reliability
+priority: P2
+title: "matrix 组合数边界——256 组合（GitHub 上限）应全部展开或被明确拒绝"
+intent_ref: INTENT-REL-076
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    test:
+      name: matrix 256 boundary job
+      runs-on: [ubuntu-latest, x64, small]
+      strategy:
+        matrix:
+          os: [os01, os02, os03, os04, os05, os06, os07, os08]
+          ver: [v01, v02, v03, v04, v05, v06, v07, v08, v09, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32]
+        fail-fast: false
+        max-parallel: 5
+      steps:
+        - name: combo marker step
+          run: |
+            echo "combo=${{ matrix.os }}-${{ matrix.ver }}"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params:
+    declared_combinations: 256
+fault_injection: null
+assertions:
+  - type: positive
+    target: jobs_expanded_count
+    equals: "256_or_explicit_rejection"
+  - type: negative
+    target: silent_truncation_detected
+    equals: "true"
+  - type: nonfunctional
+    target: expand_enqueue_seconds
+    le: "600"
+teardown:
+  reset: none

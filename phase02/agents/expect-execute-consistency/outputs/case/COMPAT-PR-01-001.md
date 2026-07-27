@@ -1,46 +1,67 @@
 # COMPAT-PR-01-001
 
-- 标题: pull_request types 命名差异 - GitCode 合法 types 应被接受
-- 维度: 兼容性 | 优先级: P0
-- 评级: 断言一致
+- **标题**: pull_request types 命名差异 - GitCode 合法 types 应被接受
+- **维度**: 兼容性
+- **优先级**: P0
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: pull_request types 命名差异 - GitCode 合法 types 应被接受
+本用例验证：**pull_request types 命名差异 - GitCode 合法 types 应被接受**
 
-- [正向] workflow 校验通过
-- [正向] 指定 types 的 PR 事件能正常触发 workflow
+- 触发事件: `pull_request`
+- 规格引用: INTENT-COMPAT-011
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=run_status, equals=success
+2. type=positive, target=run_logs, must_contain="PR_TYPES_OK"
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Echo PR event | echo "PR_EVENT_TYPE=${{ atomgit.event.action }}" echo "PR_TYPES_OK" | Y |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | run_status | success |
-| positive | run_logs | PR_TYPES_OK |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo PR event | `echo "PR_EVENT_TYPE=${{ atomgit.event.action }}" echo "PR_TYPES_OK"` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  pull_request:
+    branches: [main]
+    types: [open, reopen, update]
+jobs:
+  verify:
+    name: Verify GitCode pull_request types
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Echo PR event
+        run: |
+          echo "PR_EVENT_TYPE=${{ atomgit.event.action }}"
+          echo "PR_TYPES_OK"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | pull_request |
-| 身份 | maintainer |
-| 触发阻塞 | 是 (trigger event "pull_request" requires platform scheduling) |
+| 触发事件 | `pull_request` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] workflow 校验通过 | COVERED | 1 real steps, assertions present |
-| [正向] 指定 types 的 PR 事件能正常触发 workflow | COVERED | 1 real steps, assertions present |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-无重大问题。
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | positive | equals=success | ✅ GENUINE | 存在真实可执行步骤，有行为观测价值 |
+| 2 | run_logs | positive | must_contain=PR_TYPES_OK | ✅ GENUINE | PR_TYPES_OK: GENUINE |
 
 ---

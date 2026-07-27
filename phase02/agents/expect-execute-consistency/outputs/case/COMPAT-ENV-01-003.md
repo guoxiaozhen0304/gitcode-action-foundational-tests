@@ -1,51 +1,33 @@
 # COMPAT-ENV-01-003
 
-- 标题: GITHUB_ENV 环境变量不应被静默映射到 ATOMGIT_ENV
-- 维度: 兼容性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: GITHUB_ENV 环境变量不应被静默映射到 ATOMGIT_ENV
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMPAT-ENV-01-003
-维度标签:   [compatibility]
-维度:      兼容性
-优先级:    P1
-溯源意图:  INTENT-COMPAT-017
-参照来源:  inputs/gitcode-spec/core-concepts/variables-secrets-context-expressions.md; inputs/gitcode-spec/syntax-reference/expressions.md; inputs/gitcode-spec/syntax-reference/context.md
-母意图:    —
-标题:      GITHUB_ENV 环境变量不应被静默映射到 ATOMGIT_ENV
+本用例验证：**GITHUB_ENV 环境变量不应被静默映射到 ATOMGIT_ENV**
 
-前置条件:
-  - 仓库已启用 Actions
-  - 测试者持有 maintainer 权限
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-017
 
-操作步骤:
-  1. 创建一个 workflow，在 run 步骤中输出 `$GITHUB_ENV` 和 `$ATOMGIT_ENV`
-  2. 触发 workflow
+通过标准：
+1. type=negative, target=run_logs, eval=llm_assisted
+2. type=positive, target=run_logs, eval=llm_assisted
 
-预期结果:
-  - GITHUB_ENV 不应存在或被设置为空/未定义
-  - 不应将 GITHUB_ENV 静默映射为 ATOMGIT_ENV 的值
+## 2. 做了什么
 
-验证点:
-  - [负向] GITHUB_ENV 不等于 ATOMGIT_ENV
-  - [正向] GITHUB_ENV 为空或未定义
+workflow 中每个步骤的实际行为：
 
-清理:      无
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Compare env vars | `echo "GITHUB_ENV=$GITHUB_ENV" echo "ATOMGIT_ENV=$ATOMGIT_ENV" echo "done"` |  | ❌ VACUOUS |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Compare env vars | run: echo "GITHUB_ENV=$GITHUB_ENV"
-echo "ATOMGIT_ENV=$ATOMGIT_ENV"
-echo "done"
- | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -60,28 +42,31 @@ jobs:
           echo "GITHUB_ENV=$GITHUB_ENV"
           echo "ATOMGIT_ENV=$ATOMGIT_ENV"
           echo "done"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] GITHUB_ENV 不等于 ATOMGIT_ENV | ✅ COVERED | negative assertion in YAML assertions |
-| [正向] GITHUB_ENV 为空或未定义 | ✅ COVERED | steps have real logic |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-无
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

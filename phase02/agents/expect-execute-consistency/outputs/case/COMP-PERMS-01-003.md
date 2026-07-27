@@ -1,48 +1,33 @@
 # COMP-PERMS-01-003
 
-- 标题: fork PR 的 pull_request 下声明 write 仍仅 read
-- 维度: 完备性 | 优先级: P0
-- 评级: 断言一致
+- **标题**: fork PR 的 pull_request 下声明 write 仍仅 read
+- **维度**: 完备性
+- **优先级**: P0
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-```
-用例 ID:   COMP-PERMS-01-003
-维度标签:   [completeness, security]
-维度:      completeness
-优先级:    P0
-溯源意图:  INTENT-COMP-013
-参照来源:  inputs/gitcode-spec/core-concepts/trigger-events.md
-母意图:    —
-标题:      fork PR 的 pull_request 下声明 write 仍仅 read
+本用例验证：**fork PR 的 pull_request 下声明 write 仍仅 read**
 
-前置条件:
-  - 存在一个来自 fork 的 PR
+- 触发事件: `pull_request`
+- 规格引用: INTENT-COMP-013
 
-操作步骤:
-  1. 在 fork PR 的 pull_request workflow 中声明 repository: write
-  2. 尝试使用 ATOMGIT_TOKEN 推送代码
+通过标准：
+1. type=negative, target=run_status, equals=success_with_write
+2. type=positive, target=run_logs, contains="write failed as expected"
 
-预期结果:
-  - 写操作因权限不足失败
-  - fork PR 的 TOKEN 权限不受 permissions 声明影响
+## 2. 做了什么
 
-验证点:
-  - [负向] 写操作应失败
-  - [正向] 系统应强制 fork PR TOKEN 为 read-only
+workflow 中每个步骤的实际行为：
 
-清理:      重置 fixture 仓库
-```
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Attempt write | `curl -s -o /dev/null -w "%{http_code}"                     -H "Authorization: to` |  | ✅ GENUINE |
 
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Attempt write | run: curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token $ATOMGIT_TOKEN" -X POST "${{ atomgit.api_url }}/repos/${{ atomgit.repository }}/issues/1/comments" -d '{"body":"test"}' \|\| echo "write failed as expected" | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -65,23 +50,19 @@ jobs:
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | pull_request |
-| as | untrusted_contributor |
-| fault_injection | None |
+| 触发事件 | `pull_request` |
+| 触发身份 | `untrusted_contributor` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|--------|:-----:|------|
-| [负向] 写操作应失败 | ✅ COVERED | 步骤使用 curl 真实发起 API 写请求，通过 `|| echo "write failed as expected"` 捕获失败；YAML 中有 `type=negative, target=run_status, equals=success_with_write` 断言覆盖 |
-| [正向] 系统应强制 fork PR TOKEN 为 read-only | ✅ COVERED | 步骤真实执行写操作并输出 "write failed as expected"；断言 `run_logs contains="write failed as expected"` 验证写操作因 read-only 权限而失败 |
+逐条断言对比步骤实际输出：
 
-### 问题
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | negative | equals=success_with_write | ✅ GENUINE | 状态断言 success_with_write 可被步骤行为验证 |
+| 2 | run_logs | positive | contains=write failed as expected | ✅ GENUINE | write failed as expected: GENUINE |
 
-无。
-
-## 5. 评级理由
-
-步骤使用 curl 真实执行 API 写请求，使用 `$ATOMGIT_TOKEN` 和 `${{ }}` 表达式，属于实质逻辑。两个验证点均由真实行为产生可观测输出，全部 COVERED。整体判定为**断言一致**。
+---

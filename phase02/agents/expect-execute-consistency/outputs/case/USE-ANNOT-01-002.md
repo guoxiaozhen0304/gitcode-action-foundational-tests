@@ -1,47 +1,33 @@
 # USE-ANNOT-01-002
 
-- 标题: ::error:: 生成的 PR annotation 具备文件路径、行号与可点击跳转
-- 维度: 易用性 | 优先级: P1
-- 评级: 完全不符
+- **标题**: ::error:: 生成的 PR annotation 具备文件路径、行号与可点击跳转
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   USE-ANNOT-01-002
-维度标签:   ['usability']
-维度:      usability
-优先级:    P1
-溯源意图:  INTENT-USE-021
-参照来源:  inputs/gitcode-spec/syntax-reference/workflow-commands.md
-母意图:    —
-标题:      ::error:: 生成的 PR annotation 具备文件路径、行号与可点击跳转
+本用例验证：**::error:: 生成的 PR annotation 具备文件路径、行号与可点击跳转**
 
-前置条件:
-  - PR 存在
-  - workflow 由 PR 事件触发
+- 触发事件: `pull_request`
+- 规格引用: INTENT-USE-021
 
-操作步骤:
-  1. 在 PR 触发的工作流中输出 ::error file=...,line=...::message
-  2. 检查 PR 页面的 annotation 展示
+通过标准：
+1. type=nonfunctional, target=pr_ui, eval=llm_assisted
 
-预期结果:
-  若支持 annotation，则 PR 页面显示包含文件路径、行号、错误信息的红色/黄色标注，且可点击跳转
+## 2. 做了什么
 
-验证点:
-  - [非功能] annotation 是否包含准确的文件路径、行号、错误信息
-  - [非功能] annotation 颜色是否符合语义（error 红色、warning 黄色）
+workflow 中每个步骤的实际行为：
 
-清理:      无
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | checkout | `checkout` |  | ✅ GENUINE |
+| 2 | emit annotation | `echo "::error file=README.md,line=1::Test error annotation" echo "::warning file` |  | ❌ VACUOUS |
 
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | checkout | uses: checkout | 是 |
-| 2 | emit annotation | run: echo "::error file=README.md,line=1::..." ; echo "::warning file=README.md,line=2::..." | 否 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -67,22 +53,22 @@ jobs:
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | pull_request |
-| as | maintainer |
+| 触发事件 | `pull_request` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|--------|:-----:|------|
-| [非功能] annotation 是否包含准确的文件路径、行号、错误信息 | 🔄 UNVERIFIABLE | 断言 type=nonfunctional, eval=llm_assisted, target=pr_ui；annotation 的 UI 呈现（文件路径、行号、错误信息准确性）需 LLM 辅助评估 PR 页面，无法通过步骤输出直接判定 |
-| [非功能] annotation 颜色是否符合语义（error 红色、warning 黄色） | 🔄 UNVERIFIABLE | 同上，颜色语义判断依赖 UI 截图/页面渲染，步骤自身无法产出可对比的断言结果 |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | pr_ui | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- **两个验证点均为 UNVERIFIABLE**：断言类型为 nonfunctional，评估方式为 llm_assisted，目标为 pr_ui。workflow 步骤仅通过 echo 向日志输出 `::error` / `::warning` 工作流命令字符串，是否真正在 PR 页面生成 annotation、路径/行号/颜色是否正确，均无法通过步骤日志直接验证，必须依赖 LLM 审查 PR UI。
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
-## 5. 评级理由
-
-YAML 中唯一的断言为 `type: nonfunctional, target: pr_ui, eval: llm_assisted`。两个规格验证点均属于非功能性 UI 验证，依赖 LLM 辅助评估 annotation 在 PR 页面的呈现效果。步骤自身无法产出这些断言所需的可观测输出，因此均为 UNVERIFIABLE。
+---

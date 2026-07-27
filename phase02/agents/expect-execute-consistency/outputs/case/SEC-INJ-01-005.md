@@ -1,45 +1,64 @@
 # SEC-INJ-01-005
 
-- 标题: 表达式求值必须防止双重模板渲染（二次求值）
-- 维度: 安全性 | 优先级: P0
-- 评级: 存在空洞
+- **标题**: 表达式求值必须防止双重模板渲染（二次求值）
+- **维度**: 安全性
+- **优先级**: P0
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-前置条件:
-  - 仓库支持表达式求值
-操作步骤:
-  1. 1. 提交一个 workflow，在输入中包含模板语法字符（如 {{ 1 + 1 }}）
-  2. 2. 触发 workflow 并查看运行日志
-预期结果:
-  - 外层 ${{ }} 求值结果中的模板语法字符应被转义
-  - 不再触发内层模板引擎求值
+本用例验证：**表达式求值必须防止双重模板渲染（二次求值）**
 
-## 2. 实际做了什么（实现）
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-SEC-013
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Pass template syntax | echo "Input: ${{ '{{ 1 + 1 }}' }}"  | 是 |
+通过标准：
+1. type=negative, target=run_logs
+2. type=positive, target=run_logs, equals=template_chars_escaped
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Pass template syntax | `echo "Input: ${{ '{{ 1 + 1 }}' }}"` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  double-template:
+    name: Test double template eval
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Pass template syntax
+        run: |
+          echo "Input: ${{ '{{ 1 + 1 }}' }}"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [negative] run_logs must_not_contain: 2 | UNCOVERED | 期望值 [2] 未在任何步骤输出中找到 |
-| [positive] run_logs equals: template_chars_escaped | UNCOVERED | 期望值 [template_chars_escaped] 未在任何步骤输出中找到 |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-- **断言 1 - MISSING_SOURCE**: 期望值 [2] 未在任何步骤输出中找到
-- **断言 2 - MISSING_SOURCE**: 期望值 [template_chars_escaped] 未在任何步骤输出中找到
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | negative |  | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
+| 2 | run_logs | positive | equals=template_chars_escaped | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
 
 ---

@@ -1,47 +1,33 @@
 # SEC-FORK-01-002
 
-- 标题: fork PR 中 secrets 引用返回空值且 job 不崩溃
-- 维度: 安全性 | 优先级: P0
-- 评级: 断言一致
+- **标题**: fork PR 中 secrets 引用返回空值且 job 不崩溃
+- **维度**: 安全性
+- **优先级**: P0
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   SEC-FORK-01-002
-维度标签:   [security]
-维度:      安全性
-优先级:    P0
-溯源意图:  INTENT-SEC-001
-参照来源:  inputs/security-knowledge/issues.md; inputs/github-reference/security/
-母意图:    SEC-FORK-01-001
-标题:      fork PR 中 secrets 引用返回空值且 job 不崩溃
+本用例验证：**fork PR 中 secrets 引用返回空值且 job 不崩溃**
 
-前置条件:
-  - 仓库配置了 secret API_KEY
-  - 存在一个来自外部 fork 的 PR
+- 触发事件: `pull_request`
+- 规格引用: INTENT-SEC-001
 
-操作步骤:
-  1. 以 fork 贡献者身份提交一个将 secrets.API_KEY 注入环境变量的 workflow
-  2. 在 fork PR 场景下触发该 workflow
+通过标准：
+1. type=negative, target=run_logs, must_not_contain_secret="API_KEY"
+2. type=positive, target=run_status, equals=success
 
-预期结果:
-  - secrets.API_KEY 返回空字符串，环境变量未设置
-  - job 正常完成，不因 secret 不可访问而失败
+## 2. 做了什么
 
-验证点:
-  - [负向] 环境变量 API_KEY 为空或未定义
-  - [正向] job 状态为成功完成
+workflow 中每个步骤的实际行为：
 
-清理:      重置 fixture 仓库
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Check env empty | `if [ -z "$API_KEY" ]; then   echo "API_KEY is empty as expected" else   echo "AP` |  | ✅ GENUINE |
 
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Check env empty | run: if [ -z "$API_KEY" ]; then echo "API_KEY is empty as expected"; else echo "API_KEY is not empty"; exit 1; fi | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -68,22 +54,23 @@ jobs:
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | pull_request |
-| as | untrusted_contributor |
+| 触发事件 | `pull_request` |
+| 触发身份 | `untrusted_contributor` |
+| Repo 环境 | `with-secrets` |
+| Secrets | `['API_KEY']` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|--------|:-----:|------|
-| [负向] 环境变量 API_KEY 为空或未定义 | ✅ COVERED | 步骤通过 `if [ -z "$API_KEY" ]` 真实检测变量是否为空，env 层使用 `${{ secrets.API_KEY }}` 注入，断言 `must_not_contain_secret` 验证 secret 值不泄露 |
-| [正向] job 状态为成功完成 | ✅ COVERED | 步骤包含真实条件分支：为空则正常输出，非空则 `exit 1` 故意失败；断言 `run_status equals success` 验证 fork 场景下 secret 为空时 job 成功 |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | negative | !secret=API_KEY | ❌ UNEXERCISED | 断言 secret 不泄露但无步骤使用 API_KEY |
+| 2 | run_status | positive | equals=success | ✅ GENUINE | 存在真实可执行步骤，有行为观测价值 |
 
 ### 问题
 
-无。两个验证点均被步骤真实覆盖。
+**断言 1 — UNEXERCISED**❌: 断言 secret 不泄露但无步骤使用 API_KEY
 
-## 5. 评级理由
-
-步骤使用 `if [ -z "$API_KEY" ]` 真实条件逻辑和 `exit 1` 失败路径，第0层的 `${{ secrets.API_KEY }}` 表达式在 fork PR 场景下的求值行为即为被测功能本身。所有验证点均 COVERED。
+---

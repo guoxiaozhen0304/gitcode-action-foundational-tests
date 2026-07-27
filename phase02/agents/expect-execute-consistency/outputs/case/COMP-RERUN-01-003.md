@@ -1,68 +1,62 @@
 # COMP-RERUN-01-003
 
-- 标题: 超过 6 小时的运行不可 rerun
-- 维度: 完备性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: 超过 6 小时的运行不可 rerun
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**超过 6 小时的运行不可 rerun**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-009
+
+通过标准：
+1. type=negative, target=rerun_result, equals=rerun_of_6h_plus_run
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo | `echo "run"` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  verify:
+    name: Verify rerun age limit
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Echo
+        run: |
+          echo "run"
 ```
-用例 ID:   COMP-RERUN-01-003
-维度标签:   [completeness, reliability]
-维度:      completeness
-优先级:    P1
-溯源意图:  INTENT-COMP-009
-参照来源:  inputs/gitcode-spec/running-pipelines/view-job-logs.md; inputs/gitcode-spec/running-pipelines/view-run-results.md
-母意图:    —
-标题:      超过 6 小时的运行不可 rerun
 
-前置条件:
-  - 存在一条完成时间超过 6 小时的运行
-
-操作步骤:
-  1. 尝试对超 6h 的运行执行 rerun
-
-预期结果:
-  - 系统拒绝 rerun
-
-验证点:
-  - [负向] 超 6h 的运行的 rerun 不应成功
-
-清理:      none
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | Echo (verify) | echo "run"  | VACUOUS |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 超 6h 的运行的 rerun 不应成功 | 空洞 | no real logic, negative assertion may be vacuously true |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | rerun_result | negative | rerun_of_6h_plus_run | VACUOUS | no real logic, negative assertion may be vacuously true |
-
-### 问题
-
-- 验证点 `超 6h 的运行的 rerun 不应成功` → 空洞: no real logic, negative assertion may be vacuously true
-
-- 断言 `[negative] rerun_result` → VACUOUS: no real logic, negative assertion may be vacuously true
+| 1 | rerun_result | negative | equals=rerun_of_6h_plus_run | ✅ GENUINE | 断言有条件可被步骤验证 |
 
 ---

@@ -1,0 +1,43 @@
+id: REL-DEBOUNCE-01-001
+dimensions: [reliability]
+dimension: reliability
+priority: P1
+title: "触发幂等——同分支 10 秒内连续 5 次 push 的 run 记录应与事件一一对账"
+intent_ref: INTENT-REL-073
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+workflow: |
+  on:
+    push:
+      branches: [main]
+  jobs:
+    test:
+      name: debounce probe job
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: record sha step
+          run: |
+            echo "trigger_sha=${{ atomgit.sha }}"
+trigger:
+  event: push
+  as: maintainer
+  params:
+    push_count: 5
+    window_seconds: 10
+    distinct_commits: true
+fault_injection: null
+assertions:
+  - type: positive
+    target: push_sha_run_mapping
+    equals: "1:1_or_documented_debounce"
+  - type: positive
+    target: same_sha_duplicate_runs_count
+    equals: "0"
+  - type: negative
+    target: unexplained_run_loss_detected
+    equals: "true"
+teardown:
+  reset: fixture

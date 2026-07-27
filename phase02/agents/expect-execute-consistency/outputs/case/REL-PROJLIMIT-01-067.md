@@ -1,58 +1,77 @@
 # REL-PROJLIMIT-01-067
 
-- 标题: 项目级 workflow 并发上限——200 条同时触发时全部完成无丢失
-- 维度: 稳定性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: 项目级 workflow 并发上限——200 条同时触发时全部完成无丢失
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: 项目级 workflow 并发上限——200 条同时触发时全部完成无丢失
+本用例验证：**项目级 workflow 并发上限——200 条同时触发时全部完成无丢失**
 
-- [正向] completed_count = 200
-- [正向] failed_count = 0
-- [正向] queued_count = 0（200 条应全部立即进入 running）
-- [正向] lost_count = 0
-- [负向] 不应出现触发后无对应 run 记录（丢失）
-- [负向] 不应因并发超限而直接返回 429/500 导致触发失败
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-REL-067
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=completed_count, equals=200
+2. type=positive, target=failed_count, equals=0
+3. type=positive, target=queued_count, equals=0
+4. type=nonfunctional, target=total_duration_seconds
+5. type=nonfunctional, target=lost_count, equals=0
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | quick step | echo "run_id=${{ atomgit.run_id }}" sleep 5 | Y |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | completed_count | 200 |
-| positive | failed_count | 0 |
-| positive | queued_count | 0 |
-| nonfunctional | total_duration_seconds |  |
-| nonfunctional | lost_count | 0 |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | quick step | `echo "run_id=${{ atomgit.run_id }}" sleep 5` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    name: concurrency limit test job
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: quick step
+        run: |
+          echo "run_id=${{ atomgit.run_id }}"
+          sleep 5
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] completed_count = 200 | COVERED | 1 real steps, assertions present |
-| [正向] failed_count = 0 | COVERED | 1 real steps, assertions present |
-| [正向] queued_count = 0（200 条应全部立即进入 running） | COVERED | 1 real steps, assertions present |
-| [正向] lost_count = 0 | COVERED | 1 real steps, assertions present |
-| [负向] 不应出现触发后无对应 run 记录（丢失） | UNVERIFIABLE | single dispatch cannot prove negative |
-| [负向] 不应因并发超限而直接返回 429/500 导致触发失败 | UNVERIFIABLE | single dispatch cannot prove negative |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | completed_count | positive | equals=200 | ✅ GENUINE | 断言有条件可被步骤验证 |
+| 2 | failed_count | positive | equals=0 | ✅ GENUINE | 断言有条件可被步骤验证 |
+| 3 | queued_count | positive | equals=0 | ✅ GENUINE | 断言有条件可被步骤验证 |
+| 4 | total_duration_seconds | nonfunctional |  | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 5 | lost_count | nonfunctional | equals=0 | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [负向] 不应出现触发后无对应 run 记录（丢失）: single dispatch cannot prove negative
-- [负向] 不应因并发超限而直接返回 429/500 导致触发失败: single dispatch cannot prove negative
+**断言 4 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 5 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

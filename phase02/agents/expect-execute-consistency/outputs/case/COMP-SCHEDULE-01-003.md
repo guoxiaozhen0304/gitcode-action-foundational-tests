@@ -1,46 +1,33 @@
 # COMP-SCHEDULE-01-003
 
-- 标题: cron 间隔短于 5 分钟时被拒绝或降级
-- 维度: 完备性 | 优先级: P1
-- 评级: 完全不符
+- **标题**: cron 间隔短于 5 分钟时被拒绝或降级
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-SCHEDULE-01-003
-维度标签:   [completeness, compatibility]
-维度:      completeness
-优先级:    P1
-溯源意图:  INTENT-COMP-005
-参照来源:  inputs/gitcode-spec/core-concepts/trigger-events.md
-母意图:    —
-标题:      cron 间隔短于 5 分钟时被拒绝或降级
+本用例验证：**cron 间隔短于 5 分钟时被拒绝或降级**
 
-前置条件:
-  - 仓库具备提交 workflow 的权限
+- 触发事件: `schedule`
+- 规格引用: INTENT-COMP-005
 
-操作步骤:
-  1. 配置 cron 间隔为 1 分钟
-  2. 提交 workflow
+通过标准：
+1. type=negative, target=run_status, equals=success_with_1min_interval
+2. type=nonfunctional, target=error_message, eval=llm_assisted
 
-预期结果:
-  - 平台拒绝该 workflow 或将其降级为最短间隔
+## 2. 做了什么
 
-验证点:
-  - [负向] 不应允许每分钟触发的 schedule
-  - [非功能] 错误信息应说明最短间隔限制
+workflow 中每个步骤的实际行为：
 
-清理:      none
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo scheduled | `echo "should not run"` |  | ❌ VACUOUS |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Echo scheduled | run: echo "should not run" | 否 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -54,30 +41,29 @@ jobs:
       - name: Echo scheduled
         run: |
           echo "should not run"
-
 ```
 
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | schedule |
-| as | maintainer |
+| 触发事件 | `schedule` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|--------|:-----:|------|
-| [负向] 不应允许每分钟触发的 schedule | 🔄 UNVERIFIABLE | 平台级校验（workflow 提交时拒绝）发生在步骤执行之前，步骤无法自证"被拒绝"是其产出 |
-| [非功能] 错误信息应说明最短间隔限制 | ❌ MISSING | 步骤仅 echo 字面量 "should not run"，无任何逻辑输出错误信息 |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | negative | equals=success_with_1min_interval | ✅ GENUINE | 状态断言 success_with_1min_interval 可被步骤行为验证 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [负向] 不应允许每分钟触发的 schedule: UNVERIFIABLE — 该验证依赖平台在 workflow 提交时的静态校验，不是 workflow 步骤在运行时能验证的行为
-- [非功能] 错误信息应说明最短间隔限制: MISSING — 步骤仅 echo 固定字符串，无 ${{ }} 表达式、无 if 条件、无 uses action、无实质命令
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
-## 5. 评级理由
-
-两个验证点分别为 UNVERIFIABLE 和 MISSING，步骤仅 echo 固定字符串，未执行任何实质逻辑，评级为完全不符。
+---

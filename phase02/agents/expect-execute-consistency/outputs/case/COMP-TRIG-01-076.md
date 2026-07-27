@@ -1,48 +1,33 @@
 # COMP-TRIG-01-076
 
-- 标题: issue_comment 事件关键字段与 types 验证
-- 维度: 完备性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: issue_comment 事件关键字段与 types 验证
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-TRIG-01-076
-维度标签:   [completeness]
-维度:      完备性
-优先级:    P1
-溯源意图:  KEEP-TC-075~083
-参照来源:  inputs/existing-cases/cases.md
-母意图:    —
-标题:      issue_comment 事件关键字段与 types 验证
+本用例验证：**issue_comment 事件关键字段与 types 验证**
 
-前置条件:
-  - 仓库已启用 AtomGit Action
-  - 存在 Issue
+- 触发事件: `issue_comment`
+- 规格引用: INTENT-COMP-076
 
-操作步骤:
-  1. 配置 issue_comment 触发并定义 types
-  2. 创建评论验证触发和字段
+通过标准：
+1. type=positive, target=run_logs, must_contain="COMMENT_ID="
+2. type=positive, target=run_logs, must_contain="issue_comment_ok"
 
-预期结果:
-  - issue_comment 事件触发 workflow，types 允许 created / edited / deleted，atomgit.event.comment 和 issue 字段可访问
+## 2. 做了什么
 
-验证点:
-  - [正向] issue 评论创建时触发
-  - [正向] event.comment.id 非空
-  - [正向] event.issue.number 非空
+workflow 中每个步骤的实际行为：
 
-清理:      重置 fixture 仓库
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Print comment fields | `echo "COMMENT_ID=${{ atomgit.event.comment.id }}" echo "ISSUE_NUM=${{ atomgit.ev` |  | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Print comment fields | run: echo "COMMENT_ID=${{ atomgit.event.comment.id }}" && echo "ISSUE_NUM=${{ atomgit.event.issue.number }}" && echo "issue_comment_ok" | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -58,30 +43,25 @@ jobs:
           echo "COMMENT_ID=${{ atomgit.event.comment.id }}"
           echo "ISSUE_NUM=${{ atomgit.event.issue.number }}"
           echo "issue_comment_ok"
-
 ```
 
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | issue_comment |
-| as | maintainer |
+| 触发事件 | `issue_comment` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|--------|:-----:|------|
-| [正向] issue 评论创建时触发 | ✅ COVERED | 步骤通过 ${{ atomgit.event.comment.id }} 和 ${{ atomgit.event.issue.number }} 表达式真实访问 issue_comment 事件上下文，演练了评论创建后字段的可用性 |
-| [正向] event.comment.id 非空 | ✅ COVERED | 步骤 echo "COMMENT_ID=${{ atomgit.event.comment.id }}" 真实输出 comment ID，断言可通过 must_contain: COMMENT_ID= 验证 |
-| [正向] event.issue.number 非空 | ✅ COVERED | 步骤 echo "ISSUE_NUM=${{ atomgit.event.issue.number }}" 真实输出 issue number |
+逐条断言对比步骤实际输出：
 
-### 问题
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | must_contain=COMMENT_ID= | ✅ GENUINE | COMMENT_ID=: GENUINE |
+| 2 | run_logs | positive | must_contain=issue_comment_ok | ✅ GENUINE | issue_comment_ok: GENUINE |
 
-无 — 所有验证点均 COVERED。
-
-## 5. 评级理由
-
-三个验证点全部 COVERED：步骤通过 ${{ }} 表达式真实访问 issue_comment 事件上下文的 comment.id 和 issue.number 字段，均产生可观测输出，评级为断言一致。
+---

@@ -1,52 +1,35 @@
 # COMP-STEP-01-070
 
-- 标题: step 可选字段 id env if with 验证
-- 维度: 完备性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: step 可选字段 id env if with 验证
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-STEP-01-070
-维度标签:   [completeness]
-维度:      完备性
-优先级:    P1
-溯源意图:  KEEP-TC-279~288
-参照来源:  inputs/existing-cases/cases.md
-母意图:    —
-标题:      step 可选字段 id env if with 验证
+本用例验证：**step 可选字段 id env if with 验证**
 
-前置条件:
-  - 仓库已启用 AtomGit Action
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-069
 
-操作步骤:
-  1. 定义含 id / env / if / with 的 step
-  2. 验证各字段生效
+通过标准：
+1. type=positive, target=run_logs, must_contain="OUT=hello"
+2. type=positive, target=run_logs, must_contain="STEP_VAR=step_value"
 
-预期结果:
-  - id 用于后续引用 outputs，env 仅对该 step 生效，if 控制步骤执行，with 向 Action 传参
+## 2. 做了什么
 
-验证点:
-  - [正向] id 定义的步骤可被后续引用 outputs
-  - [正向] env 仅在该 step 内生效
-  - [正向] if 条件正确控制步骤执行
+workflow 中每个步骤的实际行为：
 
-清理:      重置 fixture 仓库
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Step with id | `echo "result=hello" >> "$ATOMGIT_OUTPUT"` |  | ❌ VACUOUS |
+| 2 | Use output | `echo "OUT=${{ steps.mystep.outputs.result }}"` |  | ✅ GENUINE |
+| 3 | Conditional step | `echo "STEP_VAR=$STEP_VAR"` | ${{ true }} | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Step with id | run: echo "result=hello" >> "$ATOMGIT_OUTPUT"
- | id: mystep | 是 |
-| 2 | Use output | run: echo "OUT=${{ steps.mystep.outputs.result }}"
- | 是 |
-| 3 | Conditional step | run: echo "STEP_VAR=$STEP_VAR"
- | if: ${{ true }} | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -69,29 +52,31 @@ jobs:
           STEP_VAR: step_value
         run: |
           echo "STEP_VAR=$STEP_VAR"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] id 定义的步骤可被后续引用 outputs | ✅ COVERED | steps have real logic |
-| [正向] env 仅在该 step 内生效 | ✅ COVERED | steps have real logic |
-| [正向] if 条件正确控制步骤执行 | ✅ COVERED | steps have real logic |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | must_contain=OUT=hello | ❌ MISSING_SOURCE | OUT=hello: MISSING_SOURCE (无步骤产出此字符串) |
+| 2 | run_logs | positive | must_contain=STEP_VAR=step_value | ❌ MISSING_SOURCE | STEP_VAR=step_value: MISSING_SOURCE (无步骤产出此字符串) |
 
 ### 问题
 
-无
+**断言 1 — MISSING_SOURCE**❌: OUT=hello: MISSING_SOURCE (无步骤产出此字符串)
+
+**断言 2 — MISSING_SOURCE**❌: STEP_VAR=step_value: MISSING_SOURCE (无步骤产出此字符串)
 
 ---

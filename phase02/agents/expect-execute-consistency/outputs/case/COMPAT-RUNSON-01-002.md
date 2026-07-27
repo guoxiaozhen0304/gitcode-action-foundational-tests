@@ -1,49 +1,74 @@
 # COMPAT-RUNSON-01-002
 
-- 标题: runs-on 标签体系——单标签字符串应报错
-- 维度: 兼容性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: runs-on 标签体系——单标签字符串应报错
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: runs-on 标签体系——单标签字符串应报错
+本用例验证：**runs-on 标签体系——单标签字符串应报错**
 
-- [负向] 单标签字符串格式在解析/校验阶段报错
-- [正向] 错误信息应明确说明需使用数组格式
-- [负向] 不应静默调度到不匹配标签的 Runner
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-027
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=negative, target=workflow_parse, eval=llm_assisted
+2. type=positive, target=run_logs, eval=llm_assisted
+3. type=negative, target=run_logs, eval=llm_assisted
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | (TC) should not reach here | echo "RUNSON_STRING_ACCEPTED" | - |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| negative | workflow_parse |  |
-| positive | run_logs |  |
-| negative | run_logs |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | (TC) should not reach her | `echo "RUNSON_STRING_ACCEPTED"` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  verify-runs-on-string:
+    name: Verify single label string error
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: (TC) should not reach here
+        run: |
+          echo "RUNSON_STRING_ACCEPTED"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] 单标签字符串格式在解析/校验阶段报错 | COVERED | negative assertion present |
-| [正向] 错误信息应明确说明需使用数组格式 | WEAK | assertions present but all steps trivial |
-| [负向] 不应静默调度到不匹配标签的 Runner | COVERED | negative assertion present |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | workflow_parse | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 3 | run_logs | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [正向] 错误信息应明确说明需使用数组格式: assertions present but all steps trivial
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 3 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

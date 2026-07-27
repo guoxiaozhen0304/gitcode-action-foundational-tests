@@ -1,46 +1,73 @@
 # COMPAT-WCMD-01-003
 
-- 标题: ::stop-commands:: 不被支持时应静默降级而非报错
-- 维度: 兼容性 | 优先级: P2
-- 评级: 部分不符
+- **标题**: ::stop-commands:: 不被支持时应静默降级而非报错
+- **维度**: 兼容性
+- **优先级**: P2
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: ::stop-commands:: 不被支持时应静默降级而非报错
+本用例验证：**::stop-commands:: 不被支持时应静默降级而非报错**
 
-- [正向] workflow 不因 stop-commands 而失败
-- [负向] 不通过 stop-commands 导致 workflow 报错中断
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-NEW-009
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=run_status, equals=success, eval=llm_assisted
+2. type=negative, target=run_logs, eval=llm_assisted
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Use stop-commands | echo "::stop-commands::pause" echo "::set-output name=K::V" echo "::pause::" echo "done" | - |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | run_status | success |
-| negative | run_logs |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Use stop-commands | `echo "::stop-commands::pause" echo "::set-output name=K::V" echo "::pause::" ech` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test-stop-commands:
+    name: Test stop-commands command
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Use stop-commands
+        run: |
+          echo "::stop-commands::pause"
+          echo "::set-output name=K::V"
+          echo "::pause::"
+          echo "done"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] workflow 不因 stop-commands 而失败 | WEAK | assertions present but all steps trivial |
-| [负向] 不通过 stop-commands 导致 workflow 报错中断 | COVERED | negative assertion present |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | positive | equals=success | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | run_logs | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [正向] workflow 不因 stop-commands 而失败: assertions present but all steps trivial
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

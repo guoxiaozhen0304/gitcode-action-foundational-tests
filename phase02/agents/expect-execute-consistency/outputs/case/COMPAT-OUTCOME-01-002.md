@@ -1,54 +1,87 @@
 # COMPAT-OUTCOME-01-002
 
-- 标题: continue-on-error true 时 outcome 应为 failure 而 conclusion 应为 success
-- 维度: 兼容性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: continue-on-error true 时 outcome 应为 failure 而 conclusion 应为 success
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: continue-on-error true 时 outcome 应为 failure 而 conclusion 应为 success
+本用例验证：**continue-on-error true 时 outcome 应为 failure 而 conclusion 应为 success**
 
-- [正向] 失败 step 的 outcome 为 failure
-- [正向] 失败 step 的 conclusion 为 success
-- [正向] 后续 step 正常执行
-- [正向] job 最终状态为 success（若无其他失败）
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-035
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=step_status, equals=failure, eval=llm_assisted
+2. type=positive, target=step_conclusion, equals=success, eval=llm_assisted
+3. type=positive, target=run_status, equals=success, eval=llm_assisted
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | checkout source | uses: checkout | Y |
-| 2 | failing step tolerated | exit 1 | - |
-| 3 | next step runs | echo "This step should run" | - |
-| 4 | check status | echo "Check step outcome and conclusion" | Y |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | step_status | failure |
-| positive | step_conclusion | success |
-| positive | run_status | success |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | checkout source | `checkout` |  | ✅ GENUINE |
+| 2 | failing step tolerated | `exit 1` |  | ✅ GENUINE |
+| 3 | next step runs | `echo "This step should run"` |  | ❌ VACUOUS |
+| 4 | check status | `echo "Check step outcome and conclusion"` | ${{ always() }} | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  outcome-true:
+    name: Test outcome with continue on error true
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: checkout source
+        uses: checkout
+      - name: failing step tolerated
+        continue-on-error: true
+        run: |
+          exit 1
+      - name: next step runs
+        run: |
+          echo "This step should run"
+      - name: check status
+        if: ${{ always() }}
+        run: |
+          echo "Check step outcome and conclusion"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 失败 step 的 outcome 为 failure | COVERED | 2 real steps, assertions present |
-| [正向] 失败 step 的 conclusion 为 success | COVERED | 2 real steps, assertions present |
-| [正向] 后续 step 正常执行 | COVERED | 2 real steps, assertions present |
-| [正向] job 最终状态为 success（若无其他失败） | COVERED | 2 real steps, assertions present |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | step_status | positive | equals=failure | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | step_conclusion | positive | equals=success | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 3 | run_status | positive | equals=success | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-无重大问题。
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 3 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

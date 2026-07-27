@@ -1,88 +1,47 @@
 # USE-VARS-01-001
 
-- 标题: vars 上下文在文档与样本中的声明必须一致
-- 维度: usability | 优先级: P1
-- 评级: 完全不符
+- **标题**: vars 上下文在文档与样本中的声明必须一致
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-前置条件:
-  - 文档与样本版本为 2026-07-20 抓取版本
+本用例验证：**vars 上下文在文档与样本中的声明必须一致**
 
-操作步骤:
-  1. 比对 syntax-reference/context.md 与 workflow-samples 注释对 vars 的支持声明
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-USE-014
 
-预期结果:
-  两者声明一致：要么均支持，要么均不支持
+通过标准：
+1. type=nonfunctional, target=documentation, eval=llm_assisted
 
-验证点:
-  - [正向] 若支持，文档示例可运行且样本注释已移除已知不支持
-  - [负向] 若不支持，文档中不应出现 vars 使用示例
+## 2. 做了什么
 
-## 2. 实际做了什么（实现）
+workflow 中每个步骤的实际行为：
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| - | (无步骤) | - | - |
-
-<details><summary>完整 workflow YAML</summary>
-
-```yaml
-id: USE-VARS-01-001
-dimensions: ["usability"]
-dimension: usability
-priority: P1
-title: "vars 上下文在文档与样本中的声明必须一致"
-intent_ref: INTENT-USE-014
-
-setup:
-  repo_fixture: default
-  secrets: []
-  variables: {}
-  branch_protection: default
-
-workflow: null
-
-trigger:
-  event: workflow_dispatch
-  as: maintainer
-  params: {}
-
-fault_injection: null
-
-assertions:
-  - type: nonfunctional
-    target: documentation
-    eval: llm_assisted
-    rubric: "文档与样本对同一能力 vars 上下文的声明必须一致；不一致即视为可理解性缺陷"
-
-teardown:
-  reset: none
-```
-
-</details>
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo | default |
-| Secrets | (none) |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 若支持，文档示例可运行且样本注释已移除 | ❌ MISSING | workflow=null，无步骤能够运行文档示例或检查样本注释 |
-| [负向] 若不支持，文档中不应出现 vars 使用示例 | ❌ MISSING | workflow=null，无步骤进行文档/样本对比；assertion eval=llm_assisted |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | documentation | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- [正向] 文档示例/样本验证: MISSING — workflow=null, no steps to run document examples or inspect sample annotations
-- [负向] 文档无 vars 示例: MISSING — workflow=null, no steps to perform doc cross-referencing; assertion is llm_assisted
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

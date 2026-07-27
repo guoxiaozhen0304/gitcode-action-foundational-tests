@@ -1,47 +1,32 @@
 # COMP-WFLOW-01-064
 
-- 标题: workflow stages 阶段结构字段验证
-- 维度: 完备性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: workflow stages 阶段结构字段验证
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-WFLOW-01-064
-维度标签:   [completeness]
-维度:      完备性
-优先级:    P1
-溯源意图:  KEEP-TC-366~401
-参照来源:  inputs/existing-cases/cases.md
-母意图:    —
-标题:      workflow stages 阶段结构字段验证
+本用例验证：**workflow stages 阶段结构字段验证**
 
-前置条件:
-  - 仓库已启用 AtomGit Action
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-061
 
-操作步骤:
-  1. 定义含 stages 的 workflow，使用 map 格式
-  2. 验证 stage 间串行和 fail_fast
+通过标准：
+1. type=positive, target=run_logs, must_contain="build_done"
+2. type=positive, target=run_logs, must_contain="test_done"
 
-预期结果:
-  - stages 为 map 格式，每个 stage 含 jobs，stage 间串行执行，fail_fast 控制失败时是否中断
+## 2. 做了什么
 
-验证点:
-  - [正向] stages map 格式通过校验
-  - [正向] 单 stage 可缺省 stages 字段
-  - [正向] fail_fast true 时某 job 失败中断后续 stage
+workflow 中每个步骤的实际行为：
 
-清理:      重置 fixture 仓库
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| - | (no steps) | - | - |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -69,31 +54,31 @@ stages:
           - name: Test step
             run: |
               echo "test_done"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] stages map 格式通过校验 | ❌ NOT_COVERED | no steps found |
-| [正向] 单 stage 可缺省 stages 字段 | ❌ NOT_COVERED | no steps found |
-| [正向] fail_fast true 时某 job 失败中断后续 stage | ❌ NOT_COVERED | no steps found |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | must_contain=build_done | ❌ MISSING_SOURCE | build_done: MISSING_SOURCE (无步骤产出此字符串) |
+| 2 | run_logs | positive | must_contain=test_done | ❌ MISSING_SOURCE | test_done: MISSING_SOURCE (无步骤产出此字符串) |
 
 ### 问题
 
-- [正向] stages map 格式通过校验: NOT_COVERED - no steps found
-- [正向] 单 stage 可缺省 stages 字段: NOT_COVERED - no steps found
-- [正向] fail_fast true 时某 job 失败中断后续 stage: NOT_COVERED - no steps found
+**断言 1 — MISSING_SOURCE**❌: build_done: MISSING_SOURCE (无步骤产出此字符串)
+
+**断言 2 — MISSING_SOURCE**❌: test_done: MISSING_SOURCE (无步骤产出此字符串)
 
 ---

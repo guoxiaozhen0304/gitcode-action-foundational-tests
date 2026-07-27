@@ -1,71 +1,68 @@
 # SEC-DEFPERM-01-002
 
-- 标题: job 级覆盖后权限正确收窄
-- 维度: 安全性 | 优先级: P0
-- 评级: 断言一致
+- **标题**: job 级覆盖后权限正确收窄
+- **维度**: 安全性
+- **优先级**: P0
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**job 级覆盖后权限正确收窄**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-SEC-036
+
+通过标准：
+1. type=negative, target=run_logs
+2. type=positive, target=run_logs, equals=403_or_permission_denied
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Attempt write after overr | `curl -s -o /dev/null -w "%{http_code}" -X POST \n            "https://api.gitcod` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+permissions:
+  repository: write
+jobs:
+  override-test:
+    name: Test job level override
+    runs-on: [ubuntu-latest, x64, small]
+    permissions:
+      repository: read
+    steps:
+      - name: Attempt write after override
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" -X POST \n            "https://api.gitcode.com/api/v5/repos/${{ atomgit.repository }}/issues" \n            -H "Authorization: token ${{ atomgit.token }}" \n            -d '{"title": "test"}'
 ```
-用例 ID:   SEC-DEFPERM-01-002
-维度标签:   [security]
-维度:      安全性
-优先级:    P0
-溯源意图:  INTENT-SEC-036
-参照来源:  inputs/security-knowledge/issues.md; inputs/github-reference/security/
-母意图:    SEC-DEFPERM-01-001
-标题:      job 级覆盖后权限正确收窄
 
-前置条件:
-  - 仓库声明了顶层 permissions: repository: write
-
-操作步骤:
-  1. 提交一个 workflow，顶层声明 repository: write，job 级覆盖为 repository: read
-  2. 触发 workflow 并验证 job 实际权限
-
-预期结果:
-  - job 级收窄后不应仍保留顶层的更大权限
-  - token 实际权限应与 job 级声明一致
-
-验证点:
-  - [负向] job 级收窄后不应仍保留顶层的更大权限
-  - [正向] 各权限域实测与有效声明一致，越权写被拒
-
-清理:      重置 fixture 仓库
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | Attempt write after override (override-test) | curl -s -o /dev/null -w "%{http_code}" -X POST \n            "https://api.gitcode.com/api/v5/repos/$ | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| job 级收窄后不应仍保留顶层的更大权限 | 覆盖 | log assertion without specific string check |
-| 各权限域实测与有效声明一致，越权写被拒 | 覆盖 | log assertion without specific string check |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | negative |  | CONSISTENT | log assertion without specific string check |
-| 2 | run_logs | positive | 403_or_permission_denied | CONSISTENT | log assertion without specific string check |
-
-### 问题
-
-- 所有验证点均被覆盖，步骤与断言一致
+| 1 | run_logs | negative |  | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
+| 2 | run_logs | positive | equals=403_or_permission_denied | ✅ GENUINE | 日志断言无特定字符串匹配要求 |
 
 ---

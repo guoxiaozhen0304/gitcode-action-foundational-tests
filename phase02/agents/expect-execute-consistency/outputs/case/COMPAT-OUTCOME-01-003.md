@@ -1,53 +1,87 @@
 # COMPAT-OUTCOME-01-003
 
-- 标题: outcome 与 conclusion 在 job 条件判断中不应互换语义
-- 维度: 兼容性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: outcome 与 conclusion 在 job 条件判断中不应互换语义
+- **维度**: 兼容性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: outcome 与 conclusion 在 job 条件判断中不应互换语义
+本用例验证：**outcome 与 conclusion 在 job 条件判断中不应互换语义**
 
-- [正向] job A 的 outcome 保持为 failure
-- [正向] job A 的 conclusion 为 success
-- [正向] job B 的 needs 条件基于 conclusion 判断时认为 job A 成功
-- [负向] 不应出现 outcome 与 conclusion 被互换使用导致的误判
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMPAT-035
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=job_status, equals=success, eval=llm_assisted
+2. type=positive, target=step_status, equals=failure, eval=llm_assisted
+3. type=negative, target=semantic_swap, eval=llm_assisted
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | checkout source | uses: checkout | Y |
-| 2 | failing step tolerated | exit 1 | - |
-| 3 | verify job a conclusion | echo "Job A conclusion should be success" | - |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | job_status | success |
-| positive | step_status | failure |
-| negative | semantic_swap |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | checkout source | `checkout` |  | ✅ GENUINE |
+| 2 | failing step tolerated | `exit 1` |  | ✅ GENUINE |
+| 3 | verify job a conclusion | `echo "Job A conclusion should be success"` |  | ❌ VACUOUS |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  job-a:
+    name: Job A with continue on error true
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: checkout source
+        uses: checkout
+      - name: failing step tolerated
+        continue-on-error: true
+        run: |
+          exit 1
+  job-b:
+    name: Job B depends on A
+    runs-on: [ubuntu-latest, x64, small]
+    needs: [job-a]
+    steps:
+      - name: verify job a conclusion
+        run: |
+          echo "Job A conclusion should be success"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] job A 的 outcome 保持为 failure | COVERED | 1 real steps, assertions present |
-| [正向] job A 的 conclusion 为 success | COVERED | 1 real steps, assertions present |
-| [正向] job B 的 needs 条件基于 conclusion 判断时认为 job A 成功 | COVERED | 1 real steps, assertions present |
-| [负向] 不应出现 outcome 与 conclusion 被互换使用导致的误判 | COVERED | negative assertion present |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | job_status | positive | equals=success | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | step_status | positive | equals=failure | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 3 | semantic_swap | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-无重大问题。
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 3 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

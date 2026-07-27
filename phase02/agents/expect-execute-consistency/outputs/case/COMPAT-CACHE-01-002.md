@@ -1,56 +1,36 @@
 # COMPAT-CACHE-01-002
 
-- 标题: cache 行为等价性——fork PR 写隔离
-- 维度: 兼容性 | 优先级: P0
-- 评级: 断言一致
+- **标题**: cache 行为等价性——fork PR 写隔离
+- **维度**: 兼容性
+- **优先级**: P0
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMPAT-CACHE-01-002
-维度标签:   [compatibility, security]
-维度:      兼容性
-优先级:    P0
-溯源意图:  INTENT-COMPAT-025
-参照来源:  inputs/security-knowledge/issues.md; inputs/github-reference/security/
-母意图:    COMPAT-CACHE-01-001
-标题:      cache 行为等价性——fork PR 写隔离
+本用例验证：**cache 行为等价性——fork PR 写隔离**
 
-前置条件:
-  - 仓库已启用 cache 插件
-  - 存在一个来自 fork 的 PR
+- 触发事件: `pr`
+- 规格引用: INTENT-COMPAT-025
 
-操作步骤:
-  1. 在 fork PR 的工作流中使用 `uses: cache` 尝试写入新缓存
-  2. 观察 fork PR 场景下的缓存写入行为
-  3. 对比同一缓存 key 在主干分支上的写入权限
+通过标准：
+1. type=negative, target=run_logs, eval=llm_assisted
+2. type=positive, target=run_logs, eval=llm_assisted
+3. type=negative, target=run_status, equals=leaked_cache_to_fork
 
-预期结果:
-  - fork PR 不应覆盖或污染主干分支的缓存条目
-  - fork PR 可读取公共缓存，但写入应被隔离或拒绝
-  - 系统应为 fork 提供独立的缓存命名空间或阻止写入
+## 2. 做了什么
 
-验证点:
-  - [负向] fork PR 不应成功覆盖主干缓存
-  - [正向] 主干缓存保持完整未被污染
-  - [正向] 系统提供明确的缓存隔离机制
+workflow 中每个步骤的实际行为：
 
-清理:      fixture
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | (TC) restore cache | `cache` |  | ✅ GENUINE |
+| 2 | (TC) attempt write from f | `mkdir -p "$HOME/.cache/test-dir" echo "FORK_MARKER_$(date +%s)" > "$HOME/.cache/` |  | ✅ GENUINE |
+| 3 | (TC) save cache | `cache` | ${{ always() }} | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | (TC) restore cache | uses: cache | 是 |
-| 2 | (TC) attempt write from fork | run: mkdir -p "$HOME/.cache/test-dir"
-echo "FORK_MARKER_$(date +%s)" > "$HOME/.cache/test-dir/fork_marker.txt"
-echo "FORK_WRITE_ATTEMPTED"
- | 是 |
-| 3 | (TC) save cache | uses: cache | if: ${{ always() }} | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -78,29 +58,32 @@ jobs:
         with:
           path: ~/.cache/test-dir
           key: compat-cache-fork-test
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | pr |
-| 触发身份 | untrusted_contributor |
-| Repo Fixture | with-fork-pr |
-| Secrets | N/A |
+| 触发事件 | `pr` |
+| 触发身份 | `untrusted_contributor` |
+| Repo 环境 | `with-fork-pr` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] fork PR 不应成功覆盖主干缓存 | ✅ COVERED | negative assertion in YAML assertions |
-| [正向] 主干缓存保持完整未被污染 | ✅ COVERED | steps have real logic |
-| [正向] 系统提供明确的缓存隔离机制 | ✅ COVERED | steps have real logic |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 2 | run_logs | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
+| 3 | run_status | negative | equals=leaked_cache_to_fork | ✅ GENUINE | 状态断言 leaked_cache_to_fork 可被步骤行为验证 |
 
 ### 问题
 
-无
+**断言 1 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

@@ -1,51 +1,35 @@
 # COMP-TIMEOUT-01-002
 
-- 标题: 超时的 job 被强制终止并标记为 failure
-- 维度: 完备性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: 超时的 job 被强制终止并标记为 failure
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-TIMEOUT-01-002
-维度标签:   [completeness, reliability]
-维度:      completeness
-优先级:    P1
-溯源意图:  INTENT-COMP-008
-参照来源:  inputs/gitcode-spec/core-concepts/variables-secrets-context-expressions.md; inputs/gitcode-spec/syntax-reference/expressions.md; inputs/gitcode-spec/syntax-reference/context.md
-母意图:    —
-标题:      超时的 job 被强制终止并标记为 failure
+本用例验证：**超时的 job 被强制终止并标记为 failure**
 
-前置条件:
-  - workflow 声明 timeout-minutes: 1
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-008
 
-操作步骤:
-  1. 触发 workflow，其中 step 睡眠超过 1 分钟
-  2. 观察 job 是否在 1 分钟后被强制终止
+通过标准：
+1. type=negative, target=run_status, equals=success
+2. type=positive, target=run_status, equals=failure
+3. type=positive, target=run_logs, contains="starting"
 
-预期结果:
-  - job 在 1 分钟后被强制终止
-  - 运行状态标记为 failure
-  - 已运行 step 的日志保留
+## 2. 做了什么
 
-验证点:
-  - [负向] 运行状态为 failure
-  - [正向] 超时前已完成的 step 日志完整保留
+workflow 中每个步骤的实际行为：
 
-清理:      none
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo before sleep | `echo "starting"` |  | ❌ VACUOUS |
+| 2 | Sleep beyond timeout | `sleep 120` |  | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Echo before sleep | run: echo "starting"
- | 否 |
-| 2 | Sleep beyond timeout | run: sleep 120
- | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -62,28 +46,32 @@ jobs:
       - name: Sleep beyond timeout
         run: |
           sleep 120
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] 运行状态为 failure | ✅ COVERED | negative assertion in YAML assertions |
-| [正向] 超时前已完成的 step 日志完整保留 | ✅ COVERED | steps have real logic |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | negative | equals=success | ✅ GENUINE | 存在真实可执行步骤，有行为观测价值 |
+| 2 | run_status | positive | equals=failure | ❌ IMPOSSIBLE | 期望 !=success 但无步骤可能失败 |
+| 3 | run_logs | positive | contains=starting | ❌ VACUOUS | starting: VACUOUS (步骤仅 echo，未执行功能) |
 
 ### 问题
 
-无
+**断言 2 — IMPOSSIBLE**❌: 期望 !=success 但无步骤可能失败
+
+**断言 3 — VACUOUS**❌: starting: VACUOUS (步骤仅 echo，未执行功能)
 
 ---

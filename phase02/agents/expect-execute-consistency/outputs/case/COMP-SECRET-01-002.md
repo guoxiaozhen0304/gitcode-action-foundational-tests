@@ -1,46 +1,32 @@
 # COMP-SECRET-01-002
 
-- 标题: secret 原始值不应以明文出现在标准日志中
-- 维度: 完备性 | 优先级: P0
-- 评级: 断言一致
+- **标题**: secret 原始值不应以明文出现在标准日志中
+- **维度**: 完备性
+- **优先级**: P0
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   COMP-SECRET-01-002
-维度标签:   [completeness, security]
-维度:      completeness
-优先级:    P0
-溯源意图:  INTENT-COMP-012
-参照来源:  inputs/security-knowledge/issues.md; inputs/github-reference/security/
-母意图:    —
-标题:      secret 原始值不应以明文出现在标准日志中
+本用例验证：**secret 原始值不应以明文出现在标准日志中**
 
-前置条件:
-  - 仓库配置了 secret TEST_SECRET
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-012
 
-操作步骤:
-  1. 在 workflow 中通过多种方式输出 secret
-  2. 查看运行日志
+通过标准：
+1. type=negative, target=run_logs, must_not_contain_secret="TEST_SECRET"
 
-预期结果:
-  - 无论通过何种标准方式引用，secret 原始值均不出现在日志
+## 2. 做了什么
 
-验证点:
-  - [负向] 日志中不包含 secret 原始明文
+workflow 中每个步骤的实际行为：
 
-清理:      重置 fixture 仓库
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Echo secret via env | `echo "env secret is $MY_SECRET"` |  | ✅ GENUINE |
 
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Echo secret via env | run: echo "env secret is $MY_SECRET"
- | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -55,27 +41,28 @@ jobs:
           MY_SECRET: ${{ secrets.TEST_SECRET }}
         run: |
           echo "env secret is $MY_SECRET"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo Fixture | with-secrets |
-| Secrets | TEST_SECRET |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `with-secrets` |
+| Secrets | `['TEST_SECRET']` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] 日志中不包含 secret 原始明文 | ✅ COVERED | negative assertion in YAML assertions |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | negative | !secret=TEST_SECRET | ❌ UNEXERCISED | 断言 secret 不泄露但无步骤使用 TEST_SECRET |
 
 ### 问题
 
-无
+**断言 1 — UNEXERCISED**❌: 断言 secret 不泄露但无步骤使用 TEST_SECRET
 
 ---

@@ -1,50 +1,68 @@
 # REL-MEM-01-021
 
-- 标题: Runner 内存越界——small runner 分配 9 GB 应被 OOM kill
-- 维度: 稳定性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: Runner 内存越界——small runner 分配 9 GB 应被 OOM kill
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 部分不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: Runner 内存越界——small runner 分配 9 GB 应被 OOM kill
+本用例验证：**Runner 内存越界——small runner 分配 9 GB 应被 OOM kill**
 
-- [正向] job 状态=failure
-- [正向] 日志含 OOM 或 Killed
-- [负向] 不应导致 Runner 宿主机崩溃
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-REL-021
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=job_status, equals=failure
+2. type=positive, target=run_logs, contains="Killed"
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | allocate 9GB | python3 -c "a=bytearray(9216*1024*1024); print(len(a))" | - |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | job_status | failure |
-| positive | run_logs |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | allocate 9GB | `python3 -c "a=bytearray(9216*1024*1024); print(len(a))"` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    name: memory over limit test
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: allocate 9GB
+        run: |
+          python3 -c "a=bytearray(9216*1024*1024); print(len(a))"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] job 状态=failure | WEAK | assertions present but all steps trivial |
-| [正向] 日志含 OOM 或 Killed | WEAK | assertions present but all steps trivial |
-| [负向] 不应导致 Runner 宿主机崩溃 | UNVERIFIABLE | single dispatch cannot prove negative |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | job_status | positive | equals=failure | ✅ GENUINE | 平台级断言 job_status — 由 harness 在运行时观测 |
+| 2 | run_logs | positive | contains=Killed | ❌ MISSING_SOURCE | Killed: MISSING_SOURCE (无步骤产出此字符串) |
 
 ### 问题
 
-- [正向] job 状态=failure: assertions present but all steps trivial
-- [正向] 日志含 OOM 或 Killed: assertions present but all steps trivial
-- [负向] 不应导致 Runner 宿主机崩溃: single dispatch cannot prove negative
+**断言 2 — MISSING_SOURCE**❌: Killed: MISSING_SOURCE (无步骤产出此字符串)
 
 ---

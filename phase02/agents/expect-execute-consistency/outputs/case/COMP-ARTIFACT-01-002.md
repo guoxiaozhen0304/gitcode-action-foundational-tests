@@ -1,131 +1,95 @@
 # COMP-ARTIFACT-01-002
 
-- 标题: 下载全部制品功能正常
-- 维度: 完备性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: 下载全部制品功能正常
+- **维度**: 完备性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-前置条件:
-- workflow 上传多个 artifacts
+本用例验证：**下载全部制品功能正常**
 
-操作步骤:
-1. job 1 上传多个 artifacts
-2. job 2 不指定 name 下载全部 artifacts
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-COMP-015
 
-预期结果:
-- 所有 artifacts 被下载到指定目录
+通过标准：
+1. type=positive, target=run_status, equals=success
+2. type=positive, target=run_logs, contains="app"
+3. type=positive, target=run_logs, contains="report"
 
-验证点:
-- [正向] 所有 artifact 文件均存在
+## 2. 做了什么
 
-## 2. 实际做了什么（实现）
+workflow 中每个步骤的实际行为：
 
-| # | 步骤名 | 关键内容（前80字） | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Create artifacts | mkdir -p dist reports; echo "app" > dist/app.txt; echo "report" > reports/coverage.txt | 是 |
-| 2 | Upload app | uses: upload-artifact with name: app, path: dist/ | 是 |
-| 3 | Upload reports | uses: upload-artifact with name: reports, path: reports/ | 是 |
-| 4 | Download all | uses: download-artifact with path: artifacts/ (no name) | 是 |
-| 5 | Verify all | cat artifacts/app/app.txt; cat artifacts/reports/coverage.txt | 是 |
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Create artifacts | `mkdir -p dist reports echo "app" > dist/app.txt echo "report" > reports/coverage` |  | ✅ GENUINE |
+| 2 | Upload app | `upload-artifact` |  | ✅ GENUINE |
+| 3 | Upload reports | `upload-artifact` |  | ✅ GENUINE |
+| 4 | Download all | `download-artifact` |  | ✅ GENUINE |
+| 5 | Verify all | `cat artifacts/app/app.txt cat artifacts/reports/coverage.txt` |  | ✅ GENUINE |
 
 <details>
 <summary>完整 workflow YAML</summary>
 
 ```yaml
-id: COMP-ARTIFACT-01-002
-dimensions: [completeness, reliability]
-dimension: completeness
-priority: P1
-title: 下载全部制品功能正常
-intent_ref: INTENT-COMP-015
-
-setup:
-  repo_fixture: default
-  secrets: []
-  variables: {}
-  branch_protection: default
-
-workflow: |
-  on:
-    workflow_dispatch:
-  jobs:
-    build:
-      name: Build multiple artifacts
-      runs-on: [ubuntu-latest, x64, small]
-      steps:
-        - name: Create artifacts
-          run: |
-            mkdir -p dist reports
-            echo "app" > dist/app.txt
-            echo "report" > reports/coverage.txt
-        - name: Upload app
-          uses: upload-artifact
-          with:
-            name: app
-            path: dist/
-        - name: Upload reports
-          uses: upload-artifact
-          with:
-            name: reports
-            path: reports/
-    verify:
-      name: Download all artifacts
-      runs-on: [ubuntu-latest, x64, small]
-      needs: build
-      steps:
-        - name: Download all
-          uses: download-artifact
-          with:
-            path: artifacts/
-        - name: Verify all
-          run: |
-            cat artifacts/app/app.txt
-            cat artifacts/reports/coverage.txt
-
-trigger:
-  event: workflow_dispatch
-  as: maintainer
-  params: {}
-
-fault_injection: null
-
-assertions:
-  - type: positive
-    target: run_status
-    equals: success
-  - type: positive
-    target: run_logs
-    contains: app
-  - type: positive
-    target: run_logs
-    contains: report
-
-teardown:
-  reset: none
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build multiple artifacts
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Create artifacts
+        run: |
+          mkdir -p dist reports
+          echo "app" > dist/app.txt
+          echo "report" > reports/coverage.txt
+      - name: Upload app
+        uses: upload-artifact
+        with:
+          name: app
+          path: dist/
+      - name: Upload reports
+        uses: upload-artifact
+        with:
+          name: reports
+          path: reports/
+  verify:
+    name: Download all artifacts
+    runs-on: [ubuntu-latest, x64, small]
+    needs: build
+    steps:
+      - name: Download all
+        uses: download-artifact
+        with:
+          path: artifacts/
+      - name: Verify all
+        run: |
+          cat artifacts/app/app.txt
+          cat artifacts/reports/coverage.txt
 ```
 
 </details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo | default |
-| Secrets | (none) |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 所有 artifact 文件均存在 | ✅ COVERED | 步骤5 cat 两个文件，断言 run_logs contains "app" 和 "report" |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-- 无
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | positive | equals=success | ✅ GENUINE | 存在真实可执行步骤，有行为观测价值 |
+| 2 | run_logs | positive | contains=app | ✅ GENUINE | app: GENUINE |
+| 3 | run_logs | positive | contains=report | ✅ GENUINE | report: GENUINE |
 
 ---

@@ -1,69 +1,75 @@
 # USE-DISP-01-001
 
-- 标题: workflow_dispatch 必填参数未提供时应给出明确校验错误
-- 维度: 易用性 | 优先级: P1
-- 评级: 断言一致
+- **标题**: workflow_dispatch 必填参数未提供时应给出明确校验错误
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 完全不符
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
+本用例验证：**workflow_dispatch 必填参数未提供时应给出明确校验错误**
+
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-USE-030
+
+通过标准：
+1. type=negative, target=run_status, equals=COMPLETED
+2. type=nonfunctional, target=error_message, eval=llm_assisted
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | echo env | `echo "env=${{ inputs.environment }}"` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: target environment
+        type: string
+        required: true
+jobs:
+  test-required:
+    name: missing required input
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: echo env
+        run: |
+          echo "env=${{ inputs.environment }}"
 ```
-用例 ID:   USE-DISP-01-001
-维度标签:   ['usability', 'completeness']
-维度:      usability/completeness
-优先级:    P1
-溯源意图:  INTENT-USE-030
-参照来源:  inputs/gitcode-spec/core-concepts/trigger-events.md
-母意图:    —
-标题:      workflow_dispatch 必填参数未提供时应给出明确校验错误
 
-前置条件:
-  - workflow 配置了一个 required: true 且无 default 的 input
-
-操作步骤:
-  1. 手动触发 workflow 但不提供该必填参数
-
-预期结果:
-  系统拒绝触发并提示缺少必填参数
-
-验证点:
-  - [负向] 不应在缺少必填参数时触发运行
-  - [非功能] 报错中是否指出具体缺少的字段名
-
-清理:      无
-```
-
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | echo env (test-required) | echo "env=${{ inputs.environment }}"  | GENUINE |
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | workflow_dispatch |
-| as | maintainer |
-| fault_injection | None |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| 不应在缺少必填参数时触发运行 | 覆盖 | negative status assertion |
-| 报错中是否指出具体缺少的字段名 | 覆盖 | 非功能断言存在(LLM评估) |
+逐条断言对比步骤实际输出：
 
-### 断言逐条分析
-
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | COMPLETED | CONSISTENT | negative status assertion |
-| 2 | error_message | nonfunctional | 报错信息必须指出缺少必填参数 environment 或等效字段名 | LLM_DEPENDENT | LLM/nonfunctional assertion: 报错信息必须指出缺少必填参数 environment 或等效字段名 |
+| 1 | run_status | negative | equals=COMPLETED | ❌ IMPOSSIBLE | 期望 !=success 但无步骤可能失败 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- 所有验证点均被覆盖，步骤与断言一致
+**断言 1 — IMPOSSIBLE**❌: 期望 !=success 但无步骤可能失败
+
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

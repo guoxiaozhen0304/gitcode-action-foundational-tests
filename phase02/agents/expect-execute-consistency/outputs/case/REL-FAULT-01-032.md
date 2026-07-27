@@ -1,49 +1,70 @@
 # REL-FAULT-01-032
 
-- 标题: 故障注入——artifact 上传时网络分区 30 秒后应失败并报网络错误
-- 维度: 稳定性 | 优先级: P1
-- 评级: 部分不符
+- **标题**: 故障注入——artifact 上传时网络分区 30 秒后应失败并报网络错误
+- **维度**: 可靠性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-标题: 故障注入——artifact 上传时网络分区 30 秒后应失败并报网络错误
+本用例验证：**故障注入——artifact 上传时网络分区 30 秒后应失败并报网络错误**
 
-- [正向] upload-artifact step 状态=failure
-- [正向] 日志含网络错误
-- [负向] 不应无限挂起超过 120 秒
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-REL-032
 
-## 2. 实际做了什么（实现）
+通过标准：
+1. type=positive, target=step_status, equals=failure
+2. type=positive, target=run_logs, contains="network"
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | generate artifact file | dd if=/dev/urandom of=artifact.bin bs=1M count=10 | - |
-| 2 | upload artifact step | uses: upload-artifact | Y |
+## 2. 做了什么
 
-| 断言类型 | 目标 | 值 |
-|---------|------|----|
-| positive | step_status | failure |
-| positive | run_logs |  |
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | generate artifact file | `dd if=/dev/urandom of=artifact.bin bs=1M count=10` |  | ✅ GENUINE |
+| 2 | upload artifact step | `upload-artifact` |  | ✅ GENUINE |
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    name: fault injection network partition
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: generate artifact file
+        run: |
+          dd if=/dev/urandom of=artifact.bin bs=1M count=10
+      - name: upload artifact step
+        uses: upload-artifact
+        with:
+          name: net-fault-artifact
+          path: artifact.bin
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 事件 | workflow_dispatch |
-| 身份 | maintainer |
-| 触发阻塞 | 否 |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | `{'at': 'mid_job', 'action': 'network_partition', 'params': {'duration_seconds': 30, 'target_step': 2}, 'recovery_expectation': 'explicit_error_and_rerun_success'}` |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] upload-artifact step 状态=failure | COVERED | 1 real steps, assertions present |
-| [正向] 日志含网络错误 | COVERED | 1 real steps, assertions present |
-| [负向] 不应无限挂起超过 120 秒 | UNVERIFIABLE | single dispatch cannot prove negative |
+逐条断言对比步骤实际输出：
 
-### 问题
-
-- [负向] 不应无限挂起超过 120 秒: single dispatch cannot prove negative
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | step_status | positive | equals=failure | ✅ GENUINE | 断言有条件可被步骤验证 |
+| 2 | run_logs | positive | contains=network | ✅ GENUINE | network: GENUINE (uses action 内部输出) |
 
 ---

@@ -1,42 +1,70 @@
 # USE-YAML-01-002
 
-- 标题: YAML 缩进错误时报错应指出具体行号与列号
-- 维度: usability | 优先级: P1
-- 评级: 部分不符
+- **标题**: YAML 缩进错误时报错应指出具体行号与列号
+- **维度**: 易用性
+- **优先级**: P1
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-前置条件:
-  - workflow 文件位于 .gitcode/workflows/
-操作步骤:
-  1. 1. 提交一个 steps 缩进错误的 workflow
-预期结果:
-  报错包含具体的行号、列号，指出缩进错误位置
+本用例验证：**YAML 缩进错误时报错应指出具体行号与列号**
 
-## 2. 实际做了什么（实现）
+- 触发事件: `workflow_dispatch`
+- 规格引用: INTENT-USE-022
 
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| - | (无步骤) | - | - |
+通过标准：
+1. type=negative, target=run_status, equals=COMPLETED
+2. type=nonfunctional, target=error_message, eval=llm_assisted
+
+## 2. 做了什么
+
+workflow 中每个步骤的实际行为：
+
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+
+<details>
+<summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  workflow_dispatch:
+jobs:
+  bad:
+    name: indent error
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+    - name: step one
+      run: |
+        echo "hello"
+     - name: step two
+       run: |
+         echo "world"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
+| 触发事件 | `workflow_dispatch` |
+| 触发身份 | `maintainer` |
+| Repo 环境 | `default` |
+| Secrets | `[]` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [negative] run_status equals: COMPLETED | ✅ COVERED | workflow 含有故意缩进错误的 YAML，平台解析失败后 run_status != COMPLETED，可通过 batch_validate.py 验证 |
-| [nonfunctional] error_message  | ⚠️ LLM_DEPENDENT | 非功能性/LLM辅助断言，不可静态评估: 报错信息必须同时包含字段名、所在行号、正确写法示例三项中的至少两项 |
+逐条断言对比步骤实际输出：
+
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_status | negative | equals=COMPLETED | ✅ COVERED | 平台验证型用例：YAML 含语法错误，batch_validate.py 可验证平台拒绝 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | 🔶 LLM_DEPENDENT | 非功能性/LLM 辅助断言，跳过步骤追溯分析 |
 
 ### 问题
 
-- **断言 2 - LLM_DEPENDENT**: 非功能性/LLM辅助断言，不可静态评估: 报错信息必须同时包含字段名、所在行号、正确写法示例三项中的至少两项
+**断言 2 — LLM_DEPENDENT**⚠️: 非功能性/LLM 辅助断言，跳过步骤追溯分析
 
 ---

@@ -1,48 +1,34 @@
 # SEC-FORK-01-001
 
-- 标题: fork PR 触发 pull_request 时不可读取项目 secrets
-- 维度: 安全性 | 优先级: P0
-- 评级: 断言一致
+- **标题**: fork PR 触发 pull_request 时不可读取项目 secrets
+- **维度**: 安全性
+- **优先级**: P0
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么（规格）
+## 1. 想测什么
 
-用例 ID:   SEC-FORK-01-001
-维度标签:   [security]
-维度:      安全性
-优先级:    P0
-溯源意图:  INTENT-SEC-001
-参照来源:  inputs/security-knowledge/issues.md; inputs/github-reference/security/
-母意图:    —
-标题:      fork PR 触发 pull_request 时不可读取项目 secrets
+本用例验证：**fork PR 触发 pull_request 时不可读取项目 secrets**
 
-前置条件:
-  - 仓库配置了 secret DEPLOY_TOKEN
-  - 存在一个来自外部 fork 的 PR
+- 触发事件: `pull_request`
+- 规格引用: INTENT-SEC-001
 
-操作步骤:
-  1. 以 fork 贡献者身份提交一个引用 secrets.DEPLOY_TOKEN 的 workflow
-  2. 在 fork PR 场景下触发该 workflow
+通过标准：
+1. type=negative, target=run_logs, must_not_contain_secret="DEPLOY_TOKEN"
+2. type=positive, target=run_status, equals=completed_or_blocked
 
-预期结果:
-  - 系统阻止 fork PR 访问 DEPLOY_TOKEN，引用时返回空值或安全报错
-  - 运行日志中不出现 DEPLOY_TOKEN 明文
+## 2. 做了什么
 
-验证点:
-  - [负向] 日志不含 DEPLOY_TOKEN 明文
-  - [正向] fork PR 的 job 中 secrets 引用为空或不可访问
+workflow 中每个步骤的实际行为：
 
-清理:      重置 fixture 仓库
+| # | 步骤名 | 命令/uses | 条件 (if) | 实质 |
+|---|--------|-----------|------|------|
+| 1 | Try access secret | `echo "secret value is ${{ secrets.DEPLOY_TOKEN }}"` |  | ✅ GENUINE |
+| 2 | Print env | `env | grep DEPLOY_TOKEN || echo "not found"` |  | ✅ GENUINE |
 
-## 2. 实际做了什么（实现）
-
-| # | 步骤名 | 关键内容 | 实质逻辑 |
-|---|--------|------|:---:|
-| 1 | Try access secret | run: echo "secret value is ${{ secrets.DEPLOY_TOKEN }}" | 是 |
-| 2 | Print env | run: env \| grep DEPLOY_TOKEN \|\| echo "not found" | 是 |
-
-<details><summary>完整 workflow YAML</summary>
+<details>
+<summary>完整 workflow YAML</summary>
 
 ```yaml
 on:
@@ -65,22 +51,19 @@ jobs:
 
 ## 3. 触发与运行环境
 
-| 字段 | 值 |
-|------|----|
-| event | pull_request |
-| as | untrusted_contributor |
+| 触发事件 | `pull_request` |
+| 触发身份 | `untrusted_contributor` |
+| Repo 环境 | `with-secrets` |
+| Secrets | `['DEPLOY_TOKEN']` |
+| 故障注入 | 无 |
 
-## 4. 规格 vs 实现对照
+## 4. 能否达成目标
 
-| 验证点 | 覆盖? | 说明 |
-|--------|:-----:|------|
-| [负向] 日志不含 DEPLOY_TOKEN 明文 | ✅ COVERED | 步骤1 使用 `${{ secrets.DEPLOY_TOKEN }}` 真实访问 secret，断言 `must_not_contain_secret` 验证 secret 值不出现 |
-| [正向] fork PR 的 job 中 secrets 引用为空或不可访问 | ✅ COVERED | 步骤2 通过 `env \| grep DEPLOY_TOKEN \|\| echo "not found"` 真实检测环境变量，断言 `run_status equals completed_or_blocked` 验证 job 可正常完成 |
+逐条断言对比步骤实际输出：
 
-### 问题
+| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+|---|------|------|------|------|------|
+| 1 | run_logs | negative | !secret=DEPLOY_TOKEN | ✅ GENUINE | 步骤使用 DEPLOY_TOKEN，secret 脱敏断言有验证对象（故意暴露测试） |
+| 2 | run_status | positive | equals=completed_or_blocked | ✅ GENUINE | 检查步骤是否能完成或被平台阻止 — 有实际观测价值 |
 
-无。两个验证点均被步骤真实覆盖。
-
-## 5. 评级理由
-
-步骤通过 `${{ }}` 表达式真实访问 secrets 并通过 shell 命令检测环境变量，断言直接观测这些行为的结果。所有验证点均 COVERED。
+---
