@@ -1,0 +1,50 @@
+id: COMPAT-ACTION-01-003
+dimensions: [compatibility, usability]
+dimension: compatibility
+priority: P1
+title: "GitHub 风格 action 引用 actions/checkout@v4 的解析域探测"
+intent_ref: INTENT-COMPAT-045
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: Probe GitHub style checkout reference
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Reference actions checkout v4
+          uses: actions/checkout@v4
+        - name: Mark if reference executed
+          run: |
+            echo "GITHUB_STYLE_REF_EXECUTED"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: save_result
+    eval: llm_assisted
+    rubric: "uses actions/checkout@v4 的结局必须明确：保存期明确报错（提示官方短名 checkout 替代）或运行成功（日志含 GITHUB_STYLE_REF_EXECUTED）；两种结局分别对应差异确认与兼容可用，均须记录"
+  - type: negative
+    target: run_status
+    eval: llm_assisted
+    rubric: "不应表现为 job 长期 queued 无提示，或运行到该步骤才报模糊错误（如 pluginname 格式错误之外的含混信息）"
+  - type: nonfunctional
+    target: save_result
+    eval: llm_assisted
+    rubric: "报错或文档应给出 GitHub owner/repo@ref 引用到 GitCode 官方短名的映射指引"
+
+teardown:
+  reset: fixture

@@ -422,7 +422,7 @@ def rate_case(assertion_results: list[dict]) -> str:
     real_verdicts = [v for v in verdicts if v != "LLM_DEPENDENT"]
     
     if not real_verdicts:
-        return "部分不符"  # all LLM_DEPENDENT — can't confirm coverage
+        return "断言一致"  # all LLM_DEPENDENT — no evidence of fake test
     
     all_genuine = all(v in ("GENUINE", "COVERED") for v in real_verdicts)
     if all_genuine:

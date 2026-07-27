@@ -3,8 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P2
 title: "matrix 三维展开不被支持时的差异"
-intent_ref: INTENT-COMPAT-007
-
+intent_ref: INTENT-COMPAT-NEW-007
 setup:
   repo_fixture: default
   secrets: []

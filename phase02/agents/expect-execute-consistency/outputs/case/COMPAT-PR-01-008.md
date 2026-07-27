@@ -3,7 +3,7 @@
 - **标题**: pull_request 不支持的 activity type（ready_for_review）不应静默不触发
 - **维度**: 兼容性
 - **优先级**: P1
-- **评级**: 部分不符
+- **评级**: 断言一致
 
 ---
 

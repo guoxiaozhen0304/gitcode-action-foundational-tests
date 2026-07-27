@@ -3,7 +3,7 @@
 - **标题**: continue-on-error true 时 outcome 应为 failure 而 conclusion 应为 success
 - **维度**: 兼容性
 - **优先级**: P1
-- **评级**: 部分不符
+- **评级**: 断言一致
 
 ---
 

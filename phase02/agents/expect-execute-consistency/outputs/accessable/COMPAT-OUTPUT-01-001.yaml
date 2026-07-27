@@ -3,8 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P1
 title: "跨 Job 引用未声明 output 时返回空值的差异"
-intent_ref: INTENT-COMPAT-006
-
+intent_ref: INTENT-COMPAT-NEW-006
 setup:
   repo_fixture: default
   secrets: []

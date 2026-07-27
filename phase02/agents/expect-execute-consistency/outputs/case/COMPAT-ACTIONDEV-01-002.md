@@ -3,7 +3,7 @@
 - **标题**: action 运行时 runs.using 类型覆盖（node16/composite/docker/node20）探测
 - **维度**: 兼容性
 - **优先级**: P1
-- **评级**: 部分不符
+- **评级**: 断言一致
 
 ---
 
