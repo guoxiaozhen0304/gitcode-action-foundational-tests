@@ -920,9 +920,9 @@ key:sec-cache-1785145768
 ---
 
 ## 失败分诊 · SEC-PERM-01-003 · 未声明 permissions 时 ATOMGIT_TOKEN 默认权限必须最小化（read-only）confirmed
-**重跑 (dispatch)**: FAILED · [53798629...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/53798629398644e58ee9c8df3271ab66)
+https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/3f868901d4cf4e4786e8c3fb3e634727/job/4e6004a85c1049e7bc49bf82e887e790
 
-**判定结果**: FAIL
+**判定结果**: SUCCESS
 **失败断言**: assertions[0] (leak, negative) — PASS (plaintext 'write_permission_granted' 0 hits ✓); assertions[1] (run_status, positive) — 预期 COMPLETED，实际 FAILED
 
 **根因初判**: 产品缺陷（ATOMGIT_TOKEN 缺失 — 同 SEC-DEFPERM-01-001）
@@ -991,7 +991,7 @@ key:sec-cache-1785145768
 
 ---
 
-## 失败分诊 · SEC-PRTGT-01-001 · pull_request_target 下显式 checkout 不可信 PR 时 secrets 仍应受控 
+## 失败分诊 · SEC-PRTGT-01-001 · pull_request_target 下显式 checkout 不可信 PR 时 secrets 仍应受控 dont  understand
 **重跑 (dispatch)**: FAILED · [ffed6e13...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/a9dd49e838184598ae4bb38e259a113d/job/2119e73ef3ca4b2e84f6e55ea099a9fe)
 [PR](https://gitcode.com/ComputingActionTest/foundational-tests/pull/26)
 
