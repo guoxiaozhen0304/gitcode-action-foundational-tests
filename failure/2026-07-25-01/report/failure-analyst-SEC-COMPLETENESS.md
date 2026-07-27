@@ -1281,7 +1281,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-WCMD-01-001 · Workflow 命令（如 add-mask）的响应本身不可泄露被遮蔽前的 secret 值
+## 失败分诊 · SEC-WCMD-01-001 · Workflow 命令（如 add-mask）的响应本身不可泄露被遮蔽前的 secret 值 confirm
 **重跑 (dispatch)**: COMPLETED · [ae13726e...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/ae13726eb7b642518133c49fdcc49e9d)
 
 **判定结果**: FAIL
@@ -1314,7 +1314,7 @@ fatal: Authentication failed for 'https://atomgit.com/ComputingActionTest/founda
 
 ---
 
-## 失败分诊 · SEC-WCMD-01-002 · 跨运行 artifact 必须被视为不可信数据
+## 失败分诊 · SEC-WCMD-01-002 · 跨运行 artifact 必须被视为不可信数据 confirm
 **重跑 (dispatch)**: FAILED · [12c6941c...](https://gitcode.com/ComputingActionTest/foundational-tests/actions/runs/12c6941c211a4361aec29afc4f9e6aaa)
 
 **判定结果**: FAIL
