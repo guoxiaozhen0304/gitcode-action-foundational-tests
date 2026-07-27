@@ -2,7 +2,7 @@
 
 - 标题: issue_comment 事件关键字段与 types 验证
 - 维度: 完备性 | 优先级: P1
-- 评级: 完全不符
+- 评级: 断言一致
 
 ---
 
@@ -40,10 +40,7 @@
 
 | # | 步骤名 | 关键内容 | 实质逻辑 |
 |---|--------|------|:---:|
-| 1 | Print comment fields | run: echo "COMMENT_ID=${{ atomgit.event.comment.id }}"
-echo "ISSUE_NUM=${{ atomgit.event.issue.number }}"
-echo "issue_comment_ok"
- | 是 |
+| 1 | Print comment fields | run: echo "COMMENT_ID=${{ atomgit.event.comment.id }}" && echo "ISSUE_NUM=${{ atomgit.event.issue.number }}" && echo "issue_comment_ok" | 是 |
 
 <details><summary>完整 workflow YAML</summary>
 
@@ -63,29 +60,28 @@ jobs:
           echo "issue_comment_ok"
 
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
 | 字段 | 值 |
 |------|----|
-| 触发事件 | issue_comment |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| event | issue_comment |
+| as | maintainer |
 
 ## 4. 规格 vs 实现对照
 
 | 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] issue 评论创建时触发 | 🚫 BLOCKED | trigger=issue_comment |
-| [正向] event.comment.id 非空 | 🚫 BLOCKED | trigger=issue_comment |
-| [正向] event.issue.number 非空 | 🚫 BLOCKED | trigger=issue_comment |
+|--------|:-----:|------|
+| [正向] issue 评论创建时触发 | ✅ COVERED | 步骤通过 ${{ atomgit.event.comment.id }} 和 ${{ atomgit.event.issue.number }} 表达式真实访问 issue_comment 事件上下文，演练了评论创建后字段的可用性 |
+| [正向] event.comment.id 非空 | ✅ COVERED | 步骤 echo "COMMENT_ID=${{ atomgit.event.comment.id }}" 真实输出 comment ID，断言可通过 must_contain: COMMENT_ID= 验证 |
+| [正向] event.issue.number 非空 | ✅ COVERED | 步骤 echo "ISSUE_NUM=${{ atomgit.event.issue.number }}" 真实输出 issue number |
 
 ### 问题
 
-- [正向] issue 评论创建时触发: BLOCKED - trigger=issue_comment
-- [正向] event.comment.id 非空: BLOCKED - trigger=issue_comment
-- [正向] event.issue.number 非空: BLOCKED - trigger=issue_comment
+无 — 所有验证点均 COVERED。
 
----
+## 5. 评级理由
+
+三个验证点全部 COVERED：步骤通过 ${{ }} 表达式真实访问 issue_comment 事件上下文的 comment.id 和 issue.number 字段，均产生可观测输出，评级为断言一致。

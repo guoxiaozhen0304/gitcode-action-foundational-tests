@@ -1,0 +1,493 @@
+[
+  {
+    "case_id": "COMP-ARTIFACT-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"da8b24ae08f1bb9ffe5f32826d796710\"}"
+  },
+  {
+    "case_id": "COMP-ARTIFACT-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"953e5cc41d8a91c4a6955b4a78114013\"}"
+  },
+  {
+    "case_id": "COMP-ARTIFACT-01-003",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"7fd6742cf49253a8b9b088f6ed3b1412\"}"
+  },
+  {
+    "case_id": "COMP-ATOMGIT-01-047",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"dadb8ebe24e4fec6f9947424403d359c\"}"
+  },
+  {
+    "case_id": "COMP-ATOMGIT-01-048",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"5dcb89ece98ad6064778314b72e7b207\"}"
+  },
+  {
+    "case_id": "COMP-ATOMGIT-01-049",
+    "status": "ERROR_WAF",
+    "diagnostics": [],
+    "http_status": 418
+  },
+  {
+    "case_id": "COMP-BOUND-01-084",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"f15d3e2e2b5093ae640f44c628cc9be9\"}"
+  },
+  {
+    "case_id": "COMP-BOUND-01-086",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"a3db2fb59231ecfb3b2f7db718049bc0\"}"
+  },
+  {
+    "case_id": "COMP-BOUND-01-087",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"67cb13a2b6029e163b18666ad284b961\"}"
+  },
+  {
+    "case_id": "COMP-BOUND-01-088",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"192aab34e421069aef363f9bfd648d95\"}"
+  },
+  {
+    "case_id": "COMP-CACHE-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"b20d114c832df59b204b8f1814d60ce0\"}"
+  },
+  {
+    "case_id": "COMP-CACHE-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"a39ca8c7618ebb7ba1297678aa2d9448\"}"
+  },
+  {
+    "case_id": "COMP-CALL-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"093ceaff6b4d17fdc23ea37e1a9d0d6c\"}"
+  },
+  {
+    "case_id": "COMP-CTX-01-051",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"7715cb440eeb1853ce7f346170a50e68\"}"
+  },
+  {
+    "case_id": "COMP-CTX-01-052",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"79f30cbd4ec1ee0bed985c10a94ac7ff\"}"
+  },
+  {
+    "case_id": "COMP-CTX-01-053",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"84d897f9300f5d1d230e0bf2124b71bf\"}"
+  },
+  {
+    "case_id": "COMP-DIR-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"e68a02607cea8ccff046308aa545870b\"}"
+  },
+  {
+    "case_id": "COMP-DIR-01-002",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMP-ENVCTX-01-050",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"5eae835d787bd1bb5da244f3356d8a89\"}"
+  },
+  {
+    "case_id": "COMP-EXPR-01-054",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"b2805d9341794fc0fb79d9407f0c9169\"}"
+  },
+  {
+    "case_id": "COMP-EXPR-01-055",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"d210ebd6861a58e6c2317a71609a6f6e\"}"
+  },
+  {
+    "case_id": "COMP-EXPR-01-056",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"604d9dc73a1731e12e70e2f01607a1c2\"}"
+  },
+  {
+    "case_id": "COMP-EXPR-01-057",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"54ab0d1530296932022d5cf29c0b0945\"}"
+  },
+  {
+    "case_id": "COMP-EXPR-01-058",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"a507c0b7c69d6418300a51fa3f914aa9\"}"
+  },
+  {
+    "case_id": "COMP-ISOLATION-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"96a88ab704730610a95c1fca80b9cd7e\"}"
+  },
+  {
+    "case_id": "COMP-ISOLATION-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"2f8fb7fd26d9768365fbd617e82fea50\"}"
+  },
+  {
+    "case_id": "COMP-JOB-01-066",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"2174d02e365b8e87b3327ddb445e25e0\"}"
+  },
+  {
+    "case_id": "COMP-JOB-01-067",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"48b2f420511dac02466e1fb6c0a316e9\"}"
+  },
+  {
+    "case_id": "COMP-JOB-01-068",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"6d854f40663c282a5af8c65f3cb058a0\"}"
+  },
+  {
+    "case_id": "COMP-PERMS-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"44d191fc6ddd89e42aa2c12e9d00fb8b\"}"
+  },
+  {
+    "case_id": "COMP-PERMS-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"d53971c2cd4764e50834b466310c58db\"}"
+  },
+  {
+    "case_id": "COMP-PUSH-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"a35c103edeab50883b30411cdc2e2d1b\"}"
+  },
+  {
+    "case_id": "COMP-PUSH-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"8b2de94ec9ad929851d1221f81af53f1\"}"
+  },
+  {
+    "case_id": "COMP-PUSH-01-003",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"2ced742db6369b9bdad0a78142e97f9f\"}"
+  },
+  {
+    "case_id": "COMP-RERUN-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"5a37cf6447c200ab03be9807e3786d71\"}"
+  },
+  {
+    "case_id": "COMP-RERUN-01-003",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"e287ca5e4a83364fe36217d763b04ecb\"}"
+  },
+  {
+    "case_id": "COMP-RUNNER-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"103d9bff5b9be5c9410dfdaab76352ec\"}"
+  },
+  {
+    "case_id": "COMP-RUNNER-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"2d46127cc975ca9a5752e96ec66164a6\"}"
+  },
+  {
+    "case_id": "COMP-RUNNER-01-080",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"c379ea8b3a4ad85fa51e1aa5c1cc727e\"}"
+  },
+  {
+    "case_id": "COMP-SCRIPT-01-081",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"d524b340d36209abc7567da867220118\"}"
+  },
+  {
+    "case_id": "COMP-SCRIPT-01-082",
+    "status": "ERROR_WAF",
+    "diagnostics": [],
+    "http_status": 418
+  },
+  {
+    "case_id": "COMP-STAGES-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"b3ac9c0b7dd6fc1caadd3f175969bc0f\"}"
+  },
+  {
+    "case_id": "COMP-STAGES-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"b63145f485cb0ef056da8ef198548e4b\"}"
+  },
+  {
+    "case_id": "COMP-STAGES-01-003",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"8956b1e58b123f97a44535e0b37205f2\"}"
+  },
+  {
+    "case_id": "COMP-STATUS-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"7fe1d23631282743a05f0d7696096cb1\"}"
+  },
+  {
+    "case_id": "COMP-STATUS-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"2f65cfb8f527744fb241949b64efb490\"}"
+  },
+  {
+    "case_id": "COMP-STEP-01-069",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"4ec5184893361531c546582c96b61a1c\"}"
+  },
+  {
+    "case_id": "COMP-STEP-01-070",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"0dad33217d604d8f63e1248ea86df922\"}"
+  },
+  {
+    "case_id": "COMP-STEP-01-071",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"6bd2bcc9856dc6222cdd82e567f92245\"}"
+  },
+  {
+    "case_id": "COMP-SUMMARY-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"6226c86caf30ccb714673a45c76094ed\"}"
+  },
+  {
+    "case_id": "COMP-SUMMARY-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"724adc8bd6f52fa4fca974b6aaa55e13\"}"
+  },
+  {
+    "case_id": "COMP-SYSENV-01-059",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"4b74e9961a7552656e11ec17376d547d\"}"
+  },
+  {
+    "case_id": "COMP-SYSENV-01-060",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"8dfd96726480075abbd4593ac8ddcc30\"}"
+  },
+  {
+    "case_id": "COMP-TIMEOUT-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"939e5891a69b9d200b74f0f562f12737\"}"
+  },
+  {
+    "case_id": "COMP-TIMEOUT-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"035b04abfa036e0214d4a33a9b4da83e\"}"
+  },
+  {
+    "case_id": "COMP-TRIG-01-072",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"6955d50e34296cd32a89019b1f0bb921\"}"
+  },
+  {
+    "case_id": "COMP-TRIG-01-074",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"ffbcf946340ae2a06b592583d0d7cb33\"}"
+  },
+  {
+    "case_id": "COMP-TRIG-01-077",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"540ee980b12c941bddcf54d2f1458a3e\"}"
+  },
+  {
+    "case_id": "COMP-TRIG-01-078",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"ed94fb644ed586d8c2383a5b0ee242b5\"}"
+  },
+  {
+    "case_id": "COMP-TRIG-01-079",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"a4b71b0a0af65b510ad698dd7d599d3d\"}"
+  },
+  {
+    "case_id": "COMP-UNKNOWN-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"8a9d88099abb2743d4c2b1aff3fa1442\"}"
+  },
+  {
+    "case_id": "COMP-VARREF-01-083",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"147d152a4e67d908241da7b2ea0ef176\"}"
+  },
+  {
+    "case_id": "COMP-WFLOW-01-061",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"19d38518ae62f727974216f5942ffc55\"}"
+  },
+  {
+    "case_id": "COMP-WFLOW-01-062",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"32425e6ca5d46d9618b5498f01062d1e\"}"
+  },
+  {
+    "case_id": "COMP-WFLOW-01-063",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"1f412cf13027b07bc70f048a3a481463\"}"
+  },
+  {
+    "case_id": "COMP-WFLOW-01-064",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"fc11c0bbaa527ed5c4e00182acfe71d1\"}"
+  },
+  {
+    "case_id": "COMP-WFLOW-01-065",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"77ef869de72bbd8404577a15a8699c17\"}"
+  },
+  {
+    "case_id": "COMPAT-EXPR-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"0018a8b1e89860a61e1f5c28ea39fca8\"}"
+  },
+  {
+    "case_id": "COMPAT-EXPR-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"f9a1ad0dd7dcd4966ada9703207ac592\"}"
+  },
+  {
+    "case_id": "COMPAT-EXPR-01-003",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"93ea77b825477f375d7acae1d7bf2a06\"}"
+  },
+  {
+    "case_id": "COMPAT-EXPR-01-004",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"bca153445596d681cac80e542ca8305b\"}"
+  },
+  {
+    "case_id": "COMPAT-EXPR-01-005",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"ead920158773220a6280918710de6346\"}"
+  },
+  {
+    "case_id": "COMPAT-EXPR-01-006",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"a775c1e5f29eacd400c27741405e6413\"}"
+  },
+  {
+    "case_id": "COMPAT-EXPR-01-007",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"37f594417ecb3c4eec47b2d4c4568811\"}"
+  },
+  {
+    "case_id": "COMPAT-IF-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"aae61775e2d9d2b07f3ba31f401c7a99\"}"
+  },
+  {
+    "case_id": "COMPAT-IF-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"9307f7d19569f31ce8ce54a541764baf\"}"
+  },
+  {
+    "case_id": "COMPAT-INPUTS-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"84af96cd406f117a5dbfb005f62949d9\"}"
+  },
+  {
+    "case_id": "COMPAT-NEST-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"802931a3c14a551717d2eac7b707ca84\"}"
+  },
+  {
+    "case_id": "COMPAT-PATHS-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"b3dc07ac54415fa0b25efeb6976ce112\"}"
+  },
+  {
+    "case_id": "COMPAT-PERM-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"6f09bb6a7039bafe33652aa03df34f1f\"}"
+  },
+  {
+    "case_id": "COMPAT-SHELL-01-001",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"9ea549d0d2d1826e9e830f2f8d8dd914\"}"
+  },
+  {
+    "case_id": "COMPAT-SHELL-01-002",
+    "status": "ERROR",
+    "diagnostics": [],
+    "raw": "{\"error_code\": 420, \"error_code_name\": \"NOT_LOGIN_ERROR\", \"error_message\": \"未认证或已过期\", \"trace_id\": \"c0bc05588912e9a4288b59af766b9195\"}"
+  }
+]

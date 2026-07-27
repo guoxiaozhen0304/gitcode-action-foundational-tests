@@ -2,7 +2,7 @@
 
 - 标题: pull_request 事件关键字段与 types 验证
 - 维度: 完备性 | 优先级: P1
-- 评级: 完全不符
+- 评级: 部分不符
 
 ---
 
@@ -40,9 +40,7 @@
 
 | # | 步骤名 | 关键内容 | 实质逻辑 |
 |---|--------|------|:---:|
-| 1 | Print PR fields | run: echo "PR_NUM=${{ atomgit.event.pull_request.number }}"
-echo "PR_TITLE=${{ atomgit.event.pull_request.title }}"
-echo "PR_STATE=${{ atomgit.event.pull_r | 是 |
+| 1 | Print PR fields | run: echo "PR_NUM=${{ atomgit.event.pull_request.number }}" && echo "PR_TITLE=${{ atomgit.event.pull_request.title }}" && echo "PR_STATE=${{ atomgit.event.pull_request.state }}" && echo "pr_ok" | 是 |
 
 <details><summary>完整 workflow YAML</summary>
 
@@ -64,29 +62,28 @@ jobs:
           echo "pr_ok"
 
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
 | 字段 | 值 |
 |------|----|
-| 触发事件 | pull_request |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| event | pull_request |
+| as | maintainer |
 
 ## 4. 规格 vs 实现对照
 
 | 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] PR 创建时触发 workflow | 🚫 BLOCKED | trigger=pull_request |
-| [正向] event.pull_request.number 非空 | 🚫 BLOCKED | trigger=pull_request |
-| [正向] types 仅匹配指定类型 | 🚫 BLOCKED | trigger=pull_request |
+|--------|:-----:|------|
+| [正向] PR 创建时触发 workflow | ✅ COVERED | 步骤通过 ${{ atomgit.event.pull_request.number }} 表达式访问 PR 事件上下文，真实演练了 pull_request 触发后的字段可用性 |
+| [正向] event.pull_request.number 非空 | ✅ COVERED | 步骤 echo "PR_NUM=${{ atomgit.event.pull_request.number }}" 真实输出 PR number，断言可通过 must_contain: PR_NUM= 验证 |
+| [正向] types 仅匹配指定类型 | ❌ MISSING | 步骤仅打印当前事件的字段值，无任何逻辑对比或验证 types 过滤（如检测不在 [open, update, reopen] 中的 type 是否被拒绝） |
 
 ### 问题
 
-- [正向] PR 创建时触发 workflow: BLOCKED - trigger=pull_request
-- [正向] event.pull_request.number 非空: BLOCKED - trigger=pull_request
-- [正向] types 仅匹配指定类型: BLOCKED - trigger=pull_request
+- [正向] types 仅匹配指定类型: MISSING — 步骤未实现 type 过滤验证逻辑，仅被动打印当前事件上下文字段。要验证 types 过滤，需要多场景对比或条件判断
 
----
+## 5. 评级理由
+
+三个验证点中两个 COVERED（步骤通过 ${{ }} 表达式真实访问 PR 事件上下文），一个 MISSING（types 过滤验证未实现），评级为部分不符。

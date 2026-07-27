@@ -2,13 +2,12 @@
 
 - 标题: fork PR 写入的 cache 必须不可被主仓后续 workflow 读取
 - 维度: 安全性 | 优先级: P0
-- 评级: BLOCKED
+- 评级: 部分不符
 
 ---
 
 ## 1. 想测什么（规格）
 
-```
 用例 ID:   SEC-CACHE-01-001
 维度标签:   [security]
 维度:      安全性
@@ -34,13 +33,34 @@
   - [非功能] 缓存命中率监控应显示跨仓库命中为 0
 
 清理:      重置 fixture 仓库
-```
+
 
 ## 2. 实际做了什么（实现）
 
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | Write cache (cache-write) | cache | GENUINE |
+| # | 步骤名 | 关键内容 | 实质逻辑 |
+|---|--------|------|:---:|
+| 1 | Write cache | uses: cache with path=./node_modules, key=test-cache-key | 是 |
+
+<details><summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  cache-write:
+    name: Write cache from fork
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Write cache
+        uses: cache
+        with:
+          path: ./node_modules
+          key: test-cache-key
+
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
@@ -48,12 +68,18 @@
 |------|----|
 | event | pull_request |
 | as | untrusted_contributor |
-| fault_injection | None |
 
 ## 4. 规格 vs 实现对照
 
+| 验证点 | 覆盖? | 说明 |
+|--------|:-----:|------|
+| [负向] 主仓 workflow 在 fork PR 写入 cache 后，绝不应命中到该缓存 | ✅ COVERED | 步骤以 fork 贡献者身份真实写入 cache（uses: cache），断言 target=cache_restore, must_not_hit=fork_cache_key 可验证主仓不可读取 |
+| [非功能] 缓存命中率监控应显示跨仓库命中为 0 | 🔄 UNVERIFIABLE | 监控指标为平台级可观测性度量，单次 workflow 步骤无法产出这类聚合监控数据 |
+
 ### 问题
 
-- 触发事件 `pull_request` 无 dispatch API，无法在自动化框架中验证
+- [非功能] 缓存命中率监控应显示跨仓库命中为 0: UNVERIFIABLE — 缓存命中率是平台级监控指标，不是单个 workflow 步骤能产出或验证的输出
 
----
+## 5. 评级理由
+
+两个验证点中一个 COVERED（步骤通过 uses: cache 真实写入缓存，为安全隔离断言的验证提供前提），一个 UNVERIFIABLE（监控指标不可通过步骤产出），评级为部分不符。

@@ -38,8 +38,7 @@
 
 | # | 步骤名 | 关键内容 | 实质逻辑 |
 |---|--------|------|:---:|
-| 1 | Echo scheduled | run: echo "should not run"
- | 否 |
+| 1 | Echo scheduled | run: echo "should not run" | 否 |
 
 <details><summary>完整 workflow YAML</summary>
 
@@ -50,34 +49,35 @@ on:
 jobs:
   verify:
     name: Verify short interval rejection
-    runs-on: [dedicate-hosted, x64, large]
+    runs-on: [ubuntu-latest, x64, small]
     steps:
       - name: Echo scheduled
         run: |
           echo "should not run"
 
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
 | 字段 | 值 |
 |------|----|
-| 触发事件 | schedule |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| event | schedule |
+| as | maintainer |
 
 ## 4. 规格 vs 实现对照
 
 | 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] 不应允许每分钟触发的 schedule | 🚫 BLOCKED | trigger=schedule |
-| [非功能] 错误信息应说明最短间隔限制 | 🚫 BLOCKED | trigger=schedule |
+|--------|:-----:|------|
+| [负向] 不应允许每分钟触发的 schedule | 🔄 UNVERIFIABLE | 平台级校验（workflow 提交时拒绝）发生在步骤执行之前，步骤无法自证"被拒绝"是其产出 |
+| [非功能] 错误信息应说明最短间隔限制 | ❌ MISSING | 步骤仅 echo 字面量 "should not run"，无任何逻辑输出错误信息 |
 
 ### 问题
 
-- [负向] 不应允许每分钟触发的 schedule: BLOCKED - trigger=schedule
-- [非功能] 错误信息应说明最短间隔限制: BLOCKED - trigger=schedule
+- [负向] 不应允许每分钟触发的 schedule: UNVERIFIABLE — 该验证依赖平台在 workflow 提交时的静态校验，不是 workflow 步骤在运行时能验证的行为
+- [非功能] 错误信息应说明最短间隔限制: MISSING — 步骤仅 echo 固定字符串，无 ${{ }} 表达式、无 if 条件、无 uses action、无实质命令
 
----
+## 5. 评级理由
+
+两个验证点分别为 UNVERIFIABLE 和 MISSING，步骤仅 echo 固定字符串，未执行任何实质逻辑，评级为完全不符。

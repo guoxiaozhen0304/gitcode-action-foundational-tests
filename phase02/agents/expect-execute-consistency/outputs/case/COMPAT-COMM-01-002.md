@@ -2,7 +2,7 @@
 
 - 标题: issue_comment types:created 不支持时应给出降级指引
 - 维度: 兼容性 | 优先级: P1
-- 评级: BLOCKED
+- 评级: 完全不符
 
 ---
 
@@ -40,9 +40,28 @@
 
 ## 2. 实际做了什么（实现）
 
-| # | 步骤名 (job) | 关键内容 | 分类 |
-|---|--------|------|------|
-| 1 | Echo trigger info (test-comment-created) | echo "event_name=${{ atomgit.event_name }}" echo "done"  | GENUINE |
+| # | 步骤名 | 关键内容 | 实质逻辑 |
+|---|--------|------|:---:|
+| 1 | Echo trigger info | run: echo "event_name=${{ atomgit.event_name }}" / echo "done" | 是 |
+
+<details><summary>完整 workflow YAML</summary>
+
+```yaml
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  test-comment-created:
+    name: Test issue comment created type
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: Echo trigger info
+        run: |
+          echo "event_name=${{ atomgit.event_name }}"
+          echo "done"
+```
+
+</details>
 
 ## 3. 触发与运行环境
 
@@ -54,8 +73,16 @@
 
 ## 4. 规格 vs 实现对照
 
+| 验证点 | 覆盖? | 说明 |
+|--------|:-----:|------|
+| [负向] 不通过静默忽略（types 配置失效） | 🔄 UNVERIFIABLE | 步骤仅输出 `event_name=issue_comment`，无法区分 types 被正确过滤还是被静默忽略；单次 workflow 执行无法证明否定行为 |
+| [正向] 报错信息包含可接受的 types 列表 | ❌ MISSING | 步骤只 echo 事件名和 "done"，无任何步骤产出报错信息；若 types:created 被支持则无报错产生，断言目标不可达 |
+
 ### 问题
 
-- 触发事件 `issue_comment` 无 dispatch API，无法在自动化框架中验证
+- **[负向] 不通过静默忽略**: UNVERIFIABLE — 步骤仅 echo `event_name=issue_comment`，无论 types 是被正确处理还是静默忽略，步骤的输出完全相同，单次运行无法证明平台未静默忽略配置。
+- **[正向] 报错信息包含可接受的 types 列表**: MISSING — 无任何步骤产生 error_message 输出；workflow 可能正常运行（types 已被支持），则根本不会产生报错信息。
 
----
+## 5. 评级理由
+
+两个验证点均未覆盖：[负向] 为 UNVERIFIABLE（单次运行无法证明否定行为），[正向] 为 MISSING（无步骤产生报错信息）。无任何 COVERED 项，整体判定为**完全不符**。

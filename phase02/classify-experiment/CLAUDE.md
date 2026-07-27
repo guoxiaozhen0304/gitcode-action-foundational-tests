@@ -31,13 +31,13 @@ python3 batch_validate.py
 | 触发事件 | API 调用链 | 平台是否触发 | 分类标签 |
 |----------|-----------|-------------|---------|
 | `push` | `git push` | ✅ 已验证 | `scriptable` |
-| `pull_request` | `POST /pulls` | ❌ API 打通，平台不触发 | `api_blocked` |
-| `pull_request_target` | `POST /pulls` (fork) | ❌ API 打通，平台不触发 | `api_blocked` |
-| `fork_pr` | `POST /forks` + `POST /pulls` | ❌ API 打通，平台不触发 | `api_blocked` |
-| `issue_comment` | `POST /issues` + `POST /comments` | ❌ API 打通，平台不触发 | `api_blocked` |
-| `pull_request_comment` | `POST /comments` (PR) | ❌ API 打通，平台不触发 | `api_blocked` |
+| `pull_request` | `POST /pulls` | ✅ 已验证 | `scriptable` |
+| `pull_request_target` | `POST /pulls` (fork) | ✅ 已验证 | `scriptable` |
+| `fork_pr` | `POST /forks` + `POST /pulls` | ✅ 已验证 | `scriptable` |
+| `issue_comment` | `POST /issues` + `POST /comments` | ✅ 已验证 | `scriptable` |
+| `pull_request_comment` | `POST /comments` (PR) | ✅ 已验证 | `scriptable` |
 | `schedule` | push cron + wait | ⚠️ 变通可行但不稳定 | `api_blocked` |
-| `workflow_dispatch` / `manual` | dispatch API | ❓ 未验证 | `untested` |
+| `workflow_dispatch` / `manual` | ✅ 已验证 | `scriptable` |
 | `tag` | `git tag` + push | ❓ 未验证 | `untested` |
 
 **原则**: 

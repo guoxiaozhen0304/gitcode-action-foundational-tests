@@ -23,7 +23,7 @@ workflow: |
             git config --global user.name "Your Name"
             git add test.txt
             git commit -m test
-            git push origin main || echo push denied as expected
+            git push origin main 
 trigger:
   event: workflow_dispatch
   as: maintainer

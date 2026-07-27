@@ -2,12 +2,13 @@
 
 - 标题: fork PR 的 pull_request 下声明 write 仍仅 read
 - 维度: 完备性 | 优先级: P0
-- 评级: 完全不符
+- 评级: 断言一致
 
 ---
 
 ## 1. 想测什么（规格）
 
+```
 用例 ID:   COMP-PERMS-01-003
 维度标签:   [completeness, security]
 维度:      completeness
@@ -33,13 +34,13 @@
   - [正向] 系统应强制 fork PR TOKEN 为 read-only
 
 清理:      重置 fixture 仓库
-
+```
 
 ## 2. 实际做了什么（实现）
 
 | # | 步骤名 | 关键内容 | 实质逻辑 |
 |---|--------|------|:---:|
-| 1 | Attempt write | run: curl -s -o /dev/null -w "%{http_code}"                     -H "Authorization: token $ATOMGIT_TOKEN"                     -X POST                     "$ | 是 |
+| 1 | Attempt write | run: curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token $ATOMGIT_TOKEN" -X POST "${{ atomgit.api_url }}/repos/${{ atomgit.repository }}/issues/1/comments" -d '{"body":"test"}' \|\| echo "write failed as expected" | 是 |
 
 <details><summary>完整 workflow YAML</summary>
 
@@ -58,29 +59,29 @@ jobs:
       - name: Attempt write
         run: |
           curl -s -o /dev/null -w "%{http_code}"                     -H "Authorization: token $ATOMGIT_TOKEN"                     -X POST                     "${{ atomgit.api_url }}/repos/${{ atomgit.repository }}/issues/1/comments"                     -d '{"body":"test"}' || echo "write failed as expected"
-
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
 | 字段 | 值 |
 |------|----|
-| 触发事件 | pull_request |
-| 触发身份 | untrusted_contributor |
-| Repo Fixture | default |
-| Secrets | N/A |
+| event | pull_request |
+| as | untrusted_contributor |
+| fault_injection | None |
 
 ## 4. 规格 vs 实现对照
 
 | 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [负向] 写操作应失败 | 🚫 BLOCKED | trigger=pull_request |
-| [正向] 系统应强制 fork PR TOKEN 为 read-only | 🚫 BLOCKED | trigger=pull_request |
+|--------|:-----:|------|
+| [负向] 写操作应失败 | ✅ COVERED | 步骤使用 curl 真实发起 API 写请求，通过 `|| echo "write failed as expected"` 捕获失败；YAML 中有 `type=negative, target=run_status, equals=success_with_write` 断言覆盖 |
+| [正向] 系统应强制 fork PR TOKEN 为 read-only | ✅ COVERED | 步骤真实执行写操作并输出 "write failed as expected"；断言 `run_logs contains="write failed as expected"` 验证写操作因 read-only 权限而失败 |
 
 ### 问题
 
-- [负向] 写操作应失败: BLOCKED - trigger=pull_request
-- [正向] 系统应强制 fork PR TOKEN 为 read-only: BLOCKED - trigger=pull_request
+无。
 
----
+## 5. 评级理由
+
+步骤使用 curl 真实执行 API 写请求，使用 `$ATOMGIT_TOKEN` 和 `${{ }}` 表达式，属于实质逻辑。两个验证点均由真实行为产生可观测输出，全部 COVERED。整体判定为**断言一致**。

@@ -66,6 +66,8 @@
 |------|------|------|
 | 用例规格（期望） | `phase01/runs/2026-07-23-01/cases/text/*.md` | 前置条件、操作步骤、预期结果、验证点 |
 | 用例 YAML（实现） | `phase01/runs/2026-07-23-01/cases/yaml/*.yaml` | workflow 步骤、断言、触发条件、setup |
+|feedback|phase02/agents/expect-execute-consistency/feedback.md|feedback of the history report, manmanly add|
+
 
 ## 工作步骤
 

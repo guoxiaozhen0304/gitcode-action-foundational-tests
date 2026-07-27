@@ -40,8 +40,7 @@
 
 | # | 步骤名 | 关键内容 | 实质逻辑 |
 |---|--------|------|:---:|
-| 1 | Echo scheduled | run: echo "scheduled run"
- | 否 |
+| 1 | Echo scheduled | run: echo "scheduled run" | 否 |
 
 <details><summary>完整 workflow YAML</summary>
 
@@ -52,34 +51,35 @@ on:
 jobs:
   verify:
     name: Verify schedule trigger
-    runs-on: [dedicate-hosted, x64, large]
+    runs-on: [ubuntu-latest, x64, small]
     steps:
       - name: Echo scheduled
         run: |
           echo "scheduled run"
 
 ```
+
 </details>
 
 ## 3. 触发与运行环境
 
 | 字段 | 值 |
 |------|----|
-| 触发事件 | schedule |
-| 触发身份 | maintainer |
-| Repo Fixture | default |
-| Secrets | N/A |
+| event | schedule |
+| as | maintainer |
 
 ## 4. 规格 vs 实现对照
 
 | 验证点 | 覆盖? | 说明 |
-|------|:---:|------|
-| [正向] 运行记录存在且 event 为 schedule | 🚫 BLOCKED | trigger=schedule |
-| [正向] 触发时间与 cron 预期 UTC 时间一致 | 🚫 BLOCKED | trigger=schedule |
+|--------|:-----:|------|
+| [正向] 运行记录存在且 event 为 schedule | ⚠️ TRIVIAL | 步骤仅 echo 字面量 "scheduled run"，无 ${{ }} 表达式、无 if 条件、无 uses action、无实质命令 |
+| [正向] 触发时间与 cron 预期 UTC 时间一致 | ❌ MISSING | 无任何步骤产出时间相关输出 |
 
 ### 问题
 
-- [正向] 运行记录存在且 event 为 schedule: BLOCKED - trigger=schedule
-- [正向] 触发时间与 cron 预期 UTC 时间一致: BLOCKED - trigger=schedule
+- [正向] 运行记录存在且 event 为 schedule: TRIVIAL — 步骤仅 echo 字面量，未执行任何验证逻辑
+- [正向] 触发时间与 cron 预期 UTC 时间一致: MISSING — 无步骤产出或对比时间信息
 
----
+## 5. 评级理由
+
+两个验证点均为 TRIVIAL 或 MISSING，无任何步骤真实执行被测功能，评级为完全不符。
