@@ -3,8 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P1
 title: "issue_comment types 命名差异 - GitCode 合法 types 应被接受"
-intent_ref: INTENT-COMPAT-004
-
+intent_ref: INTENT-COMPAT-NEW-004
 setup:
   repo_fixture: default
   secrets: []

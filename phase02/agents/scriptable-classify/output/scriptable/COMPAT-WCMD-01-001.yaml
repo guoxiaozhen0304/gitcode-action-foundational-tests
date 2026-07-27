@@ -3,8 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P2
 title: "::add-mask:: 不被支持时应静默降级而非报错"
-intent_ref: INTENT-COMPAT-009
-
+intent_ref: INTENT-COMPAT-NEW-009
 setup:
   repo_fixture: default
   secrets: []

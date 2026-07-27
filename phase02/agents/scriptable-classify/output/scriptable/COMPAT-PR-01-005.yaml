@@ -3,8 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P1
 title: "PR paths 过滤不工作时的兼容性差异"
-intent_ref: INTENT-COMPAT-003
-
+intent_ref: INTENT-COMPAT-NEW-003
 setup:
   repo_fixture: default
   secrets: []

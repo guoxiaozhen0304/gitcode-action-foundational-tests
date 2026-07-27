@@ -3,8 +3,7 @@ dimensions: [compatibility, reliability]
 dimension: compatibility
 priority: P1
 title: "concurrency preemption enable 行为差异"
-intent_ref: INTENT-COMPAT-005
-
+intent_ref: INTENT-COMPAT-NEW-005
 setup:
   repo_fixture: default
   secrets: []

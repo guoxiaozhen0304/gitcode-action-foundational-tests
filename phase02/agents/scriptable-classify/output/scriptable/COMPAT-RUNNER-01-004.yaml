@@ -3,8 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P2
 title: "自定义特征标签不被支持时应给出可用标签列表"
-intent_ref: INTENT-COMPAT-008
-
+intent_ref: INTENT-COMPAT-NEW-008
 setup:
   repo_fixture: default
   secrets: []

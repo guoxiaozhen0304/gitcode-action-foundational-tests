@@ -1,0 +1,58 @@
+id: REL-STATE-01-059
+dimensions: [reliability]
+dimension: reliability
+priority: P1
+title: "运行状态收敛——job 全部终态后 run 状态应在有界时间内脱离 RUNNING 且单调无抖动"
+intent_ref: INTENT-REL-071
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    job_1:
+      name: parallel job one
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step one
+          run: |
+            sleep 60
+    job_2:
+      name: parallel job two
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step two
+          run: |
+            sleep 60
+    job_3:
+      name: parallel job three
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step three
+          run: |
+            sleep 60
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params:
+    poll_interval_seconds: 10
+    observe_window_seconds: 600
+fault_injection: null
+assertions:
+  - type: positive
+    target: run_conclusion
+    equals: "success"
+  - type: negative
+    target: run_status_after_jobs_terminal
+    equals: "in_progress"
+  - type: nonfunctional
+    target: convergence_seconds
+    le: "120"
+  - type: nonfunctional
+    target: status_sequence_monotonic
+    equals: "true"
+teardown:
+  reset: none

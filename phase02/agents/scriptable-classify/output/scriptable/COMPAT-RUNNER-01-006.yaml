@@ -3,8 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P2
 title: "Runner 未预装 Java 工具链与 GitHub 差异"
-intent_ref: INTENT-COMPAT-011
-
+intent_ref: INTENT-COMPAT-NEW-011
 setup:
   repo_fixture: default
   secrets: []

@@ -3,8 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P2
 title: "self-hosted 标签不被支持时应明确报错"
-intent_ref: INTENT-COMPAT-008
-
+intent_ref: INTENT-COMPAT-NEW-008
 setup:
   repo_fixture: default
   secrets: []

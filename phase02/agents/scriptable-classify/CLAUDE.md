@@ -47,6 +47,17 @@ assertions:
 `COMP-CALL-01-001`：2 层 workflow_call 嵌套正常执行。验证嵌套调用链需要检查多个子工作流 run 的 status/event，harness 仅能扫描当前 run 的日志和字段，无法跨 run 验证调用链。
 
 `COMP-ARTIFACT-01-003`：artifact 保留期设置生效 (retention-days)。验证保留期实际生效需要检查 artifact service 在过期后 artifact 是否被删除，属于 artifact-level 操作，harness 不支持。
+
+`REL-FAULT-01-031`：故障注入——runner 进程被 SIGKILL。`fault_injection.action: kill_runner` 需要在 job 执行过程中向 runner 注入 SIGKILL，harness 仅能 dispatch 和轮询，无法注入运行时故障。
+
+`REL-FAULT-01-032`：故障注入——网络分区。`fault_injection.action: network_partition` 需要制造网络隔离，harness 不支持。
+
+`REL-FAULT-01-033`：故障注入——磁盘满。`fault_injection.action: disk_full` 需要填满 runner 磁盘，harness 不支持。
+
+`REL-FAULT-01-034`：故障注入——并发洪水。`fault_injection.action: concurrent_flood` 需要触发大量并发 dispatch，harness 无法精确控制并发量和时序。
+
+`REL-FAULT-01-035`：故障注入——并发洪水。同上。
+
 | 3 | trigger 复杂 | 仅 schedule |
 | 4 | 长时间等待（timing assertions） | `max_queued_to_running_seconds` 等时序断言 |
 | 5 | UI 检查（`ui_visual` / `ui_interaction` / `ui_layout`） | 需要浏览器自动化 |

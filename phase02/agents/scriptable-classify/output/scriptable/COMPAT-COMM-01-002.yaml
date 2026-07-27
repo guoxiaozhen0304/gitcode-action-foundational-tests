@@ -3,8 +3,7 @@ dimensions: [compatibility]
 dimension: compatibility
 priority: P1
 title: "issue_comment types:created 不支持时应给出降级指引"
-intent_ref: INTENT-COMPAT-004
-
+intent_ref: INTENT-COMPAT-NEW-004
 setup:
   repo_fixture: default
   secrets: []

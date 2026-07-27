@@ -1,0 +1,48 @@
+id: COMPAT-RUNSON-01-004
+dimensions: [compatibility, usability]
+dimension: compatibility
+priority: P1
+title: "自托管 runs-on 数组式写法（标签列表子集匹配）的实测仲裁"
+intent_ref: INTENT-COMPAT-046
+
+setup:
+  repo_fixture: with-self-hosted-runner
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: Probe array form self-hosted runs-on
+      runs-on: [self-hosted, linux, x64]
+      steps:
+        - name: Mark scheduling success
+          run: |
+            echo "ARRAY_FORM_SCHEDULED"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_status
+    eval: llm_assisted
+    rubric: "数组式 runs-on（runner-images-tools.md 文档形态）结局确定：调度成功（日志含 ARRAY_FORM_SCHEDULED）或解析期明确报错"
+  - type: negative
+    target: run_status
+    eval: llm_assisted
+    rubric: "不被接受时不应表现为 job 无限 queued 且无任何提示"
+  - type: nonfunctional
+    target: run_status
+    eval: llm_assisted
+    rubric: "与 COMPAT-RUNSON-01-003 结论合并：两种写法若均被接受，匹配语义（子集规则、group 与数组元素对应关系）必须等价并统一文档"
+
+teardown:
+  reset: fixture
