@@ -1777,9 +1777,9 @@
   {
     "case_id": "SEC-ARTF-01-002",
     "status": "VALID",
-    "via": "WAF_WHITELIST",
     "diagnostics": [],
-    "http_status": 418
+    "http_status": 418,
+    "via": "WAF_WHITELIST"
   },
   {
     "case_id": "SEC-AUDIT-01-001",
@@ -2044,9 +2044,9 @@
   {
     "case_id": "SEC-TOKEN-01-004",
     "status": "VALID",
-    "via": "WAF_WHITELIST",
     "diagnostics": [],
-    "http_status": 418
+    "http_status": 418,
+    "via": "WAF_WHITELIST"
   },
   {
     "case_id": "SEC-WCMD-01-001",
