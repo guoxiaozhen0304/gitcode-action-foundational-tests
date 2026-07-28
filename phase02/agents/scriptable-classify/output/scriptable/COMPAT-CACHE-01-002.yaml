@@ -1,0 +1,64 @@
+id: COMPAT-CACHE-01-002
+dimensions: [compatibility, security]
+dimension: compatibility
+priority: P0
+title: cache 行为等价性——fork PR 写隔离
+intent_ref: INTENT-COMPAT-025
+
+setup:
+  repo_fixture: with-fork-pr
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    pull_request:
+      branches: [main]
+  jobs:
+    verify-fork-cache:
+      name: Verify fork PR cache isolation
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: (TC) restore cache
+          uses: cache
+          with:
+            path: ~/.cache/test-dir
+            key: compat-cache-fork-test
+            restore-keys: compat-cache-fork-test-
+        - name: (TC) attempt write from fork
+          run: |
+            mkdir -p "$HOME/.cache/test-dir"
+            echo "FORK_MARKER_$(date +%s)" > "$HOME/.cache/test-dir/fork_marker.txt"
+            echo "FORK_WRITE_ATTEMPTED"
+        - name: (TC) save cache
+          if: ${{ always() }}
+          uses: cache
+          with:
+            path: ~/.cache/test-dir
+            key: compat-cache-fork-test
+
+trigger:
+  event: pr
+  as: untrusted_contributor
+  params: {}
+
+fault_injection: null
+
+# 注：fork 写是否被隔离到独立命名空间取决于平台 cache 插件行为（跳过/拒绝/隔离的日志措辞未知），
+# 该判定保留 llm_assisted；写入尝试本身由真实步骤产生 FORK_WRITE_ATTEMPTED 标记，确定性断言。
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: "FORK_WRITE_ATTEMPTED"
+  - type: negative
+    target: run_logs
+    eval: llm_assisted
+    rubric: "fork PR 的 cache save 不应成功覆盖主干缓存条目（保存被跳过、拒绝或隔离到 fork 命名空间；不得出现以主干 key 成功保存 fork 内容的日志）"
+  - type: positive
+    target: run_logs
+    eval: llm_assisted
+    rubric: "日志中应出现明确的缓存隔离或拒绝写入标识（cache 插件输出）"
+
+teardown:
+  reset: fixture

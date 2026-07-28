@@ -1,0 +1,44 @@
+id: REL-YAMLCACHE-01-060
+dimensions: [reliability]
+dimension: reliability
+priority: P1
+title: "Workflow YAML 缓存失效——修改后无旧代码残留"
+intent_ref: INTENT-REL-060
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+# 注：本 YAML 为「修改后」的 workflow 版本（v2）。harness 先用 fixture 中的 v1 workflow
+# （echo marker_v1）执行 run1，再用本文件（v2）执行 run2；run2 日志应含 marker_v2 且
+# 不残留 marker_v1（平台 YAML 缓存已失效）。因此本文件只能包含 marker_v2 步骤，
+# 不得同时保留 marker_v1 步骤，否则负向断言必然失败。
+workflow: |
+  on:
+    workflow_dispatch:
+    push:
+  jobs:
+    test:
+      name: YAML cache invalidation test
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: echo marker v2
+          run: |
+            echo marker_v2
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+assertions:
+  - type: positive
+    target: run1_logs
+    contains: "marker_v1"
+  - type: positive
+    target: run2_logs
+    contains: "marker_v2"
+  - type: negative
+    target: run2_logs
+    contains: "marker_v1"
+teardown:
+  reset: fixture

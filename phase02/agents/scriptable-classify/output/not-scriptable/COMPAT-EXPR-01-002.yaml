@@ -1,0 +1,69 @@
+id: COMPAT-EXPR-01-002
+dimensions: [compatibility]
+dimension: compatibility
+priority: P1
+title: success() 函数的处理行为差异
+intent_ref: INTENT-COMPAT-004
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    job-a:
+      name: Job A that succeeds
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: checkout source
+          uses: checkout
+        - name: verify checkout real
+          run: |
+            if [ -n "$(ls -A)" ]; then
+              echo "JOB_A_VERIFIED"
+            else
+              echo "JOB_A_EMPTY"
+              exit 1
+            fi
+    job-b:
+      name: Job B probe success fn
+      runs-on: [ubuntu-latest, x64, small]
+      needs: job-a
+      steps:
+        - name: probe success fn gating
+          if: ${{ success() }}
+          run: |
+            echo "SUCCESS_FN_ACCEPTED"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+# 注：job-b 故意使用 if success() 作为平台探针（VALIDATION-RULES 实测平台拒绝该函数，
+# 此处正是验证该兼容差异）；保存期接受/拒绝的判定保留 llm_assisted，
+# 可执行部分（job-a 真实校验）为确定性断言。
+assertions:
+  - type: positive
+    target: run_status
+    equals: success
+  - type: positive
+    target: run_logs
+    must_contain: "JOB_A_VERIFIED"
+  - type: positive
+    target: workflow_parse
+    eval: llm_assisted
+    rubric: "平台对 if success() 的保存期响应确定：拒绝并报表达式解析错误，或接受并允许条件执行（job-b 日志出现 SUCCESS_FN_ACCEPTED）；结论与 GitHub 支持 success() 的行为比对并文档化"
+  - type: negative
+    target: workflow_parse
+    eval: llm_assisted
+    rubric: "不应静默忽略 success() 表达式而按无条件执行 job-b"
+
+teardown:
+  reset: fixture

@@ -1,0 +1,76 @@
+id: REL-BIGRUNNER-01-066
+dimensions: [reliability]
+dimension: reliability
+priority: P1
+title: "大规格资源调度稳定性——xlarge/2xlarge 反复编译成功率"
+intent_ref: INTENT-REL-066
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    compile_xlarge:
+      name: compile on xlarge
+      runs-on: [ubuntu-latest, x64, xlarge]
+      steps:
+        - name: compile step
+          run: |
+            cat > main.c <<'EOF'
+            #include <stdio.h>
+            int main(){long s=0;for(long i=0;i<500000000;i++)s+=i;printf("RESULT=%ld\n",s);return 0;}
+            EOF
+            gcc -O2 -o main main.c
+            ./main
+            echo "COMPILE_OK_XLARGE"
+        - name: attribution marker
+          if: ${{ always() }}
+          run: |
+            echo "ATTRIBUTION_JOB=compile_xlarge"
+    compile_2xlarge:
+      name: compile on 2xlarge
+      runs-on: [ubuntu-latest, x64, 2xlarge]
+      steps:
+        - name: compile step
+          run: |
+            cat > main.c <<'EOF'
+            #include <stdio.h>
+            int main(){long s=0;for(long i=0;i<500000000;i++)s+=i;printf("RESULT=%ld\n",s);return 0;}
+            EOF
+            gcc -O2 -o main main.c
+            ./main
+            echo "COMPILE_OK_2XLARGE"
+        - name: attribution marker
+          if: ${{ always() }}
+          run: |
+            echo "ATTRIBUTION_JOB=compile_2xlarge"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+# 注：success_rate 为跨多次运行的聚合指标，由 harness 统计；failure_attribution 的"归因明确性"
+# 属判读性质，保留 llm_assisted，归因材料由 if always() 的 ATTRIBUTION_JOB 标记与 gcc 真实编译
+# 日志提供。编译步骤真实执行 gcc 编译与运行，失败路径真实存在（编译错误/运行非零即失败）。
+assertions:
+  - type: positive
+    target: run_status
+    equals: success
+  - type: positive
+    target: run_logs
+    must_contain: "COMPILE_OK_XLARGE"
+  - type: positive
+    target: run_logs
+    must_contain: "COMPILE_OK_2XLARGE"
+  - type: positive
+    target: success_rate
+    ge: "90"
+  - type: positive
+    target: failure_attribution
+    eval: llm_assisted
+    rubric: "若任一 job 失败，日志应明确指向失败 job（ATTRIBUTION_JOB 标记）与失败命令（gcc 编译或程序运行），不应无归因信息"
+teardown:
+  reset: none
