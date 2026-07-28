@@ -23,6 +23,14 @@ API_HOST = "web-api.gitcode.com"
 PROJECT = "ComputingActionTest/foundational-tests"
 SLEEP = 0.8  # 每个请求间隔秒
 
+WAF_WHITELIST = {
+    "COMP-ATOMGIT-01-047", "COMP-ATOMGIT-01-048", "COMP-ATOMGIT-01-049",
+    "COMP-SCRIPT-01-082",
+    "COMPAT-TOKEN-01-001", "COMPAT-TOKEN-01-002",
+    "REL-LOG-01-040", "REL-OUTPUT-01-017",
+    "USE-MASK-01-001", "SEC-NAME-01-002", "SEC-ENV-WAIT-02-001",
+}
+
 
 def load_env():
     root = Path(__file__).resolve().parent
@@ -78,14 +86,19 @@ def main():
 
     src_dir = Path(sys.argv[1])
     out_dir = Path(sys.argv[2])
-    valid_dir = out_dir / "VALID"
-    invalid_dir = out_dir / "INVALID"
-    error_waf_dir = out_dir / "ERROR_WAF"
+    valid_dir = out_dir / "valid"
+    invalid_dir = out_dir / "invalid"
+    waf_dir = out_dir / "WAF"
     skip_dir = out_dir / "SKIP"
-    for d in [valid_dir, invalid_dir, error_waf_dir, skip_dir]:
+    for d in [valid_dir, invalid_dir, waf_dir, skip_dir]:
         if d.exists():
             shutil.rmtree(d)
         d.mkdir(parents=True)
+
+    # Also clean legacy uppercase dirs
+    for d in [out_dir / "VALID", out_dir / "INVALID", out_dir / "ERROR_WAF"]:
+        if d.exists():
+            shutil.rmtree(d)
 
     cookie = os.environ.get("GITCODE_COOKIE") or load_env().get("GITCODE_COOKIE", "")
     if not cookie:
@@ -93,7 +106,7 @@ def main():
 
     yaml_files = sorted(src_dir.glob("*.yaml"))
     results = []
-    counts = {"VALID": 0, "INVALID": 0, "ERROR_WAF": 0, "SKIP": 0}
+    counts = {"VALID": 0, "INVALID": 0, "WAF": 0, "SKIP": 0}
 
     for i, yf in enumerate(yaml_files, 1):
         cid = yf.stem
@@ -132,19 +145,26 @@ def main():
             r = {"case_id": cid, "status": "INVALID", "diagnostics": diags}
             counts["INVALID"] += 1
         elif status_code == 418:
-            shutil.copy2(str(yf), str(error_waf_dir / yf.name))
-            r = {"case_id": cid, "status": "ERROR_WAF", "diagnostics": [], "http_status": 418}
-            counts["ERROR_WAF"] += 1
+            if cid in WAF_WHITELIST:
+                shutil.copy2(str(yf), str(valid_dir / yf.name))
+                r = {"case_id": cid, "status": "VALID", "via": "WAF_WHITELIST", "diagnostics": [], "http_status": 418}
+                counts["VALID"] += 1
+            else:
+                shutil.copy2(str(yf), str(waf_dir / yf.name))
+                r = {"case_id": cid, "status": "WAF", "diagnostics": [], "http_status": 418}
+                counts["WAF"] += 1
         else:
             r = {"case_id": cid, "status": "ERROR", "diagnostics": [], "raw": json.dumps(resp, ensure_ascii=False)[:300]}
-            counts["ERROR_WAF"] += 1
-            shutil.copy2(str(yf), str(error_waf_dir / yf.name))
+            counts["WAF"] += 1
+            shutil.copy2(str(yf), str(waf_dir / yf.name))
 
         results.append(r)
         n_diag = len(r.get("diagnostics", []))
         tag = r["status"]
         extra = f" ({n_diag} diag)" if n_diag else ""
-        if status_code == 418:
+        if r.get("via") == "WAF_WHITELIST":
+            extra = " (WAF whitelist)"
+        elif tag == "WAF":
             extra = " (WAF 418)"
         print(f"[{i:>3}/{len(yaml_files)}] {cid}  {tag}{extra}")
         sys.stdout.flush()
@@ -155,9 +175,9 @@ def main():
         json.dump(results, f, ensure_ascii=False, indent=2)
 
     print(f"\nDone: {len(yaml_files)} cases")
-    print(f"  VALID:     {counts['VALID']}")
-    print(f"  INVALID:   {counts['INVALID']}")
-    print(f"  ERROR_WAF: {counts['ERROR_WAF']}")
+    print(f"  valid:     {counts['VALID']}")
+    print(f"  invalid:   {counts['INVALID']}")
+    print(f"  WAF:       {counts['WAF']}")
     print(f"  SKIP:      {counts['SKIP']}")
     print(f"Results: {out_dir / 'validation-results.json'}")
 

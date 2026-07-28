@@ -24,7 +24,9 @@
 
 | Case ID | 拦截原因 |
 |---------|------|
-| COMP-ATOMGIT-01-049 | workflow body 含 `${}` 触发 WAF |
+| COMP-ATOMGIT-01-047 | workflow body 含 `${}` 触发 WAF，人工验证通过 |
+| COMP-ATOMGIT-01-048 | 同上 |
+| COMP-ATOMGIT-01-049 | 同上 |
 | COMP-SCRIPT-01-082 | 同上 |
 | COMPAT-TOKEN-01-001 | token 值在 YAML 中触发注入检测 |
 | COMPAT-TOKEN-01-002 | 同上 |
