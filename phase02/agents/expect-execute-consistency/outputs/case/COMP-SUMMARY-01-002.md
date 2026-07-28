@@ -2,7 +2,7 @@
 
 - **标题**: summary 中不应暴露系统内部路径
 - **维度**: 完备性
-- **评级**: 断言一致
+- **评级**: 完全不符
 
 ---
 
@@ -16,5 +16,5 @@ Step: `echo "Results: OK" >> "$ATOMGIT_STEP_SUMMARY"`（写入安全内容）。
 
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | step_summary | negative | must_not_contain /tmp/runner | COVERED | Step 写入安全内容，harness 验证平台不注入内部路径到 summary；type=negative |
-| 2 | step_summary | negative | must_not_contain /opt/actions | COVERED | 同上 |
+| 1 | step_summary | negative | must_not_contain /tmp/runner | VACUOUS | 步骤仅写入 "Results: OK"，从未输出 /tmp/runner；断言永远为真，安全行为未被触发（Rule 4） |
+| 2 | step_summary | negative | must_not_contain /opt/actions | VACUOUS | 同上，步骤从未输出 /opt/actions |

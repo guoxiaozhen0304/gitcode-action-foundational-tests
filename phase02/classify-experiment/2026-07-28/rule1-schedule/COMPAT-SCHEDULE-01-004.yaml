@@ -1,0 +1,50 @@
+id: COMPAT-SCHEDULE-01-004
+dimensions: [compatibility, reliability]
+dimension: compatibility
+priority: P2
+title: "schedule 生命周期语义（自动停用策略与触发延迟可观测性）确认"
+intent_ref: INTENT-COMPAT-051
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    schedule:
+      - cron: "*/5 * * * * ?"
+  jobs:
+    probe:
+      name: Probe schedule lifecycle semantics
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Record actual trigger time
+          run: |
+            date -u +"ACTUAL_TRIGGER_UTC=%Y-%m-%dT%H:%M:%SZ"
+            echo "SCHEDULE_PROBE_DONE"
+
+trigger:
+  event: schedule
+  as: maintainer
+  params:
+    cron: "*/5 * * * * ?"
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: "SCHEDULE_PROBE_DONE"
+  - type: negative
+    target: run_list
+    eval: llm_assisted
+    rubric: "长期观察窗口内不应出现未文档化的静默停用；若存在自动停用策略，停用前应有可观测通知且 UI 可见状态，否则记为缺陷"
+  - type: nonfunctional
+    target: run_list
+    eval: llm_assisted
+    rubric: "比对 cron 计划时间与 ACTUAL_TRIGGER_UTC 实际入队时间，延迟可观测且结论文档化；TC-563 修复后复验"
+
+teardown:
+  reset: fixture

@@ -1,0 +1,54 @@
+id: REL-NEEDS-01-026
+dimensions: [reliability, completeness]
+dimension: reliability
+priority: P0
+title: "needs 依赖 matrix job 成功路径——matrix 全部成功后下游 job 应正常初始化执行"
+intent_ref: INTENT-REL-069
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    job_b:
+      name: matrix upstream job
+      runs-on: [ubuntu-latest, x64, small]
+      strategy:
+        matrix:
+          version: [1, 2, 3]
+        fail-fast: false
+      steps:
+        - name: matrix work step
+          run: |
+            echo "matrix_instance=${{ matrix.version }}"
+    job_a:
+      name: downstream aggregator job
+      runs-on: [ubuntu-latest, x64, small]
+      needs: job_b
+      steps:
+        - name: read needs result step
+          run: |
+            echo "needs_result=${{ needs.job_b.result }}"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+assertions:
+  - type: positive
+    target: job_b_status
+    equals: "success"
+  - type: positive
+    target: job_a_status
+    equals: "success"
+  - type: negative
+    target: job_a_status
+    equals: "skipped"
+  - type: nonfunctional
+    target: downstream_start_delay_seconds
+    le: "120"
+teardown:
+  reset: none

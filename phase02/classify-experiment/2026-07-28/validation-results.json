@@ -1,0 +1,524 @@
+[
+  {
+    "case_id": "COMP-BOUND-01-085",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 3,
+            "column": 13
+          },
+          "end": {
+            "line": 3,
+            "column": 26
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[0].cron: 不是可识别的cron表达式"
+      },
+      {
+        "range": {
+          "start": {
+            "line": 4,
+            "column": 13
+          },
+          "end": {
+            "line": 4,
+            "column": 27
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[1].cron: 不是可识别的cron表达式"
+      },
+      {
+        "range": {
+          "start": {
+            "line": 5,
+            "column": 13
+          },
+          "end": {
+            "line": 5,
+            "column": 29
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[2].cron: 不是可识别的cron表达式"
+      }
+    ]
+  },
+  {
+    "case_id": "COMP-SCHEDULE-01-001",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 3,
+            "column": 13
+          },
+          "end": {
+            "line": 3,
+            "column": 24
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[0].cron: 不是可识别的cron表达式"
+      }
+    ]
+  },
+  {
+    "case_id": "COMP-SCHEDULE-01-002",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 3,
+            "column": 13
+          },
+          "end": {
+            "line": 3,
+            "column": 24
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[0].cron: 不是可识别的cron表达式"
+      }
+    ]
+  },
+  {
+    "case_id": "COMP-SCHEDULE-01-003",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 3,
+            "column": 13
+          },
+          "end": {
+            "line": 3,
+            "column": 26
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[0].cron: 不是可识别的cron表达式"
+      }
+    ]
+  },
+  {
+    "case_id": "COMP-TRIG-01-075",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 3,
+            "column": 13
+          },
+          "end": {
+            "line": 3,
+            "column": 24
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[0].cron: 不是可识别的cron表达式"
+      }
+    ]
+  },
+  {
+    "case_id": "COMPAT-SCHEDULE-01-001",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "column": 0
+          },
+          "end": {
+            "line": 0,
+            "column": 0
+          }
+        },
+        "severity": "Error",
+        "message": "Cannot deserialize value of type `java.util.ArrayList<com.huawei.devcloud.cloudpipeline.v2.domain.entity.pac2.gitcode.on.GitcodeScheduleOn>` from Object value (token `JsonToken.START_OBJECT`)\n at [Source: UNKNOWN; byte offset: #UNKNOWN] (through reference chain: com.huawei.devcloud.cloudpipeline.v2.domain.entity.pac2.gitcode.GitcodePipelineDefinition[\"on\"]->com.huawei.devcloud.cloudpipeline.v2.domain.entity.pac2.gitcode.on.GitcodeOn[\"schedule\"])"
+      }
+    ]
+  },
+  {
+    "case_id": "COMPAT-SCHEDULE-01-002",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 0,
+            "column": 0
+          },
+          "end": {
+            "line": 0,
+            "column": 0
+          }
+        },
+        "severity": "Error",
+        "message": "Cannot deserialize value of type `java.util.ArrayList<com.huawei.devcloud.cloudpipeline.v2.domain.entity.pac2.gitcode.on.GitcodeScheduleOn>` from Object value (token `JsonToken.START_OBJECT`)\n at [Source: UNKNOWN; byte offset: #UNKNOWN] (through reference chain: com.huawei.devcloud.cloudpipeline.v2.domain.entity.pac2.gitcode.GitcodePipelineDefinition[\"on\"]->com.huawei.devcloud.cloudpipeline.v2.domain.entity.pac2.gitcode.on.GitcodeOn[\"schedule\"])"
+      }
+    ]
+  },
+  {
+    "case_id": "COMPAT-SCHEDULE-01-003",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 3,
+            "column": 13
+          },
+          "end": {
+            "line": 3,
+            "column": 24
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[0].cron: 不是可识别的cron表达式"
+      }
+    ]
+  },
+  {
+    "case_id": "COMPAT-SCHEDULE-01-004",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 3,
+            "column": 13
+          },
+          "end": {
+            "line": 3,
+            "column": 26
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[0].cron: 不是可识别的cron表达式"
+      }
+    ]
+  },
+  {
+    "case_id": "REL-SCHED-01-058",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 3,
+            "column": 13
+          },
+          "end": {
+            "line": 3,
+            "column": 26
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[0].cron: 不是可识别的cron表达式"
+      }
+    ]
+  },
+  {
+    "case_id": "USE-DOC-01-003",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 3,
+            "column": 13
+          },
+          "end": {
+            "line": 3,
+            "column": 24
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[0].cron: 不是可识别的cron表达式"
+      }
+    ]
+  },
+  {
+    "case_id": "USE-SCHED-01-001",
+    "rule": "rule1-schedule",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 3,
+            "column": 13
+          },
+          "end": {
+            "line": 3,
+            "column": 24
+          }
+        },
+        "severity": "Error",
+        "message": "on.schedule[0].cron: 不是可识别的cron表达式"
+      }
+    ]
+  },
+  {
+    "case_id": "COMP-CACHE-01-003",
+    "rule": "rule2-complex-target",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMP-RERUN-01-001",
+    "rule": "rule2-complex-target",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMP-SUMMARY-01-002",
+    "rule": "rule2-complex-target",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMPAT-ARTIFACT-01-002",
+    "rule": "rule2-complex-target",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-RETAIN-01-047",
+    "rule": "rule2-complex-target",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "SEC-MASK-01-002",
+    "rule": "rule2-complex-target",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-CLUSTER-01-001",
+    "rule": "rule2b-fault-injection",
+    "status": "SKIP",
+    "http": 0
+  },
+  {
+    "case_id": "REL-FAULT-01-033",
+    "rule": "rule2b-fault-injection",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-FAULT-01-034",
+    "rule": "rule2b-fault-injection",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-FAULT-01-035",
+    "rule": "rule2b-fault-injection",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-FAULT-01-036",
+    "rule": "rule2b-fault-injection",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-FAULT-01-037",
+    "rule": "rule2b-fault-injection",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-FAULT-01-038",
+    "rule": "rule2b-fault-injection",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-FAULT-01-039",
+    "rule": "rule2b-fault-injection",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMP-ACT-01-003",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-API-01-065",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-CANCEL-01-029",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-CPU-01-022",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-IMAGE-01-052-V2",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-IMAGE-01-052",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-LATENCY-01-050-V2",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-LOGPERF-01-051-V2",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-LOGPERF-01-052",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-LONG-01-043",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-NEEDS-01-026",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-NETFAULT-01-062",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-REG-01-001",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-SCHED-01-057",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-STATE-01-058",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-STATE-01-059",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-TIMEOUT-01-007",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-TIMEOUT-01-009",
+    "rule": "rule4-timing",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  },
+  {
+    "case_id": "USE-BADGE-01-001",
+    "rule": "rule5-ui",
+    "status": "INVALID",
+    "http": 200,
+    "diagnostics": []
+  }
+]

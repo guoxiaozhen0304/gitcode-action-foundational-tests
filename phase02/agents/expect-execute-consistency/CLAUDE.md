@@ -47,6 +47,7 @@
 安全用例（dimension=security，或 `must_not_contain_secret`，或脱敏断言）：
 - 断言"secret 不得出现在日志中"但无步骤使用该 secret → **UNEXERCISED**（未执行）
 - 步骤 `echo $SECRET` 然后断言 `must_not_contain_secret` → **GENUINE**（故意暴露测试）
+- 任何 `must_not_contain` 断言，若步骤从未写出被禁字符串（如只写了 `"OK"` 却断言 `must_not_contain: /tmp/runner`）→ **VACUOUS**（空洞）— 断言永远为真，安全行为从未被触发
 
 ### 规则 5: 非功能性 / LLM 断言不可评估
 

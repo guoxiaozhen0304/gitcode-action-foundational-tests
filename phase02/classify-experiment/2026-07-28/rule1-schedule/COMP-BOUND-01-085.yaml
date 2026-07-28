@@ -1,0 +1,53 @@
+id: COMP-BOUND-01-085
+dimensions: [completeness]
+dimension: completeness
+priority: P1
+title: cron 表达式格式与位置边界验证
+intent_ref: INTENT-COMP-085
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+fault_injection: null
+workflow: |
+  on:
+    schedule:
+      - cron: "*/5 * * * * ?"
+      - cron: "0 2,14 * * * ?"
+      - cron: "0 9-17 * * 1-5 ?"
+  jobs:
+    verify:
+      name: Verify cron boundary
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Validate cron expressions
+          run: |
+            python3 - <<'PYEOF'
+            import re
+            crons = ["*/5 * * * *", "0 2,14 * * *", "0 9-17 * * 1-5"]
+            pat = re.compile(r"^[0-9*,/-]+$")
+            for c in crons:
+                parts = c.split()
+                ok = len(parts) == 5 and all(pat.match(p) for p in parts)
+                print("CRON_VALID=%s %s" % (c, ok))
+            PYEOF
+trigger:
+  event: schedule
+  as: maintainer
+  params: {}
+assertions:
+  - type: positive
+    target: run_status
+    equals: success
+  - type: positive
+    target: run_logs
+    must_contain: "CRON_VALID=*/5 * * * * True"
+  - type: positive
+    target: run_logs
+    must_contain: "CRON_VALID=0 2,14 * * * True"
+  - type: positive
+    target: run_logs
+    must_contain: "CRON_VALID=0 9-17 * * 1-5 True"
+teardown:
+  reset: fixture
