@@ -1,0 +1,7 @@
+[2026/07/28 13:24:03.826 GMT+08:00] [INFO] Job(1531653466105847808_1531653466072293383) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/59d506f1-4390-43c6-9504-c2d1e78eaf73.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/59d506f1-4390-43c6-9504-c2d1e78eaf73.sh
+gh=NOTFOUND
+gitcode=NOTFOUND
+atomgit=NOTFOUND

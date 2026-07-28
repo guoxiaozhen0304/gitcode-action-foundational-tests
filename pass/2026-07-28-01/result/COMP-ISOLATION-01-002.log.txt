@@ -1,0 +1,10 @@
+[2026/07/28 12:41:19.282 GMT+08:00] [INFO] Job(1531642709615980544_1531642709586620423) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/f891e4c7-1816-4d0b-9a06-3c8886bfc28a.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/f891e4c7-1816-4d0b-9a06-3c8886bfc28a.sh
+
+[2026/07/28 12:41:32.927 GMT+08:00] [INFO] Job(1531642709615980544_1531642709586620425) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/03406439-295b-4253-a09a-10066ffc34c2.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/03406439-295b-4253-a09a-10066ffc34c2.sh
+env not leaked as expected

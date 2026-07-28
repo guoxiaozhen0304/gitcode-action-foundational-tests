@@ -1,0 +1,37 @@
+{
+  "case_id": "SEC-RUN-01-001",
+  "title": "Job 结束后 workspace 与临时文件必须被彻底清理",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-020",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "d468621de72b41d697b6218b90372c7a",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 2,
+  "duration_seconds": 63,
+  "log_fingerprint": "487931fbe218cf93",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/d468621de72b41d697b6218b90372c7a",
+  "assertion_results": [
+    {
+      "kind": "leak",
+      "type": "negative",
+      "target": "run_logs",
+      "pass": true,
+      "is_security_critical": true,
+      "expected": "plaintext 'residual found' 0 hits",
+      "actual": 0
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'cleaned as expected'",
+      "actual": "present"
+    }
+  ]
+}

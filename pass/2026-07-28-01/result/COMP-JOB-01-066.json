@@ -1,0 +1,36 @@
+{
+  "case_id": "COMP-JOB-01-066",
+  "title": "job 必填字段 name runs-on steps 验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-066",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "434451fa24f84214928f84b53f043c13",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 37,
+  "log_fingerprint": "c5c0e6b9819f1862",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/434451fa24f84214928f84b53f043c13",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'job_fields_ok'",
+      "actual": "present"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "case_id": "SEC-INJ-01-005",
+  "title": "表达式求值必须防止双重模板渲染（二次求值）",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-013",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "f4becd4d41e24bfbb2d1fa85afb911cf",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 80,
+  "log_fingerprint": "e1fc79896229a7a2",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/f4becd4d41e24bfbb2d1fa85afb911cf",
+  "assertion_results": [
+    {
+      "kind": "leak",
+      "type": "negative",
+      "target": "run_logs",
+      "pass": true,
+      "is_security_critical": true,
+      "expected": "plaintext 'Input: 2' 0 hits",
+      "actual": 0
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains '{{ 1 + 1 }}'",
+      "actual": "present"
+    }
+  ]
+}

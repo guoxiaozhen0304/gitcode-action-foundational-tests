@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-YAML-01-001",
+  "title": "YAML 1.1 on 键布尔陷阱与 env 中 yes/no/on/off 字面量的解析行为",
+  "dimension": "compatibility",
+  "priority": "P2",
+  "intent_ref": "INTENT-COMPAT-049",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "4abc524ca4cc4e69935d223f43c0c6b8",
+  "run_status": "COMPLETED",
+  "head_sha": "c0a8bf43bccb8951be54866289eef6fec659d16a",
+  "job_count": 1,
+  "duration_seconds": 57,
+  "log_fingerprint": "a7be5c1c3b82bea5",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/4abc524ca4cc4e69935d223f43c0c6b8",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'ON_KEY_OK'",
+      "actual": "present"
+    }
+  ]
+}

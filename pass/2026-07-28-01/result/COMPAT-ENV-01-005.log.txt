@@ -1,0 +1,15 @@
+[2026/07/28 13:06:07.623 GMT+08:00] [INFO] Job(1531648952048828416_1531648952019468295) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/920bd93e-6932-4874-b16b-1e404ce35d62.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/920bd93e-6932-4874-b16b-1e404ce35d62.sh
+RUNNER_OS=[linux]
+RUNNER_ARCH=[x86_64]
+RUNNER_NAME=[1531648952019468295-pod]
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/e7fccfdb-06ac-4343-81ba-623a9f9736ce.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/e7fccfdb-06ac-4343-81ba-623a9f9736ce.sh
+RUNNER_TEMP=[/home/slave1/runner/workers/0.0.4.4.version/_temp]
+RUNNER_TOOL_CACHE=[/home/slave1/runner/workers/0.0.4.4.version/agent.ToolsDirectory]
+RUNNER_ENVIRONMENT=[NORMAL]
+PROBE_DONE

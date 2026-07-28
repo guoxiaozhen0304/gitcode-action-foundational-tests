@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-ENV-01-002",
+  "title": "GITHUB_SHA 环境变量在 GitCode 中应为空或未定义",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-017",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "eda2dcb1b6354413a615d65660b168f2",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 53,
+  "log_fingerprint": "b6c638e021868c14",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/eda2dcb1b6354413a615d65660b168f2",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

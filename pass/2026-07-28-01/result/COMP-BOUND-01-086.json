@@ -1,0 +1,21 @@
+{
+  "case_id": "COMP-BOUND-01-086",
+  "title": "矩阵构建 include exclude 与单值边界验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-086",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override"
+  ],
+  "reason": "???????push?list?dispatch?????(run=cd2ee5638cbc)???include/exclude????????",
+  "gitcode_run_id": "cd2ee5638cbc450db246eb0d86db8b46",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 65,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/cd2ee5638cbc450db246eb0d86db8b46",
+  "assertion_results": []
+}

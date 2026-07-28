@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-VARS-01-002",
+  "title": "变量插值双语法与 atomgit 属性名的文档清单 diff 及求值探测",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-038",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "88dc5acd6d1942e88e2e674e7fb5e689",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 40,
+  "log_fingerprint": "7ebc209bbeca2e95",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/88dc5acd6d1942e88e2e674e7fb5e689",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

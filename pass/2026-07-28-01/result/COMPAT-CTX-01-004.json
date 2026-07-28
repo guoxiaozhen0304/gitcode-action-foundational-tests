@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-CTX-01-004",
+  "title": "atomgit.actor 规格自相矛盾的实测仲裁",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-040",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "c285e523685543ec831114279dcd8e37",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 55,
+  "log_fingerprint": "d931e526f8eb71e9",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/c285e523685543ec831114279dcd8e37",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'PROBE_DONE'",
+      "actual": "present"
+    }
+  ]
+}

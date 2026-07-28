@@ -1,0 +1,28 @@
+{
+  "case_id": "REL-DEBOUNCE-01-001",
+  "title": "触发幂等——同分支 10 秒内连续 5 次 push 的 run 记录应与事件一一对账",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-073",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "ba474744d616402c951549a554f86e3a",
+  "run_status": "COMPLETED",
+  "head_sha": "f7e984975205af81aa56ad7e42a98bd449f9a33d",
+  "job_count": 1,
+  "duration_seconds": 91,
+  "log_fingerprint": "756dee1c221e23b7",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/ba474744d616402c951549a554f86e3a",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

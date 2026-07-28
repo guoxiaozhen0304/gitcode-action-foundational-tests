@@ -1,0 +1,44 @@
+{
+  "case_id": "COMP-TRIG-01-074",
+  "title": "workflow_dispatch 事件关键字段与 inputs 验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-074",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "4b804041e3934f969a040554e480cc8c",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 29,
+  "log_fingerprint": "6e526c9229cd5533",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/4b804041e3934f969a040554e480cc8c",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'ENV='",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'VER='",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'dispatch_ok'",
+      "actual": "present"
+    }
+  ]
+}

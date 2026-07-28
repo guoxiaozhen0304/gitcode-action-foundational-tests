@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-LBL-01-002",
+  "title": "runs-on 标签因容量不足排队时应提示排队状态而非无可用 runner",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-025",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "2c5f6fdab7404914b7c098a6ed2c694b",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 31,
+  "log_fingerprint": "4371a0bd2b7c35c6",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/2c5f6fdab7404914b7c098a6ed2c694b",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

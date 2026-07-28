@@ -1,0 +1,21 @@
+{
+  "case_id": "SEC-INJ-01-003",
+  "title": "不可信 issue/PR 评论内容不可直接插进 run 脚本导致命令注入",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-011",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override"
+  ],
+  "reason": "??????types:[created]?issue_comment??COMPLETED??TIMEOUT/INCONCLUSIVE?YAML?types??",
+  "gitcode_run_id": "",
+  "run_status": "TIMEOUT",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 641,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

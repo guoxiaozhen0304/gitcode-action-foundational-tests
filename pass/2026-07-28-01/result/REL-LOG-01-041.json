@@ -1,0 +1,28 @@
+{
+  "case_id": "REL-LOG-01-041",
+  "title": "单 job 日志大小上限探测——500MB 带序号日志的完整保留或明确截断标识",
+  "dimension": "reliability",
+  "priority": "P2",
+  "intent_ref": "INTENT-REL-077",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "0be161249a524be7b1eb1c9cd2197064",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 597,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/0be161249a524be7b1eb1c9cd2197064",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

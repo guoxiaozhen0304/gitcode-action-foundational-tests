@@ -1,0 +1,15 @@
+[2026/07/28 12:53:13.882 GMT+08:00] [INFO] Job(1531645706840707072_1531645706781986823) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/bf29fead-0f5a-4f9d-8fbf-3db2a10d19da.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/bf29fead-0f5a-4f9d-8fbf-3db2a10d19da.sh
+FMT=Hello World
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/acdf2a07-ce50-437f-945d-fb64c714cb64.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/acdf2a07-ce50-437f-945d-fb64c714cb64.sh
+SUB=
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/2da809fd-0c6e-49da-aafa-8369ab4e27e1.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/2da809fd-0c6e-49da-aafa-8369ab4e27e1.sh
+REP=main

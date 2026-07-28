@@ -1,0 +1,36 @@
+{
+  "case_id": "COMP-VARREF-01-084",
+  "title": "${gitcode_*} 与 ${PIPELINE_*} 非标准插值的求值行为记录",
+  "dimension": "completeness",
+  "priority": "P2",
+  "intent_ref": "INTENT-COMP-032",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "2b909342af634638988d461dd9646824",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 75,
+  "log_fingerprint": "505c4381ba1f40c8",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/2b909342af634638988d461dd9646824",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'GC_LIT='",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'PL_LIT='",
+      "actual": "present"
+    }
+  ]
+}

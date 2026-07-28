@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-TOKEN-01-002",
+  "title": "GITHUB_TOKEN 在 GitCode 中应为空且不应被静默映射",
+  "dimension": "compatibility",
+  "priority": "P0",
+  "intent_ref": "INTENT-COMPAT-020",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "d632f28a356c496db8b758dcc3c78a0e",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 36,
+  "log_fingerprint": "a2e697bfc7710e14",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/d632f28a356c496db8b758dcc3c78a0e",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

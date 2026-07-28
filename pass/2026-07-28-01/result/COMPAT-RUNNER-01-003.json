@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-RUNNER-01-003",
+  "title": "self-hosted 标签不被支持时应明确报错",
+  "dimension": "compatibility",
+  "priority": "P2",
+  "intent_ref": "INTENT-COMPAT-NEW-008",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "4695771954b141fdba37926bb8225888",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 47,
+  "log_fingerprint": "488e7898896263ab",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/4695771954b141fdba37926bb8225888",
+  "assertion_results": [
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": true,
+      "expected": "conclusion != SUCCESS",
+      "actual": "FAILED"
+    }
+  ]
+}

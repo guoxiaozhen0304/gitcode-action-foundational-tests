@@ -1,0 +1,21 @@
+{
+  "case_id": "COMP-PRTARGET-01-003",
+  "title": "fork PR 按文档推荐配置 pull_request_target 的 secret 暴露面核查",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-023",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override"
+  ],
+  "reason": "??????types:[created]?issue_comment??COMPLETED??TIMEOUT/INCONCLUSIVE?YAML?types??",
+  "gitcode_run_id": "",
+  "run_status": "INCONCLUSIVE",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 0,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

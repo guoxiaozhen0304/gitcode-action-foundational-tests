@@ -1,0 +1,14 @@
+[2026/07/28 12:56:25.211 GMT+08:00] [INFO] Job(1531646509445562368_1531646509412007943) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/c31dab9d-04d7-48b9-9ba6-2acc4561980e.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/c31dab9d-04d7-48b9-9ba6-2acc4561980e.sh
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/52d51041-6d0e-414e-a206-63e59d8eaab0.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/52d51041-6d0e-414e-a206-63e59d8eaab0.sh
+OUT=hello
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/ea89facc-ebb3-4f08-bd95-c49dc7d04fdc.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/ea89facc-ebb3-4f08-bd95-c49dc7d04fdc.sh
+STEP_VAR=step_value

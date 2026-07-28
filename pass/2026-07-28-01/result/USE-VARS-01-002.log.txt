@@ -1,0 +1,7 @@
+[2026/07/28 13:30:09.883 GMT+08:00] [INFO] Job(1531655001384435712_1531655001355075591) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/8200d352-d660-4561-aab1-aebaf825ea14.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/8200d352-d660-4561-aab1-aebaf825ea14.sh
+legacy1=[]
+legacy2=[7fdcb987741a42a4bae6e89be144abf9]
+std=[ComputingActionTest/gitcode-test-1]

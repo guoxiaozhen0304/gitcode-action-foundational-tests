@@ -1,0 +1,28 @@
+{
+  "case_id": "REL-CONC-01-002",
+  "title": "concurrency.max=6 配置应被系统拒绝",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-002",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "19d0c284f07e457985a7040717beecdb",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 143,
+  "log_fingerprint": "06f19f82aa17da36",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/19d0c284f07e457985a7040717beecdb",
+  "assertion_results": [
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": true,
+      "expected": "conclusion != should_not_start",
+      "actual": "COMPLETED"
+    }
+  ]
+}

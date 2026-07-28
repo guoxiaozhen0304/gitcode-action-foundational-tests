@@ -1,0 +1,22 @@
+[2026/07/28 12:48:44.848 GMT+08:00] [INFO] Job(1531644578455363584_1531644578421809159) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/e8017af1-4f64-48e6-bba9-8e836d9adb41.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/e8017af1-4f64-48e6-bba9-8e836d9adb41.sh
+EVENT_REF=refs/heads/main
+BEFORE=4c57df878865d5ae777f7f44eeb9035dc956d3ed
+AFTER=d85d3b645d82c21ed0651e1cb9403cecd6b25834
+BASE_REF=
+CREATED=false
+DELETED=
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/1e23cb19-8afb-4205-8fb0-9985f300ea7a.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/1e23cb19-8afb-4205-8fb0-9985f300ea7a.sh
+REF_CONSISTENT=yes
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/5c09d6ec-b5a1-4ac7-ab71-15a71e70f8d9.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/5c09d6ec-b5a1-4ac7-ab71-15a71e70f8d9.sh
+BEFORE_HEX40=yes
+AFTER_HEX40=yes
+COMMITS_LEN=0

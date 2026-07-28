@@ -1,0 +1,28 @@
+{
+  "case_id": "COMP-ISOLATION-01-004",
+  "title": "托管 Runner 上特权 options 与敏感路径挂载的边界核查",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-025",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "7933b587e27d49bdabedd1a443afafac",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 46,
+  "log_fingerprint": "1b304329feb01794",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/7933b587e27d49bdabedd1a443afafac",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

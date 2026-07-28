@@ -1,0 +1,8 @@
+[2026/07/28 12:57:23.016 GMT+08:00] [INFO] Job(1531646752015126528_1531646751985766407) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/89c1f6fa-3580-443c-8bc2-383437bd2105.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/89c1f6fa-3580-443c-8bc2-383437bd2105.sh
+SHA_MATCH=yes
+REF_MATCH=yes
+EVENT_MATCH=yes
+REPO_MATCH=yes

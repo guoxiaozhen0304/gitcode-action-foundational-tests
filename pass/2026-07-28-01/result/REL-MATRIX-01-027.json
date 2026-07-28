@@ -1,0 +1,28 @@
+{
+  "case_id": "REL-MATRIX-01-027",
+  "title": "matrix max-parallel=4——9 个组合应最多同时运行 4 个",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-027",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "e1ac8e6a68b348f68266bb7148c91f8f",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 10,
+  "duration_seconds": 119,
+  "log_fingerprint": "777d401a319126ae",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/e1ac8e6a68b348f68266bb7148c91f8f",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "case_id": "COMP-EXPR-01-057",
+  "title": "format substring replace 函数边界行为",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-057",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "bf6daa0113ce4a73a8f80db97307ffb0",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 61,
+  "log_fingerprint": "496da4ed5e08d605",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/bf6daa0113ce4a73a8f80db97307ffb0",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'FMT=Hello World'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'SUB='",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'REP='",
+      "actual": "present"
+    }
+  ]
+}

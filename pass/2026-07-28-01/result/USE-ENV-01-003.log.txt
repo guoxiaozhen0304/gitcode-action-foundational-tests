@@ -1,0 +1,43 @@
+[2026/07/28 13:26:06.805 GMT+08:00] [INFO] Job(1531653981866827776_1531653981833273351) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/63c6ba54-2276-466d-93f0-9da9babcb27f.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/63c6ba54-2276-466d-93f0-9da9babcb27f.sh
+ATOMGIT_ACTION=dump atomgit env vars
+ATOMGIT_ACTION_PATH=
+ATOMGIT_ACTION_REF=1.0.0
+ATOMGIT_ACTION_REPOSITORY=official_shell
+ATOMGIT_ACTIONS=true
+ATOMGIT_ACTOR_ID=11123796
+ATOMGIT_ACTOR=yyl-support
+ATOMGIT_API_URL=https://api.atomgit.com
+ATOMGIT_BASE_REF=main
+ATOMGIT_ENV=/home/slave1/runner/workers/0.0.4.4.version/_temp/_runner_file_commands/set_env_8fb77c32-f74e-420f-8820-5e18969674f3
+ATOMGIT_EVENT_NAME=Manual
+ATOMGIT_HEAD_REF=
+ATOMGIT_JOB=atomgit env injection probe
+ATOMGIT_JOB_RUN_ID=d26ce2d62a9548ce99dd160393c3c7d2
+ATOMGIT_OUTPUT=/home/slave1/runner/workers/0.0.4.4.version/_temp/_runner_file_commands/set_output_8fb77c32-f74e-420f-8820-5e18969674f3
+ATOMGIT_PATH=/home/slave1/runner/workers/0.0.4.4.version/_temp/_runner_file_commands/add_path_8fb77c32-f74e-420f-8820-5e18969674f3
+ATOMGIT_PIPELINE_ID=99d25ba88d6c4198a8da5607eb55ed28
+ATOMGIT_PIPELINE_RUN_ID=8376cbb15f1f4baebc6ceeb2db443ac3
+ATOMGIT_REF=main
+ATOMGIT_REF_NAME=main
+ATOMGIT_REF_TYPE=branch
+ATOMGIT_REPOSITORY=ComputingActionTest/gitcode-test-2
+ATOMGIT_REPOSITORY_ID=10431335
+ATOMGIT_REPOSITORY_URL=https://gitcode.com/ComputingActionTest/gitcode-test-2.git
+ATOMGIT_REPOSITORYURL=https://gitcode.com/ComputingActionTest/gitcode-test-2.git
+ATOMGIT_RUN_ID=0da45942301a40d782e3d3a8a0ea6d18
+ATOMGIT_RUN_NUMBER=1
+ATOMGIT_SERVER_URL=https://atomgit.com
+ATOMGIT_SHA=
+ATOMGIT_SOURCE_REPOSITORY_ID=
+ATOMGIT_START_TIMESTAMP=20260728132605
+ATOMGIT_STATE=/home/slave1/runner/workers/0.0.4.4.version/_temp/_runner_file_commands/save_state_8fb77c32-f74e-420f-8820-5e18969674f3
+ATOMGIT_STEP_SUMMARY=/tmp/step_summary_0d2d5316-9b00-45f8-90df-28329a473e9e.md
+ATOMGIT_TOKEN=***
+ATOMGIT_TRIGGERING_ACTOR=GT-69faf5e9e86a354be6222fa3
+ATOMGIT_WORKFLOW=99d25ba88d6c4198a8da5607eb55ed28
+ATOMGIT_WORKFLOW_ID=031796d7f2ff4e27898d00d3aed785b3
+ATOMGIT_WORKFLOW_RUN_ID=0da45942301a40d782e3d3a8a0ea6d18
+ATOMGIT_WORKSPACE=/home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-2

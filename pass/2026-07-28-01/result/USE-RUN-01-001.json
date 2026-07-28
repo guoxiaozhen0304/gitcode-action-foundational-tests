@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-RUN-01-001",
+  "title": "使用三段式标签时 job 正常调度",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-006",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "671aa27f1e744fe285b3d0b0920c19a1",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 31,
+  "log_fingerprint": "95c15030269a8927",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/671aa27f1e744fe285b3d0b0920c19a1",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

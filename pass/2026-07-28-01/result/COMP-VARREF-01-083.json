@@ -1,0 +1,44 @@
+{
+  "case_id": "COMP-VARREF-01-083",
+  "title": "YAML 表达式与 Shell 环境变量引用方式验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-083",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "8da999a990c04d89af1878a0ee014fc7",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 40,
+  "log_fingerprint": "d4f2ea64ff300632",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/8da999a990c04d89af1878a0ee014fc7",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'EXPR=hello'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'ENV=hello'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'ref_ok'",
+      "actual": "present"
+    }
+  ]
+}

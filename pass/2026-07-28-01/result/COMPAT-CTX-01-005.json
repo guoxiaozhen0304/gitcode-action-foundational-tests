@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-CTX-01-005",
+  "title": "atomgit 缺位字段（job/run_attempt/triggering_actor/ref_protected）求值行为探测",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-040",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "957b14e06d354fc8a5f907f60bb968b7",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 46,
+  "log_fingerprint": "8432ec59b3f0b438",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/957b14e06d354fc8a5f907f60bb968b7",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'PROBE_DONE'",
+      "actual": "present"
+    }
+  ]
+}

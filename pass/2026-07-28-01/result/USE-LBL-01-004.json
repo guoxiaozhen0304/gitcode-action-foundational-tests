@@ -1,0 +1,21 @@
+{
+  "case_id": "USE-LBL-01-004",
+  "title": "quick-start 单标签写法 runs-on ubuntu-latest 的可调度性验证",
+  "dimension": "usability",
+  "priority": "P0",
+  "intent_ref": "INTENT-USE-031",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override"
+  ],
+  "reason": "?????runs-on: ubuntu-latest ??????????workflow ????",
+  "gitcode_run_id": "probe-on-gitcode-test-0",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 0,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

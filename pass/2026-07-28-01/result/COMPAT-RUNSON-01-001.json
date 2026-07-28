@@ -1,0 +1,44 @@
+{
+  "case_id": "COMPAT-RUNSON-01-001",
+  "title": "runs-on 标签体系——三段式数组正常匹配",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-027",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "6b3c57f4337c404da6f7e04fe416f976",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 61,
+  "log_fingerprint": "c8271748a1dd3b3b",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/6b3c57f4337c404da6f7e04fe416f976",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'RUNSON_ARRAY_OK'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'RUNNER_OS='",
+      "actual": "present"
+    }
+  ]
+}

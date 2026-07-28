@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-RUNNER-01-001",
+  "title": "runner.os 在 Linux Runner 上应返回 Linux",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-018",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "082b66cbc9fe4590a72299964ed58983",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 97,
+  "log_fingerprint": "47735bb2e8fbaf4d",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/082b66cbc9fe4590a72299964ed58983",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

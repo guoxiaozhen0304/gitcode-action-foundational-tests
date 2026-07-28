@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-UNKN-01-002",
+  "title": "未知字段报错若识别为 GitHub 特有应追加迁移提示",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-023",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "2ed4b4be320949079ef4caf9a57e6064",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 86,
+  "log_fingerprint": "68c6c7a79b5bd1a8",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/2ed4b4be320949079ef4caf9a57e6064",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "case_id": "SEC-RUN-01-002",
+  "title": "Runner 环境变量与共享目录必须跨 job 隔离",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-021",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "ba27de9d260f4f1cbf441c7c9b8cc3e2",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 2,
+  "duration_seconds": 54,
+  "log_fingerprint": "da1f925098886e84",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/ba27de9d260f4f1cbf441c7c9b8cc3e2",
+  "assertion_results": [
+    {
+      "kind": "leak",
+      "type": "negative",
+      "target": "run_logs",
+      "pass": true,
+      "is_security_critical": true,
+      "expected": "plaintext 'isolation broken' 0 hits",
+      "actual": 0
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'isolated as expected'",
+      "actual": "present"
+    }
+  ]
+}

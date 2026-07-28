@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-CLI-01-001",
+  "title": "Runner 无 gh 等效 CLI 时迁移指引的替代方案说明",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-045",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "b522df5293b14003af7533a9a03c989d",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 73,
+  "log_fingerprint": "2de72fb8a4e53a02",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/b522df5293b14003af7533a9a03c989d",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

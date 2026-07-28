@@ -1,0 +1,14 @@
+[2026/07/28 13:46:08.527 GMT+08:00] [INFO] Job(1531659022388310016_1531659022363144199) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/54da2d3d-5596-4558-ad4c-46f6537427d1.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/54da2d3d-5596-4558-ad4c-46f6537427d1.sh
+PR_NUM=40
+PR_TITLE=test: COMP-TRIG-01-073
+PR_STATE=opened
+pr_ok
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/77dcb519-8b57-42b6-a209-967cc4bcbd17.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/77dcb519-8b57-42b6-a209-967cc4bcbd17.sh
+PR_ACTION=open
+type_in_filter

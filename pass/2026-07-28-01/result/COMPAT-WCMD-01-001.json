@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-WCMD-01-001",
+  "title": "::add-mask:: 不被支持时应静默降级而非报错",
+  "dimension": "compatibility",
+  "priority": "P2",
+  "intent_ref": "INTENT-COMPAT-NEW-009",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "5d13d5a5157a411c957bb8135900897d",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 29,
+  "log_fingerprint": "9fefd06126267e4b",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/5d13d5a5157a411c957bb8135900897d",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

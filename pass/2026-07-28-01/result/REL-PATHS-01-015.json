@@ -1,0 +1,21 @@
+{
+  "case_id": "REL-PATHS-01-015",
+  "title": "paths 匹配越界值——第 301 个变更文件不参与 paths 匹配判断",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-015",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override"
+  ],
+  "reason": "?????? src/** ????? workflow ???????",
+  "gitcode_run_id": "f713643928454a5697d547a19da9cb41",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 624,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/f713643928454a5697d547a19da9cb41",
+  "assertion_results": []
+}

@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-PERM-01-001",
+  "title": "使用 GitCode 权限域命名时正常生效",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-005",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "20f86d5c7e1e4e19a223d467031d5a5d",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 39,
+  "log_fingerprint": "0f162328c2dce903",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/20f86d5c7e1e4e19a223d467031d5a5d",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

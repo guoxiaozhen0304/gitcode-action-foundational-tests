@@ -1,0 +1,36 @@
+{
+  "case_id": "COMPAT-PR-01-001",
+  "title": "pull_request types 命名差异 - GitCode 合法 types 应被接受",
+  "dimension": "compatibility",
+  "priority": "P0",
+  "intent_ref": "INTENT-COMPAT-011",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "55860b48e0fe47479669ef68a441fd09",
+  "run_status": "COMPLETED",
+  "head_sha": "1588bcc9e3235e572d85f136e9165781732173f4",
+  "job_count": 1,
+  "duration_seconds": 82,
+  "log_fingerprint": "e88f8271d420c227",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/55860b48e0fe47479669ef68a441fd09",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'PR_TYPES_OK'",
+      "actual": "present"
+    }
+  ]
+}

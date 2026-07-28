@@ -1,0 +1,44 @@
+{
+  "case_id": "COMP-TRIG-01-072",
+  "title": "push 事件关键字段与过滤验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-072",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "b79f2b60602c4512958f382c2615c2fa",
+  "run_status": "COMPLETED",
+  "head_sha": "d524da2f861068fdd3a0b64f9647843f6611e505",
+  "job_count": 1,
+  "duration_seconds": 25,
+  "log_fingerprint": "21fd282bf6118c0d",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/b79f2b60602c4512958f382c2615c2fa",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'REF=refs/'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'BEFORE='",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'push_ok'",
+      "actual": "present"
+    }
+  ]
+}

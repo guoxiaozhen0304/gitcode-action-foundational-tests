@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-ENV-01-001",
+  "title": "使用 ATOMGIT_SHA 环境变量时正常取值",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-003",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "d72ccd3dcb7f4af092aac0c64d175a5a",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 29,
+  "log_fingerprint": "db7630463db32ff2",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/d72ccd3dcb7f4af092aac0c64d175a5a",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'sha='",
+      "actual": "present"
+    }
+  ]
+}

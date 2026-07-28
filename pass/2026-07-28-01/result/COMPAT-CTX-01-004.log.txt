@@ -1,0 +1,6 @@
+[2026/07/28 13:02:56.645 GMT+08:00] [INFO] Job(1531648151234560000_1531648151201005575) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/7e9e40a8-4393-4fa1-a25c-64557e69d17b.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/7e9e40a8-4393-4fa1-a25c-64557e69d17b.sh
+ACTOR_VALUE=yyl-support
+PROBE_DONE

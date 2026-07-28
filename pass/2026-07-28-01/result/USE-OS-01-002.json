@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-OS-01-002",
+  "title": "runner 上下文返回值精确格式与文档枚举值逐字符一致性",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-041",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "7448294917774acd8dd34c7eb0dfdafa",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 49,
+  "log_fingerprint": "8cf1575c11ae329a",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/7448294917774acd8dd34c7eb0dfdafa",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

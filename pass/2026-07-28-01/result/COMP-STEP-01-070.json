@@ -1,0 +1,36 @@
+{
+  "case_id": "COMP-STEP-01-070",
+  "title": "step 可选字段 id env if with 验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-069",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "a22c9eef70c44fb8b6ef22c9747fbd42",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 37,
+  "log_fingerprint": "752dadd797b3958b",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/a22c9eef70c44fb8b6ef22c9747fbd42",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'OUT=hello'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'STEP_VAR=step_value'",
+      "actual": "present"
+    }
+  ]
+}

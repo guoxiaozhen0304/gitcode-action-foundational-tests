@@ -1,0 +1,29 @@
+{
+  "case_id": "COMPAT-EXPR-01-011",
+  "title": "join() 函数缺失时的降级行为",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-010",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "1d2fc9cb7e494dfa9a926dee265fb08a",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 49,
+  "log_fingerprint": "ca6b59498194d619",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/1d2fc9cb7e494dfa9a926dee265fb08a",
+  "assertion_results": [
+    {
+      "kind": "leak",
+      "type": "negative",
+      "target": "run_logs",
+      "pass": true,
+      "is_security_critical": true,
+      "expected": "plaintext 'join-result=a-b-c' 0 hits",
+      "actual": 0
+    }
+  ]
+}

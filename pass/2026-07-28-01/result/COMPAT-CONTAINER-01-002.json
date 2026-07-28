@@ -1,0 +1,21 @@
+{
+  "case_id": "COMPAT-CONTAINER-01-002",
+  "title": "container 自定义镜像被拒绝时应给出替代指引",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-NEW-001",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override"
+  ],
+  "reason": "?????container: ?????????(HTTP 400)??????????",
+  "gitcode_run_id": "",
+  "run_status": "TIMEOUT",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 641,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

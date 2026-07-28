@@ -1,0 +1,49 @@
+{
+  "case_id": "REL-NEEDS-01-027",
+  "title": "needs 依赖 matrix job 部分失败——无 if 条件的下游 job 应 skipped 而非执行",
+  "dimension": "reliability",
+  "priority": "P0",
+  "intent_ref": "INTENT-REL-069",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override"
+  ],
+  "reason": "?????matrix+needs ??????(5 jobs,??IGNORED)?assertion_engine ? YAML key ?? job name ????? INCONCLUSIVE",
+  "gitcode_run_id": "5548ccd22cf44d6180c693f1003b3161",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 5,
+  "duration_seconds": 103,
+  "log_fingerprint": "63704687495593d8",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/5548ccd22cf44d6180c693f1003b3161",
+  "assertion_results": [
+    {
+      "kind": "job_status",
+      "type": "positive",
+      "target": "job_status",
+      "pass": false,
+      "inconclusive": true,
+      "expected": "job_status == FAILED (name~'job_b')",
+      "actual": "无匹配 'job_b' 的 job——无法判定"
+    },
+    {
+      "kind": "job_status",
+      "type": "positive",
+      "target": "job_status",
+      "pass": false,
+      "inconclusive": true,
+      "expected": "job_status == IGNORED (name~'job_a')",
+      "actual": "无匹配 'job_a' 的 job——无法判定"
+    },
+    {
+      "kind": "job_status",
+      "type": "positive",
+      "target": "job_status",
+      "pass": false,
+      "inconclusive": true,
+      "expected": "job_status == COMPLETED (name~'job_a')",
+      "actual": "无匹配 'job_a' 的 job——无法判定"
+    }
+  ]
+}

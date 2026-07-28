@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-DOC-01-004",
+  "title": "workflow-commands 多行输出示例漏写重定向照抄得空输出",
+  "dimension": "usability",
+  "priority": "P0",
+  "intent_ref": "INTENT-USE-033",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "bd62ab2f99d2432e8d0987403d98f51d",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 60,
+  "log_fingerprint": "9f6178af568df8e6",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/bd62ab2f99d2432e8d0987403d98f51d",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

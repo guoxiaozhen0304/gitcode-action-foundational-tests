@@ -1,0 +1,36 @@
+{
+  "case_id": "COMPAT-EXPR-01-010",
+  "title": "loose equality null 与空字符串及零的等价性差异",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-009",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "57e7ba738bd446a088f2e8e2d5766028",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 93,
+  "log_fingerprint": "69cb3df26a54c726",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/57e7ba738bd446a088f2e8e2d5766028",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'NULL_EQ_EMPTY='",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'NULL_EQ_ZERO='",
+      "actual": "present"
+    }
+  ]
+}

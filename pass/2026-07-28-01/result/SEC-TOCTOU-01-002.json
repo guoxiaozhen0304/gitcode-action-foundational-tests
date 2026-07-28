@@ -1,0 +1,21 @@
+{
+  "case_id": "SEC-TOCTOU-01-002",
+  "title": "评论触发不应绕过代码固定与 PR 审批",
+  "dimension": "security",
+  "priority": "P0",
+  "intent_ref": "INTENT-SEC-031",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override"
+  ],
+  "reason": "??????types:[created]?issue_comment??COMPLETED??TIMEOUT/INCONCLUSIVE?YAML?types??",
+  "gitcode_run_id": "",
+  "run_status": "TIMEOUT",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 659,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

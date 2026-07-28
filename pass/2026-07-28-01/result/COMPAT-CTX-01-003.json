@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-CTX-01-003",
+  "title": "github 上下文嵌套属性访问应报错而非返回空",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-016",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "21a704e36e8c4ca1a11ef7a6b8ad20a7",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 61,
+  "log_fingerprint": "7023eee84c1ce6ba",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/21a704e36e8c4ca1a11ef7a6b8ad20a7",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

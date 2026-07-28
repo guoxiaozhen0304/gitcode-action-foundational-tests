@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-VARS-01-002",
+  "title": "vars 上下文若不支持应报错而非静默为空",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-022",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "e13b65a3a6c247d2bd0b6f93657064af",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 86,
+  "log_fingerprint": "2464823b54d2bea8",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/e13b65a3a6c247d2bd0b6f93657064af",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

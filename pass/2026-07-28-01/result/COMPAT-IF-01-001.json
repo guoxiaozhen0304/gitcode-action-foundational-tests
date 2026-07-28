@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-IF-01-001",
+  "title": "step 失败后后续 step 默认跳过行为",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-003",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "d70a458402ea417dbfefe674d6868457",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 132,
+  "log_fingerprint": "c4351f754f919637",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/d70a458402ea417dbfefe674d6868457",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "FAILED",
+      "actual": "FAILED"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-EXPR-01-004",
+  "title": "未文档化函数 default() 的文档缺失 diff（与平台行为断言合并证据链）",
+  "dimension": "usability",
+  "priority": "P2",
+  "intent_ref": "INTENT-USE-039",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "2e0ce34e35cb49629eac46148b0b3a6e",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 39,
+  "log_fingerprint": "d66a7e148a2cf46d",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/2e0ce34e35cb49629eac46148b0b3a6e",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "case_id": "COMP-TRIG-01-078",
+  "title": "多事件组合与分支路径过滤验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-078",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override",
+    "reverted_from_fail"
+  ],
+  "reason": "??????????????",
+  "gitcode_run_id": "",
+  "run_status": "TIMEOUT",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 637,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

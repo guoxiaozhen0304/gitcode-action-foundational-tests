@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-TYPE-01-001",
+  "title": "使用 GitCode types 命名时正常触发",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-009",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "74f6175d06bf487380f1418603a8e085",
+  "run_status": "COMPLETED",
+  "head_sha": "687d8db4d1c694f4dd5559a4d9cf44bb65ae1523",
+  "job_count": 1,
+  "duration_seconds": 22,
+  "log_fingerprint": "bc05e00f59a32e11",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/74f6175d06bf487380f1418603a8e085",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

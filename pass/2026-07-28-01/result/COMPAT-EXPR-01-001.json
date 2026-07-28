@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-EXPR-01-001",
+  "title": "success 关键字在条件表达式中的可用性",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-004",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "8be40c20624c42f28708848253c6a11c",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 46,
+  "log_fingerprint": "c9ce3821ecc4bf36",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/8be40c20624c42f28708848253c6a11c",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'implicit success confirmed'",
+      "actual": "present"
+    }
+  ]
+}

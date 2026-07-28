@@ -1,0 +1,5 @@
+[2026/07/28 13:25:27.098 GMT+08:00] [INFO] Job(1531653815499632640_1531653815474466823) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/6d81f5e1-ba22-4a07-891b-7e2bc357b1b2.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/6d81f5e1-ba22-4a07-891b-7e2bc357b1b2.sh
+workflow triggered from .gitcode/workflows/

@@ -1,0 +1,36 @@
+{
+  "case_id": "USE-ANNOT-01-001",
+  "title": "workflow 命令 ::error:: 与 ::warning:: 在日志中保留原文",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-021",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "d47f87fbbf194cc09124be1ca0476883",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 44,
+  "log_fingerprint": "e95d47ee2037dbd3",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/d47f87fbbf194cc09124be1ca0476883",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains '::error file=src/main.js,line=10::Missing semicolon'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains '::warning file=src/util.js,line=5::Deprecated function'",
+      "actual": "present"
+    }
+  ]
+}

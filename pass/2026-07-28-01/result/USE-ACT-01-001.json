@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-ACT-01-001",
+  "title": "使用裸插件名 checkout 时正常拉取官方 Action",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-007",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "ce6ae099377548dca508b49194884829",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 57,
+  "log_fingerprint": "222989353b6bbee7",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/ce6ae099377548dca508b49194884829",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

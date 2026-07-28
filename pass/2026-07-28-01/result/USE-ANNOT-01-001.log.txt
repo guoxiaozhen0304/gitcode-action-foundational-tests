@@ -1,0 +1,7 @@
+[2026/07/28 13:23:36.088 GMT+08:00] [INFO] Job(1531653349852323840_1531653349818769415) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/0aa95cca-36a1-4b45-8eec-15cce612c02d.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/0aa95cca-36a1-4b45-8eec-15cce612c02d.sh
+::error file=src/main.js,line=10::Missing semicolon
+::warning file=src/util.js,line=5::Deprecated function
+::notice::General notice

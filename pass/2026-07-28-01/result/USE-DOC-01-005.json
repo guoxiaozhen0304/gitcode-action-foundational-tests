@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-DOC-01-005",
+  "title": "configure-steps 的 shell 类型与命令语言不匹配示例照抄失败",
+  "dimension": "usability",
+  "priority": "P0",
+  "intent_ref": "INTENT-USE-033",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "b353eaaf658f4bc3a1a21e9df715bd69",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 2,
+  "duration_seconds": 51,
+  "log_fingerprint": "989f17057c08b2db",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/b353eaaf658f4bc3a1a21e9df715bd69",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "FAILED",
+      "actual": "FAILED"
+    }
+  ]
+}

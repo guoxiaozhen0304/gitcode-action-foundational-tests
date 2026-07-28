@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-PERM-01-005",
+  "title": "permissions 空对象时 ATOMGIT_TOKEN 默认权限范围差异",
+  "dimension": "compatibility",
+  "priority": "P0",
+  "intent_ref": "INTENT-COMPAT-030",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "4ecd70a87e2c4ecdac48c520aaaeed2d",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 54,
+  "log_fingerprint": "c329937b565d7203",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/4ecd70a87e2c4ecdac48c520aaaeed2d",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

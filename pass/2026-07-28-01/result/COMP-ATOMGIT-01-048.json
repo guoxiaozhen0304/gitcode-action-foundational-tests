@@ -1,0 +1,60 @@
+{
+  "case_id": "COMP-ATOMGIT-01-048",
+  "title": "atomgit 事件相关属性可访问性",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-048",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "d417958ea27645a2bfb1b17ed8425984",
+  "run_status": "COMPLETED",
+  "head_sha": "d85d3b645d82c21ed0651e1cb9403cecd6b25834",
+  "job_count": 1,
+  "duration_seconds": 145,
+  "log_fingerprint": "43578c7df7778a81",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/d417958ea27645a2bfb1b17ed8425984",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'EVENT_REF=refs/'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'BEFORE_HEX40=yes'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'AFTER_HEX40=yes'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'COMMITS_LEN='",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'REF_CONSISTENT=yes'",
+      "actual": "present"
+    }
+  ]
+}

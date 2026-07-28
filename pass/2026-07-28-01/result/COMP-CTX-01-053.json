@@ -1,0 +1,28 @@
+{
+  "case_id": "COMP-CTX-01-053",
+  "title": "上下文在 Action 插件参数中注入验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-051",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "e7439a1f7d3a4a3ebe96a6e265da96cd",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 63,
+  "log_fingerprint": "1bc4663bb2ad4b96",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/e7439a1f7d3a4a3ebe96a6e265da96cd",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}

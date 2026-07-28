@@ -1,0 +1,6 @@
+[2026/07/28 13:04:57.775 GMT+08:00] [INFO] Job(1531648659328733184_1531648659307761671) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/5e45277f-7ed1-4630-ab32-d25bcc0120ba.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/5e45277f-7ed1-4630-ab32-d25bcc0120ba.sh
+github_sha=
+done

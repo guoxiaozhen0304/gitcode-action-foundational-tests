@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-STAT-01-001",
+  "title": "使用 always() 带括号时若被接受则正常执行",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-004",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "30561ecd0ed643c08610b1f1cc8fd5b2",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 43,
+  "log_fingerprint": "2e4404738a710965",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/30561ecd0ed643c08610b1f1cc8fd5b2",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'cleanup executed'",
+      "actual": "present"
+    }
+  ]
+}

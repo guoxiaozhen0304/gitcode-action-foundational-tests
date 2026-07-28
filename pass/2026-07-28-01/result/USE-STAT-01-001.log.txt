@@ -1,0 +1,10 @@
+[2026/07/28 13:28:57.263 GMT+08:00] [INFO] Job(1531654696890802176_1531654696853053447) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/658b4644-a434-4484-a66f-cab803d20ed2.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/658b4644-a434-4484-a66f-cab803d20ed2.sh
+::error::Process exited with code 1
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/1034c3d0-7e49-4481-b54b-41c470882b50.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/1034c3d0-7e49-4481-b54b-41c470882b50.sh
+cleanup executed

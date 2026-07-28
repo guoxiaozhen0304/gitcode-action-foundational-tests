@@ -1,0 +1,10 @@
+[2026/07/28 13:08:28.674 GMT+08:00] [INFO] Job(1531649543961972736_1531649543941001221) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/4115aa40-2442-4d90-b015-c7036f0d243c.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/4115aa40-2442-4d90-b015-c7036f0d243c.sh
+${{ toJson({key1: value1, key2: value2}) }}
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/acb9d07d-f1fc-4208-bdcd-21ef833ab802.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/acb9d07d-f1fc-4208-bdcd-21ef833ab802.sh
+${{ toJson([a, b, c]) }}

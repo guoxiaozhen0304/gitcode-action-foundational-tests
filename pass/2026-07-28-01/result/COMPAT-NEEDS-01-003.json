@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-NEEDS-01-003",
+  "title": "matrix 上游 job 的 needs outputs 聚合语义与未声明 output 边界",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-041",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "75a5cd41c672449f9e4148e8c181c4aa",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 4,
+  "duration_seconds": 58,
+  "log_fingerprint": "51dd70981acb83f0",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/75a5cd41c672449f9e4148e8c181c4aa",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'PROBE_DONE'",
+      "actual": "present"
+    }
+  ]
+}

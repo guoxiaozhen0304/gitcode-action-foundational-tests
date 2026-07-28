@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-ACT-01-002",
+  "title": "使用 actions/checkout@v4 时报错应给出迁移指引",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-007",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "226e47c533e94c9e8b26672f72f57d8d",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 53,
+  "log_fingerprint": "21a09345d0129c2f",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/226e47c533e94c9e8b26672f72f57d8d",
+  "assertion_results": [
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": true,
+      "expected": "conclusion != COMPLETED",
+      "actual": "FAILED"
+    }
+  ]
+}

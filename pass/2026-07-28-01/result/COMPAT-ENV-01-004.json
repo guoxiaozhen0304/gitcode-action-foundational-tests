@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-ENV-01-004",
+  "title": "ATOMGIT_ENV 覆写系统默认变量的防护（对齐 GitHub 同名禁止）",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-043",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "60e0c5cc8c6140869c7f7d2a5f51a643",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 60,
+  "log_fingerprint": "b21f9d62fdca317d",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/60e0c5cc8c6140869c7f7d2a5f51a643",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'CUSTOM_NOW=custom-ok'",
+      "actual": "present"
+    }
+  ]
+}

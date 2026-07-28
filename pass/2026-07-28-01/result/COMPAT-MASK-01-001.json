@@ -1,0 +1,27 @@
+{
+  "case_id": "COMPAT-MASK-01-001",
+  "title": "直接 echo secrets 值应在日志中被脱敏",
+  "dimension": "compatibility",
+  "priority": "P0",
+  "intent_ref": "INTENT-COMPAT-033",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "dc2d5d418a54457e8a87a27026eb4c7e",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 84,
+  "log_fingerprint": "af5548890266577b",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/dc2d5d418a54457e8a87a27026eb4c7e",
+  "assertion_results": [
+    {
+      "kind": "config_probe",
+      "pass": true,
+      "not_configured": false,
+      "expected": "资源已配置（日志无 'configured_len=0'）",
+      "actual": "configured"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-ACTION-01-003",
+  "title": "GitHub 风格 action 引用 actions/checkout@v4 的解析域探测",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-045",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "e9fa04daa8e746d6abe6fe7da1949533",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 45,
+  "log_fingerprint": "15620d3dd4babfdb",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/e9fa04daa8e746d6abe6fe7da1949533",
+  "assertion_results": [
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": true,
+      "expected": "conclusion != SUCCESS",
+      "actual": "FAILED"
+    }
+  ]
+}

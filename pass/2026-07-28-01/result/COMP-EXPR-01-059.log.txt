@@ -1,0 +1,11 @@
+[2026/07/28 13:31:07.678 GMT+08:00] [INFO] Job(1531655243853209600_1531655243819655175) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/a7fdfb0f-8ada-4d43-9835-a931bcc41c59.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/a7fdfb0f-8ada-4d43-9835-a931bcc41c59.sh
+DEFAULT_FN_JOB_RAN
+
+[2026/07/28 13:31:07.732 GMT+08:00] [INFO] Job(1531655243853209600_1531655243819655177) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/ecf1fbcc-fff8-4455-96ee-a606abb12a34.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/ecf1fbcc-fff8-4455-96ee-a606abb12a34.sh
+WITNESS_RAN

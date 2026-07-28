@@ -1,0 +1,21 @@
+{
+  "case_id": "COMPAT-DIR-01-003",
+  "title": ".github/workflows 目录不应被识别且应给出迁移提示",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-029",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override"
+  ],
+  "reason": "?????.github/workflows/????GitCode??(?.gitcode/workflows/)??????????",
+  "gitcode_run_id": "",
+  "run_status": "TIMEOUT",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 717,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

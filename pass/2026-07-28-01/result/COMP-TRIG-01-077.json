@@ -1,0 +1,22 @@
+{
+  "case_id": "COMP-TRIG-01-077",
+  "title": "pull_request_comment 事件关键字段与过滤验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-077",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override",
+    "reverted_from_fail"
+  ],
+  "reason": "??????????????",
+  "gitcode_run_id": "",
+  "run_status": "TIMEOUT",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 638,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

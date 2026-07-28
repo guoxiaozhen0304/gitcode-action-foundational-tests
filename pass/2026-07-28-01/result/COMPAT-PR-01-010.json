@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-PR-01-010",
+  "title": "存在合并冲突的 PR 的触发行为（GitHub 不触发）对齐确认",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-039",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "d6ff5bd8a42146eb80779f9d92395e47",
+  "run_status": "COMPLETED",
+  "head_sha": "9943fa681663653d6f14d3b6e930ec40271b33b0",
+  "job_count": 1,
+  "duration_seconds": 21,
+  "log_fingerprint": "0f367b0d57f027ae",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/d6ff5bd8a42146eb80779f9d92395e47",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

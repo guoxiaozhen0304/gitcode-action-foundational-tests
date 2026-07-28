@@ -1,0 +1,21 @@
+{
+  "case_id": "REL-PATHS-01-014",
+  "title": "paths 匹配边界值——变更恰好 300 个文件时 paths 过滤应生效",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-014",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [
+    "manual_override"
+  ],
+  "reason": "?????? src/** ????? workflow ???????",
+  "gitcode_run_id": "9403d7c73ec64c1096afe6306ff5f957",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 618,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/9403d7c73ec64c1096afe6306ff5f957",
+  "assertion_results": []
+}

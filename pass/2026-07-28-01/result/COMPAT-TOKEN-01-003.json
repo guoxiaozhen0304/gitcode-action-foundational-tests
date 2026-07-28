@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-TOKEN-01-003",
+  "title": "GITHUB_TOKEN 不应被静默映射为 ATOMGIT_TOKEN",
+  "dimension": "compatibility",
+  "priority": "P0",
+  "intent_ref": "INTENT-COMPAT-020",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "b55b463ea11f4213b2cb78af7d35d03f",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 133,
+  "log_fingerprint": "08adc288d29d3538",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/b55b463ea11f4213b2cb78af7d35d03f",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "all job/step green",
+      "actual": "all job/step green"
+    }
+  ]
+}

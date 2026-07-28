@@ -1,0 +1,28 @@
+{
+  "case_id": "COMP-CTX-01-054",
+  "title": "pull_request 触发下 inputs 上下文求值裁定",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-020",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "dd8e17dc20004626aaa24bcc5687191e",
+  "run_status": "COMPLETED",
+  "head_sha": "3175f1cb90c25d48f5a23d027c353aaf401c8d39",
+  "job_count": 1,
+  "duration_seconds": 58,
+  "log_fingerprint": "40222ee3ffe1d4ea",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/dd8e17dc20004626aaa24bcc5687191e",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'INPUT_PR_ID='",
+      "actual": "present"
+    }
+  ]
+}

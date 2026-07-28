@@ -1,0 +1,6 @@
+[2026/07/28 13:15:12.816 GMT+08:00] [INFO] Job(1531651239148654592_1531651239127683079) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/4e686732-c22a-44a7-af18-0930a56f7534.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/4e686732-c22a-44a7-af18-0930a56f7534.sh
+org_var=org_value
+done

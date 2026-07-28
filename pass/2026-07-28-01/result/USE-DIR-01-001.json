@@ -1,0 +1,28 @@
+{
+  "case_id": "USE-DIR-01-001",
+  "title": "workflow 放置于 .gitcode/workflows/ 下可正常触发",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-001",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "PASS",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "d6412fa783ef46b28d4f7820718e0118",
+  "run_status": "COMPLETED",
+  "head_sha": "d0669cfa5d61a54893ac7895d3c75cff9541b03e",
+  "job_count": 1,
+  "duration_seconds": 49,
+  "log_fingerprint": "ec2d992a006f0fe0",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-1/actions/runs/d6412fa783ef46b28d4f7820718e0118",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": true,
+      "expected": "COMPLETED",
+      "actual": "COMPLETED"
+    }
+  ]
+}
