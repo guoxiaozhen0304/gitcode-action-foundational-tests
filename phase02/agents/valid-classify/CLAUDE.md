@@ -42,20 +42,15 @@
 
 ### Step 1: 逐文件校验
 
-调用 `POST https://web-api.gitcode.com/api/v2/projects/ComputingActionTest%2Ffoundational-tests/actions/valid`。
+执行 `phase02/agents/valid-classify/batch_validate.py`：
 
-请求 body：
-```json
-{
-  "file_content": "<yaml 内容>",
-  "file_path": ".gitcode/workflows/<id>.yml",
-  "workflow_id": "b03a4b84cd784ddea00c5270eba62c7f"
-}
+```bash
+python3 phase02/agents/valid-classify/batch_validate.py \
+  phase02/agents/scriptable-classify/output/scriptable/ \
+  phase02/agents/valid-classify/output/
 ```
 
-认证：需要 `GITCODE_COOKIE` 和 `GITCODE_ACCESS_TOKEN`（从项目根 `.env` 读取）。
-
-请求间隔 ≥ 0.8 秒，避免限流。
+脚本内置 WAF 白名单，自动将白名单中的 418 响应归入 `valid/`。
 
 ### Step 2: 按响应分组
 
@@ -86,9 +81,26 @@ valid-classify/output/
 
 | 分组 | 数量 |
 |------|:---:|
-| valid | N |
+| valid | N (+N WAF whitelist) |
 | invalid | N |
 | WAF | N |
+| SKIP | N |
+
+## WAF 白名单
+
+| Case ID | 拦截原因 |
+|---------|------|
+| COMP-ATOMGIT-01-047 | workflow body 含 `${}` 触发 WAF，人工验证通过 |
+| COMP-ATOMGIT-01-048 | 同上 |
+| COMP-ATOMGIT-01-049 | 同上 |
+| COMP-SCRIPT-01-082 | 同上 |
+| COMPAT-TOKEN-01-001 | token 值在 YAML 中触发注入检测 |
+| COMPAT-TOKEN-01-002 | 同上 |
+| REL-LOG-01-040 | 日志相关表达式触发 WAF |
+| REL-OUTPUT-01-017 | ATOMGIT_OUTPUT 相关模式触发 WAF |
+| USE-MASK-01-001 | secret masking 相关 |
+| SEC-NAME-01-002 | secret 名触发 WAF |
+| SEC-ENV-WAIT-02-001 | 环境等待相关 |
 
 ## invalid 明细
 
