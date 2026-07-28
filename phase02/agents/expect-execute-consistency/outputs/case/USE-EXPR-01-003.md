@@ -1,32 +1,16 @@
 # USE-EXPR-01-003
 - **标题**: expressions 函数表语法标记可解析性与状态关键字术语区分
-- **维度**: usability
-- **优先级**: P1
+- **维度**: 易用性
 - **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**expressions 函数表语法标记可解析性与状态关键字术语区分**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-USE-035
-通过标准：
-1. 语法列含多余括号等无法解析的字符串即不合格
-2. 文档把 success 等无括号关键字称为函数且不加区别说明即不合格
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| — | workflow: null | 无 workflow 步骤 | — | 纯文档分析 |
+## 想测什么
+检查 expressions.md 函数表中语法列是否存在无法通过表达式 parser 的字符串（如多余括号），以及文档是否把无括号状态关键字与真正函数混称而不加区分。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
+## 做了什么
+纯文档检查用例（workflow: null）。对 expressions.md 函数表语法列做括号配平与词法检查，扫描关键词确认 success/failed/always/cancelled 是否被混入函数一节。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | documentation 确定性校验：函数表语法列括号配平与词法检查 | negative | 对函数表语法列做括号配平与词法检查 | ✅ COVERED | 确定性文档校验 |
-| 2 | documentation 确定性校验：状态关键字与函数术语区分 | negative | 字符串扫描确认 success 等是否列于函数节且无说明 | ✅ COVERED | 确定性文档校验 |
----
+| 1 | documentation | negative | 函数表语法列含多余括号等不可解析字符串即不合格 | COVERED | eval: deterministic，可程序化做括号配平与词法检查 |
+| 2 | documentation | negative | 状态关键字被列为函数且无说明即不合格 | COVERED | eval: deterministic，字符串扫描可判定 |

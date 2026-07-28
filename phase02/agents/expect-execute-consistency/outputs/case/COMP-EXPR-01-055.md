@@ -2,43 +2,20 @@
 
 - **标题**: hashFiles 函数边界行为
 - **维度**: 完备性
-- **优先级**: P1
 - **评级**: 断言一致
 
 ---
 
-## 1. 想测什么
+## 想测什么
+验证 `hashFiles` 对单文件、多文件、无匹配路径的输出格式（64 位 hex SHA256 / 空值）。
 
-本用例验证：**hashFiles 函数边界行为**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-COMP-055
+## 做了什么
+step 使用 `${{ hashFiles('package.json') }}` 计算单文件 hash，bash `[[ =~ ^[0-9a-f]{64}$ ]]` 校验格式；用 `${{ hashFiles('src/**', 'package.json') }}` 计算多文件组合 hash；用 `${{ hashFiles('nonexistent.xyz') }}` 测试无匹配时的行为。
 
-通过标准：
-1. [正向] 单文件 hashFiles 输出 64 位 hex —— 断言 HASH_SINGLE=
-2. [正向] 多文件 hashFiles 输出 64 位 hex —— 断言 HASH_MULTI=
-3. [正向] 不匹配路径返回空或固定值 —— 断言 HASH_NONE=
+## 逐断言判定
 
-## 2. 做了什么
-
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | Single file hash | `echo "HASH_SINGLE=${{ hashFiles('package.json') }}"` | - | hashFiles 对单文件的求值结果 |
-| 2 | Multi pattern hash | `echo "HASH_MULTI=${{ hashFiles('src/**', 'package.json') }}"` | - | hashFiles 对多模式匹配的求值结果 |
-| 3 | No match hash | `echo "HASH_NONE=${{ hashFiles('nonexistent.xyz') }}"` | - | hashFiles 对无匹配路径的求值结果 |
-
-## 3. 触发与运行环境
-
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | must_contain: HASH_SINGLE= | ✅ GENUINE | `${{ hashFiles('package.json') }}` 是真实平台函数求值 |
-| 2 | run_logs | positive | must_contain: HASH_MULTI= | ✅ GENUINE | `${{ hashFiles('src/**', 'package.json') }}` 多文件 hash |
-| 3 | run_logs | positive | must_contain: HASH_NONE= | ✅ GENUINE | `${{ hashFiles('nonexistent.xyz') }}` 无匹配路径的边界行为 |
-
+| 1 | run_logs | positive | must_contain: SINGLE_HEX64=yes | COVERED | `hashFiles('package.json')` 实际计算 SHA256，bash 正则校验 64 位 hex 后输出 |
+| 2 | run_logs | positive | must_contain: MULTI_HEX64=yes | COVERED | `hashFiles('src/**', 'package.json')` 组合计算，bash 正则校验后输出 |
+| 3 | run_logs | positive | must_contain: NONE_EMPTY=yes | COVERED | `hashFiles('nonexistent.xyz')` 无匹配，bash `[ -z "$H" ]` 判断为空后输出 |

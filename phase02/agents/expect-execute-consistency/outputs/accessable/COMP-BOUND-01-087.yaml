@@ -17,6 +17,8 @@ workflow: |
     verify:
       name: Verify output boundary
       runs-on: [ubuntu-latest, x64, small]
+      outputs:
+        key1: ${{ steps.writer.outputs.key1 }}
       steps:
         - name: Write output
           id: writer
@@ -28,6 +30,15 @@ workflow: |
             echo "K1=${{ steps.writer.outputs.key1 }}"
             echo "K2=${{ steps.writer.outputs.key2 }}"
             echo "output_ok"
+    crossjob:
+      name: Read outputs across jobs
+      runs-on: [ubuntu-latest, x64, small]
+      needs: verify
+      steps:
+        - name: Read declared and undeclared keys
+          run: |
+            echo "DECLARED=${{ needs.verify.outputs.key1 }}"
+            echo "UNDECLARED=[${{ needs.verify.outputs.key2 }}]"
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -42,5 +53,14 @@ assertions:
   - type: positive
     target: run_logs
     must_contain: output_ok
+  - type: positive
+    target: run_logs
+    must_contain: DECLARED=val1
+  - type: positive
+    target: run_logs
+    must_contain: UNDECLARED=[]
+  - type: negative
+    target: run_logs
+    must_not_contain: UNDECLARED=[val2]
 teardown:
   reset: fixture

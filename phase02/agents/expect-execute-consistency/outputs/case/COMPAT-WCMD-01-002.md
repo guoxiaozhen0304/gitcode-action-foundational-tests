@@ -1,33 +1,13 @@
 # COMPAT-WCMD-01-002
 - **标题**: ::group:: 不被支持时应静默降级而非报错
 - **维度**: 兼容性
-- **优先级**: P2
 - **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**::group:: 不被支持时应静默降级而非报错**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-COMPAT-NEW-009
-通过标准：
-1. [正向] workflow 不因 group 命令而失败
-2. [负向] 不通过 group 导致 workflow 报错中断
-
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | Use group | `echo "::group::My Group"` → `echo "inside group"` → `echo "::endgroup::"` → `echo "done"` | - | `::group::My Group`, `inside group`, `::endgroup::`, `done` |
-
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
-|---|------|------|------|------|------|
-| 1 | run_status | positive | equals=success, eval=llm_assisted | 🔶 LLM_DEPENDENT | 需 LLM 评估 group 命令是否导致失败 |
-| 2 | run_logs | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 需 LLM 评估是否报错中断 |
-
----
+## 想测什么
+验证 GitCode 不支持 `::group::`/`::endgroup::` 工作流命令时静默降级，而非报错中断 workflow。
+## 做了什么
+在 run 步骤中使用 `::group::My Group` 和 `::endgroup::`，观察执行结果。
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+|---|---|---|---|---|---|
+| 1 | run_status | positive | equals=success eval=llm_assisted | LLM_DEPENDENT | eval=llm_assisted |
+| 2 | run_logs | negative | llm_assisted 判断不应报错中断 | LLM_DEPENDENT | eval=llm_assisted |

@@ -1,38 +1,19 @@
 # COMP-DIR-01-002
 
 - **标题**: .github/workflows/ 下的 YAML 不被识别为 workflow
-- **维度**: completeness
-- **优先级**: P1
+- **维度**: 完备性
 - **评级**: 断言一致
 
 ---
 
-## 1. 想测什么
+## 想测什么
+验证 `.github/workflows/` 目录下的 YAML 不被平台识别为 workflow，push 事件不产生对应运行。
 
-本用例验证：**.github/workflows/ 下的 YAML 不被识别为 workflow**
-- 触发事件: `push`
-- 规格引用: INTENT-COMP-001
+## 做了什么
+YAML 位于 `.github/workflows/` 目录，workflow 字段为空（无内联 workflow 步骤）。
 
-通过标准：
-1. [负向] 运行列表中不存在源自 .github/workflows/ci.yml 的运行 —— 断言 run_list=no_run_from_github_dir
+## 逐断言判定
 
-## 2. 做了什么
-
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| - | (空 workflow) | 无任务、无步骤 | - | 不产生任何运行 |
-
-## 3. 触发与运行环境
-
-| 触发事件 | push |
-| 触发身份 | maintainer |
-| Repo 环境 | github-workflows-dir |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_list | negative | equals: no_run_from_github_dir | ✅ GENUINE | harness 级断言；将空 YAML 置于 .github/workflows/ 目录，验证平台不识别该路径下的 workflow 文件 |
-
+| 1 | run_list | negative | equals: no_run_from_github_dir | COVERED | 差异记录类用例：期望结果就是"不产生运行"，无运行即验证通过。harness 通过运行列表确认没有源自 .github/workflows/ 的运行 |

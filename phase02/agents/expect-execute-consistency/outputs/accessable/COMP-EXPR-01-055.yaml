@@ -20,13 +20,19 @@ workflow: |
       steps:
         - name: Single file hash
           run: |
-            echo "HASH_SINGLE=${{ hashFiles('package.json') }}"
+            H="${{ hashFiles('package.json') }}"
+            echo "HASH_SINGLE=$H"
+            [[ "$H" =~ ^[0-9a-f]{64}$ ]] && echo "SINGLE_HEX64=yes" || echo "SINGLE_HEX64=no"
         - name: Multi pattern hash
           run: |
-            echo "HASH_MULTI=${{ hashFiles('src/**', 'package.json') }}"
+            H="${{ hashFiles('src/**', 'package.json') }}"
+            echo "HASH_MULTI=$H"
+            [[ "$H" =~ ^[0-9a-f]{64}$ ]] && echo "MULTI_HEX64=yes" || echo "MULTI_HEX64=no"
         - name: No match hash
           run: |
-            echo "HASH_NONE=${{ hashFiles('nonexistent.xyz') }}"
+            H="${{ hashFiles('nonexistent.xyz') }}"
+            echo "HASH_NONE=$H"
+            [ -z "$H" ] && echo "NONE_EMPTY=yes" || echo "NONE_EMPTY=no"
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -34,12 +40,12 @@ trigger:
 assertions:
   - type: positive
     target: run_logs
-    must_contain: HASH_SINGLE=
+    must_contain: SINGLE_HEX64=yes
   - type: positive
     target: run_logs
-    must_contain: HASH_MULTI=
+    must_contain: MULTI_HEX64=yes
   - type: positive
     target: run_logs
-    must_contain: HASH_NONE=
+    must_contain: NONE_EMPTY=yes
 teardown:
   reset: fixture

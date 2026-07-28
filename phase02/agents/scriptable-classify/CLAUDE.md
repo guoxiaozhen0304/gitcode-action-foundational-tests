@@ -136,6 +136,17 @@ assertions:
 | USE-OS-01-001 | runner.os 返回值与文档声明的平台支持一致 |
 | USE-SECNAME-01-001 | Secret 名称以 ATOMGIT_ 开头时应给出命名规则错误 |
 
+### 负向/不可自证类
+
+**问题**：「证明某事不发生」（无新运行、无丢失、无排队饿死）单次 workflow 执行无法自证，观测点本就在 harness 侧（运行列表对账、多次编排采样）。这是用例设计的固有分层，以下 case 全部硬编码为 `not-scriptable`：
+
+- 并发/排队/限流：`REL-CONC-01-001`、`REL-PRESSURE-01-055`、`REL-PROJLIMIT-01-067`、`REL-PROJLIMIT-01-068`、`REL-QUEUE-01-003`、`REL-K8S-01-045`
+- 取消/抢占：`REL-CANCEL-01-028`、`REL-PREEMPT-01-005`
+- 故障注入：`REL-FAULT-01-031` 至 `REL-FAULT-01-038`
+- Rerun 次数/时限：`COMP-RERUN-01-002`、`COMP-RERUN-01-003`、`REL-RERUN-01-011`、`REL-RERUN-01-012`、`REL-RERUN-01-013`
+- 条件式负向：`COMPAT-EXPR-01-002`、`COMPAT-EXPR-01-003`（条件表达式不触发时无法观测「未触发」）
+- 饿死/丢失点：`REL-NEEDS-01-025`、`REL-MATRIX-01-026`、`REL-MATRIX-01-038`、`REL-MATRIX-01-039`
+
 ## 工作步骤
 
 ### Step 1: 准备 accessable 目录

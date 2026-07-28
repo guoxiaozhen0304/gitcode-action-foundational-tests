@@ -1,35 +1,16 @@
 # USE-TYPE-01-002
 - **标题**: 使用 GitHub types 命名 opened/synchronize 时应给出可理解提示
-- **维度**: usability
-- **优先级**: P1
+- **维度**: 易用性/兼容性
 - **评级**: 部分不符
----
-## 1. 想测什么
-本用例验证：**使用 GitHub types 命名 opened/synchronize 时应给出可理解提示**
-- 触发事件: `pull_request`
-- 规格引用: INTENT-USE-009
-通过标准：
-1. 不应静默通过校验并在运行时永远不被触发
-2. 报错中应列出 merge/open/reopen/update 并指出对应关系
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | echo event | `echo "hello"` | 无 | 预期 YAML 校验报错 |
+## 想测什么
+验证在 pull_request 事件中使用 GitHub 的 types [opened, synchronize] 时平台应报错并列出 GitCode 支持的 types 取值及对应关系。
 
-## 3. 触发与运行环境
-| 触发事件 | pull_request |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
+## 做了什么
+workflow 监听 `on: pull_request: types: [opened, synchronize]`。期望平台在校验阶段报错并给出对照提示。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status equals COMPLETED | negative | 步骤纯 echo，但 types 命名校验由平台执行 | ✅ GENUINE | 平台对 pull_request types 的校验是真实行为 |
-| 2 | error_message eval=llm_assisted | nonfunctional | LLM 判定报错对照关系提示 | 🔶 LLM_DEPENDENT | 需 LLM 辅助判定报错内容 |
-
-### 问题
-断言 2 依赖 LLM 辅助判定，无法在当前分析中确证。
----
+| 1 | run_status | negative | 运行不应成功完成 | COVERED | 非法 types 值应导致校验失败 → GENUINE |
+| 2 | error_message | nonfunctional | 报错列出 GitCode 支持的 types 并给出 GitHub 对应关系 | UNVERIFIABLE | eval: llm_assisted → LLM_DEPENDENT |

@@ -1,32 +1,11 @@
 # REL-QUEUE-01-003
-- **标题**: concurrency QUEUE 策略——超上限运行应排队等待
-- **维度**: 稳定性
-- **优先级**: P1
-- **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**concurrency QUEUE 策略——超上限运行应排队等待**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-003
-通过标准：
-1. 4 个运行最终全部 completed(success)
-2. 运行 3-4 不应被丢弃
-
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | sleep step | `sleep 30` | — | 持有 runner 30 秒 |
-
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | (无) |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+- **标题**: concurrency QUEUE 策略——超上限运行应排队等待   - **维度**: reliability   - **评级**: 断言一致
+## 想测什么
+验证 concurrency.max=2, exceed-action=QUEUE 时，超过上限的触发应排队等待而非丢弃。
+## 做了什么
+同时触发 4 次 workflow（每 job sleep 30s），验证前 2 个运行后 2 个排队，最终 4 个全部完成。
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status = completed(success) | positive | — | ✅ GENUINE | `sleep 30` 真实命令 + `concurrency.max=2 exceed-action=QUEUE` 真实测试排队策略 |
-| 2 | queued_count = 2 | nonfunctional | — | 🔶 LLM_DEPENDENT | 非功能断言 |
----
+| 1 | run_status | positive | equals "completed(success)" | COVERED | 平台 API 查询最终运行状态 |
+| 2 | queued_count | nonfunctional | equals "2" | COVERED | harness 统计排队运行的个数 |

@@ -1,34 +1,15 @@
 # USE-MASK-01-002
 - **标题**: 直接 echo secrets 值时文档描述的绕过风险与实际一致
-- **维度**: usability
-- **优先级**: P0
-- **评级**: 完全不符
----
-## 1. 想测什么
-本用例验证：**直接 echo secrets 值时文档描述的绕过风险与实际一致**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-USE-016
-通过标准：
-1. 若绕过确实发生，日志中可能出现明文
-2. 文档是否给出不要在 run 中直接 echo secrets 的缓解建议
+- **维度**: 易用性/安全性
+- **评级**: 断言一致
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | direct echo secret | `echo "secret=${{ secrets.TEST_SECRET }}"` | 无 | 可能泄露明文 |
+## 想测什么
+验证直接在 run 中 `echo ${{ secrets.TEST_SECRET }}` 时文档声明的脱敏绕过风险与实际行为是否一致，以及文档是否给出缓解建议。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
+## 做了什么
+workflow 在 run 中直接 echo secrets 值（未通过 env 中转）。断言依赖 LLM 分析日志和文档一致性。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs eval=llm_assisted | nonfunctional | 虽步骤含 `${{ secrets.TEST_SECRET }}` 表达式，但断言为 nonfunctional + llm_assisted | 🔶 LLM_DEPENDENT | 断言依赖 LLM 辅助判定文档声明与实际行为是否一致 |
-
-### 问题
-唯一断言为 nonfunctional + llm_assisted，步骤虽有 `${{ }}` 表达式但断言方式依赖 LLM 判定文档-行为一致性。
----
+| 1 | run_logs | nonfunctional | 文档风险声明与实际行为一致且给出缓解建议 | UNVERIFIABLE | eval: llm_assisted，全 LLM_DEPENDENT；Rule 9: 仅含 LLM_DEPENDENT → 断言一致 |

@@ -26,6 +26,14 @@ workflow: |
             echo "PR_TITLE=${{ atomgit.event.pull_request.title }}"
             echo "PR_STATE=${{ atomgit.event.pull_request.state }}"
             echo "pr_ok"
+        - name: Check action in types whitelist
+          run: |
+            ACTION="${{ atomgit.event.action }}"
+            echo "PR_ACTION=$ACTION"
+            case "$ACTION" in
+              open|update|reopen) echo "type_in_filter" ;;
+              *) echo "type_out_of_filter" ;;
+            esac
 trigger:
   event: pull_request
   as: maintainer
@@ -37,5 +45,11 @@ assertions:
   - type: positive
     target: run_logs
     must_contain: pr_ok
+  - type: positive
+    target: run_logs
+    must_contain: type_in_filter
+  - type: negative
+    target: run_logs
+    must_not_contain: type_out_of_filter
 teardown:
   reset: fixture

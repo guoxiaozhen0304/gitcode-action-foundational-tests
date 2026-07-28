@@ -1,35 +1,16 @@
 # USE-PERM-01-002
 - **标题**: 使用 GitHub 权限域命名时报错应给出 GitCode 对照表
-- **维度**: usability
-- **优先级**: P1
+- **维度**: 易用性/兼容性
 - **评级**: 部分不符
----
-## 1. 想测什么
-本用例验证：**使用 GitHub 权限域命名时报错应给出 GitCode 对照表**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-USE-005
-通过标准：
-1. 不应静默忽略未知权限域
-2. 报错中应列出 GitCode 可用权限域列表
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | checkout | `uses: checkout` | 无 | 预期平台对 GitHub 权限域名报错 |
+## 想测什么
+验证使用 GitHub 的 `permissions: contents: read` 时平台应报错并列出 GitCode 可用权限域（如 repository）及对照关系。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
+## 做了什么
+workflow 声明 `permissions: contents: read`（GitHub 命名域），job 使用 checkout。期望平台在校验阶段拒绝并给出对照提示。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status equals COMPLETED | negative | `uses: checkout` + 非法 permissions 字段，平台校验真实行为 | ✅ GENUINE | `uses:` 调用 + permissions 校验涉及平台真实行为 |
-| 2 | error_message eval=llm_assisted | nonfunctional | LLM 判定报错对照内容 | 🔶 LLM_DEPENDENT | 需 LLM 辅助判定报错内容 |
-
-### 问题
-断言 2 依赖 LLM 辅助判定，无法在当前分析中确证。
----
+| 1 | run_status | negative | 运行不应成功完成 | COVERED | 未知权限域应导致校验失败 → GENUINE |
+| 2 | error_message | nonfunctional | 报错给出 GitHub 名 vs GitCode 名对照 | UNVERIFIABLE | eval: llm_assisted → LLM_DEPENDENT |

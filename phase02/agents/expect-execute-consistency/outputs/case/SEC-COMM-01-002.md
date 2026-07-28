@@ -1,34 +1,12 @@
 # SEC-COMM-01-002
-- **标题**: 引用/反讽/代码块内嵌指令文本绝不应造成 pull_request_comment 预期外触发
-- **维度**: 安全性
-- **优先级**: P1
-- **评级**: 完全不符
----
-## 1. 想测什么
-本用例验证：**精确指令评论正常触发，但引用块/反讽/代码块内嵌指令不触发**
-- 触发事件: `pull_request_comment` (as untrusted_contributor)
-- 规格引用: INTENT-SEC-042
-通过标准：
-1. 精确指令触发
-2. 边界评论不触发
-3. 触发可回溯
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | Mark trigger | `echo "TRIGGERED_BY_COMMENT: command accepted"` | — | 触发标记 |
-
-## 3. 触发与运行环境
-| 触发事件 | pull_request_comment |
-| 触发身份 | untrusted_contributor |
-| Repo 环境 | default |
-| Secrets | (无) |
-| 故障注入 | 无 |
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
-|---|------|------|------|------|------|
-| 1 | 精确指令触发 | positive | run_trigger equals "exact_command_triggers" | ❌ MISSING_SOURCE | target=run_trigger 非 run_logs/run_status，步骤不产生此输出 |
-| 2 | 边界评论不触发 | negative | run_trigger must_not_equal | ❌ MISSING_SOURCE | 同上 |
-| 3 | 触发可回溯 | nonfunctional | trigger_audit equals | 🔶 LLM_DEPENDENT | nonfunctional + external target |
-### 问题
-所有断言 target=run_trigger / trigger_audit，均为非标准外部目标，workflow 步骤仅 echo 标记字符串，无法驱动这些断言验证。
----
+- **标题**: 引用/反讽/代码块内嵌指令文本绝不应造成 pull_request_comment 预期外触发   - **维度**: 安全性   - **评级**: 部分不符
+## 想测什么
+评论过滤中引用块、反讽、代码块内的指令文本不应造成预期外触发，触发应可回溯到具体评论内容。
+## 做了什么
+YAML workflow包含comments过滤配置('^/deploy fixture-environment$')和echo步骤。trigger为pull_request_comment，params含boundary_comments列表。第三个断言target trigger_audit为抽象平台面目标。
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+|---|---|---|---|---|---|
+| 1 | run_trigger | positive | equals "exact_command_triggers" | COVERED | 精确指令的触发行为可通过run状态判定 |
+| 2 | run_trigger | negative | must_not_equal "triggered_by_quoted_or_embedded_text" | COVERED | 边界评论的触发行为可通过run状态判定 |
+| 3 | trigger_audit | nonfunctional | equals "trigger_traceable_to_comment_content" | UNVERIFIABLE | trigger_audit为抽象目标，无具体workflow步骤对应 |

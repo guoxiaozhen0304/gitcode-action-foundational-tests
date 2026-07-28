@@ -1,0 +1,52 @@
+id: USE-DOC-01-005
+dimensions: ["usability"]
+dimension: usability
+priority: P0
+title: "configure-steps 的 shell 类型与命令语言不匹配示例照抄失败"
+intent_ref: INTENT-USE-033
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    bash-example:
+      name: shell bash with PowerShell command
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: doc example bash step
+          shell: bash
+          run: |
+            Write-Host "hello"
+    python-example:
+      name: shell python with shell command
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: doc example python step
+          shell: python
+          run: |
+            echo "hello"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_status
+    equals: "failure"
+  - type: negative
+    target: documentation
+    eval: "deterministic"
+    criterion: "configure-steps.md 中 shell bash 示例配 PowerShell 命令、shell python 示例配 shell 命令，类型与语言不匹配即为不合格"
+
+teardown:
+  reset: none

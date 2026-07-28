@@ -1,0 +1,46 @@
+id: USE-CONT-01-001
+dimensions: ["usability", "compatibility"]
+dimension: usability
+priority: P1
+title: "container.image 文档声明可用与实际可用性的一致性"
+intent_ref: INTENT-USE-042
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    container-job:
+      name: job with container image
+      runs-on: [ubuntu-latest, x64, small]
+      container:
+        image: "ubuntu:22.04"
+      steps:
+        - name: inside container
+          run: |
+            echo "in-container"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: validation_result
+    eval: "deterministic"
+    criterion: "记录平台对 container.image 的接受、忽略或报错行为；报错质量归 COMPAT-NEW-001，本条记录事实供文档一致性判定"
+  - type: negative
+    target: documentation
+    eval: "deterministic"
+    criterion: "文档字段集合与实际可用字段集合 diff；文档多出且未标注未支持或 Beta 的字段每 1 个即一条缺陷"
+
+teardown:
+  reset: none

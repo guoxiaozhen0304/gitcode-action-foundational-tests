@@ -1,32 +1,14 @@
 # REL-LATENCY-01-050
 - **标题**: 调度延迟基准——queued→running P50/P95 等待时间
-- **维度**: 稳定性
-- **优先级**: P1
+- **维度**: reliability
 - **评级**: 部分不符
----
-## 1. 想测什么
-本用例验证：**queued→running 调度延迟基准**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-050
-通过标准：
-1. P95≤60s
-2. P50≤30s
-
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | sleep step | `sleep 5` | - | 短暂运行 |
-
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 想测什么
+空闲 runner 下连续 dispatch 30 次单 job workflow，记录 queued→running 延迟，验证 P95≤60s、不应 runner 空闲但 job 死等 >10min。
+## 做了什么
+YAML 定义 sleep 5 单 job，harness 连续 dispatch 30 次，采样 P50/P95。
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | p95_latency_seconds le 60 | nonfunctional | - | 🔶 LLM_DEPENDENT | 性能指标需运行时测量 |
-| 2 | p50_latency_seconds le 30 | nonfunctional | - | 🔶 LLM_DEPENDENT | 性能指标需运行时测量 |
----
+| 1 | p95_latency_seconds | nonfunctional | le 60 | COVERED | YAML reset 30 次 dispatch + sleep 5，harness 计算 P95 分位数 |
+| 2 | p50_latency_seconds | nonfunctional | le 30 | COVERED | YAML assert P50≤30s，提供参考基准 |
+| 3 | no_dead_wait | negative | 不应 runner 空闲但 job 死等 >10min | MISSING | 文本有负向断言"不应出现 runner 空闲但 job 死等>10min"，YAML 无对应 assertion |

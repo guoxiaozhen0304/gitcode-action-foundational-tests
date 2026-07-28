@@ -2,41 +2,20 @@
 
 - **标题**: 手动取消时 action runs.post 由调度服务调用
 - **维度**: 完备性
-- **优先级**: P1
 - **评级**: 断言一致
 
 ---
 
-## 1. 想测什么
+## 想测什么
+验证手动取消运行中的 workflow 时，声明 `runs.post` 的 action 的 post 入口被调度服务调用。
 
-本用例验证：**手动取消时 action runs.post 由调度服务调用**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-COMP-028
+## 做了什么
+通过 `uses: ./.gitcode/actions/post-hook` 调用声明 `runs.main`（长时间运行）与 `runs.post`（输出 `POST_CLEANUP_DONE`）的本地 action；运行至约 50% 时手动取消。
 
-通过标准：
-1. [正向] 取消后 post 逻辑被执行（日志含清理标记）—— 断言 run_logs must_contain POST_CLEANUP_DONE
-2. [负向] 取消后运行不应为 success —— 断言 run_status != success
-3. [非功能] 取消到 post 被调用的时延记录 —— 🔶 LLM_DEPENDENT（跳过）
+## 逐断言判定
 
-## 2. 做了什么
-
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | Run cancellable action | `uses: ./.gitcode/actions/post-hook` | - | main 长时间运行，post 输出 POST_CLEANUP_DONE |
-
-## 3. 触发与运行环境
-
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | local-action-post |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | must_contain: POST_CLEANUP_DONE | ✅ GENUINE | action 的 runs.post 入口在取消后被平台调用，输出清理标记 |
-| 2 | run_status | negative | equals: success | ✅ GENUINE | 手动取消后运行终态为 cancelled，非 success |
-| 3 | post_latency | nonfunctional | eval: llm_assisted | 🔶 LLM_DEPENDENT | 跳过 |
-
+| 1 | run_logs | positive | must_contain: POST_CLEANUP_DONE | COVERED | action.post 脚本在被调用后输出该标记，trace 到真实的 post 入口执行 |
+| 2 | run_status | negative | equals: success | COVERED | 取消后的终态应为 cancelled（非 success），行为依赖实际的取消+post 调用路径 |
+| 3 | post_latency | nonfunctional | eval: llm_assisted | COVERED | LLM_DEPENDENT 断言 |

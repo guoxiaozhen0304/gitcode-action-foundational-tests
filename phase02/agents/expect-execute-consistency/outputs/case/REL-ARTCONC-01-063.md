@@ -1,33 +1,13 @@
 # REL-ARTCONC-01-063
 - **标题**: 制品并发写一致性——多 job 同时 upload-artifact 同名 artifact
-- **维度**: 稳定性
-- **优先级**: P1
+- **维度**: reliability
 - **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**多 job 同时 upload-artifact 同名 artifact 的并发写一致性**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-063
-通过标准：
-1. 下载内容确定，绝非混合态
-2. 内容完整无损
-
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | generate content | `python3 -c "print('A'*1048576)" > out.txt` (分支基于 `${{ matrix.instance }}`) | - | 各 matrix 实例生成 A/B/C 三种全同字符的 1MB 文件 |
-| 2 | upload artifact step | `uses: upload-artifact` name=concurrent-artifact | - | 上传到同一 artifact 名 |
-
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 想测什么
+matrix 3 实例并行上传同名 artifact，验证下载内容确定（非混合态），内容完整无损。
+## 做了什么
+YAML 使用 matrix instance=[1,2,3] 并行，每实例用 python3 生成不同内容文件（A/B/C），通过 upload-artifact action 上传到同名 `concurrent-artifact`。
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | download_content in ['AAA','BBB','CCC'] | positive | - | ✅ GENUINE | 步骤真实执行 python3 生成差异化内容 + uses upload-artifact action |
-| 2 | download_content contains_mixed=false | negative | - | ✅ GENUINE | 同一 artifact 名的并发上传行为由平台控制，验证点匹配 |
----
+| 1 | download_content | positive | 在['AAA','BBB','CCC']中 | COVERED | YAML 使用 python3 真实命令生成不同内容，upload-artifact action 上传，assertion 判定下载内容归属于确定单一值 |
+| 2 | download_content | negative | contains_mixed=false | COVERED | YAML 显式 asserts 不含混合态，对应文本"不应出现 ABA/BAB 等混合态" |

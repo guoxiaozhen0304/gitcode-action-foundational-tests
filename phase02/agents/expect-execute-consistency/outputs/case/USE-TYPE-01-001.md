@@ -1,31 +1,15 @@
 # USE-TYPE-01-001
 - **标题**: 使用 GitCode types 命名时正常触发
-- **维度**: usability
-- **优先级**: P1
+- **维度**: 易用性/兼容性
 - **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**使用 GitCode types 命名时正常触发**
-- 触发事件: `pull_request`
-- 规格引用: INTENT-USE-009
-通过标准：
-1. PR 创建或更新时触发运行
-2. 运行成功或至少进入执行态
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | echo event | `echo "event=${{ atomgit.event_name }}"` | 无 | 记录触发事件名 |
+## 想测什么
+验证在 pull_request 事件中使用 GitCode types 命名 [open, update, reopen] 时 workflow 可正常触发并执行。
 
-## 3. 触发与运行环境
-| 触发事件 | pull_request |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
+## 做了什么
+workflow 监听 `on: pull_request: types: [open, update, reopen]`，step echo `${{ atomgit.event_name }}`。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status equals COMPLETED | positive | `${{ atomgit.event_name }}` 表达式 + pull_request 触发 | ✅ GENUINE | pull_request 触发 + 表达式求值涉及平台真实行为 |
----
+| 1 | run_status | positive | 运行成功完成 | COVERED | 平台事件触发与调度行为 → GENUINE |

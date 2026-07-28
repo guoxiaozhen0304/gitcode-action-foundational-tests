@@ -1,34 +1,14 @@
 # REL-FAULT-01-034
 - **标题**: 故障注入——cache 服务 503 不可用时 job 应优雅降级为 cache miss
-- **维度**: 稳定性
-- **优先级**: P1
+- **维度**: reliability
 - **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**cache 服务 503 时应优雅降级为 cache miss 不阻断 job**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-034
-通过标准：
-1. cache step 标记为 miss 或跳过
-2. 后续 step 正常执行
-3. job 不应整体 failure
-
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | restore cache step | `uses: cache` path=node_modules | - | cache action 输出（含 cache miss） |
-| 2 | subsequent step | `echo subsequent step executed` | - | 确认后续执行 |
-
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | cache service 503 at step 1 |
-
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 想测什么
+在 cache restore 期间注入 503，验证 cache step 标记为 miss、后续 step 正常执行、job 不应整体 failure。
+## 做了什么
+YAML 使用 cache action（restore 步骤）+ 后续 echo step，fault_injection 对 cache 服务注入 503。
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | job_status = success | positive | - | ✅ GENUINE | cache 服务 503 时平台优雅降级，后续步骤不受影响 |
-| 2 | run_logs contains "cache miss" | positive | - | ✅ GENUINE | cache action 内部输出 "cache miss" |
----
+| 1 | job_status | positive | equals success | COVERED | YAML assert job_status=success，对应文本"cache step 标记为 miss 或跳过" + "后续 step 正常执行" |
+| 2 | run_logs | positive | contains "cache miss" | COVERED | YAML assert 日志含"cache miss"，cache action 层面的降级提示 → GENUINE |
+| 3 | no_overall_failure | negative | job 不应因 cache 服务不可用而整体 failure | COVERED | job_status=success 隐含未因 cache 不可用而整体失败，对应文本负向断言 |

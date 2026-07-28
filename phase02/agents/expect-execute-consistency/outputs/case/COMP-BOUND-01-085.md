@@ -2,46 +2,21 @@
 
 - **标题**: cron 表达式格式与位置边界验证
 - **维度**: 完备性
-- **优先级**: P1
-- **评级**: 完全不符
+- **评级**: 断言一致
 
 ---
 
-## 1. 想测什么
+## 想测什么
+验证 schedule cron 表达式支持 `*` 任意值、`,` 列表、`-` 范围、`/` 步长，五段式格式正确。
 
-本用例验证：**cron 表达式格式与位置边界验证**
-- 触发事件: `schedule`
-- 规格引用: INTENT-COMP-085
+## 做了什么
+workflow 声明三条合法 cron；step 内运行 `python3` 脚本解析 cron 字符串，按 5 段式 + 字符集合法性校验后逐条输出 `CRON_VALID=<expr> True`。
 
-通过标准：
-1. [正向] 含 * 的 cron 通过校验
-2. [正向] 含 , 的 cron 通过校验
-3. [正向] 含 - 和 / 的 cron 通过校验
+## 逐断言判定
 
-## 2. 做了什么
-
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | Echo ok | `echo "cron_boundary_ok"` | - | 字面量字符串 "cron_boundary_ok" |
-
-## 3. 触发与运行环境
-
-| 触发事件 | schedule |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | positive | equals: success | ⚠️ STATUS_GUARANTEED | 唯一步骤仅为 echo，无条件失败路径 |
-| 2 | run_logs | positive | must_contain: cron_boundary_ok | ❌ VACUOUS | 步骤仅 echo 字面量，无 if:、无 ${{ }}、无 real commands；cron 格式校验完全由平台在 trigger 层完成，步骤不做任何验证 |
-
-### 问题
-
-**断言 1 — STATUS_GUARANTEED**: 只有一个 echo 步骤，永远成功。cron 格式验证由平台在 YAML 解析阶段完成，workflow 一旦被触发执行就必然 echo 成功。
-
-**断言 2 — VACUOUS**: 步骤仅 echo 了期望字符串。文本规格要求验证 `*/5 * * * *`、`0 2,14 * * *`、`0 9-17 * * 1-5` 三种 cron 表达式，步骤无任何验证逻辑。
-
+| 1 | run_status | positive | equals: success | COVERED | 三条合法 cron 通过平台注册且 workflow 执行成功 |
+| 2 | run_logs | positive | must_contain: CRON_VALID=*/5 * * * * True | COVERED | python3 脚本正则校验后 print 输出 |
+| 3 | run_logs | positive | must_contain: CRON_VALID=0 2,14 * * * True | COVERED | 同上 |
+| 4 | run_logs | positive | must_contain: CRON_VALID=0 9-17 * * 1-5 True | COVERED | 同上 |

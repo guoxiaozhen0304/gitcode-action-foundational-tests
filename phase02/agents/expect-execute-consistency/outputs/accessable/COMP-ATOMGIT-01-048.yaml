@@ -24,10 +24,24 @@ workflow: |
             echo "EVENT_REF=${{ atomgit.event.ref }}"
             echo "BEFORE=${{ atomgit.event.before }}"
             echo "AFTER=${{ atomgit.event.after }}"
-            echo "COMMITS_LEN=${{ atomgit.event.commits }}"
             echo "BASE_REF=${{ atomgit.event.base_ref }}"
             echo "CREATED=${{ atomgit.event.created }}"
             echo "DELETED=${{ atomgit.event.deleted }}"
+        - name: Check event ref consistency
+          run: |
+            if [ "${{ atomgit.event.ref }}" = "${{ atomgit.ref }}" ]; then
+              echo "REF_CONSISTENT=yes"
+            else
+              echo "REF_CONSISTENT=no"
+            fi
+        - name: Check sha formats and commits
+          run: |
+            BEFORE="${{ atomgit.event.before }}"
+            AFTER="${{ atomgit.event.after }}"
+            [[ "$BEFORE" =~ ^[0-9a-f]{40}$ ]] && echo "BEFORE_HEX40=yes" || echo "BEFORE_HEX40=no"
+            [[ "$AFTER" =~ ^[0-9a-f]{40}$ ]] && echo "AFTER_HEX40=yes" || echo "AFTER_HEX40=no"
+            COMMITS="${{ atomgit.event.commits }}"
+            echo "COMMITS_LEN=${#COMMITS}"
 trigger:
   event: push
   as: maintainer
@@ -38,9 +52,15 @@ assertions:
     must_contain: EVENT_REF=refs/
   - type: positive
     target: run_logs
-    must_contain: BEFORE=
+    must_contain: BEFORE_HEX40=yes
   - type: positive
     target: run_logs
-    must_contain: AFTER=
+    must_contain: AFTER_HEX40=yes
+  - type: positive
+    target: run_logs
+    must_contain: COMMITS_LEN=
+  - type: positive
+    target: run_logs
+    must_contain: REF_CONSISTENT=yes
 teardown:
   reset: fixture

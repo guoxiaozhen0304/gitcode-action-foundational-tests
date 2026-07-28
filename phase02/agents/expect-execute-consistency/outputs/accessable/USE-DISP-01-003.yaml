@@ -1,0 +1,66 @@
+id: USE-DISP-01-003
+dimensions: ["usability"]
+dimension: usability
+priority: P1
+title: "workflow_dispatch 手动触发 UI 与 YAML inputs 定义的集合一致性"
+intent_ref: INTENT-USE-051
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+      inputs:
+        environment:
+          description: "target env"
+          required: true
+          default: "staging"
+        version:
+          description: "release version"
+          required: false
+        dry_run:
+          description: "dry run flag"
+          required: false
+          default: "true"
+        approver:
+          description: "approver name"
+          required: true
+        notes:
+          description: "extra notes"
+          required: false
+  jobs:
+    deploy:
+      name: dispatch inputs probe
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: marker step
+          run: |
+            echo "dispatched"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: ui
+    eval: "deterministic"
+    criterion: "手动触发 UI 渲染字段集合与 YAML inputs 集合做 diff；集合不一致即不合格"
+  - type: negative
+    target: ui
+    eval: "deterministic"
+    criterion: "UI 不应渲染 YAML 未定义字段、不应漏渲染已定义字段"
+  - type: nonfunctional
+    target: ui
+    eval: "deterministic"
+    criterion: "required 标星、default 预填、description 作为提示呈现；manual_override false 字段应锁死只读（样本语义，文档未提时记文档缺陷）"
+
+teardown:
+  reset: none

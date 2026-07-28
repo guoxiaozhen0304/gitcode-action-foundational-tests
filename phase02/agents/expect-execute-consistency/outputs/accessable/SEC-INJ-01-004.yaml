@@ -18,6 +18,11 @@ workflow: |
         - name: Inline commit message
           run: |
             echo "Message is ${{ atomgit.event.commits[0].message }}"
+        - name: Safe via intermediate env
+          env:
+            COMMIT_MSG: ${{ atomgit.event.commits[0].message }}
+          run: |
+            echo "Message via env is $COMMIT_MSG"
 trigger:
   event: push
   as: untrusted_contributor

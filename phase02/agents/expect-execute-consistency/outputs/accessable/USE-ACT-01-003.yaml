@@ -1,0 +1,30 @@
+id: USE-ACT-01-003
+dimensions: ["usability"]
+dimension: usability
+priority: P1
+title: "官方短名 Action 清单与 actions-market 插件目录的映射一致性"
+intent_ref: INTENT-USE-052
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: null
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: negative
+    target: documentation
+    eval: "deterministic"
+    criterion: "文档短名集合与市场目录插件名集合建立映射；cache 与 AtomgitCache 等大小写或连字符不一致且文档未明示映射规则即不合格"
+
+teardown:
+  reset: none

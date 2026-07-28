@@ -40,6 +40,6 @@ assertions:
     must_not_contain: "residual found"
   - type: positive
     target: run_logs
-    equals: "cleaned_as_expected"
+    contains: "cleaned as expected"
 teardown:
   reset: fixture

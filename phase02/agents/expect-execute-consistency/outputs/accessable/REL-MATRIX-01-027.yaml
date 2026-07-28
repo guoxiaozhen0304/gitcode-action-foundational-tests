@@ -18,12 +18,14 @@ workflow: |
       runs-on: [ubuntu-latest, x64, small]
       strategy:
         matrix:
-          version: [1, 2, 3]
+          x: [1, 2, 3]
+          y: [1, 2, 3]
         max-parallel: 4
       steps:
         - name: matrix step
           run: |
-            echo version=${{ matrix.version }}
+            echo x=${{ matrix.x }} y=${{ matrix.y }}
+            sleep 10
 trigger:
   event: workflow_dispatch
   as: maintainer

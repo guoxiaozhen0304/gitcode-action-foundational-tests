@@ -1,6 +1,6 @@
 # 断言-步骤一致性报告
 
-**日期**: 2026-07-27
+**日期**: 2026-07-28
 **数据源**: phase01/runs/2026-07-27-01/cases/yaml/
 **用例总数**: 498
 
@@ -8,536 +8,118 @@
 
 ## 1. 总览
 
-| 评级 | 数量 | 说明 |
-|------|:---:|------|
-| 断言一致 | 302 | 步骤真实产生断言所需输出，无假测试 |
-| 部分不符 | 116 | 部分验证点存在空洞/缺步骤/必然状态 |
-| 完全不符 | 80 | 全部验证点为假测试或无法达成 |
-| **合计** | **498** | |
-
-| 维度 | 断言一致 | 部分不符 | 完全不符 | 合计 |
-|------|:---:|:---:|:---:|:---:|
-| 完备性 | 81 | 14 | 15 | 110 |
-| 兼容性 | 104 | 9 | 24 | 137 |
-| 可靠性 | 63 | 39 | 3 | 105 |
-| 安全性 | 20 | 29 | 18 | 67 |
-| 易用性 | 34 | 25 | 20 | 79 |
+| 维度 | 断言一致 | 部分不符 | 完全不符 |
+|------|:---:|:---:|:---:|
+| 完备性 | 96 | 12 | 2 |
+| 兼容性 | 127 | 4 | 6 |
+| 可靠性 | 85 | 18 | 2 |
+| 安全性 | 45 | 19 | 3 |
+| 易用性 | 43 | 10 | 0 |
+| 易用性/兼容性 | 13 | 7 | 0 |
+| 易用性/安全性 | 2 | 3 | 0 |
+| 易用性/可靠性 | 1 | 0 | 0 |
+| **合计** | **412** | **73** | **13** |
 
 ---
 
-## 2. 断言一致 — 所有验证点真实覆盖
+## 2. 完全不符 (13 例)
 
-| # | Case ID |
-|---|---------|
-| 1 | [COMP-ACT-01-001](case/COMP-ACT-01-001.md) |
-| 2 | [COMP-ACT-01-002](case/COMP-ACT-01-002.md) |
-| 3 | [COMP-ACT-01-003](case/COMP-ACT-01-003.md) |
-| 4 | [COMP-ARTIFACT-01-001](case/COMP-ARTIFACT-01-001.md) |
-| 5 | [COMP-ARTIFACT-01-002](case/COMP-ARTIFACT-01-002.md) |
-| 6 | [COMP-ARTIFACT-01-003](case/COMP-ARTIFACT-01-003.md) |
-| 7 | [COMP-ATOMGIT-01-047](case/COMP-ATOMGIT-01-047.md) |
-| 8 | [COMP-ATOMGIT-01-048](case/COMP-ATOMGIT-01-048.md) |
-| 9 | [COMP-ATOMGIT-01-049](case/COMP-ATOMGIT-01-049.md) |
-| 10 | [COMP-BOUND-01-086](case/COMP-BOUND-01-086.md) |
-| 11 | [COMP-BOUND-01-087](case/COMP-BOUND-01-087.md) |
-| 12 | [COMP-BOUND-01-088](case/COMP-BOUND-01-088.md) |
-| 13 | [COMP-CACHE-01-001](case/COMP-CACHE-01-001.md) |
-| 14 | [COMP-CACHE-01-002](case/COMP-CACHE-01-002.md) |
-| 15 | [COMP-CACHE-01-003](case/COMP-CACHE-01-003.md) |
-| 16 | [COMP-CALL-01-003](case/COMP-CALL-01-003.md) |
-| 17 | [COMP-CALL-01-004](case/COMP-CALL-01-004.md) |
-| 18 | [COMP-CTX-01-051](case/COMP-CTX-01-051.md) |
-| 19 | [COMP-CTX-01-052](case/COMP-CTX-01-052.md) |
-| 20 | [COMP-CTX-01-053](case/COMP-CTX-01-053.md) |
-| 21 | [COMP-CTX-01-054](case/COMP-CTX-01-054.md) |
-| 22 | [COMP-CTX-01-055](case/COMP-CTX-01-055.md) |
-| 23 | [COMP-DIR-01-002](case/COMP-DIR-01-002.md) |
-| 24 | [COMP-ENVCTX-01-050](case/COMP-ENVCTX-01-050.md) |
-| 25 | [COMP-EXPR-01-054](case/COMP-EXPR-01-054.md) |
-| 26 | [COMP-EXPR-01-055](case/COMP-EXPR-01-055.md) |
-| 27 | [COMP-EXPR-01-056](case/COMP-EXPR-01-056.md) |
-| 28 | [COMP-EXPR-01-057](case/COMP-EXPR-01-057.md) |
-| 29 | [COMP-EXPR-01-058](case/COMP-EXPR-01-058.md) |
-| 30 | [COMP-ISOLATION-01-001](case/COMP-ISOLATION-01-001.md) |
-| 31 | [COMP-ISOLATION-01-002](case/COMP-ISOLATION-01-002.md) |
-| 32 | [COMP-ISOLATION-01-003](case/COMP-ISOLATION-01-003.md) |
-| 33 | [COMP-ISOLATION-01-004](case/COMP-ISOLATION-01-004.md) |
-| 34 | [COMP-JOB-01-068](case/COMP-JOB-01-068.md) |
-| 35 | [COMP-PERMS-01-001](case/COMP-PERMS-01-001.md) |
-| 36 | [COMP-PERMS-01-002](case/COMP-PERMS-01-002.md) |
-| 37 | [COMP-PERMS-01-003](case/COMP-PERMS-01-003.md) |
-| 38 | [COMP-PR-01-001](case/COMP-PR-01-001.md) |
-| 39 | [COMP-PR-01-002](case/COMP-PR-01-002.md) |
-| 40 | [COMP-PR-01-003](case/COMP-PR-01-003.md) |
-| 41 | [COMP-PR-01-004](case/COMP-PR-01-004.md) |
-| 42 | [COMP-PR-01-005](case/COMP-PR-01-005.md) |
-| 43 | [COMP-PRTARGET-01-003](case/COMP-PRTARGET-01-003.md) |
-| 44 | [COMP-PUSH-01-002](case/COMP-PUSH-01-002.md) |
-| 45 | [COMP-PUSH-01-003](case/COMP-PUSH-01-003.md) |
-| 46 | [COMP-RERUN-01-001](case/COMP-RERUN-01-001.md) |
-| 47 | [COMP-RERUN-01-002](case/COMP-RERUN-01-002.md) |
-| 48 | [COMP-RERUN-01-003](case/COMP-RERUN-01-003.md) |
-| 49 | [COMP-RUNNER-01-001](case/COMP-RUNNER-01-001.md) |
-| 50 | [COMP-RUNNER-01-002](case/COMP-RUNNER-01-002.md) |
-| 51 | [COMP-RUNNER-01-003](case/COMP-RUNNER-01-003.md) |
-| 52 | [COMP-RUNNER-01-080](case/COMP-RUNNER-01-080.md) |
-| 53 | [COMP-RUNNER-01-081](case/COMP-RUNNER-01-081.md) |
-| 54 | [COMP-RUNNER-01-082](case/COMP-RUNNER-01-082.md) |
-| 55 | [COMP-SCHEDULE-01-002](case/COMP-SCHEDULE-01-002.md) |
-| 56 | [COMP-SCHEDULE-01-003](case/COMP-SCHEDULE-01-003.md) |
-| 57 | [COMP-SCRIPT-01-082](case/COMP-SCRIPT-01-082.md) |
-| 58 | [COMP-SECRET-01-001](case/COMP-SECRET-01-001.md) |
-| 59 | [COMP-SECRET-01-002](case/COMP-SECRET-01-002.md) |
-| 60 | [COMP-SECRET-01-003](case/COMP-SECRET-01-003.md) |
-| 61 | [COMP-STAGES-01-002](case/COMP-STAGES-01-002.md) |
-| 62 | [COMP-STAGES-01-003](case/COMP-STAGES-01-003.md) |
-| 63 | [COMP-STAGES-01-005](case/COMP-STAGES-01-005.md) |
-| 64 | [COMP-STEP-01-070](case/COMP-STEP-01-070.md) |
-| 65 | [COMP-SUMMARY-01-001](case/COMP-SUMMARY-01-001.md) |
-| 66 | [COMP-SUMMARY-01-002](case/COMP-SUMMARY-01-002.md) |
-| 67 | [COMP-SYSENV-01-059](case/COMP-SYSENV-01-059.md) |
-| 68 | [COMP-SYSENV-01-060](case/COMP-SYSENV-01-060.md) |
-| 69 | [COMP-TRIG-01-072](case/COMP-TRIG-01-072.md) |
-| 70 | [COMP-TRIG-01-073](case/COMP-TRIG-01-073.md) |
-| 71 | [COMP-TRIG-01-074](case/COMP-TRIG-01-074.md) |
-| 72 | [COMP-TRIG-01-075](case/COMP-TRIG-01-075.md) |
-| 73 | [COMP-TRIG-01-076](case/COMP-TRIG-01-076.md) |
-| 74 | [COMP-TRIG-01-077](case/COMP-TRIG-01-077.md) |
-| 75 | [COMP-TRIG-01-080](case/COMP-TRIG-01-080.md) |
-| 76 | [COMP-UNKNOWN-01-001](case/COMP-UNKNOWN-01-001.md) |
-| 77 | [COMP-UNKNOWN-01-002](case/COMP-UNKNOWN-01-002.md) |
-| 78 | [COMP-UNKNOWN-01-004](case/COMP-UNKNOWN-01-004.md) |
-| 79 | [COMP-UNKNOWN-01-005](case/COMP-UNKNOWN-01-005.md) |
-| 80 | [COMP-VARREF-01-083](case/COMP-VARREF-01-083.md) |
-| 81 | [COMP-WFLOW-01-062](case/COMP-WFLOW-01-062.md) |
-| 82 | [COMPAT-ACTION-01-001](case/COMPAT-ACTION-01-001.md) |
-| 83 | [COMPAT-ACTION-01-002](case/COMPAT-ACTION-01-002.md) |
-| 84 | [COMPAT-ACTION-01-003](case/COMPAT-ACTION-01-003.md) |
-| 85 | [COMPAT-ACTION-01-004](case/COMPAT-ACTION-01-004.md) |
-| 86 | [COMPAT-ACTIONDEV-01-001](case/COMPAT-ACTIONDEV-01-001.md) |
-| 87 | [COMPAT-ACTIONDEV-01-002](case/COMPAT-ACTIONDEV-01-002.md) |
-| 88 | [COMPAT-ARTIFACT-01-001](case/COMPAT-ARTIFACT-01-001.md) |
-| 89 | [COMPAT-ARTIFACT-01-002](case/COMPAT-ARTIFACT-01-002.md) |
-| 90 | [COMPAT-CACHE-01-001](case/COMPAT-CACHE-01-001.md) |
-| 91 | [COMPAT-COMM-01-001](case/COMPAT-COMM-01-001.md) |
-| 92 | [COMPAT-COMM-01-002](case/COMPAT-COMM-01-002.md) |
-| 93 | [COMPAT-CONCUR-01-001](case/COMPAT-CONCUR-01-001.md) |
-| 94 | [COMPAT-CONCUR-01-002](case/COMPAT-CONCUR-01-002.md) |
-| 95 | [COMPAT-CONCUR-01-003](case/COMPAT-CONCUR-01-003.md) |
-| 96 | [COMPAT-CONCUR-01-004](case/COMPAT-CONCUR-01-004.md) |
-| 97 | [COMPAT-CONTAINER-01-001](case/COMPAT-CONTAINER-01-001.md) |
-| 98 | [COMPAT-CONTAINER-01-002](case/COMPAT-CONTAINER-01-002.md) |
-| 99 | [COMPAT-CTX-01-001](case/COMPAT-CTX-01-001.md) |
-| 100 | [COMPAT-CTX-01-002](case/COMPAT-CTX-01-002.md) |
-| 101 | [COMPAT-CTX-01-003](case/COMPAT-CTX-01-003.md) |
-| 102 | [COMPAT-CTX-01-004](case/COMPAT-CTX-01-004.md) |
-| 103 | [COMPAT-CTX-01-005](case/COMPAT-CTX-01-005.md) |
-| 104 | [COMPAT-DEPR-01-001](case/COMPAT-DEPR-01-001.md) |
-| 105 | [COMPAT-DEPR-01-002](case/COMPAT-DEPR-01-002.md) |
-| 106 | [COMPAT-DIR-01-002](case/COMPAT-DIR-01-002.md) |
-| 107 | [COMPAT-DIR-01-003](case/COMPAT-DIR-01-003.md) |
-| 108 | [COMPAT-ENV-01-002](case/COMPAT-ENV-01-002.md) |
-| 109 | [COMPAT-ENV-01-003](case/COMPAT-ENV-01-003.md) |
-| 110 | [COMPAT-ENV-01-004](case/COMPAT-ENV-01-004.md) |
-| 111 | [COMPAT-ENV-01-005](case/COMPAT-ENV-01-005.md) |
-| 112 | [COMPAT-ENVIRON-01-001](case/COMPAT-ENVIRON-01-001.md) |
-| 113 | [COMPAT-ENVIRON-01-002](case/COMPAT-ENVIRON-01-002.md) |
-| 114 | [COMPAT-EVENT-01-001](case/COMPAT-EVENT-01-001.md) |
-| 115 | [COMPAT-EXPR-01-003](case/COMPAT-EXPR-01-003.md) |
-| 116 | [COMPAT-EXPR-01-004](case/COMPAT-EXPR-01-004.md) |
-| 117 | [COMPAT-EXPR-01-005](case/COMPAT-EXPR-01-005.md) |
-| 118 | [COMPAT-EXPR-01-006](case/COMPAT-EXPR-01-006.md) |
-| 119 | [COMPAT-EXPR-01-007](case/COMPAT-EXPR-01-007.md) |
-| 120 | [COMPAT-EXPR-01-008](case/COMPAT-EXPR-01-008.md) |
-| 121 | [COMPAT-EXPR-01-009](case/COMPAT-EXPR-01-009.md) |
-| 122 | [COMPAT-EXPR-01-010](case/COMPAT-EXPR-01-010.md) |
-| 123 | [COMPAT-EXPR-01-011](case/COMPAT-EXPR-01-011.md) |
-| 124 | [COMPAT-EXPR-01-012](case/COMPAT-EXPR-01-012.md) |
-| 125 | [COMPAT-IF-01-001](case/COMPAT-IF-01-001.md) |
-| 126 | [COMPAT-IF-01-002](case/COMPAT-IF-01-002.md) |
-| 127 | [COMPAT-INPUTS-01-001](case/COMPAT-INPUTS-01-001.md) |
-| 128 | [COMPAT-MASK-01-001](case/COMPAT-MASK-01-001.md) |
-| 129 | [COMPAT-MASK-01-002](case/COMPAT-MASK-01-002.md) |
-| 130 | [COMPAT-NEEDS-01-001](case/COMPAT-NEEDS-01-001.md) |
-| 131 | [COMPAT-NEEDS-01-002](case/COMPAT-NEEDS-01-002.md) |
-| 132 | [COMPAT-NEEDS-01-003](case/COMPAT-NEEDS-01-003.md) |
-| 133 | [COMPAT-NEST-01-001](case/COMPAT-NEST-01-001.md) |
-| 134 | [COMPAT-NEST-01-002](case/COMPAT-NEST-01-002.md) |
-| 135 | [COMPAT-PATHS-01-002](case/COMPAT-PATHS-01-002.md) |
-| 136 | [COMPAT-PERM-01-001](case/COMPAT-PERM-01-001.md) |
-| 137 | [COMPAT-PERM-01-004](case/COMPAT-PERM-01-004.md) |
-| 138 | [COMPAT-PR-01-002](case/COMPAT-PR-01-002.md) |
-| 139 | [COMPAT-PR-01-004](case/COMPAT-PR-01-004.md) |
-| 140 | [COMPAT-PR-01-005](case/COMPAT-PR-01-005.md) |
-| 141 | [COMPAT-PR-01-006](case/COMPAT-PR-01-006.md) |
-| 142 | [COMPAT-PR-01-007](case/COMPAT-PR-01-007.md) |
-| 143 | [COMPAT-PR-01-008](case/COMPAT-PR-01-008.md) |
-| 144 | [COMPAT-PR-01-009](case/COMPAT-PR-01-009.md) |
-| 145 | [COMPAT-PR-01-010](case/COMPAT-PR-01-010.md) |
-| 146 | [COMPAT-RUNNER-01-001](case/COMPAT-RUNNER-01-001.md) |
-| 147 | [COMPAT-RUNNER-01-002](case/COMPAT-RUNNER-01-002.md) |
-| 148 | [COMPAT-RUNNER-01-003](case/COMPAT-RUNNER-01-003.md) |
-| 149 | [COMPAT-RUNNER-01-004](case/COMPAT-RUNNER-01-004.md) |
-| 150 | [COMPAT-RUNNER-01-005](case/COMPAT-RUNNER-01-005.md) |
-| 151 | [COMPAT-RUNNER-01-006](case/COMPAT-RUNNER-01-006.md) |
-| 152 | [COMPAT-RUNNER-01-007](case/COMPAT-RUNNER-01-007.md) |
-| 153 | [COMPAT-RUNNER-01-008](case/COMPAT-RUNNER-01-008.md) |
-| 154 | [COMPAT-RUNSON-01-001](case/COMPAT-RUNSON-01-001.md) |
-| 155 | [COMPAT-RUNSON-01-002](case/COMPAT-RUNSON-01-002.md) |
-| 156 | [COMPAT-RUNSON-01-003](case/COMPAT-RUNSON-01-003.md) |
-| 157 | [COMPAT-RUNSON-01-004](case/COMPAT-RUNSON-01-004.md) |
-| 158 | [COMPAT-RUNSON-01-005](case/COMPAT-RUNSON-01-005.md) |
-| 159 | [COMPAT-RUNSON-01-006](case/COMPAT-RUNSON-01-006.md) |
-| 160 | [COMPAT-SCHEDULE-01-001](case/COMPAT-SCHEDULE-01-001.md) |
-| 161 | [COMPAT-SCHEDULE-01-002](case/COMPAT-SCHEDULE-01-002.md) |
-| 162 | [COMPAT-SCHEDULE-01-003](case/COMPAT-SCHEDULE-01-003.md) |
-| 163 | [COMPAT-SCHEDULE-01-004](case/COMPAT-SCHEDULE-01-004.md) |
-| 164 | [COMPAT-SECRET-01-005](case/COMPAT-SECRET-01-005.md) |
-| 165 | [COMPAT-SHELL-01-001](case/COMPAT-SHELL-01-001.md) |
-| 166 | [COMPAT-SHELL-01-002](case/COMPAT-SHELL-01-002.md) |
-| 167 | [COMPAT-SHELL-01-003](case/COMPAT-SHELL-01-003.md) |
-| 168 | [COMPAT-TARGET-01-001](case/COMPAT-TARGET-01-001.md) |
-| 169 | [COMPAT-TARGET-01-002](case/COMPAT-TARGET-01-002.md) |
-| 170 | [COMPAT-TARGET-01-003](case/COMPAT-TARGET-01-003.md) |
-| 171 | [COMPAT-TOKEN-01-001](case/COMPAT-TOKEN-01-001.md) |
-| 172 | [COMPAT-TOKEN-01-002](case/COMPAT-TOKEN-01-002.md) |
-| 173 | [COMPAT-TOKEN-01-003](case/COMPAT-TOKEN-01-003.md) |
-| 174 | [COMPAT-VARS-01-001](case/COMPAT-VARS-01-001.md) |
-| 175 | [COMPAT-VARS-01-002](case/COMPAT-VARS-01-002.md) |
-| 176 | [COMPAT-VARS-01-003](case/COMPAT-VARS-01-003.md) |
-| 177 | [COMPAT-VARS-01-004](case/COMPAT-VARS-01-004.md) |
-| 178 | [COMPAT-VARS-01-005](case/COMPAT-VARS-01-005.md) |
-| 179 | [COMPAT-VARS-01-006](case/COMPAT-VARS-01-006.md) |
-| 180 | [COMPAT-WCMD-01-001](case/COMPAT-WCMD-01-001.md) |
-| 181 | [COMPAT-WCMD-01-002](case/COMPAT-WCMD-01-002.md) |
-| 182 | [COMPAT-WCMD-01-003](case/COMPAT-WCMD-01-003.md) |
-| 183 | [COMPAT-WCMD-01-004](case/COMPAT-WCMD-01-004.md) |
-| 184 | [COMPAT-WCMD-01-005](case/COMPAT-WCMD-01-005.md) |
-| 185 | [COMPAT-YAML-01-001](case/COMPAT-YAML-01-001.md) |
-| 186 | [REL-API-01-065](case/REL-API-01-065.md) |
-| 187 | [REL-ART-01-041](case/REL-ART-01-041.md) |
-| 188 | [REL-ART-01-042](case/REL-ART-01-042.md) |
-| 189 | [REL-ARTCONC-01-063](case/REL-ARTCONC-01-063.md) |
-| 190 | [REL-CACHE-01-046](case/REL-CACHE-01-046.md) |
-| 191 | [REL-CANCEL-01-028](case/REL-CANCEL-01-028.md) |
-| 192 | [REL-CHILDSTATE-01-064](case/REL-CHILDSTATE-01-064.md) |
-| 193 | [REL-CHILDSTATE-01-064-V2](case/REL-CHILDSTATE-01-064-V2.md) |
-| 194 | [REL-CONC-01-002](case/REL-CONC-01-002.md) |
-| 195 | [REL-CONTINUE-01-030](case/REL-CONTINUE-01-030.md) |
-| 196 | [REL-DEBOUNCE-01-001](case/REL-DEBOUNCE-01-001.md) |
-| 197 | [REL-DEBOUNCE-01-002](case/REL-DEBOUNCE-01-002.md) |
-| 198 | [REL-DISK-01-018](case/REL-DISK-01-018.md) |
-| 199 | [REL-DISK-01-019](case/REL-DISK-01-019.md) |
-| 200 | [REL-FAULT-01-031](case/REL-FAULT-01-031.md) |
-| 201 | [REL-FAULT-01-032](case/REL-FAULT-01-032.md) |
-| 202 | [REL-FAULT-01-033](case/REL-FAULT-01-033.md) |
-| 203 | [REL-FAULT-01-034](case/REL-FAULT-01-034.md) |
-| 204 | [REL-FAULT-01-035](case/REL-FAULT-01-035.md) |
-| 205 | [REL-FAULT-01-038](case/REL-FAULT-01-038.md) |
-| 206 | [REL-FLOOD-01-036](case/REL-FLOOD-01-036.md) |
-| 207 | [REL-FLOOD-01-037](case/REL-FLOOD-01-037.md) |
-| 208 | [REL-IGNORE-01-004](case/REL-IGNORE-01-004.md) |
-| 209 | [REL-K8S-01-045](case/REL-K8S-01-045.md) |
-| 210 | [REL-LOG-01-040](case/REL-LOG-01-040.md) |
-| 211 | [REL-LOGPERF-01-052](case/REL-LOGPERF-01-052.md) |
-| 212 | [REL-LOGSTABLE-01-059](case/REL-LOGSTABLE-01-059.md) |
-| 213 | [REL-LONG-01-043](case/REL-LONG-01-043.md) |
-| 214 | [REL-MATRIX-01-027](case/REL-MATRIX-01-027.md) |
-| 215 | [REL-MATRIX-01-038](case/REL-MATRIX-01-038.md) |
-| 216 | [REL-MATRIX-01-039](case/REL-MATRIX-01-039.md) |
-| 217 | [REL-MATRIXFAIR-01-056](case/REL-MATRIXFAIR-01-056.md) |
-| 218 | [REL-MEM-01-020](case/REL-MEM-01-020.md) |
-| 219 | [REL-MEM-01-021](case/REL-MEM-01-021.md) |
-| 220 | [REL-NEEDS-01-025](case/REL-NEEDS-01-025.md) |
-| 221 | [REL-NEEDS-01-026](case/REL-NEEDS-01-026.md) |
-| 222 | [REL-NEEDS-01-027](case/REL-NEEDS-01-027.md) |
-| 223 | [REL-NEST-01-023](case/REL-NEST-01-023.md) |
-| 224 | [REL-NEST-01-024](case/REL-NEST-01-024.md) |
-| 225 | [REL-OUTPUT-01-016](case/REL-OUTPUT-01-016.md) |
-| 226 | [REL-OUTPUT-01-017](case/REL-OUTPUT-01-017.md) |
-| 227 | [REL-POST-01-001](case/REL-POST-01-001.md) |
-| 228 | [REL-PREEMPT-01-005](case/REL-PREEMPT-01-005.md) |
-| 229 | [REL-PRESSURE-01-055](case/REL-PRESSURE-01-055.md) |
-| 230 | [REL-PROJLIMIT-01-067](case/REL-PROJLIMIT-01-067.md) |
-| 231 | [REL-PROJLIMIT-01-068](case/REL-PROJLIMIT-01-068.md) |
-| 232 | [REL-QUEUE-01-003](case/REL-QUEUE-01-003.md) |
-| 233 | [REL-RACE-01-048](case/REL-RACE-01-048.md) |
-| 234 | [REL-REG-01-001](case/REL-REG-01-001.md) |
-| 235 | [REL-RERUN-01-011](case/REL-RERUN-01-011.md) |
-| 236 | [REL-RETAIN-01-047](case/REL-RETAIN-01-047.md) |
-| 237 | [REL-RUNNER-01-050](case/REL-RUNNER-01-050.md) |
-| 238 | [REL-SCHED-01-057](case/REL-SCHED-01-057.md) |
-| 239 | [REL-SCHED-01-058](case/REL-SCHED-01-058.md) |
-| 240 | [REL-STAGES-01-029](case/REL-STAGES-01-029.md) |
-| 241 | [REL-STATE-01-058](case/REL-STATE-01-058.md) |
-| 242 | [REL-STATE-01-059](case/REL-STATE-01-059.md) |
-| 243 | [REL-STEPS-01-042](case/REL-STEPS-01-042.md) |
-| 244 | [REL-TIMEOUT-01-007](case/REL-TIMEOUT-01-007.md) |
-| 245 | [REL-TIMEOUT-01-008](case/REL-TIMEOUT-01-008.md) |
-| 246 | [REL-TIMEOUT-01-009](case/REL-TIMEOUT-01-009.md) |
-| 247 | [REL-TIMEOUT-01-010](case/REL-TIMEOUT-01-010.md) |
-| 248 | [REL-TIMEOUT-01-011](case/REL-TIMEOUT-01-011.md) |
-| 249 | [SEC-ENV-01-002](case/SEC-ENV-01-002.md) |
-| 250 | [SEC-FORK-01-001](case/SEC-FORK-01-001.md) |
-| 251 | [SEC-FORK-01-002](case/SEC-FORK-01-002.md) |
-| 252 | [SEC-INJ-01-001](case/SEC-INJ-01-001.md) |
-| 253 | [SEC-INJ-01-002](case/SEC-INJ-01-002.md) |
-| 254 | [SEC-INJ-01-003](case/SEC-INJ-01-003.md) |
-| 255 | [SEC-INJ-01-004](case/SEC-INJ-01-004.md) |
-| 256 | [SEC-MASK-01-003](case/SEC-MASK-01-003.md) |
-| 257 | [SEC-MASK-01-004](case/SEC-MASK-01-004.md) |
-| 258 | [SEC-MASK-01-006](case/SEC-MASK-01-006.md) |
-| 259 | [SEC-RUN-01-001](case/SEC-RUN-01-001.md) |
-| 260 | [SEC-RUN-01-002](case/SEC-RUN-01-002.md) |
-| 261 | [SEC-RUN-01-003](case/SEC-RUN-01-003.md) |
-| 262 | [SEC-SIDE-01-001](case/SEC-SIDE-01-001.md) |
-| 263 | [SEC-SIDE-01-002](case/SEC-SIDE-01-002.md) |
-| 264 | [SEC-SUPPLY-01-001](case/SEC-SUPPLY-01-001.md) |
-| 265 | [SEC-SUPPLY-01-002](case/SEC-SUPPLY-01-002.md) |
-| 266 | [SEC-SUPPLY-01-003](case/SEC-SUPPLY-01-003.md) |
-| 267 | [SEC-WCMD-01-003](case/SEC-WCMD-01-003.md) |
-| 268 | [SEC-WCMD-01-004](case/SEC-WCMD-01-004.md) |
-| 269 | [USE-ACT-01-001](case/USE-ACT-01-001.md) |
-| 270 | [USE-ACT-01-002](case/USE-ACT-01-002.md) |
-| 271 | [USE-ANNOT-01-002](case/USE-ANNOT-01-002.md) |
-| 272 | [USE-CONC-01-001](case/USE-CONC-01-001.md) |
-| 273 | [USE-CONC-01-002](case/USE-CONC-01-002.md) |
-| 274 | [USE-CTX-01-001](case/USE-CTX-01-001.md) |
-| 275 | [USE-CTX-01-002](case/USE-CTX-01-002.md) |
-| 276 | [USE-DEPR-01-001](case/USE-DEPR-01-001.md) |
-| 277 | [USE-DEPR-01-002](case/USE-DEPR-01-002.md) |
-| 278 | [USE-DIR-01-002](case/USE-DIR-01-002.md) |
-| 279 | [USE-DISP-01-001](case/USE-DISP-01-001.md) |
-| 280 | [USE-DISP-01-002](case/USE-DISP-01-002.md) |
-| 281 | [USE-DOC-01-001](case/USE-DOC-01-001.md) |
-| 282 | [USE-ENV-01-001](case/USE-ENV-01-001.md) |
-| 283 | [USE-ENV-01-002](case/USE-ENV-01-002.md) |
-| 284 | [USE-ENV-01-004](case/USE-ENV-01-004.md) |
-| 285 | [USE-EXPR-01-003](case/USE-EXPR-01-003.md) |
-| 286 | [USE-EXPR-01-004](case/USE-EXPR-01-004.md) |
-| 287 | [USE-INPT-01-001](case/USE-INPT-01-001.md) |
-| 288 | [USE-LBL-01-003](case/USE-LBL-01-003.md) |
-| 289 | [USE-LBL-01-004](case/USE-LBL-01-004.md) |
-| 290 | [USE-LBL-01-005](case/USE-LBL-01-005.md) |
-| 291 | [USE-NEST-01-002](case/USE-NEST-01-002.md) |
-| 292 | [USE-OS-01-001](case/USE-OS-01-001.md) |
-| 293 | [USE-OS-01-002](case/USE-OS-01-002.md) |
-| 294 | [USE-PERM-01-001](case/USE-PERM-01-001.md) |
-| 295 | [USE-RUN-01-001](case/USE-RUN-01-001.md) |
-| 296 | [USE-STAT-01-001](case/USE-STAT-01-001.md) |
-| 297 | [USE-TOGGLE-01-001](case/USE-TOGGLE-01-001.md) |
-| 298 | [USE-TYPE-01-001](case/USE-TYPE-01-001.md) |
-| 299 | [USE-TYPE-01-003](case/USE-TYPE-01-003.md) |
-| 300 | [USE-UNKN-01-003](case/USE-UNKN-01-003.md) |
-| 301 | [USE-UNKN-01-004](case/USE-UNKN-01-004.md) |
-| 302 | [USE-VARS-01-002](case/USE-VARS-01-002.md) |
+- **COMP-CALL-01-001**: 2 层 workflow_call 嵌套正常执行
+- **COMP-CALL-01-002**: 3 层 workflow_call 嵌套应被拒绝
+- **COMPAT-ISOLATE-01-001**: Runner 环境隔离——跨 job 文件隔离
+- **COMPAT-ISOLATE-01-002**: Runner 环境隔离——跨 job 环境变量隔离
+- **COMPAT-LIMIT-01-001**: 单次推送多个 tag 的事件生成上限行为
+- **COMPAT-LIMIT-01-002**: workflow_dispatch 输入数量上限与非默认分支可用性
+- **COMPAT-MATRIX-01-003**: matrix 三维展开不被支持时的差异
+- **COMPAT-MATRIX-01-004**: matrix include 无基础变量不被支持时的差异
+- **REL-BIGRUNNER-01-066**: 大规格资源调度稳定性——xlarge/2xlarge 反复编译成功率
+- **REL-MATRIX-01-026**: matrix fail-fast=true——任意 job 实例失败应立即取消其余实例
+- **SEC-ARTF-01-003**: 宽通配打包含敏感文件名的 artifact 绝不应在无警示情况下静默成功且可被无痕下载
+- **SEC-AUDIT-01-001**: 敏感操作（secret/权限/rerun/审批/评论触发）必须全部留有不可擦除的审计记录
+- **SEC-OIDC-01-001**: OIDC/短时凭据支持若缺失，必须明确标注为平台限制并提供替代安全方案   - **维度**: 安全性   - **评级**: 完全不符
 
----
 
-## 3. 部分不符
+## 3. 部分不符 (73 例)
 
-| # | Case ID |
-|---|---------|
-| 1 | [COMP-DIR-01-001](case/COMP-DIR-01-001.md) |
-| 2 | [COMP-EXPR-01-059](case/COMP-EXPR-01-059.md) |
-| 3 | [COMP-PRTARGET-01-002](case/COMP-PRTARGET-01-002.md) |
-| 4 | [COMP-PUSH-01-001](case/COMP-PUSH-01-001.md) |
-| 5 | [COMP-SCHEDULE-01-001](case/COMP-SCHEDULE-01-001.md) |
-| 6 | [COMP-STAGES-01-001](case/COMP-STAGES-01-001.md) |
-| 7 | [COMP-STAGES-01-004](case/COMP-STAGES-01-004.md) |
-| 8 | [COMP-STATUS-01-001](case/COMP-STATUS-01-001.md) |
-| 9 | [COMP-STATUS-01-002](case/COMP-STATUS-01-002.md) |
-| 10 | [COMP-STEP-01-069](case/COMP-STEP-01-069.md) |
-| 11 | [COMP-TIMEOUT-01-001](case/COMP-TIMEOUT-01-001.md) |
-| 12 | [COMP-TIMEOUT-01-002](case/COMP-TIMEOUT-01-002.md) |
-| 13 | [COMP-TRIG-01-078](case/COMP-TRIG-01-078.md) |
-| 14 | [COMP-TRIG-01-079](case/COMP-TRIG-01-079.md) |
-| 15 | [COMPAT-CACHE-01-002](case/COMPAT-CACHE-01-002.md) |
-| 16 | [COMPAT-DIR-01-001](case/COMPAT-DIR-01-001.md) |
-| 17 | [COMPAT-ENV-01-001](case/COMPAT-ENV-01-001.md) |
-| 18 | [COMPAT-EXPR-01-002](case/COMPAT-EXPR-01-002.md) |
-| 19 | [COMPAT-EXPR-01-015](case/COMPAT-EXPR-01-015.md) |
-| 20 | [COMPAT-INPUTS-01-002](case/COMPAT-INPUTS-01-002.md) |
-| 21 | [COMPAT-PATHS-01-001](case/COMPAT-PATHS-01-001.md) |
-| 22 | [COMPAT-PERM-01-002](case/COMPAT-PERM-01-002.md) |
-| 23 | [COMPAT-PR-01-001](case/COMPAT-PR-01-001.md) |
-| 24 | [REL-ARTPERF-01-053](case/REL-ARTPERF-01-053.md) |
-| 25 | [REL-ARTPERF-01-053-V2](case/REL-ARTPERF-01-053-V2.md) |
-| 26 | [REL-CACHE-01-047](case/REL-CACHE-01-047.md) |
-| 27 | [REL-CACHE-01-048](case/REL-CACHE-01-048.md) |
-| 28 | [REL-CACHEPERF-01-054](case/REL-CACHEPERF-01-054.md) |
-| 29 | [REL-CANCEL-01-029](case/REL-CANCEL-01-029.md) |
-| 30 | [REL-CANCELREL-01-061](case/REL-CANCELREL-01-061.md) |
-| 31 | [REL-CLUSTER-01-001](case/REL-CLUSTER-01-001.md) |
-| 32 | [REL-CONC-01-001](case/REL-CONC-01-001.md) |
-| 33 | [REL-CPU-01-022](case/REL-CPU-01-022.md) |
-| 34 | [REL-FAIR-01-044](case/REL-FAIR-01-044.md) |
-| 35 | [REL-FAULT-01-036](case/REL-FAULT-01-036.md) |
-| 36 | [REL-FAULT-01-037](case/REL-FAULT-01-037.md) |
-| 37 | [REL-FAULT-01-039](case/REL-FAULT-01-039.md) |
-| 38 | [REL-IMAGE-01-052](case/REL-IMAGE-01-052.md) |
-| 39 | [REL-IMAGE-01-052-V2](case/REL-IMAGE-01-052-V2.md) |
-| 40 | [REL-K8S-01-046](case/REL-K8S-01-046.md) |
-| 41 | [REL-K8S-01-047](case/REL-K8S-01-047.md) |
-| 42 | [REL-K8S-01-048](case/REL-K8S-01-048.md) |
-| 43 | [REL-K8S-01-049](case/REL-K8S-01-049.md) |
-| 44 | [REL-K8S-01-050](case/REL-K8S-01-050.md) |
-| 45 | [REL-K8S-01-051](case/REL-K8S-01-051.md) |
-| 46 | [REL-LATENCY-01-050](case/REL-LATENCY-01-050.md) |
-| 47 | [REL-LATENCY-01-050-V2](case/REL-LATENCY-01-050-V2.md) |
-| 48 | [REL-LOG-01-041](case/REL-LOG-01-041.md) |
-| 49 | [REL-LOGPERF-01-051](case/REL-LOGPERF-01-051.md) |
-| 50 | [REL-LOGPERF-01-051-V2](case/REL-LOGPERF-01-051-V2.md) |
-| 51 | [REL-MATRIX-01-040](case/REL-MATRIX-01-040.md) |
-| 52 | [REL-MATRIX-01-041](case/REL-MATRIX-01-041.md) |
-| 53 | [REL-NETFAULT-01-062](case/REL-NETFAULT-01-062.md) |
-| 54 | [REL-PATHS-01-014](case/REL-PATHS-01-014.md) |
-| 55 | [REL-PATHS-01-015](case/REL-PATHS-01-015.md) |
-| 56 | [REL-PREEMPT-01-006](case/REL-PREEMPT-01-006.md) |
-| 57 | [REL-RERUN-01-012](case/REL-RERUN-01-012.md) |
-| 58 | [REL-RERUN-01-013](case/REL-RERUN-01-013.md) |
-| 59 | [REL-RUNNER-01-049](case/REL-RUNNER-01-049.md) |
-| 60 | [REL-RUNNER-01-049-V2](case/REL-RUNNER-01-049-V2.md) |
-| 61 | [REL-VCJOB-01-001](case/REL-VCJOB-01-001.md) |
-| 62 | [REL-YAMLCACHE-01-060](case/REL-YAMLCACHE-01-060.md) |
-| 63 | [SEC-ARTF-01-001](case/SEC-ARTF-01-001.md) |
-| 64 | [SEC-ARTF-01-002](case/SEC-ARTF-01-002.md) |
-| 65 | [SEC-BASE-01-001](case/SEC-BASE-01-001.md) |
-| 66 | [SEC-BASE-01-002](case/SEC-BASE-01-002.md) |
-| 67 | [SEC-CACHE-01-001](case/SEC-CACHE-01-001.md) |
-| 68 | [SEC-CACHE-01-002](case/SEC-CACHE-01-002.md) |
-| 69 | [SEC-DEFPERM-01-001](case/SEC-DEFPERM-01-001.md) |
-| 70 | [SEC-DEFPERM-01-002](case/SEC-DEFPERM-01-002.md) |
-| 71 | [SEC-DOS-01-001](case/SEC-DOS-01-001.md) |
-| 72 | [SEC-ENV-01-001](case/SEC-ENV-01-001.md) |
-| 73 | [SEC-INJ-01-005](case/SEC-INJ-01-005.md) |
-| 74 | [SEC-LOG-01-002](case/SEC-LOG-01-002.md) |
-| 75 | [SEC-MASK-01-001](case/SEC-MASK-01-001.md) |
-| 76 | [SEC-MASK-01-005](case/SEC-MASK-01-005.md) |
-| 77 | [SEC-NAME-01-001](case/SEC-NAME-01-001.md) |
-| 78 | [SEC-NAME-01-002](case/SEC-NAME-01-002.md) |
-| 79 | [SEC-NET-01-001](case/SEC-NET-01-001.md) |
-| 80 | [SEC-ORG-01-001](case/SEC-ORG-01-001.md) |
-| 81 | [SEC-ORG-01-002](case/SEC-ORG-01-002.md) |
-| 82 | [SEC-PERM-01-001](case/SEC-PERM-01-001.md) |
-| 83 | [SEC-PERM-01-002](case/SEC-PERM-01-002.md) |
-| 84 | [SEC-PERM-01-003](case/SEC-PERM-01-003.md) |
-| 85 | [SEC-PERM-01-004](case/SEC-PERM-01-004.md) |
-| 86 | [SEC-PRTGT-01-001](case/SEC-PRTGT-01-001.md) |
-| 87 | [SEC-PRTGT-01-002](case/SEC-PRTGT-01-002.md) |
-| 88 | [SEC-SECMGMT-01-001](case/SEC-SECMGMT-01-001.md) |
-| 89 | [SEC-TOKEN-01-002](case/SEC-TOKEN-01-002.md) |
-| 90 | [SEC-WCMD-01-001](case/SEC-WCMD-01-001.md) |
-| 91 | [SEC-WCMD-01-002](case/SEC-WCMD-01-002.md) |
-| 92 | [USE-BADGE-01-001](case/USE-BADGE-01-001.md) |
-| 93 | [USE-CLI-01-001](case/USE-CLI-01-001.md) |
-| 94 | [USE-DOC-01-004](case/USE-DOC-01-004.md) |
-| 95 | [USE-DOC-01-005](case/USE-DOC-01-005.md) |
-| 96 | [USE-DOC-01-007](case/USE-DOC-01-007.md) |
-| 97 | [USE-ENV-01-003](case/USE-ENV-01-003.md) |
-| 98 | [USE-EXPR-01-001](case/USE-EXPR-01-001.md) |
-| 99 | [USE-EXPR-01-002](case/USE-EXPR-01-002.md) |
-| 100 | [USE-INPT-01-002](case/USE-INPT-01-002.md) |
-| 101 | [USE-LBL-01-001](case/USE-LBL-01-001.md) |
-| 102 | [USE-LBL-01-006](case/USE-LBL-01-006.md) |
-| 103 | [USE-LOG-01-001](case/USE-LOG-01-001.md) |
-| 104 | [USE-MASK-01-001](case/USE-MASK-01-001.md) |
-| 105 | [USE-MD-01-001](case/USE-MD-01-001.md) |
-| 106 | [USE-NEST-01-001](case/USE-NEST-01-001.md) |
-| 107 | [USE-ONBD-01-002](case/USE-ONBD-01-002.md) |
-| 108 | [USE-PERM-01-002](case/USE-PERM-01-002.md) |
-| 109 | [USE-RUN-01-002](case/USE-RUN-01-002.md) |
-| 110 | [USE-SEARCH-01-001](case/USE-SEARCH-01-001.md) |
-| 111 | [USE-SECNAME-01-001](case/USE-SECNAME-01-001.md) |
-| 112 | [USE-SECNAME-01-002](case/USE-SECNAME-01-002.md) |
-| 113 | [USE-STAT-01-002](case/USE-STAT-01-002.md) |
-| 114 | [USE-TYPE-01-002](case/USE-TYPE-01-002.md) |
-| 115 | [USE-YAML-01-001](case/USE-YAML-01-001.md) |
-| 116 | [USE-YAML-01-002](case/USE-YAML-01-002.md) |
+- COMP-PRTARGET-01-001: pull_request_target 默认使用 base 分支 workflow 版本
+- COMP-PRTARGET-01-002: 显式 checkout head.sha 后执行不可信代码的风险可控
+- COMP-PUSH-01-001: 匹配 branches 的 push 正确触发 workflow
+- COMP-SCRIPT-01-081: 仓库内脚本执行与路径验证
+- COMP-STAGES-01-004: map 形式 stages 按定义顺序串行执行（回归保护）
+- COMP-STATUS-01-001: 运行状态机 queued 到 completed 转换正确
+- COMP-STATUS-01-002: 失败 step 的日志完整保留且可查看
+- COMP-STEP-01-069: step 必填与核心字段 name run uses 验证
+- COMP-TIMEOUT-01-001: 未声明 timeout-minutes 的 job 在 360 分钟内正常完成
+- COMP-UNKNOWN-01-003: 未声明 select 的 stage 与 job 默认被执行
+- COMP-WFLOW-01-061: workflow name 与 on 字段必填与类型验证
+- COMP-WFLOW-01-063: workflow concurrency 并发控制字段验证
+- COMPAT-CACHE-01-002: cache 行为等价性——fork PR 写隔离
+- COMPAT-ENV-01-001: ATOMGIT_SHA 环境变量应正确返回触发提交 SHA
+- COMPAT-EXPR-01-002: success() 函数的处理行为差异
+- COMPAT-INPUTS-01-002: workflow_dispatch inputs 类型限制 - string 正常通过
+- REL-ARTPERF-01-053-V2: 制品传输性能——1GB artifact 上传下载耗时
+- REL-ARTPERF-01-053: 制品传输性能——100MB artifact 上传下载耗时
+- REL-CACHE-01-047: cache 容量上限探测——500MB/1GB/2GB 单 cache 的接受/拒绝语义
+- REL-CACHE-01-048: cache 同 key 并发写一致性——3 方并行写同一 key 不得产生混合/损坏内容
+- REL-CACHEPERF-01-054: 缓存加速比——cache 命中 vs 未命中构建耗时对比
+- REL-CANCELREL-01-061: 取消操作可靠性——queued/running/post 各阶段取消状态正确过渡
+- REL-FAIR-01-044: 并发资源公平性——2 个 workflow 各 3 个 jobs 应被公平调度
+- REL-FAULT-01-031: 故障注入——job 执行中 runner 进程被 SIGKILL 后应记录失败并保留已执行日志
+- REL-FAULT-01-032: 故障注入——artifact 上传时网络分区 30 秒后应失败并报网络错误
+- REL-FLOOD-01-036: 并发洪泛——同一仓库 10 个 push 同时触发 10 个 workflow 运行应无丢失
+- REL-FLOOD-01-037: 并发洪泛——同一仓库 50 个 push 同时触发应正确排队/限流不崩溃
+- REL-LATENCY-01-050: 调度延迟基准——queued→running P50/P95 等待时间
+- REL-LOG-01-040: 超长日志——单 job 输出 100 MB 日志应完整保留且可下载查看
+- REL-LOGPERF-01-051: 日志加载性能——50MB 日志下载与查看耗时
+- REL-MATRIX-01-040: matrix 组合数边界——256 组合（GitHub 上限）应全部展开或被明确拒绝
+- REL-MATRIX-01-041: matrix 组合数越界——300 组合超上限时应明确报错（含上限值）不得静默截断
+- REL-VCJOB-01-002: 大规模 vcjob 并发提交（≥50）无丢失、无级联失败   - **维度**: 可靠性   - **评级**: 部分不符
+- REL-YAMLCACHE-01-060: Workflow YAML 缓存失效——修改后无旧代码残留
+- SEC-ARTF-01-001: fork PR 上传的 artifact 必须不可被主仓 workflow 下载或执行
+- SEC-ARTF-01-002: 跨仓库 artifact 下载返回 403 或 404
+- SEC-BASE-01-001: pull_request_target 使用 base 分支的 workflow 版本
+- SEC-BASE-01-002: fork PR 改 workflow 不被 pull_request_target 采用
+- SEC-CACHE-01-001: fork PR 写入的 cache 必须不可被主仓后续 workflow 读取
+- SEC-CACHE-01-002: 主仓 cache restore 对 fork cache miss
+- SEC-COMM-01-001: issue_comment/pull_request_comment 触发关键字过滤必须不可被绕过   - **维度**: 安全性   - **评级**: 部分不符
+- SEC-COMM-01-002: 引用/反讽/代码块内嵌指令文本绝不应造成 pull_request_comment 预期外触发   - **维度**: 安全性   - **评级**: 部分不符
+- SEC-COMM-01-003: 变形伪装评论（大小写/多余空白/markdown 包裹）不得绕过 comments 过滤语义   - **维度**: 安全性   - **评级**: 部分不符
+- SEC-LOG-01-001: 无权限角色读取/下载运行日志必须被拒，过期日志绝不应可恢复   - **维度**: 安全性   - **评级**: 部分不符
+- SEC-LOG-01-002: 导出/历史日志副本中 secret 原值命中数必须为 0，遮蔽状态不可回退   - **维度**: 安全性   - **评级**: 部分不符
+- SEC-MASK-01-003: Secret 日志脱敏不可通过 base64 编码绕过   - **维度**: 安全性   - **评级**: 部分不符
+- SEC-MASK-01-004: Secret 日志脱敏不可通过字符串拼接或插值绕过   - **维度**: 安全性   - **评级**: 部分不符
+- SEC-MASK-01-006: Secret 日志脱敏不可通过分片输出绕过   - **维度**: 安全性   - **评级**: 部分不符
+- SEC-NAME-01-003: 可遮蔽系统变量的 secret 命名（ATOMGIT_前缀/非法字符/数字开头）创建时必须被拒   - **维度**: 安全性   - **评级**: 部分不符
+- SEC-NAME-01-004: 与系统变量同名的用户自定义值绝不应覆盖 job 环境中的平台注入值   - **维度**: 安全性   - **评级**: 部分不符
+- SEC-ORG-01-001: 可见范围外仓库的 workflow 绝不应读到组织级 secret 原值   - **维度**: 安全性   - **评级**: 部分不符
+- SEC-TOKEN-01-004: 残留于 cache/artifact 的 token 在新 run 中绝不应通过鉴权
+- SEC-WCMD-01-002: 跨运行 artifact 必须被视为不可信数据
+- USE-ACT-01-004: 文档短名与市场名两种写法解析一致性验证
+- USE-EXPR-01-001: 引用不存在的上下文属性时报错应包含原始表达式与错误类型
+- USE-EXPR-01-002: 调用未知函数时报错应提示函数名错误与修正方向
+- USE-INPT-01-002: 使用 boolean 类型 input 时报错应提示仅支持 string
+- USE-LBL-01-001: runs-on 标签完全不匹配时应给出明确失败原因与可用标签列表
+- USE-LOG-01-001: 多 step 日志按时间线组织且边界清晰
+- USE-MASK-01-001: secret 脱敏文档描述与实际行为一致并给出缓解建议
+- USE-MD-01-001: ATOMGIT_STEP_SUMMARY 写入的 Markdown 正确渲染为 HTML
+- USE-NEST-01-001: workflow_call 嵌套 3 层时报错应明确提示上限为 2 层
+- USE-ONBD-01-001: 新手快速开始路径端到端可复刻走查（判定方式：llm_assisted）
+- USE-OS-01-001: runner.os 返回值与文档声明的平台支持一致
+- USE-PERM-01-002: 使用 GitHub 权限域命名时报错应给出 GitCode 对照表
+- USE-RUN-01-002: 使用单标签 ubuntu-latest 时报错应给出三段式格式指引
+- USE-SEARCH-01-001: 日志搜索与下载功能可用且交互流畅
+- USE-SECNAME-01-001: Secret 名称以 ATOMGIT_ 开头时应给出命名规则错误
+- USE-SECNAME-01-002: Secret 名称以数字开头时应给出命名规则错误
+- USE-STAT-01-002: 使用 success() 带括号时报错应提示 GitCode 括号差异
+- USE-TYPE-01-002: 使用 GitHub types 命名 opened/synchronize 时应给出可理解提示
+- USE-YAML-01-001: 缺少必填字段 on 时报错应指出具体字段名与位置
+- USE-YAML-01-002: YAML 缩进错误时报错应指出具体行号与列号
 
----
 
-## 4. 完全不符
+## 4. 断言一致 (412 例)
 
-| # | Case ID |
-|---|---------|
-| 1 | [COMP-BOUND-01-084](case/COMP-BOUND-01-084.md) |
-| 2 | [COMP-BOUND-01-085](case/COMP-BOUND-01-085.md) |
-| 3 | [COMP-CALL-01-001](case/COMP-CALL-01-001.md) |
-| 4 | [COMP-CALL-01-002](case/COMP-CALL-01-002.md) |
-| 5 | [COMP-JOB-01-066](case/COMP-JOB-01-066.md) |
-| 6 | [COMP-JOB-01-067](case/COMP-JOB-01-067.md) |
-| 7 | [COMP-PRTARGET-01-001](case/COMP-PRTARGET-01-001.md) |
-| 8 | [COMP-SCRIPT-01-081](case/COMP-SCRIPT-01-081.md) |
-| 9 | [COMP-STEP-01-071](case/COMP-STEP-01-071.md) |
-| 10 | [COMP-UNKNOWN-01-003](case/COMP-UNKNOWN-01-003.md) |
-| 11 | [COMP-VARREF-01-084](case/COMP-VARREF-01-084.md) |
-| 12 | [COMP-WFLOW-01-061](case/COMP-WFLOW-01-061.md) |
-| 13 | [COMP-WFLOW-01-063](case/COMP-WFLOW-01-063.md) |
-| 14 | [COMP-WFLOW-01-064](case/COMP-WFLOW-01-064.md) |
-| 15 | [COMP-WFLOW-01-065](case/COMP-WFLOW-01-065.md) |
-| 16 | [COMPAT-EXPR-01-001](case/COMPAT-EXPR-01-001.md) |
-| 17 | [COMPAT-EXPR-01-013](case/COMPAT-EXPR-01-013.md) |
-| 18 | [COMPAT-EXPR-01-014](case/COMPAT-EXPR-01-014.md) |
-| 19 | [COMPAT-EXPR-01-016](case/COMPAT-EXPR-01-016.md) |
-| 20 | [COMPAT-FIELD-01-001](case/COMPAT-FIELD-01-001.md) |
-| 21 | [COMPAT-FIELD-01-002](case/COMPAT-FIELD-01-002.md) |
-| 22 | [COMPAT-FIELD-01-003](case/COMPAT-FIELD-01-003.md) |
-| 23 | [COMPAT-ISOLATE-01-001](case/COMPAT-ISOLATE-01-001.md) |
-| 24 | [COMPAT-ISOLATE-01-002](case/COMPAT-ISOLATE-01-002.md) |
-| 25 | [COMPAT-LIMIT-01-001](case/COMPAT-LIMIT-01-001.md) |
-| 26 | [COMPAT-LIMIT-01-002](case/COMPAT-LIMIT-01-002.md) |
-| 27 | [COMPAT-MATRIX-01-003](case/COMPAT-MATRIX-01-003.md) |
-| 28 | [COMPAT-MATRIX-01-004](case/COMPAT-MATRIX-01-004.md) |
-| 29 | [COMPAT-MATRIX-01-005](case/COMPAT-MATRIX-01-005.md) |
-| 30 | [COMPAT-MIGRATE-01-001](case/COMPAT-MIGRATE-01-001.md) |
-| 31 | [COMPAT-MIGRATE-01-002](case/COMPAT-MIGRATE-01-002.md) |
-| 32 | [COMPAT-OUTCOME-01-001](case/COMPAT-OUTCOME-01-001.md) |
-| 33 | [COMPAT-OUTCOME-01-002](case/COMPAT-OUTCOME-01-002.md) |
-| 34 | [COMPAT-OUTCOME-01-003](case/COMPAT-OUTCOME-01-003.md) |
-| 35 | [COMPAT-OUTPUT-01-001](case/COMPAT-OUTPUT-01-001.md) |
-| 36 | [COMPAT-PERM-01-003](case/COMPAT-PERM-01-003.md) |
-| 37 | [COMPAT-PERM-01-005](case/COMPAT-PERM-01-005.md) |
-| 38 | [COMPAT-PERM-01-006](case/COMPAT-PERM-01-006.md) |
-| 39 | [COMPAT-PR-01-003](case/COMPAT-PR-01-003.md) |
-| 40 | [REL-BIGRUNNER-01-066](case/REL-BIGRUNNER-01-066.md) |
-| 41 | [REL-MATRIX-01-026](case/REL-MATRIX-01-026.md) |
-| 42 | [REL-VCJOB-01-002](case/REL-VCJOB-01-002.md) |
-| 43 | [SEC-ARTF-01-003](case/SEC-ARTF-01-003.md) |
-| 44 | [SEC-AUDIT-01-001](case/SEC-AUDIT-01-001.md) |
-| 45 | [SEC-COMM-01-001](case/SEC-COMM-01-001.md) |
-| 46 | [SEC-COMM-01-002](case/SEC-COMM-01-002.md) |
-| 47 | [SEC-COMM-01-003](case/SEC-COMM-01-003.md) |
-| 48 | [SEC-LOG-01-001](case/SEC-LOG-01-001.md) |
-| 49 | [SEC-MASK-01-002](case/SEC-MASK-01-002.md) |
-| 50 | [SEC-NAME-01-003](case/SEC-NAME-01-003.md) |
-| 51 | [SEC-NAME-01-004](case/SEC-NAME-01-004.md) |
-| 52 | [SEC-OIDC-01-001](case/SEC-OIDC-01-001.md) |
-| 53 | [SEC-SECMGMT-01-002](case/SEC-SECMGMT-01-002.md) |
-| 54 | [SEC-TOCTOU-01-001](case/SEC-TOCTOU-01-001.md) |
-| 55 | [SEC-TOCTOU-01-002](case/SEC-TOCTOU-01-002.md) |
-| 56 | [SEC-TOCTOU-01-003](case/SEC-TOCTOU-01-003.md) |
-| 57 | [SEC-TOKEN-01-001](case/SEC-TOKEN-01-001.md) |
-| 58 | [SEC-TOKEN-01-003](case/SEC-TOKEN-01-003.md) |
-| 59 | [SEC-TOKEN-01-004](case/SEC-TOKEN-01-004.md) |
-| 60 | [SEC-WFRUN-01-001](case/SEC-WFRUN-01-001.md) |
-| 61 | [USE-ACT-01-003](case/USE-ACT-01-003.md) |
-| 62 | [USE-ACT-01-004](case/USE-ACT-01-004.md) |
-| 63 | [USE-ANNOT-01-001](case/USE-ANNOT-01-001.md) |
-| 64 | [USE-API-01-001](case/USE-API-01-001.md) |
-| 65 | [USE-CONT-01-001](case/USE-CONT-01-001.md) |
-| 66 | [USE-DIR-01-001](case/USE-DIR-01-001.md) |
-| 67 | [USE-DISP-01-003](case/USE-DISP-01-003.md) |
-| 68 | [USE-DOC-01-002](case/USE-DOC-01-002.md) |
-| 69 | [USE-DOC-01-003](case/USE-DOC-01-003.md) |
-| 70 | [USE-DOC-01-006](case/USE-DOC-01-006.md) |
-| 71 | [USE-LBL-01-002](case/USE-LBL-01-002.md) |
-| 72 | [USE-MASK-01-002](case/USE-MASK-01-002.md) |
-| 73 | [USE-ONBD-01-001](case/USE-ONBD-01-001.md) |
-| 74 | [USE-PATH-01-001](case/USE-PATH-01-001.md) |
-| 75 | [USE-RES-01-001](case/USE-RES-01-001.md) |
-| 76 | [USE-RUN-01-003](case/USE-RUN-01-003.md) |
-| 77 | [USE-SCHED-01-001](case/USE-SCHED-01-001.md) |
-| 78 | [USE-UNKN-01-001](case/USE-UNKN-01-001.md) |
-| 79 | [USE-UNKN-01-002](case/USE-UNKN-01-002.md) |
-| 80 | [USE-VARS-01-001](case/USE-VARS-01-001.md) |
+共 412 例断言一致的用例 YAML 已复制到 `phase02/agents/expect-execute-consistency/outputs/accessable/`，可直接 dispatch。
+
+## 5. 逐用例详情
+
+每个用例的详细分析见 `phase02/agents/expect-execute-consistency/outputs/case/<CASE_ID>.md`。

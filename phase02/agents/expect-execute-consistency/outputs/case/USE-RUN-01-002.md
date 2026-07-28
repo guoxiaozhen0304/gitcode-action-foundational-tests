@@ -1,35 +1,16 @@
 # USE-RUN-01-002
 - **标题**: 使用单标签 ubuntu-latest 时报错应给出三段式格式指引
-- **维度**: usability
-- **优先级**: P1
+- **维度**: 易用性/兼容性
 - **评级**: 部分不符
----
-## 1. 想测什么
-本用例验证：**使用单标签 ubuntu-latest 时报错应给出三段式格式指引**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-USE-006
-通过标准：
-1. 不应无限 queued 且无提示
-2. 报错中应包含三段式或 default 等关键词
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | step | `echo "hello"` | 无 | 预期平台对单标签写法报错 |
+## 想测什么
+验证使用单标签 `runs-on: [ubuntu-latest]`（缺少 arch/flavor）时平台应报错并给出三段式标签格式示例或可用标签列表。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
+## 做了什么
+workflow 使用不完整单标签 runs-on，step 执行 echo。期望平台因标签不匹配而报错。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status equals COMPLETED | negative | 步骤为纯 echo，但单标签 runs-on 校验由平台决定 | ✅ GENUINE | 平台对 runs-on 标签格式的校验是真实行为 |
-| 2 | error_message eval=llm_assisted | nonfunctional | LLM 判定报错格式指引内容 | 🔶 LLM_DEPENDENT | 需 LLM 辅助判定报错内容 |
-
-### 问题
-断言 2 依赖 LLM 辅助判定，无法在当前分析中确证。
----
+| 1 | run_status | negative | 运行不应成功完成 | COVERED | 单标签不匹配应导致调度失败 → GENUINE |
+| 2 | error_message | nonfunctional | 报错含 runs-on 相关说明并给出正确示例 | UNVERIFIABLE | eval: llm_assisted → LLM_DEPENDENT |

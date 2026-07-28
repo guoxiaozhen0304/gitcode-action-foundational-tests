@@ -1,8 +1,7 @@
 # 一致性分析反馈记录
 
 1.  trigger=pull_request， it can be trigger
-
-<<<<<<< HEAD
+2. | 171 | [USE-YAML-01-002](case/USE-YAML-01-002.md) | YAML 缩进错误时报错应指出具体行号与列号 | [负向] 未找到可能导致非成功状态的步骤，单次调度无法证明 !=success |  not true, i can validate it by  phase02/classify-experiment/2026-07-23/batch_validate.py
 ---
 
 ## 2026-07-27 误报模式回写（基于 369 条基底用例全量研判）
@@ -58,7 +57,5 @@
 4. **fixture/结构缺失**（5 条）：setup 引用不存在的子 workflow 文件、reusable workflow 误放 step 级
 5. **断言逻辑自相矛盾**（2 条）：continue-on-error:true 吞失败却断言 job_status=failure；断言字符串（marker_v2）无任何步骤能产生
 6. **trigger 与 on 不一致**（3 条）：trigger.event=push 但 workflow `on:` 无 push——建议列为规则 3 的强制检查项
-=======
-2. | 171 | [USE-YAML-01-002](case/USE-YAML-01-002.md) | YAML 缩进错误时报错应指出具体行号与列号 | [负向] 未找到可能导致非成功状态的步骤，单次调度无法证明 !=success |  not true, i can validate it by  phase02/classify-experiment/2026-07-23/batch_validate.py
+
  
->>>>>>> dd1d825892681f79ef146873c84b4867716159e0

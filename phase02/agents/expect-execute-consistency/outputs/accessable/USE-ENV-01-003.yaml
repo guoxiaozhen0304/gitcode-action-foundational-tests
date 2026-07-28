@@ -1,0 +1,43 @@
+id: USE-ENV-01-003
+dimensions: ["usability", "compatibility"]
+dimension: usability
+priority: P1
+title: "ATOMGIT 系统环境变量实际注入集合与文档清单双向 diff"
+intent_ref: INTENT-USE-044
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: atomgit env injection probe
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: dump atomgit env vars
+          run: |
+            env | grep "^ATOMGIT_" | sort
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_logs
+    contains: "ATOMGIT_"
+  - type: negative
+    target: documentation
+    eval: "deterministic"
+    criterion: "实际注入集合与两页文档清单双向 diff；任一方向存在差集且文档未说明即不合格；与 COMPAT-017/044 共享注入集合探测证据"
+
+teardown:
+  reset: none

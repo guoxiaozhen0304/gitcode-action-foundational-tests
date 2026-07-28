@@ -1,41 +1,23 @@
 # COMP-ISOLATION-01-001
 
 - **标题**: 同一 workflow 先后 job 的文件系统相互隔离
-- **维度**: completeness
-- **优先级**: P0
+- **维度**: 完备性
 - **评级**: 断言一致
 
 ---
 
-## 1. 想测什么
+## 想测什么
+验证同一 workflow 的不同 job 之间文件系统隔离：job1 写入的本地文件对 job2 不可见；通过 artifact 显式传递后 job3 可访问。
 
-本用例验证：**同一 workflow 先后 job 的文件系统相互隔离**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-COMP-011
+## 做了什么
+job1 写入 `/tmp/isolation_test.txt`（含 "secret data"）并 upload-artifact；job2 检测文件是否存在（不存在则输出 "file not found as expected"，存在则 cat 并 exit 1）；job3 通过 download-artifact 获取共享文件后 cat 输出 "shared payload"。
 
-通过标准：
-1. [负向] job 2 不应访问到 job 1 的文件 —— 断言 must_not_contain "secret data"
-2. [正向] 运行状态成功 —— 断言 run_status=success
+## 逐断言判定
 
-## 2. 做了什么
-
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 (job1) | Create file | `echo "secret data" > /tmp/isolation_test.txt` | - | 创建文件 |
-| 2 (job2) | Attempt read | `if [ -f /tmp/isolation_test.txt ]; then echo "file exists"; cat /tmp/isolation_test.txt; exit 1; else echo "file not found as expected"; fi` | - (needs: job1) | 检测跨 job 文件隔离 |
-
-## 3. 触发与运行环境
-
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | positive | equals: success | ✅ GENUINE | job2 使用真实 bash `if/elif/fi` 逻辑 + `exit 1`，跨 job 文件隔离失败时 workflow 会失败 |
-| 2 | run_logs | negative | must_not_contain: secret data | ✅ GENUINE | 负向断言：若跨 job 隔离失败则 cat 会输出 "secret data" 且 exit 1；隔离成功则无此输出 |
-
+| 1 | run_status | positive | equals: success | COVERED | 三 job 完整执行（job2 验证隔离通过无 exit 1，job3 验证 artifact 传递成功） |
+| 2 | run_logs | negative | must_not_contain: secret data | COVERED | 若隔离失效 job2 会 cat 该文件输出 "secret data" 并 exit 1；不出现即隔离正确 |
+| 3 | run_logs | positive | must_contain: file not found as expected | COVERED | job2 检测文件不存在后 echo 输出 |
+| 4 | run_logs | positive | must_contain: PAYLOAD=shared payload | COVERED | job3 cat 下载的 artifact 文件输出 |
+| 5 | run_logs | positive | must_contain: artifact_read_ok | COVERED | job3 验证 artifact 传递成功的 marker |

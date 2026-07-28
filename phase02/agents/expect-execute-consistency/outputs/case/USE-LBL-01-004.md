@@ -1,32 +1,16 @@
 # USE-LBL-01-004
 - **标题**: quick-start 单标签写法 runs-on ubuntu-latest 的可调度性验证
-- **维度**: usability
-- **优先级**: P0
+- **维度**: 易用性
 - **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**quick-start 单标签写法 runs-on ubuntu-latest 的可调度性验证**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-USE-031
-通过标准：
-1. 文档示例写法应可被平台接受并运行成功
-2. 平台不应接受一种写法而文档示例给出另一种却不加说明
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | hello step | `echo "hello from single-label runs-on"` | 无 | 验证单标签 runs-on 写法能否调度 |
+## 想测什么
+验证 quick-start 文档中单标签字符串形式的 runs-on: ubuntu-latest 是否可被平台接受并成功调度，即文档示例本身是否正确。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
+## 做了什么
+workflow 按文档示例使用 `runs-on: ubuntu-latest` 单标签字符串写法，执行 echo。同时检查若平台拒绝单标签写法则 quick-start 示例为错误示例。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status equals "success" | positive | 步骤虽为纯 echo，但 runs-on 单标签写法的接受性是平台调度真实行为 | ✅ GENUINE | 平台对 runs-on 写法的校验/调度是真实行为 |
-| 2 | documentation 确定性校验 | negative | 若平台拒绝单标签写法则 quick-start 示例错误 | ✅ COVERED | 确定性文档校验，依赖断言 1 结果 |
----
+| 1 | run_status | positive | 运行成功 | COVERED | 平台实际调度行为可观察 → GENUINE |
+| 2 | documentation | negative | 若平台拒绝单标签则 quick-start 示例为错误 | COVERED | eval: deterministic，运行结果与文档示例差异判定可程序化 |

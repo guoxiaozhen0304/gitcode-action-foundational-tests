@@ -1,0 +1,51 @@
+id: COMP-SCHEDULE-01-001
+dimensions: [completeness, compatibility]
+dimension: completeness
+priority: P1
+title: 合法 cron 在默认分支按时触发
+intent_ref: INTENT-COMP-005
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    schedule:
+      - cron: "0 2 * * *"
+  jobs:
+    verify:
+      name: Verify schedule trigger
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Echo scheduled timestamp
+          run: |
+            echo "SCHEDULED_RUN_UTC=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "EVENT_NAME=${{ atomgit.event_name }}"
+
+trigger:
+  event: schedule
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_status
+    equals: success
+  - type: positive
+    target: run_event
+    equals: schedule
+  - type: positive
+    target: run_logs
+    must_contain: SCHEDULED_RUN_UTC=
+  - type: nonfunctional
+    target: trigger_time
+    eval: llm_assisted
+    rubric: "日志中的 SCHEDULED_RUN_UTC 时间戳应与 cron 0 2 * * * 预期的 UTC 时间一致（允许平台调度延迟容差）"
+
+teardown:
+  reset: none

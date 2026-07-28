@@ -1,0 +1,53 @@
+id: REL-FAULT-01-037
+dimensions: [reliability]
+dimension: reliability
+priority: P1
+title: "故障注入——runner 与平台心跳分区 300 秒，行为应确定可归因（续跑或明确失联失败）"
+intent_ref: INTENT-REL-080
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    test:
+      name: heartbeat partition 300s job
+      runs-on: [ubuntu-latest, x64, small]
+      timeout-minutes: 30
+      steps:
+        - name: pre partition marker step
+          run: |
+            echo "pre_partition_marker"
+        - name: long work step
+          run: |
+            sleep 420
+        - name: post partition marker step
+          run: |
+            echo "post_partition_marker"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection:
+  at: mid_job
+  action: network_partition
+  params:
+    scope: runner_to_platform
+    duration_seconds: 300
+    inject_at_step: 2
+  recovery_expectation: "auto_recover_or_explicit_lost_with_attribution; rerun_succeeds"
+assertions:
+  - type: positive
+    target: outcome
+    equals: "resumed_success_or_explicit_lost_with_attribution"
+  - type: negative
+    target: failure_attribution
+    equals: "missing"
+  - type: nonfunctional
+    target: first_misjudge_or_death_threshold_seconds
+    equals: "recorded"
+teardown:
+  reset: fixture

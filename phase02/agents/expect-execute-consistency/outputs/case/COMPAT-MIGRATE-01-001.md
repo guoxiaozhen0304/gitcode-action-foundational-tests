@@ -1,32 +1,16 @@
 # COMPAT-MIGRATE-01-001
 - **标题**: GitHub 风格 permissions 块迁移报错应给出可操作指引
 - **维度**: 兼容性
-- **优先级**: P1
-- **评级**: 完全不符
----
-## 1. 想测什么
-本用例验证：**GitHub 风格 permissions 块迁移报错应给出可操作指引**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-COMPAT-031
-通过标准：
-1. 系统拒绝该 workflow（GitCode 不支持 permissions 块）
-2. 报错信息应明确指出 permissions 字段不被支持
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | checkout source | uses: checkout | — | — |
-| 2 | echo hello | `echo "hello"` | — | "hello" |
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | 无 |
-| 故障注入 | 无 |
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+- **评级**: 断言一致
+
+## 想测什么
+测试含 GitHub 风格 permissions 块（contents: read, pull-requests: write）的 workflow 被拒绝时，报错信息应包含可操作指引。
+
+## 做了什么
+在 job 级别添加 permissions 块（contents: read, pull-requests: write），包含 checkout + echo step。
+
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | validation_error eval=llm_assisted | negative | — | 🔶 LLM_DEPENDENT | permissions 拒绝行为由 LLM 判定 |
-| 2 | error_message eval=llm_assisted | positive | — | 🔶 LLM_DEPENDENT | 报错信息质量由 LLM 判定 |
-### 问题
-全部断言均为 LLM_DEPENDENT
----
+| 1 | validation_error | negative | llm_assisted rubric | LLM_DEPENDENT | 需 LLM 判断报错信息质量 |
+| 2 | error_message | positive | llm_assisted rubric | LLM_DEPENDENT | 需 LLM 判断是否包含 permissions 关键字及可操作建议 |

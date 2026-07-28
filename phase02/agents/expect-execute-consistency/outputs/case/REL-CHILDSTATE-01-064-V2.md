@@ -1,35 +1,14 @@
 # REL-CHILDSTATE-01-064-V2
 - **标题**: 子任务状态传播——workflow_call 未拉起时父 workflow 不应假阳性完成
-- **维度**: 稳定性
-- **优先级**: P0
+- **维度**: reliability
 - **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**引用不存在的子 workflow 时父 workflow 应正确标记 failure**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-064
-通过标准：
-1. 父 workflow 状态=failure
-2. 下游 job 被 skip
-3. 父 workflow 不应显示 success
-
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | call_child | `uses: ./.gitcode/workflows/child_missing.yml` | - | 调用不存在的子 workflow |
-| 2 | downstream should not run | `echo downstream` | needs: call_child | 依赖失败的子 workflow，应 skip |
-
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 想测什么
+workflow_call 引用不存在的子 workflow（child_missing.yml），验证父 workflow 状态=failure、下游 job 被 skip、父不应显示 success。
+## 做了什么
+YAML 使用 `uses: ./.gitcode/workflows/child_missing.yml`（不存在），下游 job needs: call_child。
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | parent_status = failure | positive | - | ✅ GENUINE | `uses:` 引用不存在的子 workflow，平台解析失败 → 真实 failure |
-| 2 | downstream_status = skipped | positive | - | ✅ GENUINE | needs 依赖失败 → 平台自动 skip |
-| 3 | parent_status = success | negative | - | ✅ GENUINE | 子 workflow 不存在，父必然不为 success |
----
+| 1 | parent_status | positive | equals failure | COVERED | YAML uses 不存在的工作流 → 平台校验/执行期报错 → parent_status=failure，对应文本"父 workflow 明确标记 failure" |
+| 2 | downstream_status | positive | equals skipped | COVERED | YAML assert downstream_status=skipped，对应文本"下游默认 job 被 skip" |
+| 3 | parent_status | negative | equals success | COVERED | YAML 负向断言 parent_status ≠ success，对应文本"父 workflow 不应显示 success" |

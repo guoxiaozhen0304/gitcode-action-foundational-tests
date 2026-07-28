@@ -1,32 +1,11 @@
 # REL-TIMEOUT-01-007
-- **标题**: job timeout 边界值——359 分钟运行应在 360 分钟边界前完成
-- **维度**: 稳定性
-- **优先级**: P1
-- **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**job timeout 边界值——359 分钟运行应在 360 分钟边界前完成**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-007
-通过标准：
-1. job 状态 = success
-2. job 时长 ≤359 分钟（非功能）
-
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | long sleep step | `sleep 21540` | — | 运行约 359 分钟（21540 秒） |
-
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | (无) |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+- **标题**: job timeout 边界值——359 分钟运行应在 360 分钟边界前完成   - **维度**: reliability   - **评级**: 断言一致
+## 想测什么
+验证 timeout-minutes=360 时，运行 359 分钟（sleep 21540）的 job 应正常成功完成，不被提前终止。
+## 做了什么
+触发 timeout-minutes=360 的 workflow，job 执行 sleep 21540（359 分钟）。
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | job_status = success | positive | — | ✅ GENUINE | `sleep 21540`（=359 分钟）真实运行接近 `timeout-minutes=360` 边界，无失败路径 |
-| 2 | job_duration_minutes ≤ 359 | nonfunctional | — | 🔶 LLM_DEPENDENT | 非功能断言 |
----
+| 1 | job_status | positive | equals "success" | COVERED | 平台 API 查询 job 终态 |
+| 2 | job_duration_minutes | nonfunctional | le "359" | COVERED | harness 测量实际运行时长 |

@@ -20,12 +20,11 @@ workflow: |
         matrix:
           os: [ubuntu, euler]
           arch: [x64, arm64]
-          compiler: [gcc, clang]
-          mode: [debug, release, profile]
+          compiler: [gcc, clang, llvm, msvc, mingw]
       steps:
         - name: verify matrix vars
           run: |
-            echo os=${{{{ matrix.os }}}} arch=${{{{ matrix.arch }}}} compiler=${{{{ matrix.compiler }}}} mode=${{{{ matrix.mode }}}}
+            echo os=${{ matrix.os }} arch=${{ matrix.arch }} compiler=${{ matrix.compiler }}
 trigger:
   event: workflow_dispatch
   as: maintainer

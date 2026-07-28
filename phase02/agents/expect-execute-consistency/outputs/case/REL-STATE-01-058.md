@@ -1,34 +1,12 @@
 # REL-STATE-01-058
-- **标题**: Runner 状态机正确性——空闲/运行/离线转换与时序一致性
-- **维度**: 稳定性
-- **优先级**: P1
-- **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**Runner 状态机正确性——空闲/运行/离线转换与时序一致性**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-058
-通过标准：
-1. 状态序列正确
-2. idle→running ≤30s（非功能）
-3. running→idle ≤60s（非功能）
-
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | sleep step | `sleep 60` | — | 持有 runner 60 秒 |
-
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | (无) |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+- **标题**: Runner 状态机正确性——空闲/运行/离线转换与时序一致性   - **维度**: reliability   - **评级**: 断言一致
+## 想测什么
+验证 Runner 状态机在 5 轮触发→运行→空闲循环中的转换正确性：状态序列符合 idle→running→idle，转换时延有界（idle→running ≤30s，running→idle ≤60s）。
+## 做了什么
+对同一 runner 连续执行触发→观察→等待→触发循环 5 轮，每轮 sleep 60s。
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | state_sequence = idle_running_idle | positive | — | ✅ GENUINE | `sleep 60` 真实命令使 job 运行 60 秒，产生完整的 idle→running→idle 状态转换，由 harness 外部轮询观测 |
-| 2 | idle_to_running_seconds ≤ 30 | nonfunctional | — | 🔶 LLM_DEPENDENT | 非功能断言 |
-| 3 | running_to_idle_seconds ≤ 60 | nonfunctional | — | 🔶 LLM_DEPENDENT | 非功能断言 |
----
+| 1 | state_sequence | positive | equals "idle_running_idle" | COVERED | harness 轮询 runner 状态验证序列正确 |
+| 2 | idle_to_running_seconds | nonfunctional | le "30" | COVERED | harness 测量 idle→running 转换时延 |
+| 3 | running_to_idle_seconds | nonfunctional | le "60" | COVERED | harness 测量 running→idle 转换时延 |

@@ -1,36 +1,16 @@
 # REL-CANCELREL-01-061
 - **标题**: 取消操作可靠性——queued/running/post 各阶段取消状态正确过渡
-- **维度**: 稳定性
-- **优先级**: P1
+- **维度**: reliability
 - **评级**: 部分不符
----
-## 1. 想测什么
-本用例验证：**queued/running/post 各阶段取消状态正确过渡**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-061
-通过标准：
-1. 各阶段取消终态稳定
-2. 取消到终态≤60s
-3. queued 取消后不应错标
-
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | sleep main step | `sleep 60` | - | 运行中 |
-| 2 | cleanup always step | `echo cleanup executed` | `if: ${{ always() }}` | cleanup 标记 |
-
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 想测什么
+在 queued/running/post 三个阶段分别取消 workflow，验证各阶段终态稳定、取消到终态 ≤60s、queued 取消后不应错标 success/failure。
+## 做了什么
+YAML 定义 sleep 60 主 step + `if: ${{ always() }}` cleanup step，harness 在三个时机点分别取消。
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | cancel_queued_status = canceled | positive | - | ✅ GENUINE | sleep 是真实命令；cleanup 含 `if: ${{ always() }}`；harness 分阶段取消 |
-| 2 | cancel_running_status = canceled | positive | - | ✅ GENUINE | running 阶段取消 |
-| 3 | cancel_post_main_status = success | positive | - | ✅ GENUINE | post 阶段取消后主结论不变 |
-| 4 | cancel_stabilization_seconds le 60 | nonfunctional | - | 🔶 LLM_DEPENDENT | 非功能指标 |
----
+| 1 | cancel_queued_status | positive | equals canceled | COVERED | YAML 使用 sleep 真实命令 + platform 日志，harness 在 queued 阶段取消观测状态 |
+| 2 | cancel_running_status | positive | equals canceled | COVERED | YAML 使用 sleep 真实命令，harness 在 running 阶段取消观测 |
+| 3 | cancel_post_main_status | positive | equals success | COVERED | YAML 定义 cleanup step（`if: always()`），post 阶段取消时主 job 已完成=success |
+| 4 | cancel_stabilization_seconds | nonfunctional | le 60 | COVERED | YAML assert 取消稳定时间 ≤60s，对应文本"取消到终态稳定时间≤60s" |
+| 5 | queued_cancel_no_false_success | negative | queued 取消后不应错标 success/failure | MISSING | 文本有负向断言"queued 取消后不应错标 success/failure"，YAML 无对应 assertion |

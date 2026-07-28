@@ -1,30 +1,15 @@
 # USE-LBL-01-005
 - **标题**: runs-on 含资源池名写法的文档资源池清单 diff
-- **维度**: usability
-- **优先级**: P1
+- **维度**: 易用性
 - **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**runs-on 含资源池名写法的文档资源池清单 diff**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-USE-040
-通过标准：
-1. 样本中出现的资源池名不在文档清单内每 1 个即一条缺陷
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| — | workflow: null | 无 workflow 步骤 | — | 纯文档分析 |
+## 想测什么
+检查真实样本中出现的资源池名（如 dedicate-hosted、codearts-hosted 等）是否全部被 selecting-runner-labels.md 文档列出。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
+## 做了什么
+纯文档检查用例（workflow: null）。从样本抽取资源池名集合，与文档清单做包含检查。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | documentation 确定性校验：样本资源池名集合应被文档清单包含 | negative | 字符串集合 diff 检查 | ✅ COVERED | 确定性文档校验 |
----
+| 1 | documentation | negative | 样本资源池名不在文档清单内即缺陷 | COVERED | eval: deterministic，集合包含检查可程序化 |

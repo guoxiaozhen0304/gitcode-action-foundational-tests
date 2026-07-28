@@ -1,32 +1,12 @@
 # SEC-DEFPERM-01-001
-- **标题**: ATOMGIT_TOKEN 默认权限范围与 job 级覆盖必须正确生效
-- **维度**: 安全性
-- **优先级**: P0
-- **评级**: 部分不符
----
-## 1. 想测什么
-本用例验证：**顶层 permissions: repository: read 继承到 job，写操作返回 403**
-- 触发事件: `workflow_dispatch` (as maintainer)
-- 规格引用: INTENT-SEC-036
-通过标准：
-1. 写操作不成功
-2. 返回 403 或权限拒绝
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | Attempt write | `curl ... POST ... issues ... -H "Authorization: token ${{ atomgit.token }}"` | — | HTTP 状态码 |
-
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | (无) |
-| 故障注入 | 无 |
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
-|---|------|------|------|------|------|
-| 1 | 不含 write_successful | negative | run_logs must_not_contain | ✅ GENUINE | 步骤使用 ${{ }} 表达式 + curl 真实 API 调用，依赖平台权限控制行为 |
-| 2 | 403 或权限拒绝 | positive | run_logs equals "403_or_permission_denied" | ❌ VACUOUS | curl 输出 HTTP 状态码数字（如 "403"），步骤从未输出字面量 "403_or_permission_denied"；该字符串仅存在于断言期望中 |
-### 问题
-断言 2 VACUOUS：步骤输出数字状态码，断言期望的是语义标签字符串。
----
+- **标题**: ATOMGIT_TOKEN 默认权限范围与 job 级覆盖必须正确生效   - **维度**: 安全性   - **评级**: 断言一致
+## 想测什么
+顶层permissions声明被job继承，job级声明可覆盖顶层，越权写操作返回403。
+## 做了什么
+YAML workflow含两个job：inherit-test(顶层read，尝试write回传WRITE_%{http_code})和override-write(job级write覆盖，尝试read回传READ_%{http_code})。使用真实curl命令和${{}}表达式。
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+|---|---|---|---|---|---|
+| 1 | run_logs | negative | must_not_contain "WRITE_201" | COVERED | curl输出HTTP状态码到日志，可观测 |
+| 2 | run_logs | positive | contains "WRITE_403" | COVERED | 同上，HTTP 403为预期拒绝响应 |
+| 3 | run_logs | positive | contains "READ_200" | COVERED | override后读操作预期200成功 |
