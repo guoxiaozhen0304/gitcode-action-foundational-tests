@@ -1,0 +1,47 @@
+id: SEC-CACHE-01-001
+dimensions: ["security"]
+dimension: security
+priority: P0
+title: "fork PR 写入的 cache 必须不可被主仓后续 workflow 读取"
+intent_ref: INTENT-SEC-018
+setup:
+  repo_fixture: with-cache
+workflow: |
+  on:
+    pull_request:
+      branches: [main]
+  jobs:
+    cache-write:
+      name: Write cache from fork
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Write poison content
+          run: |
+            mkdir -p node_modules
+            echo "FORK_POISON_MARKER" > node_modules/poison.txt
+            echo "FORK_CACHE_WRITE_ATTEMPTED"
+        - name: Write cache
+          uses: cache
+          with:
+            path: ./node_modules
+            key: test-cache-key
+trigger:
+  event: pull_request
+  as: untrusted_contributor
+  params: {}
+fault_injection: null
+# 注：cache_restore 断言由 harness 在主仓后续 workflow 中对 test-cache-key 执行恢复检查
+# （若隔离失效，主仓将读到含 FORK_POISON_MARKER 的内容）；本 workflow 在 fork PR 上下文
+# 真实写入带投毒标记的 cache 作为被测对象。
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: "FORK_CACHE_WRITE_ATTEMPTED"
+  - type: negative
+    target: cache_restore
+    must_not_hit: "test-cache-key"
+  - type: positive
+    target: run_status
+    equals: "completed"
+teardown:
+  reset: fixture

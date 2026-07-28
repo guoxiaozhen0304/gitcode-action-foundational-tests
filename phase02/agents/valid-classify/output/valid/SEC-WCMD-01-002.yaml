@@ -1,0 +1,48 @@
+id: SEC-WCMD-01-002
+dimensions: ["security"]
+dimension: security
+priority: P0
+title: "跨运行 artifact 必须被视为不可信数据"
+intent_ref: INTENT-SEC-029
+setup:
+  repo_fixture: with-artifacts
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    artifact-trust:
+      name: Test artifact trust boundary
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Download untrusted artifact
+          uses: download-artifact
+          with:
+            name: untrusted-artifact
+        - name: Inspect but do not execute
+          run: |
+            ls -la
+            if [ -f payload.sh ] || [ -f payload ]; then
+              echo "UNTRUSTED_PAYLOAD_PRESENT"
+            fi
+            if [ -f pwned_marker.txt ]; then
+              echo "auto_executed"
+              exit 1
+            fi
+            echo "ARTIFACT_TREATED_AS_DATA_OK"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+assertions:
+  - type: negative
+    target: run_logs
+    must_not_contain: "auto_executed"
+  - type: positive
+    target: run_logs
+    must_contain: "ARTIFACT_TREATED_AS_DATA_OK"
+  - type: positive
+    target: run_status
+    equals: "completed"
+teardown:
+  reset: fixture

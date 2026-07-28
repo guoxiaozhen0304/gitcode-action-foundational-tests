@@ -1,0 +1,41 @@
+id: COMP-ACT-01-002
+dimensions: [completeness]
+dimension: completeness
+priority: P2
+title: 含连字符 input_id 的 INPUT_ 环境变量命名裁定
+intent_ref: INTENT-COMP-027
+setup:
+  repo_fixture: local-action-hyphen
+  secrets: []
+  variables: {}
+  branch_protection: default
+fault_injection: null
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    callaction:
+      name: Call action with hyphen input
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Call with hyphenated input
+          uses: ./.gitcode/actions/hyphen-input
+          with:
+            dry-run: "yes"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+assertions:
+  - type: positive
+    target: run_status
+    equals: success
+  - type: positive
+    target: run_logs
+    must_contain: INPUT_DRY
+  - type: nonfunctional
+    target: env_naming
+    eval: llm_assisted
+    rubric: 逐字记录实际注入的环境变量名（INPUT_DRY-RUN / INPUT_DRY_RUN / 其他），裁定连字符转换规则并回写规格缺口清单
+teardown:
+  reset: fixture

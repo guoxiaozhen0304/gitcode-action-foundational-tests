@@ -1,0 +1,56 @@
+id: COMPAT-PR-01-009
+dimensions: [compatibility]
+dimension: compatibility
+priority: P1
+title: "pull_request 触发时 atomgit.sha/ref 的代码版本语义（对齐 GitHub merge commit 模型）"
+intent_ref: INTENT-COMPAT-039
+
+setup:
+  repo_fixture: with-pull-request
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    pull_request:
+      branches: [main]
+  jobs:
+    probe:
+      name: Probe pull_request sha ref semantics
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Record context sha and ref
+          run: |
+            echo "CTX_SHA=${{ atomgit.sha }}"
+            echo "CTX_REF=${{ atomgit.ref }}"
+            echo "ENV_SHA=$ATOMGIT_SHA"
+        - name: (TC) checkout source
+          uses: checkout
+        - name: Record checked out commit
+          run: |
+            echo "CHECKOUT_HEAD=$(git rev-parse HEAD)"
+            echo "PROBE_DONE"
+
+trigger:
+  event: pull_request
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: "PROBE_DONE"
+  - type: positive
+    target: run_logs
+    eval: llm_assisted
+    rubric: "比对 CTX_SHA/ENV_SHA 与 PR head sha、base sha 及试合并 sha：确定 GitCode 取值语义；若为 head sha 而非试合并结果，属于与 GitHub merge commit 模型的重大差异，须记录并回写 Parity Matrix"
+  - type: negative
+    target: run_logs
+    eval: llm_assisted
+    rubric: "CHECKOUT_HEAD 不应与 CTX_SHA 指向的版本不一致；不一致即 CI 验证对象与检出代码脱节，记为缺陷"
+
+teardown:
+  reset: fixture

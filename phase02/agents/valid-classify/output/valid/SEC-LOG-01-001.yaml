@@ -1,0 +1,39 @@
+id: SEC-LOG-01-001
+dimensions: ["security"]
+dimension: security
+priority: P1
+title: "无权限角色读取/下载运行日志必须被拒，过期日志绝不应可恢复"
+intent_ref: INTENT-SEC-040
+setup:
+  repo_fixture: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    log-producer:
+      name: Produce run logs
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Emit log content
+          run: |
+            echo "LOG_ACCESS_CONTROL_FIXTURE: log content produced"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+# 注：log_api 断言由 harness 以不同角色（有权限/无权限）调用日志 API 验证；
+# "expired_log_recoverable" 需 harness 在日志保留期过期后再次尝试下载恢复判定，
+# 依赖平台保留期策略与时间夹具，非本次 workflow 步骤可验证。
+assertions:
+  - type: positive
+    target: log_api
+    equals: "authorized_download_ok"
+  - type: negative
+    target: log_api
+    must_not_equal: "unauthorized_log_access_granted"
+  - type: negative
+    target: log_api
+    must_not_equal: "expired_log_recoverable"
+teardown:
+  reset: fixture

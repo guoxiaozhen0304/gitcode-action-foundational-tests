@@ -1,0 +1,37 @@
+id: COMP-UNKNOWN-01-003
+dimensions: [completeness]
+dimension: completeness
+priority: P1
+title: 未声明 select 的 stage 与 job 默认被执行
+intent_ref: INTENT-COMP-021
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+fault_injection: null
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    alpha:
+      name: Job without select
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Mark alpha
+          run: |
+            echo "RUN_ID=${{ atomgit.run_id }}"
+            echo "NO_SELECT_JOB_RAN"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+assertions:
+  - type: positive
+    target: run_status
+    equals: success
+  - type: positive
+    target: run_logs
+    must_contain: NO_SELECT_JOB_RAN
+teardown:
+  reset: fixture

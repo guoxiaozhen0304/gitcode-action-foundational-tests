@@ -1,0 +1,53 @@
+id: REL-RUNNER-01-050
+dimensions: [reliability]
+dimension: reliability
+priority: P1
+title: "架构标签调度正确性——x64 请求不得落到 arm64 节点（反之亦然）"
+intent_ref: INTENT-REL-074
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    x64_probe:
+      name: x64 arch probe job
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: print arch step
+          run: |
+            echo "declared=x64 actual=$(uname -m)"
+    arm64_probe:
+      name: arm64 arch probe job
+      runs-on: [ubuntu-latest, arm64, small]
+      steps:
+        - name: print arch step
+          run: |
+            echo "declared=arm64 actual=$(uname -m)"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params:
+    samples_per_arch: 10
+fault_injection: null
+assertions:
+  - type: positive
+    target: x64_job_arch
+    equals: "x86_64"
+  - type: positive
+    target: arm64_job_arch
+    equals: "aarch64"
+  - type: positive
+    target: arch_mismatch_count
+    equals: "0"
+  - type: negative
+    target: x64_job_arch
+    equals: "aarch64"
+  - type: nonfunctional
+    target: no_matching_runner_behavior
+    equals: "queued_or_explicit_error"
+teardown:
+  reset: none

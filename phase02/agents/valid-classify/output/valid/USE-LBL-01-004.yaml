@@ -1,0 +1,43 @@
+id: USE-LBL-01-004
+dimensions: ["usability"]
+dimension: usability
+priority: P0
+title: "quick-start 单标签写法 runs-on ubuntu-latest 的可调度性验证"
+intent_ref: INTENT-USE-031
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: quick-start single label runs-on
+      runs-on: ubuntu-latest
+      steps:
+        - name: hello step
+          run: |
+            echo "hello from single-label runs-on"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_status
+    equals: "success"
+  - type: negative
+    target: documentation
+    eval: "deterministic"
+    criterion: "若平台拒绝单标签写法，则 quick-start 示例为错误示例，记文档缺陷；与其他页面数组式写法对照确认文档矛盾"
+
+teardown:
+  reset: none

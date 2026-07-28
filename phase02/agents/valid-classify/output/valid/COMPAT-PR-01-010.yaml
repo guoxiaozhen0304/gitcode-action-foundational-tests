@@ -1,0 +1,47 @@
+id: COMPAT-PR-01-010
+dimensions: [compatibility]
+dimension: compatibility
+priority: P1
+title: "存在合并冲突的 PR 的触发行为（GitHub 不触发）对齐确认"
+intent_ref: INTENT-COMPAT-039
+
+setup:
+  repo_fixture: with-merge-conflict-pr
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    pull_request:
+      branches: [main]
+      types: [open, update]
+  jobs:
+    probe:
+      name: Probe merge conflict trigger policy
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Mark conflicted PR run
+          run: |
+            echo "CONFLICT_PR_JOB_RAN"
+
+trigger:
+  event: pull_request
+  as: maintainer
+  params:
+    activity: "push update to conflicted PR"
+
+fault_injection: null
+
+assertions:
+  - type: negative
+    target: run_list
+    eval: llm_assisted
+    rubric: "与 GitHub 对齐时冲突 PR 的 update 不应产生运行记录；若产生运行（日志含 CONFLICT_PR_JOB_RAN），则差异须被文档化，否则记为静默语义降级"
+  - type: nonfunctional
+    target: run_list
+    eval: llm_assisted
+    rubric: "触发策略结论回写 Parity Matrix；与 INTENT-COMP-033 的 pre-merge ref 观测共享同一 PR 夹具证据"
+
+teardown:
+  reset: fixture

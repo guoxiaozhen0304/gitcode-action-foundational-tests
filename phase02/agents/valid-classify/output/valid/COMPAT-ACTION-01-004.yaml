@@ -1,0 +1,46 @@
+id: COMPAT-ACTION-01-004
+dimensions: [compatibility, usability]
+dimension: compatibility
+priority: P1
+title: "官方文档示例 docker/build-push-action@v6 引用的可用性仲裁"
+intent_ref: INTENT-COMPAT-045
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: Probe documented docker action example
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Reference docker build push action v6
+          uses: docker/build-push-action@v6
+        - name: Mark if reference executed
+          run: |
+            echo "DOCKER_ACTION_REF_EXECUTED"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: save_result
+    eval: llm_assisted
+    rubric: "docker/build-push-action@v6 为官方文档自带示例：可用则记录可用性与版本语义；不可用则须有保存期明确报错并登记文档勘误项"
+  - type: negative
+    target: run_status
+    eval: llm_assisted
+    rubric: "不应表现为无限排队或运行期模糊失败"
+
+teardown:
+  reset: fixture

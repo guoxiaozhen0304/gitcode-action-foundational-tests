@@ -1,0 +1,44 @@
+id: COMPAT-RUNSON-01-003
+dimensions: [compatibility, usability]
+dimension: compatibility
+priority: P1
+title: "自托管 runs-on 对象式写法（type/group/labels）的实测仲裁"
+intent_ref: INTENT-COMPAT-046
+
+setup:
+  repo_fixture: with-self-hosted-runner
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: Probe object form self-hosted runs-on
+      runs-on: {type: self-hosted, group: default, labels: [linux, x64]}
+      steps:
+        - name: Mark scheduling success
+          run: |
+            echo "OBJECT_FORM_SCHEDULED"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_status
+    eval: llm_assisted
+    rubric: "对象式 runs-on（configure-jobs.md 文档形态）结局确定：调度成功（日志含 OBJECT_FORM_SCHEDULED）或解析期明确报错；结论用于裁定两份文档的规格矛盾"
+  - type: negative
+    target: run_status
+    eval: llm_assisted
+    rubric: "不被接受时不应表现为 job 无限 queued 且无任何提示（与 NEW-008 同策略）"
+
+teardown:
+  reset: fixture

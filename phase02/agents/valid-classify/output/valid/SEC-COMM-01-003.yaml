@@ -1,0 +1,40 @@
+id: SEC-COMM-01-003
+dimensions: ["security", "compatibility"]
+dimension: security
+priority: P1
+title: "变形伪装评论（大小写/多余空白/markdown 包裹）不得绕过 comments 过滤语义"
+intent_ref: INTENT-SEC-042
+setup:
+  repo_fixture: default
+workflow: |
+  on:
+    pull_request_comment:
+      types: [created]
+      comments: ['^/deploy fixture-environment$']
+  jobs:
+    comment-gate:
+      name: Comment regex obfuscation check
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Mark trigger
+          run: |
+            echo "TRIGGERED_BY_COMMENT: command accepted"
+trigger:
+  event: pull_request_comment
+  as: untrusted_contributor
+  params:
+    obfuscated_comments: [case_variant, extra_whitespace, markdown_wrapped]
+fault_injection: null
+assertions:
+  - type: positive
+    target: run_trigger
+    equals: "exact_command_triggers"
+  - type: negative
+    target: run_trigger
+    must_not_equal: "triggered_by_obfuscated_variant"
+  - type: nonfunctional
+    target: documentation
+    eval: llm_assisted
+    rubric: "文档应说明 comments 过滤的匹配语义（子串/全串/锚定）并对误触发面给出警示"
+teardown:
+  reset: fixture

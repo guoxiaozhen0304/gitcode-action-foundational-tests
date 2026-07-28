@@ -1,0 +1,44 @@
+id: SEC-OIDC-01-001
+dimensions: ["security", "compatibility"]
+dimension: security
+priority: P1
+title: "OIDC / 短时凭据支持若缺失，必须明确标注为平台限制并提供替代安全方案"
+intent_ref: INTENT-SEC-034
+setup:
+  repo_fixture: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    oidc-check:
+      name: Check OIDC documentation
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Probe OIDC environment signals
+          run: |
+            echo "ID_TOKEN_REQUEST_URL=${ATOMGIT_ID_TOKEN_REQUEST_URL:-UNSET}"
+            echo "ID_TOKEN_REQUEST_TOKEN=${ATOMGIT_ID_TOKEN_REQUEST_TOKEN:+SET_OR_EMPTY}"
+            if [ -n "${ATOMGIT_ID_TOKEN_REQUEST_URL:-}" ]; then
+              echo "OIDC_ENDPOINT_PRESENT"
+            else
+              echo "OIDC_ENDPOINT_ABSENT"
+            fi
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+# 注：platform_docs 文档内容判读本质不可确定化，保留 llm_assisted；workflow 已改为真实探测
+# 运行时环境中的 OIDC 信号（ID_TOKEN_REQUEST_URL 等平台注入变量），输出
+# OIDC_ENDPOINT_PRESENT/ABSENT 供文档描述与实际行为比对。
+assertions:
+  - type: negative
+    target: platform_docs
+    eval: llm_assisted
+    rubric: "平台文档/规格绝不应将可长期复用的高权限云部署凭证描述为默认推荐方案；若发现此类描述判为不通过"
+  - type: positive
+    target: platform_docs
+    eval: llm_assisted
+    rubric: "平台文档应明确标注 OIDC 支持状态：若不支持须显式说明该限制并给出替代安全方案（如短时凭据、最小权限 token）；若支持须说明 token 的短时效与一次性特征。缺任一要素判为不通过"
+teardown:
+  reset: none
