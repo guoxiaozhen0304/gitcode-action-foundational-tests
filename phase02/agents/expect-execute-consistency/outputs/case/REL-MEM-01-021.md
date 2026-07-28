@@ -1,11 +1,17 @@
 # REL-MEM-01-021
-- **标题**: Runner 内存越界——small runner 分配 9 GB 应被 OOM kill   - **维度**: reliability   - **评级**: 断言一致
+- **标题**: Runner 内存越界——small runner 分配 9 GB 应被 OOM kill
+- **维度**: 稳定性
+- **评级**: 部分不符
+
 ## 想测什么
-验证 small runner 在分配 9 GB 内存超出上限时应被 OOM kill，日志含 Killed 信息。
+small runner 分配9GB应被OOM kill，日志含OOM/Killed，不影响同Runner其他job。
+
 ## 做了什么
-触发 runs-on small 的 job，通过 python3 分配 9216*1024*1024 bytearray（约 9 GB）。
+python3 分配 9216*1024*1024 bytearray。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | job_status | positive | equals "failure" | COVERED | 平台 API 查询 job 终态为 failure |
-| 2 | run_logs | positive | contains "Killed" | COVERED | harness 解析日志查找 OOM/Killed 关键字 |
+| 1 | job_status | positive | equals=failure | COVERED | 文本"job状态=failure"精确对应 |
+| 2 | run_logs | positive | contains=Killed | COVERED | 文本"日志含OOM或Killed信息"对应(contains Killed可覆盖) |
+| 3 | (文本负向) 不应导致Runner宿主机崩溃 | — | — | MISSING | 文本"不应导致Runner宿主机崩溃"在YAML中无独立断言 |

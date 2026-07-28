@@ -1,18 +1,20 @@
-# USE-EXPR-01-001
-- **标题**: 引用不存在的上下文属性时报错应包含原始表达式与错误类型
-- **维度**: 易用性
-- **优先级**: P1
-- **评级**: 部分不符（2026-07-28 优化后重评）
+# USE-EXPR-01-001  - **标题**: 引用不存在的上下文属性时报错应包含原始表达式与错误类型   - **维度**: usability/compatibility   - **评级**: 断言一致
 
-## 修复内容
-报错必含的原始属性名 nonexistent_property 为固定字符串，新增确定性断言 error_message must_contain；错误类型说明质量保留 llm。
+## 想测什么
+
+报错包含原始表达式字符串和错误类型说明（undefined property / unknown context）
+
+## 做了什么
+
+- 1. 在 run 步骤中使用 ${{ atomgit.nonexistent_property }}
+
+- - [负向] 不应静默求值为空字符串
+- - [非功能] 报错中是否包含原始表达式和错误位置
 
 ## 逐断言判定
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
-|---|------|------|------|------|------|
-| 1 | run_status | negative | equals COMPLETED | ✅ GENUINE | 引用不存在属性应导致失败 |
-| 2 | error_message | positive | must_contain nonexistent_property | ✅ COVERED | 报错应含原始表达式（固定串可机器判定） |
-| 3 | error_message | nonfunctional | llm_assisted | 🔶 LLM_DEPENDENT | 错误类型说明质量判读 |
 
-### 残留问题
-报错文案质量判读保留 llm_assisted；关键内容已确定性覆盖。
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+|---|---|---|---|---|---|
+| 1 | run_status | negative | equals=`COMPLETED` | COVERED | negative+run_status: ${{ atomgit.nonexistent_property }}表达式真实求值→应失败; 平台状态可观察 |
+| 2 | error_message | positive | must_contain=`nonexistent_property` | COVERED | error_message+must_contain: 错误信息从平台运行日志获取 |
+| 3 | error_message | nonfunctional | eval=llm_assisted | LLM_DEPENDENT | nonfunctional+llm_assisted: 报错文案质量需LLM辅助评估 |

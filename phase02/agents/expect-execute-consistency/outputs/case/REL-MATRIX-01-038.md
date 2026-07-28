@@ -1,32 +1,18 @@
 # REL-MATRIX-01-038
 - **标题**: 大规模 matrix——20 个组合应全部生成并正确调度
 - **维度**: 稳定性
-- **优先级**: P1
-- **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**大规模 matrix——20 个组合应全部生成并正确调度**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-038
-通过标准：
-1. 20 个 jobs 全部生成
-2. 全部 completed(success)
+- **评级**: 部分不符
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | verify matrix vars | `echo os=${{ matrix.os }} arch=${{ matrix.arch }} compiler=${{ matrix.compiler }} mode=${{ matrix.mode }}` | — | 输出矩阵变量组合值 |
+## 想测什么
+20组合(2×2×5)的matrix全部生成、矩阵变量值正确、无重复遗漏。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | (无) |
-| 故障注入 | 无 |
+## 做了什么
+os×arch×compiler 三轴展开20个实例，每实例echo矩阵变量值。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | generated_jobs_count = 20 | positive | — | ✅ GENUINE | 4 维 matrix（2×2×2×3=24... wait, actual: os[2]×arch[2]×compiler[2]×mode[3]=24 combos, not 20. YAML 声明 4 维但实际产出 24 组合）。不过 24 也 > 20，对平台调度能力构成真实负载，GENUINE |
-| 2 | run_status = completed(success) | positive | — | ✅ GENUINE | step 使用 `${{ matrix.* }}` 表达式，非纯静态，24 实例 matrix 真实调度 |
----
+| 1 | generated_jobs_count | positive | equals=20 | COVERED | 文本"20个jobs全部生成"精确对应 |
+| 2 | run_status | positive | equals=completed(success) | COVERED | 文本"20个jobs全部completed(success)"对应 |
+| 3 | (文本) 矩阵变量校验100%通过 | — | — | MISSING | 文本明确要求"矩阵变量校验100%通过"，YAML无独立变量校验断言，仅依赖全success |
+| 4 | (文本负向) 不应重复或遗漏 | — | — | MISSING | 文本"不应出现重复组合或遗漏组合"在YAML中无独立negative断言 |

@@ -1,17 +1,16 @@
 # SEC-TOKEN-01-002
 - **标题**: fork PR 中 ATOMGIT_TOKEN 写操作被平台拒绝
-- **维度**: 安全性
-- **评级**: 断言一致
+- **维度**: security
+- **评级**: 部分不符
 
 ## 想测什么
-fork PR 中尝试推送操作返回权限拒绝（403）。
+fork PR 中 ATOMGIT_TOKEN 推送操作返回权限拒绝（403），日志显示权限不足。
 
 ## 做了什么
-workflow 使用 `${{ atomgit.token }}` clone 后尝试 git push，trigger 为 pull_request + untrusted_contributor。
+step 执行 git push，失败时 `|| echo "push denied"`。但该输出与断言期望不完全匹配。
 
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | negative | push_denied_or_403 | COVERED | `git push origin main || echo "push denied"` 真实 git 命令，push 被拒后产出 "push denied" |
-| 2 | run_status | positive | completed | COVERED | 平台执行层面可观测，运行应完成不被中断 |
-
+| 1 | run_logs | negative | equals:push_denied_or_403 | COVERED | step 在 push 失败时 echo "push denied"，接近于 equals 期望；且类型 negative 搭配 equals 语义不标准 |
+| 2 | run_status | positive | equals:completed | COVERED | 平台 run_status，push 被拒后 run 仍可 completed |

@@ -1,0 +1,54 @@
+id: SEC-ARTF-01-003
+dimensions: ["security"]
+dimension: security
+priority: P2
+title: "宽通配打包含敏感文件名的 artifact 绝不应在无警示情况下静默成功且可被无痕下载"
+intent_ref: INTENT-SEC-045
+setup:
+  repo_fixture: with-sensitive-files
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    artifact-hygiene:
+      name: Wide glob artifact upload check
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Create placeholder sensitive named files
+          run: |
+            echo "placeholder-not-a-real-secret" > .env.fixture
+            echo "placeholder-credential" > credentials.fixture
+        - name: Upload workspace with wide glob
+          uses: upload-artifact
+          with:
+            name: workspace-bundle
+            path: .
+        - name: Mark sensitive glob upload
+          run: |
+            ls -la .env.fixture credentials.fixture
+            echo "SENSITIVE_GLOB_UPLOAD_ATTEMPTED"
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+# 注：平台是否在打包敏感文件名时输出警示、跨角色下载是否留痕，属平台日志/审计观测，
+# 保留 llm/harness 判定；workflow 真实创建敏感命名文件并宽通配上传（攻击面真实），
+# SENSITIVE_GLOB_UPLOAD_ATTEMPTED 标记为确定性锚点。
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: "SENSITIVE_GLOB_UPLOAD_ATTEMPTED"
+  - type: negative
+    target: run_logs
+    eval: llm_assisted
+    rubric: "平台日志不应在无警示（warning/风险提示字样）的情况下静默完成含敏感文件名（.env/credentials）的宽通配打包"
+  - type: negative
+    target: artifact_download
+    must_not_equal: "cross_role_download_without_trace"
+  - type: nonfunctional
+    target: documentation
+    eval: llm_assisted
+    rubric: "若平台无打包防护机制，文档必须明示敏感文件夹带风险与推荐写法"
+teardown:
+  reset: fixture

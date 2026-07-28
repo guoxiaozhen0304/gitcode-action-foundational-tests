@@ -1,13 +1,16 @@
 # REL-FAULT-01-033
 - **标题**: 故障注入——runner 磁盘接近满时写入操作应失败并报磁盘满
-- **维度**: reliability
+- **维度**: 稳定性
 - **评级**: 断言一致
+
 ## 想测什么
-small runner 预填充 49.5GB 后再写入 2GB artifact，验证 job=failure、日志含"No space left on device"。
+预填充 49.5GB 后再写 2GB，job=failure，日志含磁盘满错误。
+
 ## 做了什么
-YAML 使用 fallocate/dd 预填充 49.5GB（50688 个 1M 块），再用 dd 写 2GB（2048 个 1M 块），fault_injection disk_full。
+prefill 49.5GB + write 2GB extra；两个 dd/fallocate step。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | job_status | positive | equals failure | COVERED | YAML fallocate/dd 真实磁盘写入超上限，platform 日志确认失败 |
-| 2 | run_logs | positive | contains "No space left on device" | COVERED | YAML assert 日志含"No space left on device"，内核级错误 → GENUINE |
+| 1 | job_status | positive | equals "failure" | COVERED | 写 2GB 超出剩余空间，job 失败 |
+| 2 | run_logs | positive | contains "No space left on device" | COVERED | 系统磁盘满错误可观测 |

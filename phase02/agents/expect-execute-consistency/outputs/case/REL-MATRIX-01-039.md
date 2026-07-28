@@ -1,32 +1,17 @@
 # REL-MATRIX-01-039
 - **标题**: 大规模 matrix——50 个组合应全部生成并正确调度
 - **维度**: 稳定性
-- **优先级**: P1
-- **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**大规模 matrix——50 个组合应全部生成并正确调度**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-039
-通过标准：
-1. 50 个 jobs 全部生成
-2. 调度时延 ≤300 秒（非功能）
+- **评级**: 部分不符
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | verify matrix vars | `echo v1=${{ matrix.v1 }} v2=${{ matrix.v2 }}` | — | 输出矩阵变量组合值 |
+## 想测什么
+50组合(5×10)全部生成、无重复遗漏、调度时延≤300s。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | (无) |
-| 故障注入 | 无 |
+## 做了什么
+v1×v2 轴展开50实例，每实例echo变量值。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | generated_jobs_count = 50 | positive | — | ✅ GENUINE | v1[5]×v2[10]=50 组合，step 使用 `${{ matrix.* }}` 表达式，对平台大规模 matrix 调度能力构成真实负载 |
-| 2 | scheduling_latency_seconds ≤ 300 | nonfunctional | — | 🔶 LLM_DEPENDENT | 非功能断言 |
----
+| 1 | generated_jobs_count | positive | equals=50 | COVERED | 文本"50个jobs全部生成"精确对应 |
+| 2 | scheduling_latency_seconds | nonfunctional | le=300 | COVERED | 文本"调度时延≤300秒"精确对应 |
+| 3 | (文本) 无重复/遗漏组合 | — | — | MISSING | 文本"无重复/遗漏组合"在YAML中无独立断言 |

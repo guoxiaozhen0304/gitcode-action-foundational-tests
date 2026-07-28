@@ -1,14 +1,20 @@
 # REL-PROJLIMIT-01-068
-- **标题**: 项目级 workflow 并发上限越界——201 条同时触发时至少一条进入排队   - **维度**: reliability   - **评级**: 断言一致
+- **标题**: 项目级 workflow 并发上限越界——201 条同时触发时至少一条进入排队
+- **维度**: 稳定性
+- **评级**: 部分不符
+
 ## 想测什么
-验证项目级并发上限越界：201 条同时触发时，至少一条进入排队（queued），全部完成无丢失，失败数=0。
+触发201次，全部进入终态无丢失、failed=0、queued≥1、不应429/500。
+
 ## 做了什么
-在 60s 内通过 API 并发触发 201 次同一 workflow（每 job echo run_id + sleep 5）。
+harness在60s内API触发201次，每次带唯一序号对账。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | completed_count | positive | equals "201" | COVERED | harness 统计完成数 |
-| 2 | failed_count | positive | equals "0" | COVERED | harness 统计失败数 |
-| 3 | queued_count | positive | ge "1" | COVERED | harness 统计排队数，超出 200 上限部分应排队 |
-| 4 | total_duration_seconds | nonfunctional | le "3600" | COVERED | harness 测量总耗时 |
-| 5 | lost_count | nonfunctional | equals "0" | COVERED | harness 对账确认无丢失 |
+| 1 | completed_count | positive | equals=201 | COVERED | 文本"completed_count=201"精确对应 |
+| 2 | failed_count | positive | equals=0 | COVERED | 文本"failed_count=0"精确对应 |
+| 3 | queued_count | positive | ge=1 | COVERED | 文本"queued_count≥1"精确对应 |
+| 4 | total_duration_seconds | nonfunctional | le=3600 | COVERED | 文本"总耗时≤60min"对应 |
+| 5 | lost_count | nonfunctional | equals=0 | COVERED | 文本"lost_count=0"对应 |
+| 6 | (文本负向) 不应429/500导致触发失败 | — | — | MISSING | 文本"不应因并发超限而直接返回429/500"在YAML中无独立断言 |

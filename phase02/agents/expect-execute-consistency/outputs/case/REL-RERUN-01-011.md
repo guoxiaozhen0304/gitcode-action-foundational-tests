@@ -1,11 +1,18 @@
 # REL-RERUN-01-011
-- **标题**: rerun 边界值——单条运行连续重新运行 3 次应全部成功   - **维度**: reliability   - **评级**: 断言一致
+- **标题**: rerun 边界值——单条运行连续重新运行 3 次应全部成功
+- **维度**: 稳定性
+- **评级**: 部分不符
+
 ## 想测什么
-验证单条运行可连续重新运行（rerun all jobs）3 次，每次均创建新运行且状态为 success。
+对失败运行执行Re-run all 3次，每次创建新运行(sha/ref一致)、全部success，不应复用旧记录。
+
 ## 做了什么
-对一次失败的 workflow 运行依次执行 Re-run all jobs 共 3 次。
+harness对失败运行依次执行3次rerun。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | rerun_count | positive | equals "3" | COVERED | harness 统计实际创建的 rerun 次数 |
-| 2 | run_status | positive | equals "completed(success)" | COVERED | 平台 API 查询每次 rerun 的终态 |
+| 1 | rerun_count | positive | equals=3 | COVERED | 文本"第1-3次rerun均创建新运行"对应(rerun_count=3) |
+| 2 | run_status | positive | equals=completed(success) | COVERED | 文本"3次新运行均success"对应 |
+| 3 | (文本) 运行编号递增 | — | — | MISSING | 文本"运行编号递增"在YAML中无独立断言 |
+| 4 | (文本负向) 不应复用旧运行记录 | — | — | MISSING | 文本"不应复用旧运行记录"在YAML中无独立negative断言 |

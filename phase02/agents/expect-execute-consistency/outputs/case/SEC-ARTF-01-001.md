@@ -1,15 +1,17 @@
 # SEC-ARTF-01-001
 - **标题**: fork PR 上传的 artifact 必须不可被主仓 workflow 下载或执行
-- **维度**: 安全性
-- **优先级**: P0
-- **评级**: 断言一致（2026-07-28 优化后重评）
+- **维度**: security
+- **评级**: 断言一致
 
-## 修复内容
-原两条 artifact_download 断言为 MISSING_SOURCE（workflow 无下载步骤）。补上传完成标记步骤（test -f 真实校验后输出 FORK_ARTIFACT_UPLOADED，确定性锚点）；跨边界下载检查明确归属 harness（主仓上下文 API 检查，YAML 已注释）。
+## 想测什么
+fork PR 上传 artifact 后，主仓不应能下载该 artifact。
+
+## 做了什么
+fork PR workflow 真实上传 artifact 并输出 FORK_ARTIFACT_UPLOADED；harness 在主仓侧执行 artifact_download 跨边界检查。
 
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | must_contain FORK_ARTIFACT_UPLOADED | ✅ GENUINE | 真实上传+校验后输出 |
-| 2 | artifact_download | negative | must_not_equal success | ✅ COVERED | harness 主仓上下文跨边界下载检查 |
-| 3 | artifact_download | positive | equals 404_or_permission_denied | ✅ COVERED | 同上 |
+| 1 | run_logs | positive | must_contain "FORK_ARTIFACT_UPLOADED" | COVERED | 对应"fork 贡献者上传 artifact"；workflow echo→GENUINE |
+| 2 | artifact_download | negative | must_not_equal "success" | COVERED | 对应"主仓不可下载 fork PR artifact"；harness 跨边界 API 检查→GENUINE |
+| 3 | artifact_download | positive | equals "404_or_permission_denied" | COVERED | 对应"返回 404 或权限拒绝"；harness 判定 |

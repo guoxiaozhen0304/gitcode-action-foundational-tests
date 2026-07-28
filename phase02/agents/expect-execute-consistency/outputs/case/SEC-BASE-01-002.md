@@ -1,15 +1,17 @@
 # SEC-BASE-01-002
 - **标题**: fork PR 改 workflow 不被 pull_request_target 采用
-- **维度**: 安全性
-- **优先级**: P0
-- **评级**: 断言一致（2026-07-28 优化后重评）
+- **维度**: security
+- **评级**: 断言一致
 
-## 修复内容
-断言 2 原 STATUS_GUARANTEED（裸 echo + 非法状态值 success_with_base_workflow）。步骤改为 checkout + 真实校验（工作区非空，失败 exit 1）；run_status 断言值改回合法 success；补 base_branch_workflow_executed 标记断言。
+## 想测什么
+pull_request_target 不执行 fork PR 注入的步骤，运行采用的 workflow 与 base 分支一致。
+
+## 做了什么
+workflow 在 pull_request_target 下 checkout base 源码并验证；断言 fork_injected_step 不出现、base_branch_workflow_executed 出现。
 
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | negative | must_not_contain fork_injected_step | ✅ GENUINE | fork 注入若被执行则出现 |
-| 2 | run_status | positive | equals success | ✅ GENUINE | checkout + 校验有真实失败路径 |
-| 3 | run_logs | positive | must_contain base_branch_workflow_executed | ✅ GENUINE | 真实校验后输出 |
+| 1 | run_logs | negative | must_not_contain "fork_injected_step" | COVERED | 对应"fork PR 注入的步骤未出现在执行记录中" |
+| 2 | run_status | positive | equals "success" | COVERED | 对应"运行采用的 workflow 与 base 一致"→job 成功 = COVERED |
+| 3 | run_logs | positive | must_contain "base_branch_workflow_executed" | COVERED | echo→GENUINE |

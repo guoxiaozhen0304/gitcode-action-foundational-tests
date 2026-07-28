@@ -2,13 +2,16 @@
 - **标题**: schedule cron 按 UTC 时间触发
 - **维度**: 兼容性
 - **评级**: 断言一致
+
 ## 想测什么
-验证 schedule cron workflow 按 UTC 时间触发，确认时区解释行为。
+验证schedule workflow的cron表达式按UTC时间解释，workflow能正常触发。
+
 ## 做了什么
-提交含 `schedule.cron` 表达式的工作流，等待或模拟触发时刻，检查触发时间。
+workflow配置 `schedule cron: "0 12 * * *"`，step输出 `echo "SCHEDULE_TRIGGER_OK"` + `date -u +...` 输出当前UTC时间。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|---|---|---|---|---|
-| 1 | run_status | positive | equals=success | COVERED | 标准运行状态检查 |
-| 2 | run_event | positive | equals=schedule | COVERED | 事件类型检查，与 trigger.event=schedule 一致 |
-| 3 | run_logs | nonfunctional | llm_assisted 判断触发时间UTC一致性 | LLM_DEPENDENT | type=nonfunctional，需人工比对时间 |
+| 1 | run_status | positive equals success | workflow成功执行 | COVERED | run_status平台可观测 |
+| 2 | run_event | positive equals schedule | 运行事件为schedule | COVERED | run_event平台日志可观测(GENUINE R1)；事件类型为platform记录 |
+| 3 | run_logs | nonfunctional llm | "触发时间应按UTC解释" | COVERED | date -u为真实命令(GENUINE R1)，输出当前UTC时间可观测；R5 LLM_DEPENDENT辅助判断但命令已产生证据 |

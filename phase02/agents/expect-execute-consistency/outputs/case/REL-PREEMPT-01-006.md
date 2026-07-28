@@ -1,10 +1,17 @@
 # REL-PREEMPT-01-006
-- **标题**: preemption events 越界值——配置 11 个应被拒绝   - **维度**: reliability   - **评级**: 断言一致
+- **标题**: preemption events 越界值——配置 11 个应被拒绝
+- **维度**: 稳定性
+- **评级**: 部分不符
+
 ## 想测什么
-验证 concurrency.preemption.events 配置 11 个事件（超出 10 上限）时平台应在解析阶段明确拒绝。
+事件数=11应被解析阶段拒绝，错误含超限提示，不应静默截断。
+
 ## 做了什么
-创建 concurrency.preemption.events 含 11 个事件的 workflow（新增 pr 事件）并尝试保存。
+workflow preemption.events含11个事件。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | yaml_validation | positive | equals "rejected" | COVERED | harness 检查 workflow YAML 保存/校验是否被拒绝 |
+| 1 | yaml_validation | positive | equals=rejected | COVERED | 文本"系统在解析阶段报错"对应(yaml_validation=rejected) |
+| 2 | (文本) 错误信息含events数量超限提示 | — | — | MISSING | 文本"错误信息包含events数量超限提示"在YAML中无对应断言 |
+| 3 | (文本负向) 不应静默截断 | — | — | MISSING | 文本"不应静默截断"在YAML中无独立negative断言 |

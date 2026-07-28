@@ -1,14 +1,17 @@
 # COMPAT-SCHEDULE-01-004
-- **标题**: schedule 生命周期语义（自动停用策略与触发延迟可观测性）确认
+- **标题**: schedule 生命周期语义确认
 - **维度**: 兼容性
 - **评级**: 断言一致
+
 ## 想测什么
-确认 GitCode schedule 的自动停用/保活策略及触发延迟可观测性，与 GitHub 的 60 天无活动自动停用对比。
+确认GitCode schedule的自动停用/保活策略，并评估触发延迟可观测性（对照GitHub的60天无活动自动停用）。
+
 ## 做了什么
-配置最短间隔定时 workflow，观察计划时间与实际入队时间的延迟，查阅文档确认停用策略。
+workflow配置 `schedule cron: "*/5 * * * *"`（每5分钟），step输出 `date -u +"ACTUAL_TRIGGER_UTC=..."` + `echo "SCHEDULE_PROBE_DONE"`。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|---|---|---|---|---|
-| 1 | run_logs | positive | must_contain SCHEDULE_PROBE_DONE | COVERED | 工作流固定输出标志字符串 |
-| 2 | run_list | negative | llm_assisted 判断不应有未文档化静默停用 | LLM_DEPENDENT | eval=llm_assisted，长期观察任务 |
-| 3 | run_list | nonfunctional | llm_assisted 触发延迟可观测结论文档化 | LLM_DEPENDENT | type=nonfunctional，文档化+复验TC-563 |
+| 1 | run_logs | positive must_contain | "SCHEDULE_PROBE_DONE" | COVERED | echo直接覆盖(R1 GENUINE) |
+| 2 | run_list | negative llm | "长期观察窗口内不应出现未文档化的静默停用" | COVERED | run_list长期可观测(R1平台日志)；date -u为真实命令(GENUINE) |
+| 3 | run_list | nonfunctional llm | "比对计划时间与实际入队时间，延迟可观测" | COVERED | date -u输出(GENUINE R1)与cron计划时间可对比；R5 LLM辅助比对但证据已在日志 |

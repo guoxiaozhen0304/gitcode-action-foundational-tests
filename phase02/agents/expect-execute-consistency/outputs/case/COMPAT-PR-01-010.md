@@ -1,13 +1,16 @@
 # COMPAT-PR-01-010
-- **标题**: 存在合并冲突的 PR 的触发行为（GitHub 不触发）对齐确认
+- **标题**: 存在合并冲突的 PR 的触发行为对齐确认
 - **维度**: 兼容性
 - **评级**: 断言一致
+
 ## 想测什么
-确认 GitCode 处理合并冲突 PR 的触发策略是否与 GitHub 对齐——GitHub 在有合并冲突时不触发 pull_request 运行。
+确定合并冲突PR的触发策略——应与GitHub对齐（不触发）或差异被文档化。
+
 ## 做了什么
-向已有合并冲突的 PR 推送更新，制造 pull_request update 活动，观察是否产生 workflow 运行记录。
+workflow 配置 `pull_request.types: [open, update]`，step输出 `echo "CONFLICT_PR_JOB_RAN"`；对该冲突PR推送update后观察是否产生运行。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|---|---|---|---|---|
-| 1 | run_list | negative | llm_assisted 判断冲突PR update不应产生运行 | LLM_DEPENDENT | eval=llm_assisted，需人工判定触发策略 |
-| 2 | run_list | nonfunctional | llm_assisted 结论回写Parity Matrix | LLM_DEPENDENT | type=nonfunctional/eval=llm_assisted，文档化任务 |
+| 1 | run_list | negative llm | "冲突PR的update不应产生运行记录" | COVERED | echo "CONFLICT_PR_JOB_RAN"为GENUINE(R1)；若run_list中无此输出即证明未触发 |
+| 2 | run_list | nonfunctional llm | "触发策略结论回写Parity Matrix" | LLM_DEPENDENT | R5: nonfunctional + llm → LLM_DEPENDENT；结论需人工/LLM回写文档 |

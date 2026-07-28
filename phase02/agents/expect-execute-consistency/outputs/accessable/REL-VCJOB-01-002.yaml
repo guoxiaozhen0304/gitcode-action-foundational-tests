@@ -1,0 +1,37 @@
+id: REL-VCJOB-01-002
+dimensions: [reliability]
+dimension: reliability
+priority: P1
+title: "大规模 vcjob 并发提交（≥50）无丢失、无级联失败"
+intent_ref: INTENT-REL-089
+setup:
+  repo_fixture: default
+  secrets: []
+  variables:
+    volcano_deployed: "true"
+    depends_on: "REL-VCJOB-01-001（vcjob 格式缺陷修复后执行；未修复时结果仅作并发面证据）"
+  branch_protection: default
+workflow: null
+trigger:
+  event: manual
+  as: maintainer
+  params:
+    platform_op: vcjob_batch_submit
+    concurrency: 50
+fault_injection: null
+# 注：本用例为平台操作型（vcjob 批量提交由 harness 编排，无 gitcode workflow），workflow 为 null
+# 属用例设计。静默丢失由 vcjob_terminal_reconciliation 对账断言（submitted==recorded==terminal==50）
+# 与 lost_count 负向断言确定性覆盖；级联失败的归因判读保留 llm_assisted。
+assertions:
+  - type: positive
+    target: vcjob_terminal_reconciliation
+    equals: "submitted==recorded==terminal==50"
+  - type: negative
+    target: lost_count
+    equals: "0"
+  - type: nonfunctional
+    target: cascading_failure
+    eval: llm_assisted
+    rubric: "不应出现级联失败（一个任务失败引发其他无关任务失败）；资源不足导致的 Pending 属合法终态路径，不计级联失败"
+teardown:
+  reset: fixture

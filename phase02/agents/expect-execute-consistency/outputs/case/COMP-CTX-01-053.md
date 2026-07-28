@@ -1,19 +1,16 @@
 # COMP-CTX-01-053
-
 - **标题**: 上下文在 Action 插件参数中注入验证
-- **维度**: 完备性
+- **维度**: completeness
 - **评级**: 断言一致
 
----
-
 ## 想测什么
-验证 `uses:` 步骤的 `with:` 参数中 `atomgit` 上下文可正常解析并传入 Action。
+Action 的 with 参数中可正常解析 atomgit 上下文。
 
 ## 做了什么
-checkout action 的 `with.ref` 使用 `${{ atomgit.ref }}`，step 执行完成后 echo `done`。
+1. step `Checkout with explicit token`：`uses: checkout` with `ref: ${{ atomgit.ref }}`
+2. step `Echo env in action param`：`echo "done"`
 
 ## 逐断言判定
-
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | positive | equals: success | COVERED | `${{ atomgit.ref }}` 在 with 参数中求值后传给 checkout action，checkout 实际拉取对应 ref，成功完成 |
+| 1 | run_status | positive | success | COVERED | `uses: checkout` 是真实 action 调用，ref 参数使用 ${{ atomgit.ref }} |

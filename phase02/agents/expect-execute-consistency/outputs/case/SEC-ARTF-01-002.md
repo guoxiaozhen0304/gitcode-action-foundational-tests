@@ -1,14 +1,16 @@
 # SEC-ARTF-01-002
 - **标题**: 跨仓库 artifact 下载返回 403 或 404
-- **维度**: 安全性
-- **优先级**: P0
-- **评级**: 断言一致（2026-07-28 优化后重评）
+- **维度**: security
+- **评级**: 断言一致
 
-## 修复内容
-curl 命令原含字面 `\n` 断行错误已修复；步骤改为真实判定 HTTP 状态码：403/404 输出 CROSS_REPO_BLOCKED_OK，200 输出 CROSS_REPO_DOWNLOAD_LEAKED 并 exit 1；断言 2 原 VACUOUS（期望字面值 403_or_404 无源）已替换为标记断言。
+## 想测什么
+在主仓 workflow 中尝试下载 fork PR 的 artifact，应返回 403/404。
+
+## 做了什么
+workflow 中用 curl 直接请求 fork artifact API，脚本判 HTTP 状态码并输出 CROSS_REPO_BLOCKED_OK 或 CROSS_REPO_DOWNLOAD_LEAKED。
 
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | must_contain CROSS_REPO_BLOCKED_OK | ✅ GENUINE | 真实 curl + 状态码判断输出 |
-| 2 | run_logs | negative | must_not_contain CROSS_REPO_DOWNLOAD_LEAKED | ✅ GENUINE | 200 时输出并 exit 1 |
+| 1 | run_logs | positive | must_contain "CROSS_REPO_BLOCKED_OK" | COVERED | 对应"返回明确的 404 或 403 错误"；real curl → GENUINE（${{ }} / real cmds） |
+| 2 | run_logs | negative | must_not_contain "CROSS_REPO_DOWNLOAD_LEAKED" | COVERED | 对应"跨仓库下载绝不应成功"；脚本在 HTTP 200 时输出→non-trivial |

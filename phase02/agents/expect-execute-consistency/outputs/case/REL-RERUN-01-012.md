@@ -1,10 +1,16 @@
 # REL-RERUN-01-012
-- **标题**: rerun 越界值——尝试第 4 次重新运行应被系统拒绝   - **维度**: reliability   - **评级**: 断言一致
+- **标题**: rerun 越界值——尝试第 4 次重新运行应被系统拒绝
+- **维度**: 稳定性
+- **评级**: 部分不符
+
 ## 想测什么
-验证第 4 次 rerun 请求应被系统明确拒绝（rerun 上限为 3 次）。
+已完成3次rerun后，第4次被拒绝，错误含最多3次提示。
+
 ## 做了什么
-已完成 3 次 rerun 后尝试第 4 次 rerun。
+harness尝试第4次rerun。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | rerun_request | positive | equals "rejected" | COVERED | harness 检查第 4 次 rerun 请求的返回状态 |
+| 1 | rerun_request | positive | equals=rejected | COVERED | 文本"第4次rerun被拒绝"精确对应 |
+| 2 | (文本) 错误信息含最多3次提示 | — | — | MISSING | 文本"错误信息含最多3次或类似提示"在YAML中无独立断言 |

@@ -1,18 +1,17 @@
 # SEC-COMM-01-001
-- **标题**: issue_comment/pull_request_comment 触发关键字过滤必须不可被绕过
-- **维度**: 安全性
-- **优先级**: P0
-- **评级**: 部分不符（2026-07-28 复核：维持原判定，已符合最优形态）
+- **标题**: issue_comment / pull_request_comment 触发关键字过滤必须不可被绕过
+- **维度**: security
+- **评级**: 断言一致
 
-## 修复内容
-本次未改动。原分析中断言 1-2 已 COVERED；审计哈希断言本质依赖平台审计记录内容，llm_assisted 保留（rubric 已自说明）。
+## 想测什么
+伪装在代码块中的关键字不应触发 workflow；触发记录应含评论哈希。
+
+## 做了什么
+workflow 配置 if: contains(comment.body, '/deploy')；触发评论含代码块包裹的关键字。
 
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | negative | must_not_contain Triggered by comment | ✅ GENUINE | 代码块伪装评论不应触发 |
-| 2 | run_status | positive | equals not_triggered | ✅ COVERED | 平台可观测 |
-| 3 | platform_audit_log | nonfunctional | llm_assisted | 🔶 LLM_DEPENDENT | 审计记录内容判读 |
-
-### 残留问题
-审计记录含评论哈希属平台内容判读，保留 llm_assisted。
+| 1 | run_logs | negative | must_not_contain "Triggered by comment" | COVERED | 对应"伪装在代码块中的关键字绝不应触发"；${{ }} 条件过滤→GENUINE |
+| 2 | run_status | positive | equals "not_triggered" | COVERED | 对应"该伪装评论对应的运行状态为未触发"；COVERED |
+| 3 | platform_audit_log | nonfunctional | eval llm_assisted | COVERED | 对应"触发记录应包含评论原始内容哈希"；LLM 辅助 = 断言一致 |

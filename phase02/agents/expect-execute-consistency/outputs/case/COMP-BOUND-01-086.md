@@ -1,38 +1,20 @@
 # COMP-BOUND-01-086
-
 - **标题**: 矩阵构建 include exclude 与单值边界验证
-- **维度**: 完备性
-- **优先级**: P1
-- **评级**: 断言一致
+- **维度**: completeness
+- **评级**: 部分不符
 
----
+## 想测什么
+matrix include 添加额外组合，exclude 排除特定组合，单值变量正确展开。排除后产生 linux-1 和 linux-3 共 2 个实例。
 
-## 1. 想测什么
+## 做了什么
+1. step `Matrix value`（在每个矩阵实例中执行）：`echo "INSTANCE=${{ matrix.os }}-${{ matrix.version }}"` 和 `echo "matrix_ok"`
+2. matrix: os=[linux], version=[1,2], include: {os:linux, version:3}, exclude: {os:linux, version:2}
 
-本用例验证：**矩阵构建 include exclude 与单值边界验证**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-COMP-086
-
-通过标准：
-1. [正向] include/exclude 矩阵变量可访问 —— 断言 run_logs must_contain matrix_ok
-
-## 2. 做了什么
-
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | Matrix value | `echo "OS=${{ matrix.os }}"` + `echo "VER=${{ matrix.version }}"` + `echo "matrix_ok"` | - | 平台矩阵展开后的 os/version 值 |
-
-## 3. 触发与运行环境
-
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | must_contain: matrix_ok | ✅ GENUINE | 同一步骤包含 `${{ matrix.os }}` 和 `${{ matrix.version }}` 表达式，平台上下文求值即真实被测行为 |
-
+| 1 | run_logs | positive | must_contain: matrix_ok | COVERED | echo 在每个实例中执行 |
+| 2 | run_logs | positive | must_contain: INSTANCE=linux-1 | COVERED | `${{ matrix.os }}-${{ matrix.version }}` 表达式输出 |
+| 3 | run_logs | positive | must_contain: INSTANCE=linux-3 | COVERED | include 追加的组合 |
+| 4 | run_logs | negative | must_not_contain: INSTANCE=linux-2 | COVERED | 被 exclude 排除，不会出现在任何实例日志中 |
+| 5 | job_instance_count | positive | equals: 2 | UNVERIFIABLE | 目标不在 step 内产出，需外部平台 API 统计 job 实例数 |

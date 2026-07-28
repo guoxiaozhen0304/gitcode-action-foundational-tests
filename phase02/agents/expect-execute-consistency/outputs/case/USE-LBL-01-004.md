@@ -1,16 +1,20 @@
-# USE-LBL-01-004
-- **标题**: quick-start 单标签写法 runs-on ubuntu-latest 的可调度性验证
-- **维度**: 易用性
-- **评级**: 断言一致
+# USE-LBL-01-004  - **标题**: quick-start 单标签写法 runs-on ubuntu-latest 的可调度性验证   - **维度**: usability   - **评级**: 断言一致
 
 ## 想测什么
-验证 quick-start 文档中单标签字符串形式的 runs-on: ubuntu-latest 是否可被平台接受并成功调度，即文档示例本身是否正确。
+
+若 quick-start 示例写法合法，workflow 应被接受并成功调度；若平台拒绝，则证明 quick-start 示例本身错误（文档缺陷）
 
 ## 做了什么
-workflow 按文档示例使用 `runs-on: ubuntu-latest` 单标签字符串写法，执行 echo。同时检查若平台拒绝单标签写法则 quick-start 示例为错误示例。
+
+- 1. 按 01-quick-start.md 示例写法，以单标签字符串形式声明 runs-on 并提交 workflow
+- 2. 观察平台校验与调度结果
+
+- - [正向] 文档示例写法应可被平台接受并运行成功
+- - [负向] 平台不应接受一种写法而文档示例给出另一种却不加说明
 
 ## 逐断言判定
+
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
-|---|------|------|------|------|------|
-| 1 | run_status | positive | 运行成功 | COVERED | 平台实际调度行为可观察 → GENUINE |
-| 2 | documentation | negative | 若平台拒绝单标签则 quick-start 示例为错误 | COVERED | eval: deterministic，运行结果与文档示例差异判定可程序化 |
+|---|---|---|---|---|---|
+| 1 | run_status | positive | equals=`success` | COVERED | run_status: runs-on:ubuntu-latest格式验证→被测的是平台YAML解析而非echo步骤 |
+| 2 | documentation | negative | eval=deterministic | COVERED | documentation+deterministic: quick-start示例一致性确定性判定 |

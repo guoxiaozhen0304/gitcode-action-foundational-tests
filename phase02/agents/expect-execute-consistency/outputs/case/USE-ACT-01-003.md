@@ -1,16 +1,15 @@
 # USE-ACT-01-003
 - **标题**: 官方短名 Action 清单与 actions-market 插件目录的映射一致性
-- **维度**: 易用性
+- **维度**: usability
 - **评级**: 断言一致
 
 ## 想测什么
-文档短名集合与市场目录插件名集合建立完整映射对照表。
+文档短名集合与市场目录插件名集合应建立映射，不一致处需文档明示。
 
 ## 做了什么
-workflow 为 null，harness 仅做文档扫描和映射比对。
+workflow: null。纯文档验证用例，断言指向 documentation。
 
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | documentation | negative | 映射关系未明示即不合格 | COVERED | 纯文档验证，harness 扫描短名与市场名映射，workflow 非必需 |
-
+| 1 | documentation | negative | eval:deterministic | COVERED | 文档-only 用例，无 workflow 步骤；断言直接对标文档内容做确定性 diff |

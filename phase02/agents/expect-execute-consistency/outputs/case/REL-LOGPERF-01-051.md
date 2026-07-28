@@ -1,18 +1,17 @@
 # REL-LOGPERF-01-051
 - **标题**: 日志加载性能——50MB 日志下载与查看耗时
-- **维度**: 可靠性
-- **优先级**: P1
-- **评级**: 部分不符（2026-07-28 优化后重评）
+- **维度**: 稳定性
+- **评级**: 断言一致
 
-## 修复内容
-补缺失的"不应 UI 卡死"负向断言（target ui，llm_assisted——前端观测本质不可确定化）。
+## 想测什么
+50MB 日志下载≤30s，完整性 100%，UI 不卡死。
+
+## 做了什么
+循环输出 50,000 行 LOG_LINE + 时间戳。
 
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | download_time_seconds | nonfunctional | le 30 | ✅ COVERED | harness 计时测量 |
-| 2 | log_integrity | positive | equals 100% | ✅ COVERED | 完整性校验 |
-| 3 | ui | negative | llm_assisted | 🔶 LLM_DEPENDENT | UI 卡死属前端行为观测 |
-
-### 残留问题
-UI 卡死判定属前端观测，保留 llm_assisted。
+| 1 | download_time_seconds | nonfunctional | le 30 | LLM_DEPENDENT | 非功能性能指标 |
+| 2 | log_integrity | positive | equals "100%" | COVERED | 行数可校验（50,000 行），由 harness 验证 |
+| 3 | ui | negative | eval llm_assisted | LLM_DEPENDENT | LLM 判读 UI 卡死；依赖前端交互测试 |

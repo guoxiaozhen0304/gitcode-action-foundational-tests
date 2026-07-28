@@ -1,13 +1,18 @@
 # REL-NEEDS-01-027
-- **标题**: needs 依赖 matrix job 部分失败——无 if 条件的下游 job 应 skipped 而非执行   - **维度**: reliability   - **评级**: 断言一致
+- **标题**: needs 依赖 matrix job 部分失败——无 if 条件的下游 job 应 skipped 而非执行
+- **维度**: 稳定性
+- **评级**: 断言一致
+
 ## 想测什么
-验证 needs 依赖 matrix job 的部分失败路径：jobB 3 个实例中 1 个失败，jobA 无 if 条件时应被 skipped 而非执行。
+jobB(3实例中1失败, fail-fast=false)→jobA(needs:jobB)应skipped，不应执行，其余2实例正常成功不被取消。
+
 ## 做了什么
-提交 workflow：jobB 为 3 实例 matrix（fail-fast=false, version=2 实例 exit 1），jobA needs jobB 不附加 if 条件。
+jobB version=2故意exit 1，jobA needs jobB无if条件。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | job_b_status | positive | equals "failure" | COVERED | 平台 API 查询 matrix job 聚合状态（部分失败→failure） |
-| 2 | job_a_status | positive | equals "skipped" | COVERED | 平台 API 查询下游 job 状态 |
-| 3 | succeeded_instances_count | positive | equals "2" | COVERED | harness 统计 matrix 中成功的实例数 |
-| 4 | job_a_status | negative | equals "success" | COVERED | 验证 jobA 不应在部分失败时被执行 |
+| 1 | job_b_status | positive | equals=failure | COVERED | 文本"jobB聚合状态=failure"对应 |
+| 2 | job_a_status | positive | equals=skipped | COVERED | 文本"jobA状态=skipped"精确对应 |
+| 3 | succeeded_instances_count | positive | equals=2 | COVERED | 文本"成功实例数=2"精确对应 |
+| 4 | job_a_status | negative | equals=success | COVERED | 文本"jobA不应被执行(状态≠success)"精确对应 |

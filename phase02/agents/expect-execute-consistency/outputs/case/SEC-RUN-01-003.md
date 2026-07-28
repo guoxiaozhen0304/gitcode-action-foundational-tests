@@ -1,11 +1,16 @@
 # SEC-RUN-01-003
-- **标题**: 自托管 Runner 跨项目残留必须被隔离   - **维度**: 安全性   - **评级**: 断言一致
+- **标题**: 自托管 Runner 跨项目残留必须被隔离
+- **维度**: security
+- **评级**: 断言一致
+
 ## 想测什么
-自托管runner上项目B不应读取到项目A残留的敏感文件或环境变量。
+项目 A 写 /tmp 文件，项目 B 在同 runner 不应读到跨项目残留。
+
 ## 做了什么
-YAML workflow含两个job使用self-hosted runner标签：project-a写入/tmp/project-a-temp.txt，project-b检查该文件是否存在。project-b中若存在输出"cross project leak"并exit 1，否则输出"isolated as expected"。
+workflow 两个 job 均 runs-on: self-hosted；project-a 写 /tmp 文件，project-b 检查残留。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
-|---|---|---|---|---|---|
-| 1 | run_logs | negative | must_not_contain "cross project leak" | COVERED | 跨项目泄漏标志字符串不应出现 |
-| 2 | run_logs | positive | contains "isolated as expected" | COVERED | 隔离成功标志可观测 |
+|---|------|------|------|------|------|
+| 1 | run_logs | negative | must_not_contain "cross project leak" | COVERED | 对应"项目 B 绝不应读取到项目 A 残留的敏感文件"；script check→GENUINE |
+| 2 | run_logs | positive | contains "isolated as expected" | COVERED | 对应"项目 B 日志包含 isolated as expected"；echo→GENUINE |

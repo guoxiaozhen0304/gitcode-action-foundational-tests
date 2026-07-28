@@ -1,32 +1,16 @@
 # SEC-SUPPLY-01-002
 - **标题**: commit hash 不匹配时第三方 Action 应被拒绝执行
-- **维度**: 安全性
-- **优先级**: P0
-- **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**commit hash 不匹配时第三方 Action 应被拒绝执行**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-SEC-014
-通过标准：
-1. 错误 commit SHA 绝不应执行 Action
-2. 返回明确的 Action 未找到或 SHA 不匹配错误
+- **维度**: security
+- **评级**: 部分不符
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | Use invalid hash action | uses: docker/build-push-action@0000000000000000000000000000000000000000 | - | action 解析失败，平台产生错误日志 |
+## 想测什么
+错误 commit SHA 引用 Action 时 job 应失败或拒绝，系统不应静默回退。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
+## 做了什么
+step 使用 `uses: docker/build-push-action@0000...`（无效 SHA）。无 run step。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | must_not_equal: "success" | ✅ GENUINE | `uses:` 引用不存在的 hash，平台无法解析，运行不应成功 |
-| 2 | run_logs | positive | equals: "action_not_found_or_sha_mismatch" | ✅ GENUINE | `uses:` action 解析失败产生错误日志，平台应输出拒绝信息 |
----
+| 1 | run_status | negative | must_not_equal:success | COVERED | 平台 run_status 可观察，无效 SHA 预期非 success |
+| 2 | run_logs | positive | equals:action_not_found_or_sha_mismatch | VACUOUS | step 无 run 语句输出该字符串；平台日志可能包含相关错误但非 step 显式产出 |

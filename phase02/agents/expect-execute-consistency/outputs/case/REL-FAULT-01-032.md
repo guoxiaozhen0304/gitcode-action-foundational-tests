@@ -1,15 +1,17 @@
 # REL-FAULT-01-032
 - **标题**: 故障注入——artifact 上传时网络分区 30 秒后应失败并报网络错误
-- **维度**: 可靠性
-- **优先级**: P1
-- **评级**: 断言一致（2026-07-28 优化后重评）
+- **维度**: 稳定性
+- **评级**: 断言一致
 
-## 修复内容
-补缺失的负向断言：不应无限挂起超 120 秒（negative hang_beyond_120s_detected）。
+## 想测什么
+upload 期间网络分区 30s，step=failure，日志含 network 错误，不挂起超 120s。
+
+## 做了什么
+生成 10MB artifact，upload；fault_injection 在 step 2 注入 30s 网络分区。
 
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | step_status | positive | equals failure | ✅ COVERED | 网络分区故障注入 |
-| 2 | run_logs | positive | contains network | ✅ COVERED | 网络错误日志 |
-| 3 | hang_beyond_120s_detected | negative | equals true | ✅ COVERED | harness 观测挂起时长 |
+| 1 | step_status | positive | equals "failure" | COVERED | 网络分区导致 upload 失败 |
+| 2 | run_logs | positive | contains "network" | COVERED | 网络错误日志可观测 |
+| 3 | hang_beyond_120s_detected | negative | equals "true" | COVERED | harness 观测超时悬挂 |

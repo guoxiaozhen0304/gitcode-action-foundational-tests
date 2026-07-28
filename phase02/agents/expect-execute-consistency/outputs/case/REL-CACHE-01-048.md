@@ -1,19 +1,18 @@
 # REL-CACHE-01-048
 - **标题**: cache 同 key 并发写一致性——3 方并行写同一 key 不得产生混合/损坏内容
 - **维度**: 稳定性
-- **优先级**: P2
-- **评级**: 部分不符（2026-07-28 优化后重评）
+- **评级**: 断言一致
 
-## 修复内容
-归属检查步骤由 cat 改为 case 精确匹配：读回内容必须是某一写入方的完整标记（ATTRIBUTION_SINGLE_OK），混合/截断输出 ATTRIBUTION_MIXED_BAD 并 exit 1；新增 must_not_contain ATTRIBUTION_MIXED_BAD 确定性断言。
+## 想测什么
+3 方并行写同名 cache key，读回应归属单方且完整，或明确冲突错误。
+
+## 做了什么
+3 个 writer job（matrix alpha/beta/gamma）并行写 marker 到共享 cache key；verify job 读回并校验归属（case 匹配单方标记或报 ATTRIBUTION_MIXED_BAD）。
 
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | cache_content_attribution | positive | single_writer_complete_or_explicit_conflict_error | ✅ GENUINE | 真实 case 匹配校验 |
-| 2 | run_logs | negative | must_not_contain ATTRIBUTION_MIXED_BAD | ✅ GENUINE | 混合内容出现时输出并 exit 1 |
-| 3 | mixed_or_truncated_content_detected | negative | equals true | ✅ GENUINE | 负向验证 |
-| 4 | concurrent_write_semantics | nonfunctional | equals recorded | 🔶 LLM_DEPENDENT | 实测记录指令，非机器可判值 |
-
-### 残留问题
-concurrent_write_semantics=recorded 同 REL-CACHE-01-047，保留。
+| 1 | cache_content_attribution | positive | equals single_writer_complete_or_explicit_conflict_error | COVERED | verify job 的 case 匹配逻辑可判定归属 |
+| 2 | run_logs | negative | must_not_contain "ATTRIBUTION_MIXED_BAD" | COVERED | 混合态时 verify job 会 echo 该标记并 exit 1，可观测 |
+| 3 | mixed_or_truncated_content_detected | negative | equals "true" | COVERED | 通过 ATTRIBUTION_MIXED_BAD 间接覆盖 |
+| 4 | concurrent_write_semantics | nonfunctional | equals "recorded" | LLM_DEPENDENT | 记录型指标 |

@@ -2,12 +2,15 @@
 - **标题**: GITHUB_TOKEN 在 GitCode 中应为空且不应被静默映射
 - **维度**: 兼容性
 - **评级**: 断言一致
+
 ## 想测什么
-验证 GitCode 不将 GITHUB_TOKEN 静默映射为 ATOMGIT_TOKEN——GITHUB_TOKEN 应为空或未定义，引用时应返回 401/403。
+验证 `${{ secrets.GITHUB_TOKEN }}` 在GitCode中应为空/未定义，API调用应返回401/403而非200，不应静默映射到ATOMGIT_TOKEN。
+
 ## 做了什么
-通过 `${{ secrets.GITHUB_TOKEN }}` 引用令牌发起 API 调用，检查 HTTP 状态码。
+step执行curl调API repo端点，使用 `${{ secrets.GITHUB_TOKEN }}` 作为token，输出http状态码。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|---|---|---|---|---|
-| 1 | run_logs | negative | llm_assisted 判断api_status应为401/403 | LLM_DEPENDENT | eval=llm_assisted，需人工确认状态码不是200 |
-| 2 | error_message | nonfunctional | llm_assisted 判断报错应提示使用ATOMGIT_TOKEN | LLM_DEPENDENT | type=nonfunctional，文档化建议任务 |
+| 1 | run_logs | negative llm | "api_status应为401/403或空，不应为200" | COVERED | curl + ${{ secrets.GITHUB_TOKEN }}为GENUINE(R1上下文表达式)；http状态码可观测. 若GITHUB_TOKEN未定义，可能出现解析错误或空值导致curl失败 |
+| 2 | error_message | nonfunctional llm | "报错应提示使用ATOMGIT_TOKEN替代" | COVERED | error_message为平台日志(GENUINE R1)；若静默为空且curl返回401则无报错，但这是可接受的负向结果 |

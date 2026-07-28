@@ -1,15 +1,19 @@
-# USE-PATH-01-001
-- **标题**: paths 300 文件上限在文档与行为中一致且明示
-- **维度**: 易用性/兼容性
-- **评级**: 断言一致
+# USE-PATH-01-001  - **标题**: paths 300 文件上限在文档与行为中一致且明示   - **维度**: usability/compatibility   - **评级**: 断言一致
 
 ## 想测什么
-检查文档 configure-triggers.md 中 paths/paths-ignore 说明是否在显眼位置标注 300 文件匹配上限。
+
+文档在显眼位置标注 300 文件上限；超出时调试日志有提示
 
 ## 做了什么
-纯文档检查用例（workflow: null）。检查文档路径说明中是否说明了匹配前 300 个变更文件的上限。
+
+- 1. 检查 configure-triggers.md 中 paths 说明
+- 2. 触发一次变更文件数超过 300 的 push
+
+- - [非功能] 文档 paths 章节顶部或注意块中是否有 300 文件上限提示
+- - [非功能] 超出上限时调试日志是否提示 paths 过滤超出文件上限
 
 ## 逐断言判定
+
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
-|---|------|------|------|------|------|
-| 1 | documentation | nonfunctional | 文档在 paths 说明首段或注意块中写明 300 文件上限 | UNVERIFIABLE | eval: llm_assisted，全 LLM_DEPENDENT；Rule 9 → 断言一致 |
+|---|---|---|---|---|---|
+| 1 | documentation | nonfunctional | eval=llm_assisted | LLM_DEPENDENT | nonfunctional+llm_assisted: 文档paths说明位置与内容需LLM评估 |

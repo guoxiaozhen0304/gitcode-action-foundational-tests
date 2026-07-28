@@ -1,23 +1,20 @@
 # COMP-ATOMGIT-01-049
-
 - **标题**: atomgit 边界格式校验
-- **维度**: 完备性
+- **维度**: completeness
 - **评级**: 断言一致
 
----
-
 ## 想测什么
-验证 `ATOMGIT_SHA` 长度为 40、`ATOMGIT_REF` 以 `refs` 开头、`ATOMGIT_REF_NAME` 不含 `refs/` 前缀、`ATOMGIT_ACTOR` 非空。
+atomgit.sha 长度 40，atomgit.ref 以 refs/ 开头，atomgit.ref_name 不含 refs/ 前缀，atomgit.actor 非空。
 
 ## 做了什么
-单个 step 使用 bash 内置语法（`${#VAR}`、`%%`、`#refs/`）操作运行时注入的 `$ATOMGIT_*` 环境变量，echo 输出校验结果。
+1. step `Check formats`：`echo "SHA_LEN=${#ATOMGIT_SHA}"`、`echo "REF_PREFIX=${ATOMGIT_REF%%/*}"`、`echo "REF_NAME_NO_PREFIX=${ATOMGIT_REF_NAME#refs/}"`、`echo "ACTOR_LEN=${#ATOMGIT_ACTOR}"`
+   变量 ATOMGIT_SHA、ATOMGIT_REF 等为 Runner 标准注入的环境变量，与 `${{ atomgit.sha }}` 等效
 
 ## 逐断言判定
-
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_logs | positive | must_contain: SHA_LEN=40 | COVERED | `${#ATOMGIT_SHA}` 计算平台注入变量长度后输出 |
-| 2 | run_logs | positive | must_contain: REF_PREFIX=refs | COVERED | `${ATOMGIT_REF%%/*}` bash 分隔提取前缀后输出 |
-| 3 | run_logs | positive | must_contain: REF_NAME_NO_PREFIX= | COVERED | `${ATOMGIT_REF_NAME#refs/}` bash 剥离前缀后输出 |
-| 4 | run_logs | negative | must_not_contain: REF_NAME_NO_PREFIX=refs/ | COVERED | 负向校验 ref_name 剥离后不残留 `refs/`，与正向断言互补 |
-| 5 | run_logs | positive | must_contain: ACTOR_LEN= | COVERED | `${#ATOMGIT_ACTOR}` 计算长度后输出 |
+| 1 | run_logs | positive | must_contain: SHA_LEN=40 | COVERED | ${#ATOMGIT_SHA} 计算 Runner 注入的 SHA 长度 |
+| 2 | run_logs | positive | must_contain: REF_PREFIX=refs | COVERED | ${ATOMGIT_REF%%/*} 提取 refs/ 前缀 |
+| 3 | run_logs | positive | must_contain: REF_NAME_NO_PREFIX= | COVERED | ${ATOMGIT_REF_NAME#refs/} 去除 refs/ 前缀 |
+| 4 | run_logs | negative | must_not_contain: REF_NAME_NO_PREFIX=refs/ | COVERED | ref_name 经去除 refs/ 后不应仍含该前缀 |
+| 5 | run_logs | positive | must_contain: ACTOR_LEN= | COVERED | ${#ATOMGIT_ACTOR} 输出 actor 长度，非空则 > 0 |

@@ -1,33 +1,16 @@
 # COMPAT-RUNSON-01-003
-- **标题**: 自托管 runs-on 对象式写法（type/group/labels）的实测仲裁
+- **标题**: 自托管 runs-on 对象式写法的实测仲裁
 - **维度**: 兼容性
-- **优先级**: P1
 - **评级**: 断言一致
----
-## 1. 想测什么
-本用例验证：**自托管 runs-on 对象式写法（type/group/labels）的实测仲裁**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-COMPAT-046
-通过标准：
-1. [正向] 对象式写法的调度或报错结局确定
-2. [负向] 不应无限 queued 无提示
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | Mark scheduling success | `echo "OBJECT_FORM_SCHEDULED"` | - | `OBJECT_FORM_SCHEDULED` |
+## 想测什么
+验证 `runs-on: {type: self-hosted, group: default, labels: [linux, x64]}` 对象式写法在已注册自托管Runner上的调度结局。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | with-self-hosted-runner |
-| Secrets | [] |
-| 故障注入 | 无 |
+## 做了什么
+workflow_dispatch触发，runs-on对象式写法；step输出 `echo "OBJECT_FORM_SCHEDULED"` 作为调度成功标记。
 
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
-|---|------|------|------|------|------|
-| 1 | run_status | positive | eval=llm_assisted | 🔶 LLM_DEPENDENT | 需 LLM 评估对象式写法调度结局 |
-| 2 | run_status | negative | eval=llm_assisted | 🔶 LLM_DEPENDENT | 需 LLM 评估是否无限 queued |
-
----
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+|---|---|---|---|---|---|
+| 1 | run_status | positive llm | "对象式runs-on结局确定：调度成功或解析期报错" | COVERED | echo "OBJECT_FORM_SCHEDULED"为GENUINE(R1)；调度成功/报错都通过run_status+日志可观测 |
+| 2 | run_status | negative llm | "不应表现为job无限queued且无提示" | COVERED | run_status持续观察可判断无限排队(R2)；负向验证 |

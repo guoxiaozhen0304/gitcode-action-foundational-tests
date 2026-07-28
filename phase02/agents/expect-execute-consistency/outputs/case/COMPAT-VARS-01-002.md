@@ -2,12 +2,15 @@
 - **标题**: vars 上下文若不支持应报错而非静默为空
 - **维度**: 兼容性
 - **评级**: 断言一致
+
 ## 想测什么
-验证 GitCode vars 上下文不支持时在解析或运行时给出明确报错，而非将 `vars.UNKNOWN_VAR` 静默求值为空字符串。
+验证 `${{ vars.UNKNOWN_VAR }}` 在vars不支持或变量不存在时不应静默求值为空字符串。
+
 ## 做了什么
-在 workflow 中输出 `${{ vars.UNKNOWN_VAR }}`，观察运行结果。
+workflow_dispatch触发，variables为空 `{}`，step输出 `echo "unknown_var=${{ vars.UNKNOWN_VAR }}"`。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|---|---|---|---|---|
-| 1 | run_logs | negative | llm_assisted 判断不应静默求值为空 | LLM_DEPENDENT | eval=llm_assisted |
-| 2 | error_message | nonfunctional | llm_assisted 判断报错说明vars不可用 | LLM_DEPENDENT | type=nonfunctional，文档化建议任务 |
+| 1 | run_logs | negative llm | "unknown_var不应仅等于空字符串后静默通过" | COVERED | ${{ vars.UNKNOWN_VAR }}为GENUINE(R1上下文表达式)；若为空串且静默通过则断言触发 |
+| 2 | error_message | nonfunctional llm | "若不支持vars，报错应说明不可用" | COVERED | error_message为平台日志(GENUINE R1)；R5 LLM_DEPENDENT辅助判断报错内容 |

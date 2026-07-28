@@ -1,17 +1,19 @@
-# USE-YAML-01-001
-- **标题**: 缺少必填字段 on 时报错应指出具体字段名与位置
-- **维度**: 易用性
-- **优先级**: P1
-- **评级**: 部分不符（2026-07-28 复核：维持原判定，已符合最优形态）
+# USE-YAML-01-001  - **标题**: 缺少必填字段 on 时报错应指出具体字段名与位置   - **维度**: usability   - **评级**: 断言一致
 
-## 修复内容
-本次未改动。缺 on 字段的 workflow 为平台验证型（校验期拒绝 → run_status 断言 GENUINE）；报错三项中至少两项（字段名/行号/示例）为组合判读，"on" 单串过短无法作为确定性锚点，保留 llm。
+## 想测什么
+
+报错包含文件名、出错行号、缺少字段名，最好给出正确写法示例
+
+## 做了什么
+
+- 1. 提交一个缺少 on 字段的 workflow
+
+- - [负向] 不应仅报泛化 YAML parse error
+- - [非功能] 报错中是否同时包含字段名与所在行号
 
 ## 逐断言判定
-| # | 目标 | 类型 | 期望 | 判定 | 说明 |
-|---|------|------|------|------|------|
-| 1 | run_status | negative | equals COMPLETED | ✅ GENUINE | 缺必填字段应校验失败 |
-| 2 | error_message | nonfunctional | llm_assisted | 🔶 LLM_DEPENDENT | 字段名/行号/示例组合判读 |
 
-### 残留问题
-报错内容组合判读保留 llm_assisted。
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
+|---|---|---|---|---|---|
+| 1 | run_status | negative | equals=`COMPLETED` | COVERED | negative+run_status: workflow缺失on字段→畸形YAML→平台应拒绝; batch_validate可验证 |
+| 2 | error_message | nonfunctional | eval=llm_assisted | LLM_DEPENDENT | nonfunctional+llm_assisted: 报错信息完整度需LLM评估 |

@@ -1,16 +1,15 @@
 # USE-ENV-01-002
 - **标题**: 引用 GITHUB_SHA 时日志应给出环境变量映射提示
-- **维度**: 易用性
+- **维度**: usability
 - **评级**: 断言一致
 
 ## 想测什么
-使用 `$GITHUB_SHA` 时日志应提示 GITHUB 变量不存在或建议使用 ATOMGIT 变量。
+引用 `$GITHUB_SHA` 时日志中应出现关于 GITHUB 变量不存在或建议使用 ATOMGIT 的提示。
 
 ## 做了什么
-workflow 中有 `set -u` 并使用 `echo "sha=$GITHUB_SHA"`。
+step `set -u; echo "sha=$GITHUB_SHA"` 引用不存在的 GITHUB 环境变量。断言为 nonfunctional + llm_assisted。
 
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | error_message | nonfunctional | llm_assisted | LLM_DEPENDENT | `$GITHUB_SHA` 环境变量不存在，LLM 辅助判定日志是否给出 GITHUB_* → ATOMGIT_* 映射提示 |
-
+| 1 | error_message | nonfunctional | eval:llm_assisted | LLM_DEPENDENT | nonfunctional + llm_assisted 判定日志警告包含 ATOMGIT 映射指引 |
