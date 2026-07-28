@@ -20,7 +20,6 @@ workflow: |
         - name: write 51GB file
           run: |
             fallocate -l 51G testfile || dd if=/dev/zero of=testfile bs=1M count=52224
-          continue-on-error: true
         - name: check failure
           run: |
             echo expecting failure above

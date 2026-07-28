@@ -1,0 +1,33 @@
+id: REL-VCJOB-01-001
+dimensions: [reliability]
+dimension: reliability
+priority: P1
+title: "【回归】vcjob（volcano job）格式任务解析与运行——当前已知不通过，修复后回归"
+intent_ref: INTENT-REL-089
+setup:
+  repo_fixture: default
+  secrets: []
+  variables:
+    volcano_deployed: "true"
+    known_failure: "xlsx 实测不通过，断言按修复后的正确行为编写，修复前预期失败"
+  branch_protection: default
+workflow: null
+trigger:
+  event: manual
+  as: maintainer
+  params:
+    platform_op: vcjob_submit
+fault_injection: null
+assertions:
+  - type: positive
+    target: vcjob_parse_status
+    equals: "success"
+  - type: positive
+    target: vcjob_run_status
+    equals: "Running"
+  - type: negative
+    target: vcjob_field_handling
+    eval: llm_assisted
+    rubric: "不应出现 vcjob 字段被静默丢弃或 NPU 资源声明被忽略。输入退化声明：oracle 仅有 xlsx 预期结果列（能正常运行，实测不通过），字段级解析细项无平台侧文档支撑，需结合实测环境判定"
+teardown:
+  reset: fixture

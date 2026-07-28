@@ -26,6 +26,9 @@ workflow: |
             TEST_KEY: test_value
           run: |
             echo "ENV_JSON=${{ toJson(env) }}"
+        - name: Serialize atomgit context
+          run: |
+            echo "ATOMGIT_JSON=${{ toJson(atomgit) }}"
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -37,5 +40,11 @@ assertions:
   - type: positive
     target: run_logs
     must_contain: "ENV_JSON={"
+  - type: positive
+    target: run_logs
+    must_contain: TEST_KEY
+  - type: positive
+    target: run_logs
+    must_contain: '"event":'
 teardown:
   reset: fixture

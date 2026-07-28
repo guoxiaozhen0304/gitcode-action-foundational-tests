@@ -5,7 +5,7 @@ priority: P0
 title: "子任务状态传播——workflow_call 失败时父 workflow 不应假阳性完成"
 intent_ref: INTENT-REL-064
 setup:
-  repo_fixture: default
+  repo_fixture: reusable-workflow
   secrets: []
   variables: {}
   branch_protection: default

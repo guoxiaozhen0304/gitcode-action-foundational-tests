@@ -18,6 +18,11 @@ workflow: |
         - name: Inline PR title
           run: |
             echo "PR title is ${{ atomgit.event.pull_request.title }}"
+        - name: Safe via intermediate env
+          env:
+            PR_TITLE: ${{ atomgit.event.pull_request.title }}
+          run: |
+            echo "PR title via env is $PR_TITLE"
 trigger:
   event: pull_request
   as: untrusted_contributor

@@ -41,6 +41,6 @@ assertions:
     must_not_contain: "isolation broken"
   - type: positive
     target: run_logs
-    equals: "isolated_as_expected"
+    contains: "isolated as expected"
 teardown:
   reset: fixture

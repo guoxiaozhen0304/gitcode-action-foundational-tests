@@ -1,0 +1,35 @@
+id: SEC-ORG-01-002
+dimensions: ["security"]
+dimension: security
+priority: P1
+title: "fork PR 触发的运行绝不应读取组织级 secret（与项目级同等隔离）"
+intent_ref: INTENT-SEC-039
+setup:
+  repo_fixture: org-scoped-secret
+  secrets: ["ORG_SHARED_KEY"]
+workflow: |
+  on:
+    pull_request:
+      branches: [main]
+  jobs:
+    org-secret-fork:
+      name: Fork PR must not read org secret
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Attempt to echo org secret
+          run: |
+            echo "ORG_SECRET_VALUE: ${{ secrets.ORG_SHARED_KEY }}"
+trigger:
+  event: pull_request
+  as: untrusted_contributor
+  params: {}
+fault_injection: null
+assertions:
+  - type: negative
+    target: run_logs
+    must_not_contain_secret: "ORG_SHARED_KEY"
+  - type: positive
+    target: run_logs
+    equals: "fork_pr_org_secret_isolated"
+teardown:
+  reset: fixture

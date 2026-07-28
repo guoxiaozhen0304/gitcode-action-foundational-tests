@@ -1,0 +1,80 @@
+id: COMP-STAGES-01-001
+dimensions: [completeness]
+dimension: completeness
+priority: P1
+title: stages 阶段间串行、阶段内 job 并行执行
+intent_ref: INTENT-COMP-007
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  stages:
+    build-stage:
+      name: Build stage
+      jobs:
+        build-a:
+          name: Build A
+          runs-on: [ubuntu-latest, x64, small]
+          steps:
+            - name: Build A step
+              run: |
+                echo "BUILD_A_START=$(date +%s)"
+                echo "build-a"
+                echo "BUILD_A_END=$(date +%s)"
+        build-b:
+          name: Build B
+          runs-on: [ubuntu-latest, x64, small]
+          steps:
+            - name: Build B step
+              run: |
+                echo "BUILD_B_START=$(date +%s)"
+                echo "build-b"
+                echo "BUILD_B_END=$(date +%s)"
+    test-stage:
+      name: Test stage
+      jobs:
+        test:
+          name: Test
+          runs-on: [ubuntu-latest, x64, small]
+          steps:
+            - name: Test step
+              run: |
+                echo "TEST_START=$(date +%s)"
+                echo "test"
+                echo "TEST_END=$(date +%s)"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_status
+    equals: success
+  - type: positive
+    target: run_logs
+    must_contain: BUILD_A_START=
+  - type: positive
+    target: run_logs
+    must_contain: BUILD_B_START=
+  - type: positive
+    target: run_logs
+    must_contain: TEST_START=
+  - type: positive
+    target: stage_order
+    equals: serial_across_stages
+  - type: positive
+    target: job_parallelism
+    equals: parallel_within_stage
+
+teardown:
+  reset: none

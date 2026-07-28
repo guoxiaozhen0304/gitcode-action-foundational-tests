@@ -1,0 +1,40 @@
+id: USE-RUN-01-003
+dimensions: ["usability"]
+dimension: usability
+priority: P1
+title: "rerun 上限与 6 小时时限在 UI 的明示（判定方式：llm_assisted）"
+intent_ref: INTENT-USE-049
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    flaky:
+      name: failing job for rerun probe
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: fail step
+          run: |
+            exit 1
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: nonfunctional
+    target: ui
+    eval: "llm_assisted"
+    rubric: "用户在不查文档的情况下，通过 UI 自身即可理解为什么不能重跑：达到 3 次上限或超过 6 小时时按钮置灰应有 tooltip 明示原因，运行详情页应显示已重跑次数与剩余次数；tooltip 是否清晰需主观评判；重跑行为本身由 REL-011~013 覆盖"
+
+teardown:
+  reset: fixture

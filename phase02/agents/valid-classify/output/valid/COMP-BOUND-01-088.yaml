@@ -18,14 +18,17 @@ workflow: |
       name: Verify workflow commands boundary
       runs-on: [ubuntu-latest, x64, small]
       steps:
-        - name: Write env and path
+        - name: Write env path and output
+          id: cmdwriter
           run: |
             echo "MY_ENV=from_env_file" >> "$ATOMGIT_ENV"
             echo "/tmp/extra_bin" >> "$ATOMGIT_PATH"
+            echo "out_key=out_val" >> "$ATOMGIT_OUTPUT"
         - name: Read env
           run: |
             echo "MY_ENV=$MY_ENV"
             echo "PATH_HAS_EXTRA=$([[ "$PATH" == *"/tmp/extra_bin"* ]] && echo yes || echo no)"
+            echo "OUT_KEY=${{ steps.cmdwriter.outputs.out_key }}"
             echo "commands_ok"
 trigger:
   event: workflow_dispatch
@@ -35,6 +38,12 @@ assertions:
   - type: positive
     target: run_logs
     must_contain: MY_ENV=from_env_file
+  - type: positive
+    target: run_logs
+    must_contain: PATH_HAS_EXTRA=yes
+  - type: positive
+    target: run_logs
+    must_contain: OUT_KEY=out_val
   - type: positive
     target: run_logs
     must_contain: commands_ok

@@ -1,0 +1,43 @@
+id: USE-LBL-01-006
+dimensions: ["usability"]
+dimension: usability
+priority: P1
+title: "含资源池名的 runs-on 写法平台识别验证"
+intent_ref: INTENT-USE-040
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: resource pool runs-on probe
+      runs-on: [dedicate-hosted, x64, large]
+      steps:
+        - name: marker step
+          run: |
+            echo "scheduled on named pool"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_status
+    equals: "success"
+  - type: nonfunctional
+    target: documentation
+    eval: "deterministic"
+    criterion: "若平台识别该写法而文档未提，记文档缺陷；与 USE-LBL-01-005 文档 diff 结果合并证据链"
+
+teardown:
+  reset: none

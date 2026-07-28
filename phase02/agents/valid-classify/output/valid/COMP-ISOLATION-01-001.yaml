@@ -22,6 +22,13 @@ workflow: |
         - name: Create file
           run: |
             echo "secret data" > /tmp/isolation_test.txt
+            mkdir -p ./artifact_out
+            echo "shared payload" > ./artifact_out/shared.txt
+        - name: Upload shared file
+          uses: upload-artifact
+          with:
+            name: shared-file
+            path: ./artifact_out/shared.txt
     job2:
       name: Read file
       runs-on: [ubuntu-latest, x64, small]
@@ -35,6 +42,24 @@ workflow: |
               exit 1
             else
               echo "file not found as expected"
+            fi
+    job3:
+      name: Read via artifact
+      runs-on: [ubuntu-latest, x64, small]
+      needs: job1
+      steps:
+        - name: Download shared file
+          uses: download-artifact
+          with:
+            name: shared-file
+        - name: Read shared file
+          run: |
+            if [ -f shared.txt ]; then
+              echo "PAYLOAD=$(cat shared.txt)"
+              echo "artifact_read_ok"
+            else
+              echo "artifact_missing"
+              exit 1
             fi
 
 trigger:
@@ -51,6 +76,15 @@ assertions:
   - type: negative
     target: run_logs
     must_not_contain: secret data
+  - type: positive
+    target: run_logs
+    must_contain: file not found as expected
+  - type: positive
+    target: run_logs
+    must_contain: PAYLOAD=shared payload
+  - type: positive
+    target: run_logs
+    must_contain: artifact_read_ok
 
 teardown:
   reset: none

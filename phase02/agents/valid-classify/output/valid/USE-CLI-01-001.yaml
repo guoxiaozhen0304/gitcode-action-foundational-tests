@@ -1,0 +1,46 @@
+id: USE-CLI-01-001
+dimensions: ["usability"]
+dimension: usability
+priority: P1
+title: "Runner 无 gh 等效 CLI 时迁移指引的替代方案说明"
+intent_ref: INTENT-USE-045
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: cli availability probe
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: probe cli commands
+          run: |
+            command -v gh || echo "gh=NOTFOUND"
+            command -v gitcode || echo "gitcode=NOTFOUND"
+            command -v atomgit || echo "atomgit=NOTFOUND"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_logs
+    eval: "deterministic"
+    criterion: "记录 gh、gitcode、atomgit 三个命令的存在性结果"
+  - type: negative
+    target: documentation
+    eval: "deterministic"
+    criterion: "扫描迁移指引与常见问题文档；CLI 不存在且无 gh 替代方案小节即不合格"
+
+teardown:
+  reset: none

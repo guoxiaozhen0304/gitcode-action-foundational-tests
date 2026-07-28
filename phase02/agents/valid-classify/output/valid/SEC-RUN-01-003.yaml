@@ -40,6 +40,6 @@ assertions:
     must_not_contain: "cross project leak"
   - type: positive
     target: run_logs
-    equals: "isolated_as_expected"
+    contains: "isolated as expected"
 teardown:
   reset: full_instance

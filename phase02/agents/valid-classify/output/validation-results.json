@@ -10,35 +10,27 @@
     "diagnostics": []
   },
   {
-    "case_id": "COMP-ACT-01-003",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "COMP-ARTIFACT-01-001",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "COMP-ARTIFACT-01-002",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
     "case_id": "COMP-ATOMGIT-01-047",
-    "status": "VALID",
-    "diagnostics": []
+    "status": "ERROR_WAF",
+    "diagnostics": [],
+    "http_status": 418
   },
   {
     "case_id": "COMP-ATOMGIT-01-048",
-    "status": "VALID",
-    "diagnostics": []
+    "status": "ERROR_WAF",
+    "diagnostics": [],
+    "http_status": 418
   },
   {
     "case_id": "COMP-ATOMGIT-01-049",
     "status": "ERROR_WAF",
     "diagnostics": [],
     "http_status": 418
+  },
+  {
+    "case_id": "COMP-BOUND-01-084",
+    "status": "VALID",
+    "diagnostics": []
   },
   {
     "case_id": "COMP-BOUND-01-086",
@@ -72,8 +64,15 @@
   },
   {
     "case_id": "COMP-CTX-01-052",
-    "status": "VALID",
-    "diagnostics": []
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[downstream].if: if表达式无法解析 表达式：needs.verify.result == 'success'第1位出现不支持的关键字",
+        "line": 0,
+        "column": 0
+      }
+    ]
   },
   {
     "case_id": "COMP-CTX-01-053",
@@ -87,6 +86,11 @@
   },
   {
     "case_id": "COMP-CTX-01-055",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMP-DIR-01-001",
     "status": "VALID",
     "diagnostics": []
   },
@@ -126,11 +130,34 @@
     "diagnostics": [
       {
         "severity": "Error",
-        "message": "jobs[verify].steps[2].if: if表达式无法解析 {0}",
+        "message": "jobs[verify].steps[4].if: if表达式无法解析 {0}",
+        "line": 0,
+        "column": 0
+      },
+      {
+        "severity": "Error",
+        "message": "jobs[verify].steps[5].if: if表达式无法解析 {0}",
+        "line": 0,
+        "column": 0
+      },
+      {
+        "severity": "Error",
+        "message": "jobs[verify].steps[6].if: if表达式无法解析 {0}",
+        "line": 0,
+        "column": 0
+      },
+      {
+        "severity": "Error",
+        "message": "jobs[verify].steps[7].if: if表达式无法解析 {0}",
         "line": 0,
         "column": 0
       }
     ]
+  },
+  {
+    "case_id": "COMP-EXPR-01-059",
+    "status": "VALID",
+    "diagnostics": []
   },
   {
     "case_id": "COMP-ISOLATION-01-001",
@@ -153,37 +180,22 @@
     "diagnostics": []
   },
   {
+    "case_id": "COMP-JOB-01-066",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMP-JOB-01-067",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
     "case_id": "COMP-JOB-01-068",
     "status": "VALID",
     "diagnostics": []
   },
   {
-    "case_id": "COMP-PERMS-01-001",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "COMP-PERMS-01-002",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "COMP-PERMS-01-003",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "COMP-PR-01-001",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
     "case_id": "COMP-PR-01-002",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "COMP-PR-01-003",
     "status": "VALID",
     "diagnostics": []
   },
@@ -209,16 +221,6 @@
   },
   {
     "case_id": "COMP-PUSH-01-003",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "COMP-RERUN-01-002",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "COMP-RERUN-01-003",
     "status": "VALID",
     "diagnostics": []
   },
@@ -297,17 +299,17 @@
     "http_status": 418
   },
   {
-    "case_id": "COMP-SECRET-01-001",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
     "case_id": "COMP-SECRET-01-002",
     "status": "VALID",
     "diagnostics": []
   },
   {
     "case_id": "COMP-SECRET-01-003",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMP-STAGES-01-001",
     "status": "VALID",
     "diagnostics": []
   },
@@ -359,6 +361,11 @@
     "diagnostics": []
   },
   {
+    "case_id": "COMP-STEP-01-071",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
     "case_id": "COMP-SYSENV-01-059",
     "status": "VALID",
     "diagnostics": []
@@ -384,18 +391,6 @@
     "diagnostics": []
   },
   {
-    "case_id": "COMP-TRIG-01-075",
-    "status": "INVALID",
-    "diagnostics": [
-      {
-        "severity": "Error",
-        "message": "on.schedule[0].cron: 不是可识别的cron表达式",
-        "line": 3,
-        "column": 13
-      }
-    ]
-  },
-  {
     "case_id": "COMP-TRIG-01-076",
     "status": "VALID",
     "diagnostics": []
@@ -404,6 +399,23 @@
     "case_id": "COMP-TRIG-01-077",
     "status": "VALID",
     "diagnostics": []
+  },
+  {
+    "case_id": "COMP-TRIG-01-078",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMP-TRIG-01-079",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "on.merge_requests: 列表长度超出限制，branches branches-ignore之和不能小于1或超过32",
+        "line": 0,
+        "column": 0
+      }
+    ]
   },
   {
     "case_id": "COMP-TRIG-01-080",
@@ -457,9 +469,37 @@
     "diagnostics": []
   },
   {
+    "case_id": "COMP-VARREF-01-084",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
     "case_id": "COMP-WFLOW-01-062",
     "status": "VALID",
     "diagnostics": []
+  },
+  {
+    "case_id": "COMP-WFLOW-01-064",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMP-WFLOW-01-065",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "post.steps: unknown property",
+        "line": 22,
+        "column": 5
+      },
+      {
+        "severity": "Error",
+        "message": "post.run_always: unknown property",
+        "line": 20,
+        "column": 15
+      }
+    ]
   },
   {
     "case_id": "COMPAT-ACTION-01-001",
@@ -597,11 +637,6 @@
     ]
   },
   {
-    "case_id": "COMPAT-CONTAINER-01-001",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
     "case_id": "COMPAT-CONTAINER-01-002",
     "status": "VALID",
     "diagnostics": []
@@ -637,7 +672,7 @@
     "diagnostics": []
   },
   {
-    "case_id": "COMPAT-DEPR-01-002",
+    "case_id": "COMPAT-DIR-01-001",
     "status": "VALID",
     "diagnostics": []
   },
@@ -708,7 +743,7 @@
     ]
   },
   {
-    "case_id": "COMPAT-EXPR-01-003",
+    "case_id": "COMPAT-EXPR-01-001",
     "status": "VALID",
     "diagnostics": []
   },
@@ -758,17 +793,88 @@
     "diagnostics": []
   },
   {
+    "case_id": "COMPAT-EXPR-01-013",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[test-success-paren].steps[0].if: if表达式无法解析 表达式：success()第1位出现不支持的函数",
+        "line": 0,
+        "column": 0
+      },
+      {
+        "severity": "Error",
+        "message": "jobs[test-success-paren].steps[1].if: if表达式无法解析 表达式：success第1位出现不支持的关键字",
+        "line": 0,
+        "column": 0
+      }
+    ]
+  },
+  {
+    "case_id": "COMPAT-EXPR-01-014",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[test-always-paren].steps[1].if: if表达式无法解析 表达式：always第1位出现不支持的关键字",
+        "line": 0,
+        "column": 0
+      }
+    ]
+  },
+  {
+    "case_id": "COMPAT-EXPR-01-015",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMPAT-EXPR-01-016",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMPAT-FIELD-01-001",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "run-name: unknown property",
+        "line": 1,
+        "column": 11
+      }
+    ]
+  },
+  {
+    "case_id": "COMPAT-FIELD-01-002",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[test].services: unknown property",
+        "line": 0,
+        "column": 0
+      }
+    ]
+  },
+  {
+    "case_id": "COMPAT-FIELD-01-003",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "custom_field: unknown property",
+        "line": 3,
+        "column": 15
+      }
+    ]
+  },
+  {
     "case_id": "COMPAT-IF-01-001",
     "status": "VALID",
     "diagnostics": []
   },
   {
     "case_id": "COMPAT-IF-01-002",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "COMPAT-INPUTS-01-001",
     "status": "VALID",
     "diagnostics": []
   },
@@ -781,6 +887,35 @@
     "case_id": "COMPAT-MASK-01-002",
     "status": "VALID",
     "diagnostics": []
+  },
+  {
+    "case_id": "COMPAT-MATRIX-01-005",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMPAT-MIGRATE-01-001",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[migrate-permissions].permissions: unknown property",
+        "line": 0,
+        "column": 0
+      }
+    ]
+  },
+  {
+    "case_id": "COMPAT-MIGRATE-01-002",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "run-name: unknown property",
+        "line": 3,
+        "column": 11
+      }
+    ]
   },
   {
     "case_id": "COMPAT-NEEDS-01-001",
@@ -808,6 +943,28 @@
     "diagnostics": []
   },
   {
+    "case_id": "COMPAT-OUTCOME-01-001",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMPAT-OUTPUT-01-001",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMPAT-PATHS-01-001",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "on.push: 列表长度超出限制，paths paths-ignore之和不能小于1或超过32",
+        "line": 3,
+        "column": 5
+      }
+    ]
+  },
+  {
     "case_id": "COMPAT-PATHS-01-002",
     "status": "INVALID",
     "diagnostics": [
@@ -820,12 +977,52 @@
     ]
   },
   {
-    "case_id": "COMPAT-PERM-01-001",
+    "case_id": "COMPAT-PERM-01-002",
     "status": "VALID",
     "diagnostics": []
   },
   {
+    "case_id": "COMPAT-PERM-01-003",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "permissions.contents: unknown property",
+        "line": 4,
+        "column": 13
+      }
+    ]
+  },
+  {
     "case_id": "COMPAT-PERM-01-004",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMPAT-PERM-01-005",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "COMPAT-PERM-01-006",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[probe].permissions: unknown property",
+        "line": 0,
+        "column": 0
+      },
+      {
+        "severity": "Error",
+        "message": "permissions.contents: unknown property",
+        "line": 4,
+        "column": 13
+      }
+    ]
+  },
+  {
+    "case_id": "COMPAT-PR-01-001",
     "status": "VALID",
     "diagnostics": []
   },
@@ -836,6 +1033,18 @@
       {
         "severity": "Error",
         "message": "on.merge_requests.types: 列表中存在非法值:[opened] 允许值:[close, merge, open, reopen, update]",
+        "line": 0,
+        "column": 0
+      }
+    ]
+  },
+  {
+    "case_id": "COMPAT-PR-01-003",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "on.merge_requests: 列表长度超出限制，branches branches-ignore之和不能小于1或超过32",
         "line": 0,
         "column": 0
       }
@@ -864,11 +1073,6 @@
         "column": 0
       }
     ]
-  },
-  {
-    "case_id": "COMPAT-PR-01-006",
-    "status": "VALID",
-    "diagnostics": []
   },
   {
     "case_id": "COMPAT-PR-01-007",
@@ -1034,18 +1238,6 @@
     ]
   },
   {
-    "case_id": "COMPAT-SCHEDULE-01-004",
-    "status": "INVALID",
-    "diagnostics": [
-      {
-        "severity": "Error",
-        "message": "on.schedule[0].cron: 不是可识别的cron表达式",
-        "line": 3,
-        "column": 13
-      }
-    ]
-  },
-  {
     "case_id": "COMPAT-SECRET-01-005",
     "status": "INVALID",
     "diagnostics": [
@@ -1144,11 +1336,6 @@
     ]
   },
   {
-    "case_id": "COMPAT-VARS-01-006",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
     "case_id": "COMPAT-WCMD-01-001",
     "status": "VALID",
     "diagnostics": []
@@ -1179,32 +1366,12 @@
     "diagnostics": []
   },
   {
-    "case_id": "REL-API-01-065",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "REL-ART-01-041",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
     "case_id": "REL-ART-01-042",
     "status": "VALID",
     "diagnostics": []
   },
   {
-    "case_id": "REL-ARTCONC-01-063",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
     "case_id": "REL-CACHE-01-046",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "REL-CANCEL-01-028",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1220,11 +1387,6 @@
   },
   {
     "case_id": "REL-CONC-01-002",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "REL-CONTINUE-01-030",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1249,33 +1411,42 @@
     "diagnostics": []
   },
   {
-    "case_id": "REL-FLOOD-01-036",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "REL-FLOOD-01-037",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
     "case_id": "REL-IGNORE-01-004",
     "status": "VALID",
     "diagnostics": []
   },
   {
-    "case_id": "REL-K8S-01-045",
-    "status": "VALID",
+    "case_id": "REL-K8S-01-046",
+    "status": "SKIP",
     "diagnostics": []
   },
   {
-    "case_id": "REL-LOG-01-040",
-    "status": "ERROR_WAF",
-    "diagnostics": [],
-    "http_status": 418
+    "case_id": "REL-K8S-01-047",
+    "status": "SKIP",
+    "diagnostics": []
   },
   {
-    "case_id": "REL-LOGPERF-01-052",
+    "case_id": "REL-K8S-01-048",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-K8S-01-049",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-K8S-01-050",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-K8S-01-051",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-LOG-01-041",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1285,22 +1456,7 @@
     "diagnostics": []
   },
   {
-    "case_id": "REL-LONG-01-043",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
     "case_id": "REL-MATRIX-01-027",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "REL-MATRIX-01-038",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "REL-MATRIX-01-039",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1316,16 +1472,6 @@
   },
   {
     "case_id": "REL-MEM-01-021",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "REL-NEEDS-01-025",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "REL-NEEDS-01-026",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1354,6 +1500,16 @@
     "status": "ERROR_WAF",
     "diagnostics": [],
     "http_status": 418
+  },
+  {
+    "case_id": "REL-PATHS-01-014",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "REL-PATHS-01-015",
+    "status": "VALID",
+    "diagnostics": []
   },
   {
     "case_id": "REL-POST-01-001",
@@ -1386,9 +1542,22 @@
     ]
   },
   {
-    "case_id": "REL-QUEUE-01-003",
-    "status": "VALID",
-    "diagnostics": []
+    "case_id": "REL-PREEMPT-01-006",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "concurrency.preemption.events: 列表中存在非法值:[push] 允许值:[mr_id]",
+        "line": 7,
+        "column": 13
+      },
+      {
+        "severity": "Error",
+        "message": "concurrency.preemption.events: 列表长度必须在0到10之间",
+        "line": 7,
+        "column": 13
+      }
+    ]
   },
   {
     "case_id": "REL-RACE-01-048",
@@ -1403,7 +1572,7 @@
     ]
   },
   {
-    "case_id": "REL-REG-01-001",
+    "case_id": "REL-RUNNER-01-049",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1413,33 +1582,22 @@
     "diagnostics": []
   },
   {
-    "case_id": "REL-SCHED-01-058",
-    "status": "INVALID",
-    "diagnostics": [
-      {
-        "severity": "Error",
-        "message": "on.schedule[0].cron: 不是可识别的cron表达式",
-        "line": 3,
-        "column": 13
-      }
-    ]
-  },
-  {
     "case_id": "REL-STAGES-01-029",
     "status": "INVALID",
     "diagnostics": [
       {
         "severity": "Error",
-        "message": "Cannot deserialize value of type `java.util.LinkedHashMap<java.lang.String,com.huawei.devcloud.cloudpipeline.v2.domain.entity.pac2.gitcode.structs.GitcodeStage>` from Array value (token `JsonToken.START_ARRAY`)\n at [Source: UNKNOWN; byte offset: #UNKNOWN] (through reference chain: com.huawei.devcloud.cloudpipeline.v2.domain.entity.pac2.gitcode.GitcodePipelineDefinition[\"stages\"])",
+        "message": "stages[next_stage].name: 值不能为空",
+        "line": 0,
+        "column": 0
+      },
+      {
+        "severity": "Error",
+        "message": "stages[test_stage].name: 值不能为空",
         "line": 0,
         "column": 0
       }
     ]
-  },
-  {
-    "case_id": "REL-STATE-01-059",
-    "status": "VALID",
-    "diagnostics": []
   },
   {
     "case_id": "REL-STEPS-01-042",
@@ -1469,6 +1627,52 @@
     "diagnostics": []
   },
   {
+    "case_id": "REL-VCJOB-01-001",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
+    "case_id": "SEC-DEFPERM-01-001",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[override-write].permissions: unknown property",
+        "line": 0,
+        "column": 0
+      }
+    ]
+  },
+  {
+    "case_id": "SEC-DEFPERM-01-002",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[override-test].permissions: unknown property",
+        "line": 0,
+        "column": 0
+      }
+    ]
+  },
+  {
+    "case_id": "SEC-DOS-01-001",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "SEC-ENV-01-001",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[env-secret-approved].environment: unknown property",
+        "line": 0,
+        "column": 0
+      }
+    ]
+  },
+  {
     "case_id": "SEC-ENV-01-002",
     "status": "INVALID",
     "diagnostics": [
@@ -1479,16 +1683,6 @@
         "column": 0
       }
     ]
-  },
-  {
-    "case_id": "SEC-FORK-01-001",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "SEC-FORK-01-002",
-    "status": "VALID",
-    "diagnostics": []
   },
   {
     "case_id": "SEC-INJ-01-001",
@@ -1511,19 +1705,43 @@
     "diagnostics": []
   },
   {
-    "case_id": "SEC-MASK-01-003",
+    "case_id": "SEC-INJ-01-005",
     "status": "VALID",
     "diagnostics": []
   },
   {
-    "case_id": "SEC-MASK-01-004",
+    "case_id": "SEC-NET-01-001",
     "status": "VALID",
     "diagnostics": []
   },
   {
-    "case_id": "SEC-MASK-01-006",
+    "case_id": "SEC-ORG-01-002",
     "status": "VALID",
     "diagnostics": []
+  },
+  {
+    "case_id": "SEC-PERM-01-001",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[perm-read].permissions: unknown property",
+        "line": 0,
+        "column": 0
+      }
+    ]
+  },
+  {
+    "case_id": "SEC-PERM-01-002",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[perm-write-denied].permissions: unknown property",
+        "line": 0,
+        "column": 0
+      }
+    ]
   },
   {
     "case_id": "SEC-RUN-01-001",
@@ -1538,6 +1756,16 @@
   {
     "case_id": "SEC-RUN-01-003",
     "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "SEC-SECMGMT-01-001",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "SEC-SECMGMT-01-002",
+    "status": "SKIP",
     "diagnostics": []
   },
   {
@@ -1574,6 +1802,31 @@
     ]
   },
   {
+    "case_id": "SEC-TOCTOU-01-001",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "SEC-TOCTOU-01-002",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "SEC-TOCTOU-01-003",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "SEC-TOKEN-01-003",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "SEC-WCMD-01-001",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
     "case_id": "SEC-WCMD-01-003",
     "status": "INVALID",
     "diagnostics": [
@@ -1598,6 +1851,11 @@
     ]
   },
   {
+    "case_id": "SEC-WFRUN-01-001",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
     "case_id": "USE-ACT-01-001",
     "status": "VALID",
     "diagnostics": []
@@ -1608,12 +1866,22 @@
     "diagnostics": []
   },
   {
-    "case_id": "USE-ANNOT-01-002",
+    "case_id": "USE-ACT-01-003",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
+    "case_id": "USE-ANNOT-01-001",
     "status": "VALID",
     "diagnostics": []
   },
   {
-    "case_id": "USE-CONC-01-001",
+    "case_id": "USE-API-01-001",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
+    "case_id": "USE-CLI-01-001",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1630,12 +1898,7 @@
     ]
   },
   {
-    "case_id": "USE-CTX-01-001",
-    "status": "VALID",
-    "diagnostics": []
-  },
-  {
-    "case_id": "USE-CTX-01-002",
+    "case_id": "USE-CONT-01-001",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1650,6 +1913,11 @@
     "diagnostics": []
   },
   {
+    "case_id": "USE-DIR-01-001",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
     "case_id": "USE-DIR-01-002",
     "status": "SKIP",
     "diagnostics": []
@@ -1660,7 +1928,7 @@
     "diagnostics": []
   },
   {
-    "case_id": "USE-DISP-01-002",
+    "case_id": "USE-DISP-01-003",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1670,12 +1938,44 @@
     "diagnostics": []
   },
   {
+    "case_id": "USE-DOC-01-002",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
+    "case_id": "USE-DOC-01-004",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "USE-DOC-01-005",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "USE-DOC-01-006",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
+    "case_id": "USE-DOC-01-007",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "jobs[deploy].environment: unknown property",
+        "line": 0,
+        "column": 0
+      }
+    ]
+  },
+  {
     "case_id": "USE-ENV-01-001",
     "status": "VALID",
     "diagnostics": []
   },
   {
-    "case_id": "USE-ENV-01-002",
+    "case_id": "USE-ENV-01-003",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1700,6 +2000,11 @@
     "diagnostics": []
   },
   {
+    "case_id": "USE-LBL-01-002",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
     "case_id": "USE-LBL-01-003",
     "status": "SKIP",
     "diagnostics": []
@@ -1715,25 +2020,22 @@
     "diagnostics": []
   },
   {
-    "case_id": "USE-NEST-01-002",
-    "status": "INVALID",
-    "diagnostics": [
-      {
-        "severity": "Error",
-        "message": "jobs[caller].steps[0].uses: 格式错误：pluginname@version，其中 pluginname 为 1~50 位字母、数字、\"-\"、\"_\"，version（官方插件不填）为 00-99.00-99.00-99 三段两位数字",
-        "line": 0,
-        "column": 0
-      },
-      {
-        "severity": "Error",
-        "message": "stages[default].jobs[caller]: 插件./.gitcode/workflows/reusable-level1.yml不存在",
-        "line": 0,
-        "column": 0
-      }
-    ]
+    "case_id": "USE-LBL-01-006",
+    "status": "VALID",
+    "diagnostics": []
   },
   {
-    "case_id": "USE-OS-01-001",
+    "case_id": "USE-MASK-01-002",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "USE-NEST-01-002",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "USE-ONBD-01-002",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1743,12 +2045,27 @@
     "diagnostics": []
   },
   {
+    "case_id": "USE-PATH-01-001",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
     "case_id": "USE-PERM-01-001",
     "status": "VALID",
     "diagnostics": []
   },
   {
+    "case_id": "USE-RES-01-001",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
     "case_id": "USE-RUN-01-001",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
+    "case_id": "USE-RUN-01-003",
     "status": "VALID",
     "diagnostics": []
   },
@@ -1773,12 +2090,34 @@
     "diagnostics": []
   },
   {
+    "case_id": "USE-UNKN-01-001",
+    "status": "INVALID",
+    "diagnostics": [
+      {
+        "severity": "Error",
+        "message": "run-name: unknown property",
+        "line": 1,
+        "column": 11
+      }
+    ]
+  },
+  {
+    "case_id": "USE-UNKN-01-002",
+    "status": "VALID",
+    "diagnostics": []
+  },
+  {
     "case_id": "USE-UNKN-01-003",
     "status": "VALID",
     "diagnostics": []
   },
   {
     "case_id": "USE-UNKN-01-004",
+    "status": "SKIP",
+    "diagnostics": []
+  },
+  {
+    "case_id": "USE-VARS-01-001",
     "status": "SKIP",
     "diagnostics": []
   },

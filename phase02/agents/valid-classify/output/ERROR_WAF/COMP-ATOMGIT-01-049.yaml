@@ -37,6 +37,12 @@ assertions:
     must_contain: REF_PREFIX=refs
   - type: positive
     target: run_logs
+    must_contain: REF_NAME_NO_PREFIX=
+  - type: negative
+    target: run_logs
+    must_not_contain: REF_NAME_NO_PREFIX=refs/
+  - type: positive
+    target: run_logs
     must_contain: ACTOR_LEN=
 teardown:
   reset: fixture

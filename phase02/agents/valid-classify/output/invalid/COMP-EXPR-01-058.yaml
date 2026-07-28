@@ -19,17 +19,37 @@ workflow: |
       runs-on: [ubuntu-latest, x64, small]
       steps:
         - name: Equality
-          if: ${{ atomgit.ref_name == 'main' || true }}
+          if: ${{ atomgit.event_name == 'workflow_dispatch' }}
           run: |
             echo "eq_passed"
+        - name: Equality negative
+          if: ${{ atomgit.event_name == 'push' }}
+          run: |
+            echo "eq_negative_unexpected"
         - name: Not equal
           if: ${{ atomgit.ref_name != 'nonexistent' }}
           run: |
             echo "ne_passed"
+        - name: Not operator
+          if: ${{ !false }}
+          run: |
+            echo "not_passed"
         - name: Greater than
           if: ${{ 5 > 3 }}
           run: |
             echo "gt_passed"
+        - name: Less than
+          if: ${{ 2 < 3 }}
+          run: |
+            echo "lt_passed"
+        - name: Greater or equal
+          if: ${{ 3 >= 3 }}
+          run: |
+            echo "ge_passed"
+        - name: Less or equal
+          if: ${{ 3 <= 4 }}
+          run: |
+            echo "le_passed"
         - name: Logical combo
           if: ${{ true && (false || true) }}
           run: |
@@ -47,9 +67,24 @@ assertions:
     must_contain: ne_passed
   - type: positive
     target: run_logs
+    must_contain: not_passed
+  - type: positive
+    target: run_logs
     must_contain: gt_passed
   - type: positive
     target: run_logs
+    must_contain: lt_passed
+  - type: positive
+    target: run_logs
+    must_contain: ge_passed
+  - type: positive
+    target: run_logs
+    must_contain: le_passed
+  - type: positive
+    target: run_logs
     must_contain: logic_passed
+  - type: negative
+    target: run_logs
+    must_not_contain: eq_negative_unexpected
 teardown:
   reset: fixture

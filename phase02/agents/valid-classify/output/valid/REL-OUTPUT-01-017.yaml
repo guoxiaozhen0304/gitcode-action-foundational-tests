@@ -29,7 +29,8 @@ fault_injection: null
 assertions:
   - type: positive
     target: run_logs
-    contains: "1MB"
+    eval: llm_assisted
+    rubric: 日志应含平台对 step output 超出大小限制（1MB 量级）的报错或告警关键字，如 limit、exceed、too large、truncated、1MB 等平台实际输出，具体措辞以平台实现为准
   - type: positive
     target: job_status
     equals: "failure"

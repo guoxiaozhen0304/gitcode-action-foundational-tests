@@ -5,7 +5,7 @@ priority: P1
 title: "workflow_call 嵌套边界——2 层嵌套调用应成功执行"
 intent_ref: INTENT-REL-023
 setup:
-  repo_fixture: default
+  repo_fixture: reusable-workflow
   secrets: []
   variables: {}
   branch_protection: default

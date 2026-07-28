@@ -1,0 +1,25 @@
+id: SEC-SECMGMT-01-002
+dimensions: ["security"]
+dimension: security
+priority: P1
+title: "无权限角色对 secret 的创建/更新/删除必须被拒且不改变现有集合"
+intent_ref: INTENT-SEC-038
+setup:
+  repo_fixture: with-secrets
+  secrets: ["DEPLOY_TOKEN"]
+workflow: null
+trigger:
+  event: workflow_dispatch
+  as: untrusted_contributor
+  params:
+    ops: [secret_create, secret_update, secret_delete]
+fault_injection: null
+assertions:
+  - type: positive
+    target: secret_mgmt_api
+    equals: "http_403_and_secret_set_unchanged"
+  - type: negative
+    target: secret_mgmt_api
+    must_not_equal: "unauthorized_write_applied"
+teardown:
+  reset: fixture

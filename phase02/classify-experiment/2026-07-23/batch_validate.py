@@ -83,7 +83,9 @@ def main():
     error_waf_dir = out_dir / "ERROR_WAF"
     skip_dir = out_dir / "SKIP"
     for d in [valid_dir, invalid_dir, error_waf_dir, skip_dir]:
-        d.mkdir(parents=True, exist_ok=True)
+        if d.exists():
+            shutil.rmtree(d)
+        d.mkdir(parents=True)
 
     cookie = os.environ.get("GITCODE_COOKIE") or load_env().get("GITCODE_COOKIE", "")
     if not cookie:

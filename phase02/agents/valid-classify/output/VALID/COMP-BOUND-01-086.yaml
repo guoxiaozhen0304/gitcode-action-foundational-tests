@@ -30,8 +30,7 @@ workflow: |
       steps:
         - name: Matrix value
           run: |
-            echo "OS=${{ matrix.os }}"
-            echo "VER=${{ matrix.version }}"
+            echo "INSTANCE=${{ matrix.os }}-${{ matrix.version }}"
             echo "matrix_ok"
 trigger:
   event: workflow_dispatch
@@ -41,5 +40,17 @@ assertions:
   - type: positive
     target: run_logs
     must_contain: matrix_ok
+  - type: positive
+    target: run_logs
+    must_contain: INSTANCE=linux-1
+  - type: positive
+    target: run_logs
+    must_contain: INSTANCE=linux-3
+  - type: negative
+    target: run_logs
+    must_not_contain: INSTANCE=linux-2
+  - type: positive
+    target: job_instance_count
+    equals: 2
 teardown:
   reset: fixture

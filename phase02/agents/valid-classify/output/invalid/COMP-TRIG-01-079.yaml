@@ -1,0 +1,54 @@
+id: COMP-TRIG-01-079
+dimensions: [completeness]
+dimension: completeness
+priority: P1
+title: 触发事件 types 取值与过滤边界验证
+intent_ref: INTENT-COMP-079
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+fault_injection: null
+workflow: |
+  on:
+    pull_request:
+      types: [open, merge]
+  jobs:
+    verify:
+      name: Verify trigger types boundary
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Print and check event action
+          run: |
+            ACTION="${{ atomgit.event.action }}"
+            echo "PR_ACTION=$ACTION"
+            if [ "$ACTION" = "open" ] || [ "$ACTION" = "merge" ]; then
+              echo "type_allowed"
+            else
+              echo "type_unexpected"
+            fi
+trigger:
+  event: pull_request
+  as: maintainer
+  params: {}
+assertions:
+  - type: positive
+    target: run_status
+    equals: success
+  - type: positive
+    target: run_logs
+    must_contain: type_allowed
+  - type: negative
+    target: run_logs
+    must_not_contain: type_unexpected
+  - type: negative
+    target: workflow_parse
+    eval: llm_assisted
+    rubric: "变体：types 配置非法值（如 opened）提交时平台应拒绝该 workflow，并提示允许的 types 取值"
+  - type: negative
+    target: run_created
+    eval: llm_assisted
+    rubric: "变体：on.pull_request 未指定 types 时，open/update/reopen 等默认类型事件均应触发 workflow（默认 types 生效）"
+teardown:
+  reset: fixture
