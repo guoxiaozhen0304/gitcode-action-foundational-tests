@@ -1,0 +1,24 @@
+id: SEC-WFRUN-01-001
+dimensions: ["security", "compatibility"]
+dimension: security
+priority: P1
+title: "不可信运行绝不应存在隐式拉起高权限后续运行的链式路径"
+intent_ref: INTENT-SEC-044
+setup:
+  repo_fixture: default
+workflow: null
+trigger:
+  event: pull_request
+  as: untrusted_contributor
+  params: {}
+fault_injection: null
+assertions:
+  - type: negative
+    target: run_list
+    must_not_contain: "implicit_privileged_run_after_fork_pr"
+  - type: nonfunctional
+    target: documentation
+    eval: llm_assisted
+    rubric: "文档应明示不支持 workflow_run 及替代安全模式（如 pull_request_target + 审批/label gate）；与 INTENT-COMPAT-037 事件降级面共享证据链"
+teardown:
+  reset: none

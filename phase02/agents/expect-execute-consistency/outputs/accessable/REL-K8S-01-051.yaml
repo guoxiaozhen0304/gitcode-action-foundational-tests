@@ -1,0 +1,33 @@
+id: REL-K8S-01-051
+dimensions: [reliability]
+dimension: reliability
+priority: P2
+title: "同一集群重复接入的幂等性"
+intent_ref: INTENT-REL-090
+setup:
+  repo_fixture: default
+  secrets: []
+  variables:
+    repeat_onboarding_times: ">=2"
+    running_task_present: "true"
+  branch_protection: default
+workflow: null
+trigger:
+  event: manual
+  as: maintainer
+  params:
+    platform_op: cluster_re_onboarding
+fault_injection: null
+assertions:
+  - type: positive
+    target: cluster_record_count
+    equals: "1"
+  - type: positive
+    target: npu_resource_count_delta
+    equals: "0"
+  - type: negative
+    target: running_task_impact
+    eval: llm_assisted
+    rubric: "不应出现重复接入导致的资源虚增或既有运行中任务中断。输入退化声明：oracle 仅有 xlsx 预期结果列（能正常运行），既有任务影响细项需结合实测环境判定"
+teardown:
+  reset: fixture

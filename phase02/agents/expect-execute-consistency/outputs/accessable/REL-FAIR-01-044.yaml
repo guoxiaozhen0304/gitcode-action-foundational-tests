@@ -1,0 +1,71 @@
+id: REL-FAIR-01-044
+dimensions: [reliability]
+dimension: reliability
+priority: P1
+title: "并发资源公平性——2 个 workflow 各 3 个 jobs 应被公平调度"
+intent_ref: INTENT-REL-044
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    wx_job1:
+      name: workflow X job 1
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step
+          run: |
+            sleep 30
+    wx_job2:
+      name: workflow X job 2
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step
+          run: |
+            sleep 30
+    wx_job3:
+      name: workflow X job 3
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step
+          run: |
+            sleep 30
+    wy_job1:
+      name: workflow Y job 1
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step
+          run: |
+            sleep 30
+    wy_job2:
+      name: workflow Y job 2
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step
+          run: |
+            sleep 30
+    wy_job3:
+      name: workflow Y job 3
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: sleep step
+          run: |
+            sleep 30
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+assertions:
+  - type: nonfunctional
+    target: startup_time_diff_seconds
+    le: "60"
+  - type: negative
+    target: serial_execution_detected
+    equals: "true"
+teardown:
+  reset: none
