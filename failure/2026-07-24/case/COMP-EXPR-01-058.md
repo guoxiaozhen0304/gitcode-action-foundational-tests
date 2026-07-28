@@ -1,10 +1,36 @@
-## 校验失败 · COMP-EXPR-01-058 · 表达式运算符与优先级边界行为
+## 失败分诊 · COMP-EXPR-01-058 · 表达式运算符与优先级边界行为
 
-**判定结果**: INVALID
+**判定结果**: INVALID（平台 Schema 校验拒绝）
+**根因初判**: 平台不支持复杂表达式运算符（`!false`、`&&`、`||`、比较运算符 `<`/`>`/`>=`/`<=`）
+**责任人**: Phase 01（合约生成需适配平台限制）
 
-**根因**: 平台 schema 校验不通过
-**诊断信息** (1 条):
-  - [Error] L0:C0 — jobs[verify].steps[2].if: if表达式无法解析 {0}
+**证据**:
 
-- 维度: completeness | 优先级: P1
-- intent_ref: KEEP-TC-160~175 | trigger: workflow_dispatch
+- **违反的规则**: 规则 4（`if:` 表达式：仅 `always()` 确认可用，条件表达式运算符未经实测确认）
+- **具体的 YAML 差异**: 
+  ```yaml
+  # 当前 YAML（无效）:
+        - name: Not operator
+          if: ${{ !false }}
+        - name: Greater than
+          if: ${{ 5 > 3 }}
+        - name: Logical combo
+          if: ${{ true && (false || true) }}
+  ```
+  
+- **对照 VALIDATION-RULES.md** `phase01/schema/VALIDATION-RULES.md`:
+  - 规则 4: "success / failure 门控暂无确认可用写法...表达式函数 `startsWith()` / `contains()` / `endsWith()` 带括号——是否被平台接受同样待实测"
+  - 规则 4 指出平台表达式能力极为有限，仅 `always()` 确认可用，运算符与逻辑组合均未确认
+
+**置信度**: 高（平台 Schema 明确拒绝，表达式中含 `&&`、`||`、`!` 等运算符属未确认语法）
+
+**影响**:
+- **阻塞性**: 🔴阻塞 — 无法通过平台 YAML 校验
+- **静默性**: 🟢明确报错 — 平台返回表达式语法错误
+- **影响面**: 所有含逻辑运算符（`&&`/`||`/`!`）及比较运算符的 `if:` 表达式均可能被拒
+- **综合**: 表达式能力受限，仅 `always()` 和简单 equality（`==`/`!=`）在未经确认范围
+- **是否有规避手段**: 部分 — 将条件判断移至 step 内 shell 脚本；`equality` 简单比较可能可用但需逐项实测
+
+**建议**:
+- 将所有含 `!false`、`&&`、`||`、`<`、`>`、`>=`、`<=` 的 `if:` 表达式移除
+- 将逻辑判断下沉至各 step 的 shell 脚本中（`if [ ... ]`），通过 echo 输出标记供断言扫描
