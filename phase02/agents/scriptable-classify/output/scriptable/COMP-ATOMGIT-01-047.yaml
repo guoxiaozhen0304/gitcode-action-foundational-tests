@@ -35,6 +35,15 @@ workflow: |
             echo "ACTOR=${{ atomgit.actor }}"
             echo "REPO_URL=${{ atomgit.repositoryUrl }}"
             echo "BASE_REF=${{ atomgit.base_ref }}"
+        - name: Check sha length and ref name prefix
+          run: |
+            SHA="${{ atomgit.sha }}"
+            echo "SHA_LEN=${#SHA}"
+            REF_NAME="${{ atomgit.ref_name }}"
+            case "$REF_NAME" in
+              refs/*) echo "REF_NAME_HAS_PREFIX=yes" ;;
+              *) echo "REF_NAME_HAS_PREFIX=no" ;;
+            esac
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -49,5 +58,11 @@ assertions:
   - type: positive
     target: run_logs
     must_contain: REPO=
+  - type: positive
+    target: run_logs
+    must_contain: SHA_LEN=40
+  - type: positive
+    target: run_logs
+    must_contain: REF_NAME_HAS_PREFIX=no
 teardown:
   reset: fixture

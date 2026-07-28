@@ -157,9 +157,11 @@ assertions:
 
 对每个 accessable YAML，逐条检查 §判定规则。命中任意一条 → 移至 `not-scriptable/`，否则移至 `scriptable/`。
 
-### Step 3: 输出汇总
+### Step 3: 生成报告
 
-输出 `scriptable-classify/output/` 下的文件结构：
+分类完成后，基于 `scriptable/` 和 `not-scriptable/` 的实际文件生成 `output/report.md`。
+
+输出目录结构：
 
 ```
 scriptable-classify/output/
@@ -168,23 +170,41 @@ scriptable-classify/output/
 └── report.md            ← 汇总：各类数量、每个 not-scriptable 的原因
 ```
 
-输出到 `phase02/agents/scriptable-classify/output/report.md`：
+报告必须包含：
+
+1. **总览**：scriptable / not-scriptable 数量
+2. **按规则分布**：Rule 1/2/2b/4/5/Hardcoded 各自数量
+3. **不可脚本化明细**：按规则分组列出所有 case ID
+
+用 Python 扫描 `not-scriptable/` 目录中每个 YAML，按优先级判定归属规则（Hardcoded > Rule 1 > Rule 2b > Rule 2 > Rule 4 > Rule 5），写入 `report.md`。
 
 ```markdown
 # Scriptable Classify Report
 
 ## 总览
-
 | 分类 | 数量 |
 |------|:---:|
 | scriptable | N |
 | not-scriptable | N |
 
-## 不可脚本化明细
+## 按规则分布
+| 规则 | 数量 |
+|------|:---:|
+| Rule 1 (schedule) | N |
+| Rule 2 (complex target) | N |
+| Rule 2b (fault injection) | N |
+| Rule 4 (timing) | N |
+| Rule 5 (UI) | N |
+| Hardcoded | N |
 
-| Case ID | 命中规则 |
-|---------|------|
-| xxx | trigger = schedule |
+## 不可脚本化明细
+### Rule 1: schedule trigger
+- CASE-ID
+
+### Rule 2: complex target
+- CASE-ID
+
+...
 ```
 
 ## 护栏

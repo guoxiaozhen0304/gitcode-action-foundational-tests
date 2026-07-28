@@ -21,7 +21,7 @@ workflow: |
           uses: cache
           with:
             path: cache_data
-            key: cache-${{ matrix.index }}
+            key: cache-${{ atomgit.run_number }}
         - name: generate cache data
           run: |
             mkdir -p cache_data

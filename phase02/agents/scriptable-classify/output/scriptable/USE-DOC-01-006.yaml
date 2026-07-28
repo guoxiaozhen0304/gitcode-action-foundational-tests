@@ -1,0 +1,30 @@
+id: USE-DOC-01-006
+dimensions: ["usability"]
+dimension: usability
+priority: P2
+title: "syntax-reference 章节编号连续性扫描"
+intent_ref: INTENT-USE-034
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: null
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: negative
+    target: documentation
+    eval: "deterministic"
+    criterion: "正则扫描 syntax-reference 各页二级编号并检测连续性；workflow-commands.md 缺 5.5、trigger-events.md 缺 1.7 且无说明即不合格"
+
+teardown:
+  reset: none

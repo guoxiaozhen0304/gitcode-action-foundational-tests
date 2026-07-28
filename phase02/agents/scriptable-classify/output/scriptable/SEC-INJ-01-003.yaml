@@ -9,7 +9,7 @@ setup:
 workflow: |
   on:
     issue_comment:
-      types: [created]
+      types: [created, edited]
   jobs:
     comment-inj:
       name: Test comment injection
