@@ -11,19 +11,22 @@
   },
   {
     "case_id": "COMP-ATOMGIT-01-047",
-    "status": "ERROR_WAF",
+    "status": "VALID",
+    "via": "WAF_WHITELIST",
     "diagnostics": [],
     "http_status": 418
   },
   {
     "case_id": "COMP-ATOMGIT-01-048",
-    "status": "ERROR_WAF",
+    "status": "VALID",
+    "via": "WAF_WHITELIST",
     "diagnostics": [],
     "http_status": 418
   },
   {
     "case_id": "COMP-ATOMGIT-01-049",
-    "status": "ERROR_WAF",
+    "status": "VALID",
+    "via": "WAF_WHITELIST",
     "diagnostics": [],
     "http_status": 418
   },
@@ -294,7 +297,8 @@
   },
   {
     "case_id": "COMP-SCRIPT-01-082",
-    "status": "ERROR_WAF",
+    "status": "VALID",
+    "via": "WAF_WHITELIST",
     "diagnostics": [],
     "http_status": 418
   },
@@ -1288,13 +1292,15 @@
   },
   {
     "case_id": "COMPAT-TOKEN-01-001",
-    "status": "ERROR_WAF",
+    "status": "VALID",
+    "via": "WAF_WHITELIST",
     "diagnostics": [],
     "http_status": 418
   },
   {
     "case_id": "COMPAT-TOKEN-01-002",
-    "status": "ERROR_WAF",
+    "status": "VALID",
+    "via": "WAF_WHITELIST",
     "diagnostics": [],
     "http_status": 418
   },
@@ -1497,7 +1503,8 @@
   },
   {
     "case_id": "REL-OUTPUT-01-017",
-    "status": "ERROR_WAF",
+    "status": "VALID",
+    "via": "WAF_WHITELIST",
     "diagnostics": [],
     "http_status": 418
   },

@@ -4,25 +4,28 @@
 
 | 分组 | 数量 |
 |------|:---:|
-| valid | 221 (+7 WAF whitelist) |
+| valid (direct) | 214 |
+| valid (WAF whitelist) | 7 |
 | invalid | 63 |
 | WAF | 0 |
 | SKIP | 23 |
 | **total** | **307** |
 
-## WAF 白名单
+## WAF 白名单 (11 total, 7 hit this batch)
 
-| Case ID | 拦截原因 |
-|---------|------|
-| COMP-ATOMGIT-01-047 | workflow body 含 `${}` 触发 WAF，人工验证通过 |
-| COMP-ATOMGIT-01-048 | 同上 |
-| COMP-ATOMGIT-01-049 | 同上 |
-| COMP-SCRIPT-01-082 | 同上 |
-| COMPAT-TOKEN-01-001 | token 值在 YAML 中触发注入检测 |
-| COMPAT-TOKEN-01-002 | 同上 |
-| REL-OUTPUT-01-017 | ATOMGIT_OUTPUT 相关模式触发 WAF |
-
-
+| Case ID | 拦截原因 | This Batch |
+|---------|------|:---:|
+| COMP-ATOMGIT-01-047 | workflow body 含 `${}` 触发 WAF，人工验证通过 | yes |
+| COMP-ATOMGIT-01-048 | 同上 | yes |
+| COMP-ATOMGIT-01-049 | 同上 | yes |
+| COMP-SCRIPT-01-082 | 同上 | yes |
+| COMPAT-TOKEN-01-001 | token 值在 YAML 中触发注入检测 | yes |
+| COMPAT-TOKEN-01-002 | 同上 | yes |
+| REL-LOG-01-040 | 日志相关表达式触发 WAF（不在本批次 scriptable 中） | — |
+| REL-OUTPUT-01-017 | ATOMGIT_OUTPUT 相关模式触发 WAF | yes |
+| SEC-ENV-WAIT-02-001 | 环境等待相关（不在本批次 scriptable 中） | — |
+| SEC-NAME-01-002 | secret 名触发 WAF（不在本批次 scriptable 中） | — |
+| USE-MASK-01-001 | secret masking 相关（不在本批次 scriptable 中） | — |
 
 ## Invalid 明细 (63)
 
