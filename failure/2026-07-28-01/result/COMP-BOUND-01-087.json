@@ -1,0 +1,69 @@
+{
+  "case_id": "COMP-BOUND-01-087",
+  "title": "步骤输出与跨 job 传递边界验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-087",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "0856f5efb4a447b3a4522205cd3fd67a",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 70,
+  "log_fingerprint": "89c05354e6bebe8a",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/0856f5efb4a447b3a4522205cd3fd67a",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'K1=val1'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'K2=val2'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'output_ok'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'DECLARED=val1'",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'UNDECLARED=[]'",
+      "actual": "absent"
+    },
+    {
+      "kind": "leak",
+      "type": "negative",
+      "target": "run_logs",
+      "pass": true,
+      "is_security_critical": true,
+      "expected": "plaintext 'UNDECLARED=[val2]' 0 hits",
+      "actual": 0
+    }
+  ]
+}

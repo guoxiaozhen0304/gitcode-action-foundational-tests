@@ -1,0 +1,7 @@
+[2026/07/28 13:20:32.183 GMT+08:00] [INFO] Job(1531652578574217216_1531652578549051399) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/8bf2b047-5569-4242-8942-cf73b3705bee.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/8bf2b047-5569-4242-8942-cf73b3705bee.sh
+declared=x64 actual=x86_64
+
+[2026/07/28 13:20:32.256 GMT+08:00] [INFO] Job(1531652578574217216_1531652578549051401) duration check: true

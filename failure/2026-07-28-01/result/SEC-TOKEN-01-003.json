@@ -1,0 +1,37 @@
+{
+  "case_id": "SEC-TOKEN-01-003",
+  "title": "run 结束后旧 ATOMGIT_TOKEN 调用任何 API 必须失效",
+  "dimension": "security",
+  "priority": "P1",
+  "intent_ref": "INTENT-SEC-037",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "669152aa712e4d10abe7152411bb87c9",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 30,
+  "log_fingerprint": "d9ca503d8f3cd1df",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/669152aa712e4d10abe7152411bb87c9",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'in_run_token_operational'",
+      "actual": "absent"
+    },
+    {
+      "kind": "leak",
+      "type": "negative",
+      "target": "run_logs",
+      "pass": true,
+      "is_security_critical": true,
+      "expected": "plaintext 'http_2xx_with_post_run_token' 0 hits",
+      "actual": 0
+    }
+  ]
+}

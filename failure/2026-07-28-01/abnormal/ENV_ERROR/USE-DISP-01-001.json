@@ -1,0 +1,19 @@
+{
+  "case_id": "USE-DISP-01-001",
+  "title": "workflow_dispatch 必填参数未提供时应给出明确校验错误",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-030",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "ENV_ERROR",
+  "verdict_flags": [],
+  "reason": "dispatch_workflow 返回 HTTP 400: {\"error_code\": 400, \"error_code_name\": \"THIRD_ERROR\", \"error_message\": \"Actions手动触发Inputs校验失败\", \"trace_id\": \"28115896bc1bb22d6dccfb51df621f6b\"}",
+  "gitcode_run_id": "",
+  "run_status": "ENV_ERROR",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 11,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

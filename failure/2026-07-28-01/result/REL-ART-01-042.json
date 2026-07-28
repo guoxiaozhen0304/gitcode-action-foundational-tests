@@ -1,0 +1,28 @@
+{
+  "case_id": "REL-ART-01-042",
+  "title": "artifact 大小上限探测——2GB 上传应完整成功（MD5 一致）或上传阶段明确拒绝",
+  "dimension": "reliability",
+  "priority": "P2",
+  "intent_ref": "INTENT-REL-078",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "42f922b918024ad6a6a122cf78956a67",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 2,
+  "duration_seconds": 88,
+  "log_fingerprint": "4eb88098f2bb23f2",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/42f922b918024ad6a6a122cf78956a67",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'md5_match=true_if_upload_success'",
+      "actual": "absent"
+    }
+  ]
+}

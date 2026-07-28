@@ -1,0 +1,19 @@
+[2026/07/28 12:48:37.565 GMT+08:00] [INFO] Job(1531644547774156800_1531644547748990983) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/16c096e5-24b7-4a12-955a-c08645d47b45.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/16c096e5-24b7-4a12-955a-c08645d47b45.sh
+SHA=
+REF=main
+REF_NAME=main
+REF_TYPE=branch
+EVENT=Manual
+REPO=ComputingActionTest/gitcode-test-0
+RUN_NUM=2
+RUN_ATT=
+WF=.gitcode/workflows/comp-atomgit-01-047.yml
+SERVER=https://atomgit.com
+API=https://api.atomgit.com
+WORKSPACE=/home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-0
+ACTOR=yyl-support
+REPO_URL=https://gitcode.com/ComputingActionTest/gitcode-test-0.git
+BASE_REF=main

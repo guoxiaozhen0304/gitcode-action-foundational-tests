@@ -1,0 +1,36 @@
+{
+  "case_id": "COMP-PR-01-004",
+  "title": "pre-merge ref 在 PR 存续期可解析且语义裁定",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-033",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "0ae849084f7b48b4ab9f450e0237b91c",
+  "run_status": "FAILED",
+  "head_sha": "3175f1cb90c25d48f5a23d027c353aaf401c8d39",
+  "job_count": 1,
+  "duration_seconds": 50,
+  "log_fingerprint": "ec782fcbff600bf3",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/0ae849084f7b48b4ab9f450e0237b91c",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'PRE_MERGE_MARKER'",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'REF_CONTENT_DUMPED'",
+      "actual": "absent"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+[2026/07/28 13:17:02.610 GMT+08:00] [INFO] Job(1531651699410604032_1531651699385438215) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/e616ac63-2042-41af-9463-1f912d640acc.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/e616ac63-2042-41af-9463-1f912d640acc.sh
+fallocate: fallocate failed: No space left on device
+dd: error writing 'testfile': No space left on device
+36189+0 records in
+36188+0 records out
+37946486784 bytes (38 GB, 35 GiB) copied, 317.101 s, 120 MB/s
+::error::Process exited with code 1
+
+ 

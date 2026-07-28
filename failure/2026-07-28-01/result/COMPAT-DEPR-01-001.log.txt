@@ -1,0 +1,7 @@
+[2026/07/28 13:03:37.075 GMT+08:00] [INFO] Job(1531648320789299200_1531648320755744775) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/0428f6bc-10c8-4afd-be56-5ba585a98ccd.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/0428f6bc-10c8-4afd-be56-5ba585a98ccd.sh
+::set-env name=MY_VAR::hello
+MY_VAR=
+done

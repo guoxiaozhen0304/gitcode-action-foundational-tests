@@ -1,0 +1,35 @@
+{
+  "case_id": "SEC-SECMGMT-01-001",
+  "title": "Secret 写入后任何 API/UI 路径绝不应回读明文",
+  "dimension": "security",
+  "priority": "P1",
+  "intent_ref": "INTENT-SEC-038",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "91a0d1167490434ea44b2329de470a94",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 37,
+  "log_fingerprint": "bac0fbef941086b5",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-2/actions/runs/91a0d1167490434ea44b2329de470a94",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'masked_with_asterisks'",
+      "actual": "absent"
+    },
+    {
+      "kind": "config_probe",
+      "pass": true,
+      "not_configured": false,
+      "expected": "资源已配置（日志无 'configured_len=0'）",
+      "actual": "configured"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "case_id": "COMPAT-PR-01-009",
+  "title": "pull_request 触发时 atomgit.sha/ref 的代码版本语义（对齐 GitHub merge commit 模型）",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-039",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "f580d2c15e7344839512d7041855546d",
+  "run_status": "FAILED",
+  "head_sha": "9943fa681663653d6f14d3b6e930ec40271b33b0",
+  "job_count": 1,
+  "duration_seconds": 28,
+  "log_fingerprint": "4ab1f1c49ad71317",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/f580d2c15e7344839512d7041855546d",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'PROBE_DONE'",
+      "actual": "absent"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+[2026/07/28 13:00:57.861 GMT+08:00] [INFO] Job(1531647652804444160_1531647652775084039) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/ed9216d6-e399-4f98-8fcb-1b815d468676.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/ed9216d6-e399-4f98-8fcb-1b815d468676.sh
+
+::debug::Using workspace directory: /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-0
+Uploading artifact "cross-job-artifact" from paths: /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-0/artifacts/marker.txt
+::debug::followSymbolicLinks 'true'
+::debug::implicitDescendants 'true'
+::debug::matchDirectories 'true'
+::debug::omitBrokenSymbolicLinks 'true'
+::debug::followSymbolicLinks 'true'
+::debug::implicitDescendants 'true'
+::debug::matchDirectories 'true'
+::debug::omitBrokenSymbolicLinks 'true'
+::debug::Search path '/home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-0/artifacts/marker.txt'
+Found 1 file(s) to upload
+::debug::[diagnostic] First 1 matched file(s): /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-0/artifacts/marker.txt
+::debug::Resolved root directory: /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-0/artifacts
+Creating zip archive from 1 file(s)...
+Zip archive created: /tmp/artifact-1785214871200-8dd8efa6.zip (~0 MB, 164 bytes)
+Creating artifact "cross-job-artifact" (size: 164 bytes, workflow: 4456b1d39f48433fb6ff4a5a5f1166db)...
+[Twirp] trace-id: 084de8b973d3bcc93dd74147580ca388
+[Twirp] error trace-id: 084de8b973d3bcc93dd74147580ca388
+::debug::Temp zip file removed: /tmp/artifact-1785214871200-8dd8efa6.zip
+::error::Upload artifact failed: Artifact with name already exists: cross-job-artifact, repoId=10431319, workflowId=4456b1d39f48433fb6ff4a5a5f1166db
+

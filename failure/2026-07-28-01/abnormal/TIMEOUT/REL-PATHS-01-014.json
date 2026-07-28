@@ -1,0 +1,19 @@
+{
+  "case_id": "REL-PATHS-01-014",
+  "title": "paths 匹配边界值——变更恰好 300 个文件时 paths 过滤应生效",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-014",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "TIMEOUT",
+  "verdict_flags": [],
+  "reason": "超时 618s",
+  "gitcode_run_id": "",
+  "run_status": "TIMEOUT",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 618,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

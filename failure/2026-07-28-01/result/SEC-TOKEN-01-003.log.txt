@@ -1,0 +1,10 @@
+[2026/07/28 13:22:13.691 GMT+08:00] [INFO] Job(1531653004124233728_1531653004086484999) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/c48246b3-af15-488f-8f71-0fa45ff64a12.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/c48246b3-af15-488f-8f71-0fa45ff64a12.sh
+a78212cffb34e20cdb28cfd108f5fe5fcd909a8a	HEAD
+
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/86e5ff1d-83b1-4e48-b516-b3a1e4ecc505.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/86e5ff1d-83b1-4e48-b516-b3a1e4ecc505.sh
+IN_RUN_TOKEN_OPERATIONAL: token worked within scope during run

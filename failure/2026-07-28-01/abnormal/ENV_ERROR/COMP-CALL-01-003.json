@@ -1,0 +1,19 @@
+{
+  "case_id": "COMP-CALL-01-003",
+  "title": "本地路径 workflow_call 完整 secrets 映射正常执行",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-030",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "ENV_ERROR",
+  "verdict_flags": [],
+  "reason": "dispatch_workflow 返回 HTTP 400: {\"error_code\": 400, \"error_code_name\": \"THIRD_ERROR\", \"error_message\": \"获取任务caller引用的yml时失败，原因：未获取到流水线编排定义\", \"trace_id\": \"d4b4a5959d13ba80abda8e2ea3487142\"}",
+  "gitcode_run_id": "",
+  "run_status": "ENV_ERROR",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 12,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

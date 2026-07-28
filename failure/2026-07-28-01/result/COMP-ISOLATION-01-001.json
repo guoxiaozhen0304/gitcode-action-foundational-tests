@@ -1,0 +1,61 @@
+{
+  "case_id": "COMP-ISOLATION-01-001",
+  "title": "同一 workflow 先后 job 的文件系统相互隔离",
+  "dimension": "completeness",
+  "priority": "P0",
+  "intent_ref": "INTENT-COMP-011",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "296b200753e7453cb7b236a61451ce0b",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 3,
+  "duration_seconds": 118,
+  "log_fingerprint": "b746ffe0b17f616e",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/296b200753e7453cb7b236a61451ce0b",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "COMPLETED",
+      "actual": "FAILED"
+    },
+    {
+      "kind": "leak",
+      "type": "negative",
+      "target": "run_logs",
+      "pass": true,
+      "is_security_critical": true,
+      "expected": "plaintext 'secret data' 0 hits",
+      "actual": 0
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'file not found as expected'",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'PAYLOAD=shared payload'",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'artifact_read_ok'",
+      "actual": "absent"
+    }
+  ]
+}

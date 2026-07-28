@@ -1,0 +1,19 @@
+{
+  "case_id": "USE-DISP-01-003",
+  "title": "workflow_dispatch 手动触发 UI 与 YAML inputs 定义的集合一致性",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-051",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "ENV_ERROR",
+  "verdict_flags": [],
+  "reason": "dispatch_workflow 返回 HTTP 400: {\"error_code\": 400, \"error_code_name\": \"THIRD_ERROR\", \"error_message\": \"Actions手动触发Inputs校验失败\", \"trace_id\": \"4878fec50a5beb57a07cf386d15325f2\"}",
+  "gitcode_run_id": "",
+  "run_status": "ENV_ERROR",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 11,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

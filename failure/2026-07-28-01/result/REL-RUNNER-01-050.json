@@ -1,0 +1,28 @@
+{
+  "case_id": "REL-RUNNER-01-050",
+  "title": "架构标签调度正确性——x64 请求不得落到 arm64 节点（反之亦然）",
+  "dimension": "reliability",
+  "priority": "P1",
+  "intent_ref": "INTENT-REL-074",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "ffb34a58c9704beb8950b9ebaddaf4e1",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 2,
+  "duration_seconds": 44,
+  "log_fingerprint": "d404a64dc5e837b4",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/ffb34a58c9704beb8950b9ebaddaf4e1",
+  "assertion_results": [
+    {
+      "kind": "status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "all job/step green",
+      "actual": "job 'arm64 arch probe job' status=FAILED"
+    }
+  ]
+}

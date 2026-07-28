@@ -1,0 +1,19 @@
+{
+  "case_id": "COMPAT-TARGET-01-002",
+  "title": "pull_request_target 在 fork 场景下应保持 secret 隔离",
+  "dimension": "compatibility",
+  "priority": "P0",
+  "intent_ref": "INTENT-COMPAT-032",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "INCONCLUSIVE",
+  "verdict_flags": [],
+  "reason": "untrusted_contributor 执行路径未实现，拒绝以 maintainer 假验证",
+  "gitcode_run_id": "",
+  "run_status": "INCONCLUSIVE",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 0,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

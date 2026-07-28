@@ -1,0 +1,28 @@
+{
+  "case_id": "COMP-PR-01-005",
+  "title": "源分支更新后 pre-merge ref 指向刷新验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-033",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "d62b55c857104d1996937dfa55787ef7",
+  "run_status": "FAILED",
+  "head_sha": "f4827985f8003aba6c2cd1eac113387c3f63d816",
+  "job_count": 1,
+  "duration_seconds": 43,
+  "log_fingerprint": "932f9f53074a33d7",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-3/actions/runs/d62b55c857104d1996937dfa55787ef7",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'REF_SHA_RECORDED'",
+      "actual": "absent"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "case_id": "COMP-ATOMGIT-01-047",
+  "title": "atomgit 核心上下文属性可访问性",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-047",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "563bcae353ea419c8b64b9bfde60b207",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 156,
+  "log_fingerprint": "b00afe45d93ac0e7",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-0/actions/runs/563bcae353ea419c8b64b9bfde60b207",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'SHA='",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'REF=refs/'",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'REPO='",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'SHA_LEN=40'",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'REF_NAME_HAS_PREFIX=no'",
+      "actual": "absent"
+    }
+  ]
+}

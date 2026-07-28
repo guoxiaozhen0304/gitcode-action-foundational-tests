@@ -1,0 +1,8 @@
+[2026/07/28 13:31:36.867 GMT+08:00] [INFO] Job(1531655366490337280_1531655366469365767) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/d3cc9bef-2781-46e0-9278-3408e06fcdf8.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/d3cc9bef-2781-46e0-9278-3408e06fcdf8.sh
+/home/slave1/runner/workers/0.0.4.4.version/_temp/d3cc9bef-2781-46e0-9278-3408e06fcdf8.sh: line 1: FMT_BRACE=${{ format('{{{0}}}', 'x') }}: bad substitution
+::error::Process exited with code 1
+
+ 

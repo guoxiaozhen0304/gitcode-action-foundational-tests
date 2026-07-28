@@ -1,0 +1,32 @@
+[2026/07/28 13:33:28.558 GMT+08:00] [INFO] Job(1531655834805223424_1531655834771668999) duration check: true
+No shell specified, using platform default: default-bash
+::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/daa361fe-525f-4414-9053-b84f7bdb7837.sh
+::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/daa361fe-525f-4414-9053-b84f7bdb7837.sh
+2048+0 records in
+2048+0 records out
+2147483648 bytes (2.1 GB, 2.0 GiB) copied, 4.89148 s, 439 MB/s
+
+::debug::Using workspace directory: /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-3
+Uploading artifact "big-artifact-2gb" from paths: /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-3/big-artifact.bin
+::debug::followSymbolicLinks 'true'
+::debug::implicitDescendants 'true'
+::debug::matchDirectories 'true'
+::debug::omitBrokenSymbolicLinks 'true'
+::debug::followSymbolicLinks 'true'
+::debug::implicitDescendants 'true'
+::debug::matchDirectories 'true'
+::debug::omitBrokenSymbolicLinks 'true'
+::debug::Search path '/home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-3/big-artifact.bin'
+Found 1 file(s) to upload
+::debug::[diagnostic] First 1 matched file(s): /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-3/big-artifact.bin
+::debug::Resolved root directory: /home/slave1/runner/workers/0.0.4.4.version/worker_dir/ComputingActionTest/gitcode-test-3
+Creating zip archive from 1 file(s)...
+Zip archive progress tracking enabled (~2048 MB source data)
+Zip archive creation still in progress (compression)... (30s elapsed)...
+Zip archive created: /tmp/artifact-1785216828766-c4e2bf41.zip (~2049 MB, 2148138864 bytes)
+Creating artifact "big-artifact-2gb" (size: 2148138864 bytes, workflow: 4f467dbcc61445ec841451184c4ea192)...
+[Twirp] trace-id: dc573a9173b7b56a82700e1b91b544b5
+[Twirp] error trace-id: dc573a9173b7b56a82700e1b91b544b5
+::debug::Temp zip file removed: /tmp/artifact-1785216828766-c4e2bf41.zip
+::error::Upload artifact failed: Artifact size 2148138864 exceeds max allowed 2147483648, repoId=10431336, workflowId=4f467dbcc61445ec841451184c4ea192, artifactName=big-artifact-2gb
+

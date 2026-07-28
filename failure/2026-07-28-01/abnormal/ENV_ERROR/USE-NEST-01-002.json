@@ -1,0 +1,19 @@
+{
+  "case_id": "USE-NEST-01-002",
+  "title": "workflow_call 嵌套 2 层时应正常执行",
+  "dimension": "usability",
+  "priority": "P1",
+  "intent_ref": "INTENT-USE-026",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "ENV_ERROR",
+  "verdict_flags": [],
+  "reason": "dispatch_workflow 返回 HTTP 400: {\"error_code\": 400, \"error_code_name\": \"THIRD_ERROR\", \"error_message\": \"获取任务caller引用的yml时失败，原因：未获取到流水线编排定义\", \"trace_id\": \"0130c2e96070256bb1dd208cadc3574d\"}",
+  "gitcode_run_id": "",
+  "run_status": "ENV_ERROR",
+  "head_sha": "",
+  "job_count": 0,
+  "duration_seconds": 12,
+  "log_fingerprint": "e3b0c44298fc1c14",
+  "run_url": "",
+  "assertion_results": []
+}

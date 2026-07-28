@@ -1,0 +1,52 @@
+{
+  "case_id": "COMP-BOUND-01-088",
+  "title": "工作流命令 set-env add-path 与文件写入边界验证",
+  "dimension": "completeness",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMP-088",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "86996c15d9b442959c77bcaaf81d330b",
+  "run_status": "COMPLETED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 60,
+  "log_fingerprint": "3dca6668f0af3d17",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/86996c15d9b442959c77bcaaf81d330b",
+  "assertion_results": [
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'MY_ENV=from_env_file'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'PATH_HAS_EXTRA=yes'",
+      "actual": "present"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": false,
+      "expected": "log contains 'OUT_KEY=out_val'",
+      "actual": "absent"
+    },
+    {
+      "kind": "value",
+      "type": "positive",
+      "target": "run_logs",
+      "pass": true,
+      "expected": "log contains 'commands_ok'",
+      "actual": "present"
+    }
+  ]
+}

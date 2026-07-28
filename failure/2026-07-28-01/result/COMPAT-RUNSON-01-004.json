@@ -1,0 +1,36 @@
+{
+  "case_id": "COMPAT-RUNSON-01-004",
+  "title": "自托管 runs-on 数组式写法（标签列表子集匹配）的实测仲裁",
+  "dimension": "compatibility",
+  "priority": "P1",
+  "intent_ref": "INTENT-COMPAT-046",
+  "phase02_run": "2026-07-28-01",
+  "verdict": "FAIL",
+  "verdict_flags": [],
+  "reason": "",
+  "gitcode_run_id": "8abdc7b04d5a49c5b66cb22b7c8b23ff",
+  "run_status": "FAILED",
+  "head_sha": "",
+  "job_count": 1,
+  "duration_seconds": 43,
+  "log_fingerprint": "dc79548e9eff9215",
+  "run_url": "https://gitcode.com/ComputingActionTest/gitcode-test-4/actions/runs/8abdc7b04d5a49c5b66cb22b7c8b23ff",
+  "assertion_results": [
+    {
+      "kind": "run_status",
+      "type": "positive",
+      "target": "run_status",
+      "pass": false,
+      "expected": "COMPLETED",
+      "actual": "FAILED"
+    },
+    {
+      "kind": "run_status_not",
+      "type": "negative",
+      "target": "run_status",
+      "pass": true,
+      "expected": "conclusion != SUCCESS",
+      "actual": "FAILED"
+    }
+  ]
+}
