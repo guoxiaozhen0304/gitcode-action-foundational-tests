@@ -1,0 +1,42 @@
+id: SEC-ARTF-01-002
+dimensions: ["security"]
+dimension: security
+priority: P0
+title: "跨仓库 artifact 下载返回 403 或 404"
+intent_ref: INTENT-SEC-019
+setup:
+  repo_fixture: with-artifacts
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    artifact-download:
+      name: Download artifact from main repo
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Attempt download fork artifact
+          run: |
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://api.gitcode.com/api/v8/repos/${{ atomgit.repository }}/actions/artifacts/FORK_ARTIFACT_ID/zip?access_token=${{ atomgit.token }}")
+            echo "HTTP_STATUS=$CODE"
+            if [ "$CODE" = "403" ] || [ "$CODE" = "404" ]; then
+              echo "CROSS_REPO_BLOCKED_OK"
+            elif [ "$CODE" = "200" ]; then
+              echo "CROSS_REPO_DOWNLOAD_LEAKED"
+              exit 1
+            else
+              echo "CROSS_REPO_UNEXPECTED_$CODE"
+            fi
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: "CROSS_REPO_BLOCKED_OK"
+  - type: negative
+    target: run_logs
+    must_not_contain: "CROSS_REPO_DOWNLOAD_LEAKED"
+teardown:
+  reset: fixture

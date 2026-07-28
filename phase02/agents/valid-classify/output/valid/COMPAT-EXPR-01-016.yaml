@@ -1,0 +1,51 @@
+id: COMPAT-EXPR-01-016
+dimensions: [compatibility]
+dimension: compatibility
+priority: P2
+title: "format() 花括号转义与字符串字面量引号规则边界"
+intent_ref: INTENT-COMPAT-050
+
+setup:
+  repo_fixture: default
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    probe:
+      name: Probe format escaping and literal quotes
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Evaluate format brace escaping
+          run: |
+            echo "FMT_BRACE=${{ format('{{{0}}}', 'x') }}"
+        - name: Evaluate single quote escaping
+          run: |
+            echo "FMT_QUOTE=${{ format('it''s {0}', 'ok') }}"
+            echo "PROBE_DONE"
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: positive
+    target: run_logs
+    must_contain: "PROBE_DONE"
+  - type: positive
+    target: run_logs
+    eval: llm_assisted
+    rubric: "FMT_BRACE 应与 GitHub 对齐输出 {x}；不支持转义则文档声明替代写法；FMT_QUOTE 应输出 it's ok；不一致记录为表达式边界差异"
+  - type: negative
+    target: run_logs
+    eval: llm_assisted
+    rubric: "双引号字符串字面量不应被静默接受却求值异常；应与 GitHub 一样明确报错，或差异文档化"
+
+teardown:
+  reset: fixture

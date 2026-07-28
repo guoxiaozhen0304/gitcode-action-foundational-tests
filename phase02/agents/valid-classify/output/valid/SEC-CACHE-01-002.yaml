@@ -1,0 +1,46 @@
+id: SEC-CACHE-01-002
+dimensions: ["security"]
+dimension: security
+priority: P0
+title: "主仓 cache restore 对 fork cache miss"
+intent_ref: INTENT-SEC-018
+setup:
+  repo_fixture: with-cache
+workflow: |
+  on:
+    workflow_dispatch:
+  jobs:
+    cache-restore:
+      name: Restore cache from main repo
+      runs-on: [ubuntu-latest, x64, small]
+      steps:
+        - name: Restore cache
+          uses: cache
+          with:
+            path: ./node_modules
+            key: test-cache-key
+        - name: Verify no fork poison
+          run: |
+            if [ -f node_modules/poison.txt ] && grep -q "FORK_POISON_MARKER" node_modules/poison.txt; then
+              echo "FORK_CACHE_LEAKED"
+              exit 1
+            else
+              echo "FORK_CACHE_NOT_RESTORED_OK"
+            fi
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+fault_injection: null
+assertions:
+  - type: negative
+    target: cache_restore
+    must_not_hit: "fork_cache_key"
+  - type: positive
+    target: run_logs
+    must_contain: "FORK_CACHE_NOT_RESTORED_OK"
+  - type: negative
+    target: run_logs
+    must_not_contain: "FORK_CACHE_LEAKED"
+teardown:
+  reset: fixture

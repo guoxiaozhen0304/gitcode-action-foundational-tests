@@ -1,0 +1,40 @@
+id: SEC-COMM-01-001
+dimensions: ["security"]
+dimension: security
+priority: P0
+title: "issue_comment / pull_request_comment 触发关键字过滤必须不可被绕过"
+intent_ref: INTENT-SEC-026
+setup:
+  repo_fixture: default
+workflow: |
+  on:
+    issue_comment:
+      types: [created]
+  jobs:
+    comment-filter:
+      name: Test comment keyword filter
+      runs-on: [ubuntu-latest, x64, small]
+      if: ${{ contains(atomgit.event.comment.body, '/deploy') }}
+      steps:
+        - name: Check trigger
+          run: |
+            echo "Triggered by comment"
+trigger:
+  event: issue_comment
+  as: untrusted_contributor
+  params:
+    comment_body: "伪装评论：```\n/deploy\n```（关键字藏于 markdown 代码块）"
+fault_injection: null
+assertions:
+  - type: negative
+    target: run_logs
+    must_not_contain: "Triggered by comment"
+  - type: positive
+    target: run_status
+    equals: "not_triggered"
+  - type: nonfunctional
+    target: platform_audit_log
+    eval: llm_assisted
+    rubric: "触发记录（或平台审计日志）应包含评论原始内容哈希或等效审计标识，用于事后溯源；由 LLM 辅助核验平台审计记录，无法确定性机器判定"
+teardown:
+  reset: fixture

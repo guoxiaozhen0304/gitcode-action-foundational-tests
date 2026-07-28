@@ -1,0 +1,30 @@
+id: USE-API-01-001
+dimensions: ["usability", "compatibility"]
+dimension: usability
+priority: P2
+title: "API 字段值与事件类型命名同一概念分裂的对照检查"
+intent_ref: INTENT-USE-048
+
+setup:
+  repo_fixture: with-pr
+  secrets: []
+  variables: {}
+  branch_protection: default
+
+workflow: null
+
+trigger:
+  event: workflow_dispatch
+  as: maintainer
+  params: {}
+
+fault_injection: null
+
+assertions:
+  - type: negative
+    target: api_response
+    eval: "deterministic"
+    criterion: "API 返回的 PR 状态值集合与事件类型命名集合做同概念 diff；opened 与 open 同概念不同名且文档无对照表即不合格；API 面行为归 COMPAT-011"
+
+teardown:
+  reset: none
