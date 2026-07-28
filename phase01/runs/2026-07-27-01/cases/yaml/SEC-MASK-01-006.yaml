@@ -26,6 +26,9 @@ trigger:
   as: maintainer
   params: {}
 fault_injection: null
+# 注：分片输出后 secret 连续子串（如 3 字符以上）的命中判定值是动态的（取决于 secret 原值），
+# schema 无对应确定性判定键，故保留 llm_assisted；harness 可自行截取 secret 子串全文比对
+# 辅助判定。完整原值由 must_not_contain_secret 确定性覆盖。
 assertions:
   - type: negative
     target: run_logs

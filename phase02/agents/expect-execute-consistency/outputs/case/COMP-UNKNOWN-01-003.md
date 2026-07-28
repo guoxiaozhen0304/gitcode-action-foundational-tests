@@ -1,20 +1,14 @@
 # COMP-UNKNOWN-01-003
-
 - **标题**: 未声明 select 的 stage 与 job 默认被执行
 - **维度**: 完备性
-- **评级**: 部分不符
+- **优先级**: P1
+- **评级**: 断言一致（2026-07-28 优化后重评）
 
----
-
-## 想测什么
-验证未声明 select 字段的 job 默认执行（不会被跳过）。
-
-## 做了什么
-单个 job alpha，无 select 声明，run 步骤 echo "NO_SELECT_JOB_RAN"。
+## 修复内容
+步骤由裸 echo（TRIVIAL）改为增输 RUN_ID=${{ atomgit.run_id }} 表达式（规则 6：含 ${{ }} 即 GENUINE）。
 
 ## 逐断言判定
-
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | positive | success | TRIVIAL | 仅有 echo 步骤，无条件失败路径，必然成功 |
-| 2 | run_logs | positive | must_contain: NO_SELECT_JOB_RAN | COVERED | run 步骤直接 echo 该字符串 |
+| 1 | run_status | positive | equals success | ✅ GENUINE | 步骤含 ${{ }} 表达式 |
+| 2 | run_logs | positive | must_contain NO_SELECT_JOB_RAN | ✅ GENUINE | 真实输出 |

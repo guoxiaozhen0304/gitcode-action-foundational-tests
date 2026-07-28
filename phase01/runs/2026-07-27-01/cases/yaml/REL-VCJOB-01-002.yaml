@@ -19,14 +19,16 @@ trigger:
     platform_op: vcjob_batch_submit
     concurrency: 50
 fault_injection: null
+# 注：本用例为平台操作型（vcjob 批量提交由 harness 编排，无 gitcode workflow），workflow 为 null
+# 属用例设计。静默丢失由 vcjob_terminal_reconciliation 对账断言（submitted==recorded==terminal==50）
+# 与 lost_count 负向断言确定性覆盖；级联失败的归因判读保留 llm_assisted。
 assertions:
   - type: positive
     target: vcjob_terminal_reconciliation
     equals: "submitted==recorded==terminal==50"
   - type: negative
-    target: vcjob_records
-    eval: llm_assisted
-    rubric: "不应出现并发下部分 vcjob 无对应任务记录（静默丢失）。输入退化声明：oracle 仅有 xlsx 预期结果列（能正常运行），丢失判定需以提交标识对账为准"
+    target: lost_count
+    equals: "0"
   - type: nonfunctional
     target: cascading_failure
     eval: llm_assisted

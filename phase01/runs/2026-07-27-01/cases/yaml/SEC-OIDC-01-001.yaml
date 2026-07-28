@@ -14,14 +14,23 @@ workflow: |
       name: Check OIDC documentation
       runs-on: [ubuntu-latest, x64, small]
       steps:
-        - name: Document check placeholder
+        - name: Probe OIDC environment signals
           run: |
-            echo "Checking OIDC support documentation"
+            echo "ID_TOKEN_REQUEST_URL=${ATOMGIT_ID_TOKEN_REQUEST_URL:-UNSET}"
+            echo "ID_TOKEN_REQUEST_TOKEN=${ATOMGIT_ID_TOKEN_REQUEST_TOKEN:+SET_OR_EMPTY}"
+            if [ -n "${ATOMGIT_ID_TOKEN_REQUEST_URL:-}" ]; then
+              echo "OIDC_ENDPOINT_PRESENT"
+            else
+              echo "OIDC_ENDPOINT_ABSENT"
+            fi
 trigger:
   event: workflow_dispatch
   as: maintainer
   params: {}
 fault_injection: null
+# 注：platform_docs 文档内容判读本质不可确定化，保留 llm_assisted；workflow 已改为真实探测
+# 运行时环境中的 OIDC 信号（ID_TOKEN_REQUEST_URL 等平台注入变量），输出
+# OIDC_ENDPOINT_PRESENT/ABSENT 供文档描述与实际行为比对。
 assertions:
   - type: negative
     target: platform_docs

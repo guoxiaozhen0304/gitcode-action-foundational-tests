@@ -1,11 +1,17 @@
 # SEC-MASK-01-004
-- **标题**: Secret 日志脱敏不可通过字符串拼接或插值绕过   - **维度**: 安全性   - **评级**: 部分不符
-## 想测什么
-拼接后的secret值不应以可还原形式出现在日志中，分多行输出也应保持脱敏。
-## 做了什么
-YAML workflow将secret分两段(cut -c1-4和cut -c5-8)拼接输出。第二个断言为llm_assisted子串检查。
+- **标题**: Secret 日志脱敏不可通过字符串拼接或插值绕过
+- **维度**: 安全性
+- **优先级**: P0
+- **评级**: 部分不符（2026-07-28 优化后重评）
+
+## 修复内容
+加注释说明：连续子串（超阈值）命中判定值动态，schema 无对应确定性键，保留 llm_assisted；harness 可截取 secret 子串自行比对。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
-|---|---|---|---|---|---|
-| 1 | run_logs | negative | must_not_contain_secret "API_KEY" | COVERED | 明文原值搜索可机器判定 |
-| 2 | run_logs | negative | 任意连续子串命中数为0 | UNVERIFIABLE | eval:llm_assisted，子串长度阈值判定需LLM辅助 |
+|---|------|------|------|------|------|
+| 1 | run_logs | negative | must_not_contain_secret API_KEY | ✅ GENUINE | 明文原值确定性检索（步骤真实 cut 拼接输出） |
+| 2 | run_logs | negative | llm_assisted | 🔶 LLM_DEPENDENT | 子串命中判定值动态 |
+
+### 残留问题
+子串判定依赖动态值与阈值，保留 llm_assisted（YAML 已注释）。

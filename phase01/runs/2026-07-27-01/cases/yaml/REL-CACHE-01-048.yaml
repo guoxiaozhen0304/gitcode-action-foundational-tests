@@ -42,7 +42,19 @@ workflow: |
             key: concurrent-same-key-probe
         - name: check attribution step
           run: |
-            cat shared_cache/owner.txt || echo "cache_miss"
+            if [ -f shared_cache/owner.txt ]; then
+              CONTENT=$(cat shared_cache/owner.txt)
+              echo "READBACK_OWNER=$CONTENT"
+              case "$CONTENT" in
+                writer_alpha_full_content_marker|writer_beta_full_content_marker|writer_gamma_full_content_marker)
+                  echo "ATTRIBUTION_SINGLE_OK" ;;
+                *)
+                  echo "ATTRIBUTION_MIXED_BAD"
+                  exit 1 ;;
+              esac
+            else
+              echo "cache_miss"
+            fi
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -53,6 +65,9 @@ assertions:
   - type: positive
     target: cache_content_attribution
     equals: "single_writer_complete_or_explicit_conflict_error"
+  - type: negative
+    target: run_logs
+    must_not_contain: "ATTRIBUTION_MIXED_BAD"
   - type: negative
     target: mixed_or_truncated_content_detected
     equals: "true"

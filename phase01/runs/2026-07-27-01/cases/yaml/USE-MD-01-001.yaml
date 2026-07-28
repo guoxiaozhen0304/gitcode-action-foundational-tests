@@ -46,6 +46,9 @@ assertions:
   - type: positive
     target: step_summary
     contains: "Test Report"
+  - type: positive
+    target: step_summary_html
+    contains: "<table"
   - type: nonfunctional
     target: ui_visual
     eval: llm_assisted

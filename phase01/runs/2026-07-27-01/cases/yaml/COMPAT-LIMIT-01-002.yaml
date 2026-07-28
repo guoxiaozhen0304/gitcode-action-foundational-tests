@@ -49,6 +49,7 @@ workflow: |
         - name: Mark dispatch run
           run: |
             echo "DISPATCH_LIMIT_PROBE_RAN"
+            echo "DISPATCH_PROBE_BRANCH=${{ atomgit.ref }}"
 
 trigger:
   event: workflow_dispatch
@@ -58,6 +59,10 @@ trigger:
 
 fault_injection: null
 
+# 注：本用例为平台行为探针——26 个 inputs 的保存期响应（报错/截断/接受）与非默认分支 dispatch
+# 可用性本身是被测未知数，结果需通过保存校验响应与运行列表观察判定，无法由 workflow 步骤
+# 产出确定值，故保留 llm_assisted；workflow 已真实声明 26 个 inputs 作为探针本体，并在运行时
+# 输出实际执行分支供非默认分支可用性核对。
 assertions:
   - type: positive
     target: save_result

@@ -1,16 +1,18 @@
 # USE-PERM-01-002
 - **标题**: 使用 GitHub 权限域命名时报错应给出 GitCode 对照表
 - **维度**: 易用性/兼容性
-- **评级**: 部分不符
+- **优先级**: P1
+- **评级**: 部分不符（2026-07-28 优化后重评）
 
-## 想测什么
-验证使用 GitHub 的 `permissions: contents: read` 时平台应报错并列出 GitCode 可用权限域（如 repository）及对照关系。
-
-## 做了什么
-workflow 声明 `permissions: contents: read`（GitHub 命名域），job 使用 checkout。期望平台在校验阶段拒绝并给出对照提示。
+## 修复内容
+新增确定性断言 error_message must_contain permissions（平台 unknown property 报错含字段名）；对照表质量保留 llm。
 
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_status | negative | 运行不应成功完成 | COVERED | 未知权限域应导致校验失败 → GENUINE |
-| 2 | error_message | nonfunctional | 报错给出 GitHub 名 vs GitCode 名对照 | UNVERIFIABLE | eval: llm_assisted → LLM_DEPENDENT |
+| 1 | run_status | negative | equals COMPLETED | ✅ GENUINE | permissions 为平台不支持字段应拒绝 |
+| 2 | error_message | positive | must_contain permissions | ✅ COVERED | 报错应含字段名（固定串） |
+| 3 | error_message | nonfunctional | llm_assisted | 🔶 LLM_DEPENDENT | GitHub/GitCode 命名对照质量判读 |
+
+### 残留问题
+保留 llm_assisted（文案质量部分）。

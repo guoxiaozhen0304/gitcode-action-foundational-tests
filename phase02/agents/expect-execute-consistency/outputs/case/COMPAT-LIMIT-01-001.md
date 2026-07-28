@@ -2,30 +2,16 @@
 - **标题**: 单次推送多个 tag 的事件生成上限行为
 - **维度**: 兼容性
 - **优先级**: P2
-- **评级**: 完全不符
----
-## 1. 想测什么
-本用例验证：**单次推送多个 tag 的事件生成上限行为**
-- 触发事件: `tag` (模拟 4 个 tag)
-- 规格引用: INTENT-COMPAT-052
-通过标准：
-1. 推送 4 个 tag 的触发行为确定并与文档比对
-2. 超限场景不应静默丢事件
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | Mark tag triggered run | `echo "TAG_RUN_REF=${{ atomgit.ref }}"` | — | TAG_RUN_REF=<ref> |
-## 3. 触发与运行环境
-| 触发事件 | tag (params: tag_count=4, tags=v0.0.1~v0.0.4) |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | 无 |
-| 故障注入 | 无 |
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+- **评级**: 部分不符（2026-07-28 优化后重评）
+
+## 修复内容
+workflow 步骤增强：除 TAG_RUN_REF 外增输 TAG_RUN_SHA（均为 ${{ }} 表达式，GENUINE），为 run 计数对账提供材料；rubric 明确化并加注释说明探针性质。
+
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | run_list eval=llm_assisted | positive | — | 🔶 LLM_DEPENDENT | 运行记录数由 LLM 判定 |
-| 2 | run_list eval=llm_assisted | negative | — | 🔶 LLM_DEPENDENT | 静默丢弃行为由 LLM 判定 |
-### 问题
-全部断言均为 LLM_DEPENDENT；target=run_list 的验证依赖事后查询运行数量
----
+| 1 | run_list | positive | llm_assisted | 🔶 LLM_DEPENDENT | 4 个 tag 实际生成 run 数（4/部分/0）是被测未知数 |
+| 2 | run_list | negative | llm_assisted | 🔶 LLM_DEPENDENT | 静默丢弃判定需事后查询运行列表 |
+
+### 残留问题
+本质不可确定化：平台对批量 tag push 的事件生成上限是被探明对象，workflow 步骤无法产出确定期望值。已保留 llm_assisted 并在 YAML 中注释说明。

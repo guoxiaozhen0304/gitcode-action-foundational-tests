@@ -46,6 +46,9 @@ assertions:
   - type: positive
     target: run_logs
     contains: "step one prepare"
+  - type: positive
+    target: step_order
+    equals: "step one prepare,step two build,step three test,step four package,step five summary"
   - type: nonfunctional
     target: ui_layout
     eval: llm_assisted

@@ -1,11 +1,14 @@
 # SEC-NAME-01-004
-- **标题**: 与系统变量同名的用户自定义值绝不应覆盖 job 环境中的平台注入值   - **维度**: 安全性   - **评级**: 部分不符
-## 想测什么
-job级env中与系统变量同名的用户定义不应覆盖平台注入的系统变量值。
-## 做了什么
-YAML workflow中job级env声明ATOMGIT_ENV=/tmp/fixture-shadow-path，step仅echo描述性文字。断言target job_env为抽象环境面，无具体检查逻辑。
+- **标题**: 与系统变量同名的用户自定义值绝不应覆盖 job 环境中的平台注入值
+- **维度**: 安全性
+- **优先级**: P1
+- **评级**: 断言一致（2026-07-28 优化后重评）
+
+## 修复内容
+原步骤仅 echo 描述文字（两条 job_env 抽象断言 UNVERIFIABLE）。改为真实判定：比较 $ATOMGIT_ENV 是否被用户 env 遮蔽为 /tmp/fixture-shadow-path，被遮蔽输出 SYSTEM_VAR_SHADOWED_BAD 并 exit 1，否则 SYSTEM_VAR_PRESERVED_OK；断言全部确定化。
+
 ## 逐断言判定
 | # | 目标 | 类型 | 期望 | 判定 | 说明 |
-|---|---|---|---|---|---|
-| 1 | job_env | positive | equals "system_var_integrity_preserved" | UNVERIFIABLE | job_env为抽象目标，workflow步骤未实际比对系统变量值 |
-| 2 | job_env | negative | must_not_equal "user_value_shadows_system_var" | UNVERIFIABLE | 同上，无具体检测步骤可对应 |
+|---|------|------|------|------|------|
+| 1 | run_logs | positive | must_contain SYSTEM_VAR_PRESERVED_OK | ✅ GENUINE | 真实环境变量比对后输出 |
+| 2 | run_logs | negative | must_not_contain SYSTEM_VAR_SHADOWED_BAD | ✅ GENUINE | 被遮蔽时输出并 exit 1 |

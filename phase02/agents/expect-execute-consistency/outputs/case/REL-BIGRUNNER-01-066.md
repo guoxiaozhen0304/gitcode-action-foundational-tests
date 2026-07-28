@@ -2,37 +2,19 @@
 - **标题**: 大规格资源调度稳定性——xlarge/2xlarge 反复编译成功率
 - **维度**: 稳定性
 - **优先级**: P1
-- **评级**: 完全不符
----
-## 1. 想测什么
-本用例验证：**xlarge/2xlarge 反复编译成功率**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-066
-通过标准：
-1. 成功率≥90%
-2. 失败归因明确
-3. 无 flaky
+- **评级**: 部分不符（2026-07-28 优化后重评）
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | compile step (xlarge) | `echo compiling; sleep 30` | - | 文本 + 等待 |
-| 2 | compile step (2xlarge) | `echo compiling; sleep 30` | - | 文本 + 等待 |
+## 修复内容
+编译步骤由 `echo compiling; sleep 30`（STATUS_GUARANTEED）改为真实 gcc 编译 + 运行（编译错误/运行非零即真实失败）；增加 if always() 归因标记步骤；断言补 run_status/两个 COMPILE_OK 标记；failure_attribution 改 llm rubric。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | [] |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | success_rate ge 90 | positive | - | ❌ STATUS_GUARANTEED | 步骤仅 `echo compiling; sleep 30`（纯 trivial），无条件失败路径；runs-on 实际为 `[ubuntu-latest, x64, small]` 而非 xlarge/2xlarge |
-| 2 | failure_attribution = clear | positive | - | ❌ MISSING_SOURCE | 无任何失败归因步骤或失败场景——所有步骤必然成功 |
-### 问题
-**断言 1 — STATUS_GUARANTEED**: 步骤仅 echo 和 sleep，无条件分支、无真实编译、无可能的失败路径。runs-on 标签为 small 而非宣称的 xlarge/2xlarge。success_rate≥90 永远为真——测试从未验证大规模资源调度。
+| 1 | run_status | positive | equals success | ✅ GENUINE | gcc 真实编译存在失败路径 |
+| 2 | run_logs | positive | must_contain COMPILE_OK_XLARGE | ✅ GENUINE | 编译+运行成功后输出 |
+| 3 | run_logs | positive | must_contain COMPILE_OK_2XLARGE | ✅ GENUINE | 同上 |
+| 4 | success_rate | positive | ge 90 | ✅ COVERED | harness 跨 run 统计 |
+| 5 | failure_attribution | positive | llm_assisted | 🔶 LLM_DEPENDENT | 归因明确性判读（材料：ATTRIBUTION_JOB 标记 + gcc 日志） |
 
-**断言 2 — MISSING_SOURCE**: 所有步骤必然成功，无任何失败产生机制，因此不存在可观测的 failure_attribution 输出。
----
+### 残留问题
+失败归因的"明确性"属判读性质，保留 llm_assisted（YAML 已注释）；归因材料已由确定性步骤产出。

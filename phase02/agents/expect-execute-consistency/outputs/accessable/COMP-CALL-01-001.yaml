@@ -1,12 +1,12 @@
-id: COMP-CALL-01-002
+id: COMP-CALL-01-001
 dimensions: [completeness]
 dimension: completeness
 priority: P1
-title: 3 层 workflow_call 嵌套应被拒绝
+title: 2 层 workflow_call 嵌套正常执行
 intent_ref: INTENT-COMP-006
 
 setup:
-  repo_fixture: reusable-workflow-3layer
+  repo_fixture: reusable-workflow
   secrets: []
   variables: {}
   branch_protection: default
@@ -16,8 +16,8 @@ workflow: |
     workflow_dispatch:
   jobs:
     caller:
-      name: Call 3 layer reusable workflow
-      uses: ./.gitcode/workflows/reusable-level1.yml
+      name: Call reusable sub workflow
+      uses: ./.gitcode/workflows/reusable-sub.yml
 
 trigger:
   event: workflow_dispatch
@@ -27,13 +27,12 @@ trigger:
 fault_injection: null
 
 assertions:
-  - type: negative
+  - type: positive
     target: run_status
     equals: success
-  - type: nonfunctional
-    target: error_message
-    eval: llm_assisted
-    rubric: 报错信息应说明 workflow_call 最多支持 2 层嵌套
+  - type: positive
+    target: run_logs
+    must_contain: sub_workflow_marker
 
 teardown:
   reset: none

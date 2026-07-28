@@ -38,6 +38,9 @@ assertions:
   - type: positive
     target: run_logs
     contains: "ERROR: mock failure line 1"
+  - type: positive
+    target: log_download
+    equals: "success"
   - type: nonfunctional
     target: ui_interaction
     eval: llm_assisted

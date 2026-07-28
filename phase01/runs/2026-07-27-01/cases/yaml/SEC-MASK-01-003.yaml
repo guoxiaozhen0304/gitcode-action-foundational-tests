@@ -24,6 +24,9 @@ trigger:
   as: maintainer
   params: {}
 fault_injection: null
+# 注：base64 编码后的字符串值是动态的（取决于 secret 原值），schema 无"编码后形式"的确定性
+# 判定键，故保留 llm_assisted；harness 可自行计算 base64(secret) 后全文比对辅助判定。
+# 明文 secret 由 must_not_contain_secret 确定性覆盖。
 assertions:
   - type: negative
     target: run_logs

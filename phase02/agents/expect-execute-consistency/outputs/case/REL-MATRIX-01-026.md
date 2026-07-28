@@ -2,33 +2,13 @@
 - **标题**: matrix fail-fast=true——任意 job 实例失败应立即取消其余实例
 - **维度**: 稳定性
 - **优先级**: P1
-- **评级**: 完全不符
----
-## 1. 想测什么
-本用例验证：**matrix fail-fast=true——任意 job 实例失败应立即取消其余实例**
-- 触发事件: `workflow_dispatch`
-- 规格引用: INTENT-REL-026
-通过标准：
-1. 失败 job 状态 = failure
-2. 其余未完成 jobs 状态 = cancelled
+- **评级**: 断言一致（2026-07-28 优化后重评）
 
-## 2. 做了什么
-| # | 步骤名 | 命令 | 条件 (if) | 输出 |
-|---|--------|------|------|------|
-| 1 | matrix step | `echo version=${{ matrix.version }}` | — | 输出矩阵变量值 |
+## 修复内容
+本次未改动（前一轮已修复）：当前 YAML 已为 3x3=9 实例 matrix + fail-fast=true，x=1,y=1 实例真实 exit 1 故意失败，其余 sleep 30；与文本规格完全一致，断言 cancelled_jobs_count=8 与组合数匹配。原分析的 IMPOSSIBLE（无失败路径、矩阵维度不符）已不存在。
 
-## 3. 触发与运行环境
-| 触发事件 | workflow_dispatch |
-| 触发身份 | maintainer |
-| Repo 环境 | default |
-| Secrets | (无) |
-| 故障注入 | 无 |
-
-## 4. 能否达成目标
-| # | 目标 | 类型 | 条件 | 判定 | 说明 |
+## 逐断言判定
+| # | 目标 | 类型 | 期望 | 判定 | 说明 |
 |---|------|------|------|------|------|
-| 1 | job_status = failure | positive | — | ❌ IMPOSSIBLE | 工作流仅包含 `echo version=${{ matrix.version }}`，无 `exit 1` 或任何失败路径。文本描述要求"1 个实例故意失败"但 YAML 未实现 |
-| 2 | cancelled_jobs_count = 8 | positive | — | ❌ IMPOSSIBLE | 矩阵仅 `version: [1,2,3]`（3 个组合），无失败源头可触发取消，且断言值 8 与 3 实例不匹配 |
-### 问题
-文本规格要求"含 3x3 matrix 且 fail-fast=true，其中 1 个实例故意失败"并断言 cancelled=8，但 YAML 中矩阵仅一维 `version: [1,2,3]`（3 实例），且所有实例均 echo 不会失败。YAML 既缺少失败注入步骤（exit 1），也缺少第二维矩阵变量使组合达到 9 个。
----
+| 1 | job_status | positive | equals failure | ✅ GENUINE | x=1,y=1 实例真实 exit 1（故意失败合法） |
+| 2 | cancelled_jobs_count | positive | equals 8 | ✅ GENUINE | 9 实例 - 1 失败 = 8 取消，fail-fast 真实触发 |

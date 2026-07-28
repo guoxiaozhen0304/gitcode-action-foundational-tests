@@ -13,23 +13,52 @@ workflow: |
   on:
     workflow_dispatch:
   jobs:
-    test:
-      name: cache size probe job
+    save:
+      name: save cache size tier
       runs-on: [ubuntu-latest, x64, large]
       strategy:
         matrix:
           size_mb: [500, 1000, 2000]
         fail-fast: false
       steps:
+        - name: generate cache data step
+          run: |
+            mkdir -p cache_data
+            dd if=/dev/urandom of=cache_data/data.bin bs=1M count=${{ matrix.size_mb }}
+            md5sum cache_data/data.bin > cache_data/md5.txt
+            echo "SOURCE_MD5_${{ matrix.size_mb }}=$(cut -d' ' -f1 cache_data/md5.txt)"
         - name: cache save step
           uses: cache
           with:
             path: cache_data
             key: cache-size-probe-${{ matrix.size_mb }}
-        - name: generate cache data step
+    readback:
+      name: readback cache size tier
+      runs-on: [ubuntu-latest, x64, large]
+      needs: save
+      strategy:
+        matrix:
+          size_mb: [500, 1000, 2000]
+        fail-fast: false
+      steps:
+        - name: cache restore step
+          uses: cache
+          with:
+            path: cache_data
+            key: cache-size-probe-${{ matrix.size_mb }}
+        - name: verify readback md5
           run: |
-            mkdir -p cache_data
-            dd if=/dev/urandom of=cache_data/data.bin bs=1M count=${{ matrix.size_mb }}
+            if [ -f cache_data/md5.txt ]; then
+              cd cache_data
+              if md5sum -c md5.txt; then
+                echo "READBACK_MD5_OK_${{ matrix.size_mb }}"
+              else
+                echo "READBACK_MD5_BAD_${{ matrix.size_mb }}"
+                exit 1
+              fi
+            else
+              echo "CACHE_RESTORE_MISS_${{ matrix.size_mb }}"
+            fi
 trigger:
   event: workflow_dispatch
   as: maintainer
@@ -37,13 +66,16 @@ trigger:
     size_tiers_mb: [500, 1000, 2000]
     readback_verify: true
 fault_injection: null
+# 注：各档位被接受还是拒绝本身是被测未知数（探针），拒绝时 readback 输出
+# CACHE_RESTORE_MISS_<size> 供上限判定；被接受档位必须 MD5 一致，损坏会出现
+# READBACK_MD5_BAD_ 并使 job 失败。measured_cache_limit 为实测记录指标。
 assertions:
   - type: positive
     target: write_outcome
     equals: "accepted_or_explicit_rejection_with_limit"
-  - type: positive
-    target: readback_md5_match
-    equals: "true_if_accepted"
+  - type: negative
+    target: run_logs
+    must_not_contain: "READBACK_MD5_BAD_"
   - type: negative
     target: silent_corruption_detected
     equals: "true"

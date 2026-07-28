@@ -33,6 +33,7 @@ assertions:
     equals: "empty_or_error_outside_scope"
   - type: nonfunctional
     target: visibility_change
-    equals: "effective_immediately_no_cache_window"
+    eval: llm_assisted
+    rubric: "组织级 secret 可见范围变更应即时生效（无缓存窗口）：变更后范围外仓库的 workflow 立即读不到原值；由 harness 执行变更前后对照运行，LLM 辅助核验"
 teardown:
   reset: fixture

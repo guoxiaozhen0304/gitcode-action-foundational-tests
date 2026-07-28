@@ -14,6 +14,9 @@ trigger:
     invalid_names: ["ATOMGIT_TOKEN", "my-secret", "1SECRET"]
     valid_name: "DEPLOY_KEY"
 fault_injection: null
+# 注：本用例为平台操作型——harness 通过 secret 管理 API 逐一尝试创建 invalid_names 与
+# valid_name，无 gitcode workflow，workflow 为 null 属用例设计。报错文案是否明确指出
+# 命名规则属文案判读，保留 llm_assisted。
 assertions:
   - type: positive
     target: secret_mgmt_api

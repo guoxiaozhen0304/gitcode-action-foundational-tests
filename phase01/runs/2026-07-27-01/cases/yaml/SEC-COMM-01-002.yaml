@@ -34,6 +34,7 @@ assertions:
     must_not_equal: "triggered_by_quoted_or_embedded_text"
   - type: nonfunctional
     target: trigger_audit
-    equals: "trigger_traceable_to_comment_content"
+    eval: llm_assisted
+    rubric: "触发记录应可回溯到具体评论内容（评论 ID/作者/原文哈希或等效审计标识）；属平台审计内容判读，由 LLM 辅助核验"
 teardown:
   reset: fixture

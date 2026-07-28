@@ -32,6 +32,9 @@ trigger:
   params:
     declared_combinations: 300
 fault_injection: null
+# 注：negative + equals "true" 语义为「不应出现 silent_truncation_detected=true」，
+# 即平台不得在未明确报错（含上限值）的情况下静默截断 300 组合中的部分实例
+# （与文本"不应静默截断"一致）。
 assertions:
   - type: positive
     target: overflow_outcome

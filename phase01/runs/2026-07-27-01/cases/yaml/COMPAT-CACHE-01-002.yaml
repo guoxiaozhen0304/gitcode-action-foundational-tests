@@ -45,18 +45,20 @@ trigger:
 
 fault_injection: null
 
+# 注：fork 写是否被隔离到独立命名空间取决于平台 cache 插件行为（跳过/拒绝/隔离的日志措辞未知），
+# 该判定保留 llm_assisted；写入尝试本身由真实步骤产生 FORK_WRITE_ATTEMPTED 标记，确定性断言。
 assertions:
+  - type: positive
+    target: run_logs
+    must_contain: "FORK_WRITE_ATTEMPTED"
   - type: negative
     target: run_logs
     eval: llm_assisted
-    rubric: "fork PR 不应成功覆盖主干缓存条目"
+    rubric: "fork PR 的 cache save 不应成功覆盖主干缓存条目（保存被跳过、拒绝或隔离到 fork 命名空间；不得出现以主干 key 成功保存 fork 内容的日志）"
   - type: positive
     target: run_logs
     eval: llm_assisted
-    rubric: "日志中应出现明确的缓存隔离或拒绝写入标识"
-  - type: negative
-    target: run_status
-    equals: leaked_cache_to_fork
+    rubric: "日志中应出现明确的缓存隔离或拒绝写入标识（cache 插件输出）"
 
 teardown:
   reset: fixture

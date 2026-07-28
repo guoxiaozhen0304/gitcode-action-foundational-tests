@@ -32,5 +32,9 @@ assertions:
   - type: positive
     target: log_integrity
     equals: "100%"
+  - type: negative
+    target: ui
+    eval: llm_assisted
+    rubric: "前端查看/滚动 50MB 日志时 UI 不应卡死（页面长时间无响应、浏览器假死）"
 teardown:
   reset: none

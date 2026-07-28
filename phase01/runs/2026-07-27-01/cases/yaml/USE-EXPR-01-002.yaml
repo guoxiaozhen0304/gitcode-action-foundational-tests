@@ -35,6 +35,9 @@ assertions:
   - type: negative
     target: run_status
     equals: COMPLETED
+  - type: positive
+    target: error_message
+    must_contain: "unknownFunc"
   - type: nonfunctional
     target: error_message
     eval: llm_assisted
