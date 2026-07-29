@@ -8,8 +8,10 @@ GitCode Action是GitCodo 平台提供的对标Github Action的流水线平台，
 
 
 ## 关键问题概览
-- 严重的安全风险：step中的敏感信息会被汇总到step summary中等
-- 各社区CI依赖的核心功能未满足：
+- 严重的安全风险：
+    - 敏感信息可能泄露：step中的secret变量被展示到step summary中，
+    - 敏感信息可能泄露：upload-artifact 未过滤secret中的内容
+- 各社区CI依赖的核心功能未满足，详细清单如下：
 
 | 序号 | 问题场景 | 依赖社区 |
 |--|---|---------|
