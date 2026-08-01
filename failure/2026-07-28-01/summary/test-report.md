@@ -13,20 +13,20 @@ GitCode Action是GitCodo 平台提供的对标Github Action的流水线平台，
 
 ## 关键问题概览
 - 严重的安全风险：
-    - 敏感信息可能泄露：step中的secret变量被展示到step summary中，
-    - 敏感信息可能泄露：upload-artifact 未过滤secret中的内容
+    - 敏感信息可能泄露：step中的secret变量被展示到step summary中，待验证
+    - 敏感信息可能泄露：upload-artifact 未过滤secret中的内容  未解决
 - 各社区CI依赖的核心功能未满足，详细清单如下：
 
-| 序号 | 问题场景 | 依赖社区 |
-|--|---|---------|
-|1| 按路径触发workflow功能不支持 | openEuler，openGauss，MindSpore |
-|2| CI中通过permission授权临时token，调用API | 所有社区 |
-|3| continue-on-error=true——job 功能不可用，CI无法快速失败 | 所有社区 |
-|4| cache 功能在人工触发场景无法使用  | 所有社区 |
-|5| 官方提供的资源池只能以 root 用户运行 | openEuler |
-|6| 通过自定义资源接入的任务，不支持自定义镜像 | 所有社区 |
-|7| NPU资源接入后，无法正常调度 | 昇腾领域各社区 |
-|8|	跨仓复用workflow_call不支持 | openUBMC，openEuler |
+| 序号 | 问题场景                                       | 依赖社区 | 8月1号修复情况 |
+|--|--------------------------------------------|---------|----------|
+|1| 按路径触发workflow功能不支持                         | openEuler，openGauss，MindSpore | 已修复      |
+|2| CI中通过permission授权临时token，调用API             | 所有社区 | 未修复      |
+|3| continue-on-error=true——job 功能不可用，CI无法快速失败 | 所有社区 | 待验证      |
+|4| cache 功能在人工触发场景无法使用                        | 所有社区 |待验证      |
+|5| 官方提供的资源池只能以 root 用户运行                      | openEuler |未修复      |
+|6| 通过自定义资源接入的任务，不支持自定义镜像                      | 所有社区 |待验证      |
+|7| NPU资源接入后，无法正常调度                            | 昇腾领域各社区 |待验证      |
+|8| 跨仓复用workflow_call不支持                       | openUBMC，openEuler |待验证      |
 
 
 ### 整体结论
