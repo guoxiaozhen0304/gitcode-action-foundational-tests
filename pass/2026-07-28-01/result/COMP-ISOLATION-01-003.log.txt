@@ -1,6 +1,0 @@
-[2026/07/28 12:53:25.114 GMT+08:00] [INFO] Job(1531645754173046784_1531645754143686663) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /runner/workers/0.0.4.4.version/_temp/833413e4-e39e-4353-9f28-f528c2e1103f.sh
-::debug::Executing: bash -e /runner/workers/0.0.4.4.version/_temp/833413e4-e39e-4353-9f28-f528c2e1103f.sh
-CONTAINER_PROBE_OK
-VOLUME_WRITE_OK

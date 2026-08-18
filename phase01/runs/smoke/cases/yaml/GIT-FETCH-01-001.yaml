@@ -1,0 +1,21 @@
+---
+id: GIT-FETCH-01-001
+dimensions: [completeness]
+dimension: completeness
+priority: P1
+title: Git Fetch 远程更新
+intent_ref: INTENT-GIT-02
+test_type: git
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+git:
+  action: fetch
+assertions:
+  - type: positive
+    target: git_exit_code
+    equals: 0
+  - type: positive
+    target: git_output
+    contains: "empty repository"
+teardown:
+  reset: fixture

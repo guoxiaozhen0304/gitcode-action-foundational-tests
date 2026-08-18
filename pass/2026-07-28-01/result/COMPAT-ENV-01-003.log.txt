@@ -1,7 +1,0 @@
-[2026/07/28 13:05:08.940 GMT+08:00] [INFO] Job(1531648706204274688_1531648706179108871) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/3213389e-ea69-438e-9c0a-1e9ac575bc00.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/3213389e-ea69-438e-9c0a-1e9ac575bc00.sh
-GITHUB_ENV=
-ATOMGIT_ENV=/home/slave1/runner/workers/0.0.4.4.version/_temp/_runner_file_commands/set_env_75a79d17-0157-43ad-9ebc-6fb8b297966b
-done

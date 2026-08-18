@@ -28,10 +28,11 @@ PHASE02 = os.path.dirname(HERE)
 ROOT = os.path.dirname(PHASE02)
 
 import re
-_ID_RE = re.compile(r"^(COMP|COMPAT|REL|SEC|USE)-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{2}-\d{3}(-V\d+)?$")
+_ID_RE = re.compile(r"^(COMP|COMPAT|REL|SEC|USE|API|GIT)-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{2}-\d{3}(-V\d+)?$")
 _DIMS = {"completeness", "compatibility", "reliability", "security", "usability"}
 _PRIOS = {"P0", "P1", "P2"}
 _ATYPES = {"positive", "negative", "nonfunctional"}
+_TEST_TYPES = {"workflow", "api", "git"}
 
 
 def validate_case(doc):
@@ -40,7 +41,7 @@ def validate_case(doc):
     if not isinstance(doc, dict):
         return ["顶层非映射"]
     for k in ("id", "dimension", "priority", "title", "intent_ref",
-              "setup", "trigger", "assertions", "teardown"):
+              "setup", "assertions", "teardown", "test_type"):
         if k not in doc:
             errs.append(f"缺必填字段 {k}")
     if "id" in doc and not _ID_RE.match(str(doc["id"])):
@@ -49,6 +50,33 @@ def validate_case(doc):
         errs.append(f"dimension 非法: {doc.get('dimension')}")
     if doc.get("priority") not in _PRIOS:
         errs.append(f"priority 非法: {doc.get('priority')}")
+    if doc.get("test_type") not in _TEST_TYPES:
+        errs.append(f"test_type 非法: {doc.get('test_type')}（合法值: workflow/api/git）")
+
+    tt = doc.get("test_type")
+    # workflow 类型必填字段
+    if tt == "workflow":
+        if "workflow" not in doc:
+            errs.append("test_type=workflow 时缺 workflow 字段")
+        if "trigger" not in doc:
+            errs.append("test_type=workflow 时缺 trigger 字段")
+    # api 类型必填字段
+    if tt == "api":
+        if "api" not in doc:
+            errs.append("test_type=api 时缺 api 字段")
+        else:
+            api = doc["api"]
+            if not isinstance(api, dict) or "endpoint" not in api or "method" not in api:
+                errs.append("api 字段必须包含 endpoint 和 method")
+    # git 类型必填字段
+    if tt == "git":
+        if "git" not in doc:
+            errs.append("test_type=git 时缺 git 字段")
+        else:
+            git = doc["git"]
+            if not isinstance(git, dict) or "action" not in git:
+                errs.append("git 字段必须包含 action")
+
     setup = doc.get("setup")
     if isinstance(setup, dict) and "repo_fixture" not in setup:
         errs.append("setup 缺 repo_fixture")

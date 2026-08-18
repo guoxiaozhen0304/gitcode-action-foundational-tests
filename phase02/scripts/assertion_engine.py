@@ -291,6 +291,74 @@ def _eval_one(a, run_result):
                 "pass": delta <= le, "expected": f"({end}-{start}) <= {le}s",
                 "actual": f"{delta:.0f}s"}
 
+    # ── API 断言（2026-08-17 新增）──
+    if kind == "api_status_code":
+        expected = a.get("equals") or a.get("status_code")
+        expected_list = a.get("status_codes") or ([expected] if expected else [])
+        actual = run_result.get("api_status_code")
+        return {"kind": kind, "type": "positive", "target": "api_status_code",
+                "pass": actual in expected_list,
+                "expected": expected_list, "actual": actual}
+
+    if kind == "api_response_contains":
+        expect = a["expect"]
+        body_str = run_result.get("api_response_body_str", "")
+        present = _norm_sep(expect) in _norm_sep(body_str)
+        return {"kind": kind, "type": "positive", "target": "api_response_body",
+                "pass": present, "expected": f"response contains '{expect}'",
+                "actual": "present" if present else "absent"}
+
+    if kind == "api_response_json":
+        path = a.get("json_path", "")
+        expected_val = a.get("json_value")
+        body = run_result.get("api_response_body")
+        if not isinstance(body, dict):
+            return {"kind": kind, "type": "positive", "target": "api_response_body",
+                    "pass": False, "inconclusive": True,
+                    "expected": f"json_path '{path}' == {expected_val}",
+                    "actual": "response body is not JSON"}
+        # 简单 json_path 支持：a.b.c 或 a[0].b
+        val = body
+        for part in path.split("."):
+            if isinstance(val, dict):
+                val = val.get(part)
+            else:
+                val = None
+                break
+        return {"kind": kind, "type": "positive", "target": "api_response_body",
+                "pass": val == expected_val,
+                "expected": f"{path} == {expected_val}", "actual": val}
+
+    if kind == "api_latency_le":
+        le = float(a.get("le"))
+        actual = run_result.get("api_latency_ms", 0)
+        return {"kind": kind, "type": "nonfunctional", "target": "latency",
+                "pass": actual <= le, "expected": f"latency <= {le}ms", "actual": f"{actual}ms"}
+
+    # ── Git 断言（2026-08-17 新增）──
+    if kind == "git_exit_code":
+        expected = int(a.get("equals", 0))
+        actual = run_result.get("git_exit_code")
+        return {"kind": kind, "type": "positive", "target": "git_exit_code",
+                "pass": actual == expected,
+                "expected": f"exit_code == {expected}", "actual": actual}
+
+    if kind == "git_output_contains":
+        expect = a["expect"]
+        output = run_result.get("git_output", "")
+        present = _norm_sep(expect) in _norm_sep(output)
+        return {"kind": kind, "type": "positive", "target": "git_output",
+                "pass": present, "expected": f"output contains '{expect}'",
+                "actual": "present" if present else "absent"}
+
+    if kind == "git_branch_exists":
+        expect = a["expect"]
+        branches = run_result.get("git_branches", [])
+        present = expect in branches or f"remotes/origin/{expect}" in branches
+        return {"kind": kind, "type": "positive", "target": "git_branch_list",
+                "pass": present, "expected": f"branch '{expect}' exists",
+                "actual": branches}
+
     # 未知 kind → 无法判定，不冒充 PASS
     return {"kind": kind, "pass": False, "inconclusive": True,
             "expected": f"known assertion kind", "actual": f"unknown kind '{kind}'"}

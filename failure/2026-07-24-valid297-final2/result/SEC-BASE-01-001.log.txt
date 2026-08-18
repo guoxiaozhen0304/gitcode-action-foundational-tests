@@ -1,5 +1,0 @@
-[2026/07/24 21:33:09.549 GMT+08:00] [INFO] Job(1530326999904423936_1530326999879258119) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/894a9839-d144-4367-8635-2b2f8c4cc3ee.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/894a9839-d144-4367-8635-2b2f8c4cc3ee.sh
-Executing base branch workflow

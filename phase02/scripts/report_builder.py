@@ -114,7 +114,7 @@ def main():
     os.makedirs(os.path.join(PHASE02, "reports", run_id), exist_ok=True)
     rp = os.path.join(PHASE02, "reports", run_id, "report.md")
     with open(rp, "w", encoding="utf-8") as f:
-        f.write(f"# GitCode Actions 测试报告 · {run_id}\n\n")
+        f.write(f"# GitCode 冒烟测试报告 · {run_id}\n\n")
         icon = "⛔ BLOCKED" if overall == "BLOCKED" else ("⚪ INCONCLUSIVE" if overall == "INCONCLUSIVE" else "✅ GO")
         f.write(f"## 门禁判定: {icon}\n\n")
         f.write(f"- 执行覆盖率: {(exec_coverage/100):.1%}（{effective}/{tot} 有效判定）\n")
@@ -124,6 +124,11 @@ def main():
             f.write(f"**Blocked 维度**: {', '.join(blocked_dims)}\n\n")
         f.write("## 执行摘要\n")
         f.write(f"- 总用例: {tot}\n")
+        tt_dist = {}
+        for r in recs:
+            tt = r.get("test_type", "workflow")
+            tt_dist[tt] = tt_dist.get(tt, 0) + 1
+        f.write("- 测试类型: " + " · ".join(f"{k}={v}" for k, v in sorted(tt_dist.items())) + "\n")
         f.write("- 内部判定: " + " · ".join(f"{k}={n}" for k, n in sorted(by_v.items())) + "\n\n")
         f.write("## 分维度（对外三态，通过率已剔除不可测试/未发现问题）\n")
         f.write("| 维度 | 总数 | 通过 | 问题发现 | 未发现问题 | 不可测试 | 通过率 | P0失败 | 门禁 |\n")

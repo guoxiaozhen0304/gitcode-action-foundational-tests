@@ -1,0 +1,21 @@
+---
+id: GIT-CLONE-01-001
+dimensions: [completeness]
+dimension: completeness
+priority: P0
+title: Git Clone 仓库
+intent_ref: INTENT-GIT-01
+test_type: git
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+git:
+  action: clone
+assertions:
+  - type: positive
+    target: git_exit_code
+    equals: 0
+  - type: positive
+    target: git_output
+    contains: "Cloning into"
+teardown:
+  reset: fixture

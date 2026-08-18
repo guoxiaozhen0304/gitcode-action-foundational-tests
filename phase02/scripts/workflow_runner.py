@@ -96,7 +96,7 @@ class RunnerConfig:
                  timeout=None, poll_interval=None, executor=None,
                  cookie=None, workflow_id=None):
         self.owner = owner or os.environ.get("GITCODE_OWNER", "ComputingActionTest")
-        self.repo = repo or os.environ.get("GITCODE_REPO", "bingo")
+        self.repo = repo or os.environ.get("GITCODE_REPO", "gitcode_api")
         self.branch = branch or os.environ.get("GITCODE_BRANCH", "main")
         self.api_base = (api_base or os.environ.get("GITCODE_API_BASE_URL",
                                                     "https://api.gitcode.com")).rstrip("/")

@@ -1,7 +1,0 @@
-[2026/07/25 14:11:10.728 GMT+08:00] [INFO] Job(1530578159512600576_1530578159479046151) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/c7a43efe-a6c8-497a-b7cb-e0c7a684d076.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/c7a43efe-a6c8-497a-b7cb-e0c7a684d076.sh
-::add-path::/custom/path
-PATH=/home/slave1/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-done

@@ -1,6 +1,0 @@
-[2026/07/28 13:45:08.784 GMT+08:00] [INFO] Job(1531658771757928448_1531658771728568327) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/2ec25494-e71f-43ec-af81-9accf9e32399.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/2ec25494-e71f-43ec-af81-9accf9e32399.sh
-secret is ***
-token length is 24

@@ -72,55 +72,78 @@ def main():
     _update_run_md(run_dir, run_id, state)
     print(f"=== 批量执行 {run_id} · {len(cases)} 条 ===")
 
-    cfg = wr.RunnerConfig(branch=None)
-    wr.log(f" clone {cfg.owner}/{cfg.repo}@{cfg.branch}（全 {len(cases)} 条复用）")
-    with wr.Workspace(cfg) as ws:
-        for i, c in enumerate(cases, 1):
-            cid, contract = c["case_id"], os.path.join(ROOT, c["contract_path"])
-            state["current"] = f"{cid} ({i}/{len(cases)})"
-            _write_state(run_dir, state)
-            _update_run_md(run_dir, run_id, state)
-            print(f"[{i}/{len(cases)}] {cid} ...")
+    for i, c in enumerate(cases, 1):
+        cid = c["case_id"]
+        contract_path = os.path.join(ROOT, c["contract_path"])
+        state["current"] = f"{cid} ({i}/{len(cases)})"
+        _write_state(run_dir, state)
+        _update_run_md(run_dir, run_id, state)
+        print(f"[{i}/{len(cases)}] {cid} ...")
 
-            contract_doc = rc.load_contract(contract)
-            wf, asserts = rc.load_execution_inputs(contract_doc, run_dir, cid)
+        contract_doc = rc.load_contract(contract_path)
+        test_type = contract_doc.get("test_type", "workflow")
 
-            if not wf:
-                verdict = {"verdict": "NOT_CONFIGURED", "verdict_flags": [],
-                           "reason": "Phase 01 契约无 workflow 字段", "assertion_results": []}
-                rec = rc.write_result(run_dir, contract_doc, verdict,
-                                      {"status": "NOT_CONFIGURED", "case_id": cid})
-                rc.update_summary(run_dir, rec)
-                v = "NOT_CONFIGURED"
-            else:
-                ev = (contract_doc.get("trigger") or {}).get("event", "push")
-                ok, verr = wr.preflight_validate(wf)
+        try:
+            if test_type == "workflow":
+                cfg = wr.RunnerConfig(branch=None)
+                ok, verr = wr.preflight_validate(contract_doc, cfg=cfg)
                 if not ok:
-                    wr.log(f"  预检不通过（{len(verr)} 项）→ COMPILE_ERROR，不 push")
+                    wr.log(f"{cid}: 预检不通过（{len(verr)} 项）→ COMPILE_ERROR，不 push")
+                    for e in verr:
+                        wr.log(f"    - {e}")
                     verdict = {"verdict": "COMPILE_ERROR", "verdict_flags": [],
                                "reason": "; ".join(verr), "assertion_results": []}
-                    rec = rc.write_result(run_dir, contract_doc, verdict,
-                                          {"status": "COMPILE_ERROR", "case_id": cid})
-                    rc.update_summary(run_dir, rec)
-                    v = "COMPILE_ERROR"
+                    rr = {"status": "COMPILE_ERROR", "case_id": cid}
                 else:
-                    reset = (contract_doc.get("teardown") or {}).get("reset", "fixture")
-                    wr.log(f"  执行 {cid} (teardown={reset})")
-                    rr = wr.run_case(ws, cfg, cid, wf, fetch_logs=not no_logs,
-                                     teardown_reset=reset, trigger_event=ev)
-                    rr["case_id"] = cid
-                    engine_asserts = asserts if asserts else [{"kind": "status"}]
-                    verdict = ae.evaluate(rr, engine_asserts)
-                    rec = rc.write_result(run_dir, contract_doc, verdict, rr)
-                    rc.update_summary(run_dir, rec)
-                    v = rec["verdict"]
-                    wr.log(f"  → {v} run={rec['gitcode_run_id'][:10]} ({rec['duration_seconds']}s)")
+                    wf, asserts = rc.load_execution_inputs(contract_doc, run_dir, cid)
+                    if not wf:
+                        wr.log(f"{cid}: 契约无 workflow 字段 → NOT_CONFIGURED")
+                        verdict = {"verdict": "NOT_CONFIGURED", "verdict_flags": [],
+                                   "reason": "Phase 01 契约无 workflow 字段", "assertion_results": []}
+                        rr = {"status": "NOT_CONFIGURED", "case_id": cid}
+                    else:
+                        ev = (contract_doc.get("trigger") or {}).get("event", "push")
+                        trig_as = (contract_doc.get("trigger") or {}).get("as", "maintainer")
+                        if trig_as == "untrusted_contributor":
+                            cp = os.path.expanduser("~/.gitcode-contributor-token")
+                            if ev in ("issue_comment", "pull_request_comment") and os.path.exists(cp):
+                                pass
+                            else:
+                                wr.log(f"{cid}: trigger.as=untrusted_contributor → INCONCLUSIVE")
+                                verdict = {"verdict": "INCONCLUSIVE", "verdict_flags": [],
+                                           "reason": "untrusted_contributor 执行路径未实现，拒绝以 maintainer 假验证",
+                                           "assertion_results": []}
+                                rr = {"status": "INCONCLUSIVE", "case_id": cid}
+                        else:
+                            verdict, rr = rc.run_workflow_case(contract_doc, run_dir, cid, cfg, fetch_logs=not no_logs)
 
-            state["verdicts"][v] = state["verdicts"].get(v, 0) + 1
-            state["done"] = i
-            state["current"] = None
-            _write_state(run_dir, state)
-            _update_run_md(run_dir, run_id, state)
+            elif test_type == "api":
+                verdict, rr = rc.run_api_case(contract_doc, cid)
+
+            elif test_type == "git":
+                verdict, rr = rc.run_git_case(contract_doc, cid)
+
+            else:
+                verdict = {"verdict": "COMPILE_ERROR", "verdict_flags": [],
+                           "reason": f"未知 test_type: {test_type}", "assertion_results": []}
+                rr = {"status": "COMPILE_ERROR", "case_id": cid}
+
+        except Exception as e:
+            wr.log(f"{cid}: 异常 → ENV_ERROR: {e}")
+            verdict = {"verdict": "ENV_ERROR", "verdict_flags": [],
+                       "reason": str(e), "assertion_results": []}
+            rr = {"status": "ENV_ERROR", "case_id": cid, "reason": str(e)}
+
+        rec = rc.write_result(run_dir, contract_doc, verdict, rr)
+        rc.update_summary(run_dir, rec)
+        v = rec["verdict"]
+        wr.log(f"  → {v} ({rec['duration_seconds']}s)")
+
+        state["verdicts"][v] = state["verdicts"].get(v, 0) + 1
+        state["done"] = i
+        state["current"] = None
+        _write_state(run_dir, state)
+        _update_run_md(run_dir, run_id, state)
 
     state["status"] = "completed"
     _write_state(run_dir, state)

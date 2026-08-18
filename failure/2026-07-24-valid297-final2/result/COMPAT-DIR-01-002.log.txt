@@ -1,5 +1,0 @@
-[2026/07/24 21:50:24.651 GMT+08:00] [INFO] Job(1530331341314867200_1530331341281312775) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/c9107fc8-b4cb-42f7-93c4-43ab20da748d.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/c9107fc8-b4cb-42f7-93c4-43ab20da748d.sh
-GITHUB_DIR_WORKFLOW_RAN

@@ -1,6 +1,0 @@
-[2026/07/28 13:18:41.878 GMT+08:00] [INFO] Job(1531652115930157056_1531652115909185543) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/1fd1a0f3-bfec-4872-8768-864608efc4fb.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/1fd1a0f3-bfec-4872-8768-864608efc4fb.sh
-/home/slave1/runner/workers/0.0.4.4.version/_temp/1fd1a0f3-bfec-4872-8768-864608efc4fb.sh: line 1:    72 Killed                  python3 -c "a=bytearray(9216*1024*1024); print(len(a))"
-::error::Process exited with code 137

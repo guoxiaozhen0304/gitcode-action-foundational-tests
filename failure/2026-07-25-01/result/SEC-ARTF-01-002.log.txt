@@ -1,5 +1,0 @@
-[2026/07/25 12:45:55.726 GMT+08:00] [INFO] Job(1530556705542909952_1530556705521938439) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/1155d9e0-0b5b-4c55-94d3-6df298a6f2eb.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/1155d9e0-0b5b-4c55-94d3-6df298a6f2eb.sh
-000{"error_code":400,"error_code_name":"BAD_REQUEST","error_message":"参数类型错误","trace_id":"7ce0d069edfe93e23b6a13c5148f33a3"}400

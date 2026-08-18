@@ -1,8 +1,0 @@
-[2026/07/28 12:58:50.975 GMT+08:00] [INFO] Job(1531647120769564672_1531647120736010247) duration check: true
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/0f229c94-0c3c-405b-9abc-8681f974ae7d.sh
-::debug::Executing: bash --noprofile --norc -eo pipefail /home/slave1/runner/workers/0.0.4.4.version/_temp/0f229c94-0c3c-405b-9abc-8681f974ae7d.sh
-GLOBAL=global_value
-
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/0187d677-8fc8-40d7-99f0-17c9ae17c431.sh
-::debug::Executing: sh -e /home/slave1/runner/workers/0.0.4.4.version/_temp/0187d677-8fc8-40d7-99f0-17c9ae17c431.sh
-shell_override

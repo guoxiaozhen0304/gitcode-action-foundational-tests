@@ -1,6 +1,0 @@
-[2026/07/25 14:06:15.978 GMT+08:00] [INFO] Job(1530576923321442304_1530576923292082183) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/1932fc52-1c21-4759-bf4e-5c10b9694154.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/1932fc52-1c21-4759-bf4e-5c10b9694154.sh
-chmod: cannot access './scripts/hello.sh': No such file or directory
-::error::Process exited with code 1

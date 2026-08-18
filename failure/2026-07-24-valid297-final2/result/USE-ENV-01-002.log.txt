@@ -1,6 +1,0 @@
-[2026/07/24 22:20:07.677 GMT+08:00] [INFO] Job(1530338820010684416_1530338819989712903) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/ca3de34a-4cae-4490-955d-76c5e4f246c5.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/ca3de34a-4cae-4490-955d-76c5e4f246c5.sh
-/home/slave1/runner/workers/0.0.4.4.version/_temp/ca3de34a-4cae-4490-955d-76c5e4f246c5.sh: line 2: GITHUB_SHA: unbound variable
-::error::Process exited with code 1

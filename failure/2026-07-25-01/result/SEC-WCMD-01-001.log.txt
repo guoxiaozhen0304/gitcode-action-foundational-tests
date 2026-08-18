@@ -1,5 +1,0 @@
-[2026/07/25 12:54:55.406 GMT+08:00] [INFO] Job(1530558969393201152_1530558969359646727) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/26fa5a31-b455-482c-8e36-ec0feaebc149.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/26fa5a31-b455-482c-8e36-ec0feaebc149.sh
-::add-mask::***

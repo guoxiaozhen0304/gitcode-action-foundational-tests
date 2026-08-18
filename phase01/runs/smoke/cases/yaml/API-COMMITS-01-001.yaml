@@ -1,0 +1,23 @@
+---
+id: API-COMMITS-01-001
+dimensions: [completeness]
+dimension: completeness
+priority: P1
+title: 获取提交历史
+intent_ref: INTENT-API-05
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: "/api/v5/repos/{owner}/{repo}/commits"
+  method: GET
+  params:
+    sha: main
+    per_page: 1
+  auth: token
+assertions:
+  - type: positive
+    target: api_status_code
+    status_codes: [200, 404]
+teardown:
+  reset: fixture

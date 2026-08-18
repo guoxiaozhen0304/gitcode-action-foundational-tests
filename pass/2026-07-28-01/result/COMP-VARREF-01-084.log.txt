@@ -1,8 +1,0 @@
-[2026/07/28 13:31:25.125 GMT+08:00] [INFO] Job(1531655317211459584_1531655317190488071) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/9cebf4c9-0251-4ad4-9ffb-26d4788780f9.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/9cebf4c9-0251-4ad4-9ffb-26d4788780f9.sh
-GC_LIT=${gitcode_SOURCE_BRANCH}
-PL_LIT=5cf9a8ced8504745b6d79e93a046a114
-GC_SHELL=
-PL_SHELL=5cf9a8ced8504745b6d79e93a046a114

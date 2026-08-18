@@ -1,0 +1,33 @@
+---
+id: REL-WORKFLOW-01-001
+dimensions: [reliability]
+dimension: reliability
+priority: P0
+title: Actions 基础 Workflow 触发与执行
+intent_ref: INTENT-REL-01
+test_type: workflow
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+trigger:
+  event: push
+workflow: |
+  name: smoke-basic
+  on:
+    push:
+      branches: [main]
+  jobs:
+    hello:
+      name: hello-job
+      runs-on: [ubuntu-latest]
+      steps:
+        - name: say-hello
+          run: echo "hello world"
+assertions:
+  - type: positive
+    target: run_status
+    equals: completed
+  - type: positive
+    target: run_logs
+    contains: "hello world"
+teardown:
+  reset: fixture

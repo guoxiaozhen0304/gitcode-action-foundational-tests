@@ -1,14 +1,15 @@
 # 可执行用例 YAML 契约 schema（JSON-Schema 风格，供 case-writer 自校验 / 第二部分校验）
 # 这是与第二部分的唯一交接契约。字段增删须双方同步。
+# ★ 2026-08-17 扩展：支持 workflow / api / git 三种 test_type，覆盖 Actions + 核心平台 API + Git 操作。
 $schema: "http://json-schema.org/draft-07/schema#"
-title: GitCode Action Executable Test Case
+title: GitCode Executable Test Case
 type: object
-required: [id, dimensions, dimension, priority, title, intent_ref, setup, trigger, assertions, teardown]
+required: [id, dimensions, dimension, priority, title, intent_ref, setup, assertions, teardown, test_type]
 additionalProperties: false
 properties:
   id:
     type: string
-    pattern: "^(COMP|COMPAT|REL|SEC|USE)-[A-Z0-9]+(?:-[A-Z0-9]+)*-\\d{2}-\\d{3}(-V\\d+)?$"
+    pattern: "^(COMP|COMPAT|REL|SEC|USE|API|GIT)-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{2}-\d{3}(-V\d+)?$"
   dimensions:
     type: array
     minItems: 1
@@ -26,7 +27,12 @@ properties:
     minLength: 1
   intent_ref:
     type: string
-    pattern: "^INTENT-(COMP|COMPAT|REL|SEC|USE|ACT)(-NEW)?-[0-9]+$"
+    pattern: "^INTENT-(COMP|COMPAT|REL|SEC|USE|ACT|API|GIT)(-NEW)?-[0-9]+$"
+  test_type:
+    type: string
+    enum: [workflow, api, git]
+
+  # ── 通用前置 / 清理 ──
   setup:
     type: object
     required: [repo_fixture]
@@ -35,8 +41,15 @@ properties:
       secrets: { type: array, items: { type: string } }
       variables: { type: object }
       branch_protection: { type: string }
+  teardown:
+    type: object
+    required: [reset]
+    properties:
+      reset: { type: string, enum: [fixture, full_instance, none] }
+
+  # ── workflow 类型专用 ──
   workflow:
-    type: [string, "null"]         # 内联 workflow 定义；某些用例可为空（如纯触发/配置类）
+    type: [string, "null"]         # 内联 workflow 定义；test_type=api/git 时可省略
   trigger:
     type: object
     required: [event]
@@ -54,6 +67,46 @@ properties:
           action: { type: string, enum: [kill_runner, network_partition, disk_full, cpu_saturate, concurrent_flood] }
           params: { type: object }
           recovery_expectation: { type: string }
+
+  # ── api 类型专用 ──
+  api:
+    type: object
+    required: [endpoint, method]
+    properties:
+      endpoint:
+        type: string
+        description: "API 路径，如 /api/v8/repos/{owner}/{repo}/pulls"
+      method:
+        type: string
+        enum: [GET, POST, PUT, PATCH, DELETE]
+      params:
+        type: object
+        description: "请求参数（query 或 body，视 method 而定）"
+      auth:
+        type: string
+        enum: [token, none]
+        default: token
+      expected_status:
+        type: array
+        items: { type: integer }
+        description: "期望的 HTTP 状态码列表（任一命中即 pass）"
+
+  # ── git 类型专用 ──
+  git:
+    type: object
+    required: [action]
+    properties:
+      action:
+        type: string
+        enum: [clone, push, fetch, branch_create, branch_delete, tag_create, tag_delete, checkout, merge_request_create, merge_request_merge]
+      args:
+        type: object
+        description: "Git 操作参数，如 {branch: feat-x, remote: origin}"
+      local_path:
+        type: string
+        description: "本地仓库路径（相对执行目录）"
+
+  # ── 断言（三类全覆盖） ──
   assertions:
     type: array
     minItems: 1
@@ -62,19 +115,28 @@ properties:
       required: [type, target]
       properties:
         type: { type: string, enum: [positive, negative, nonfunctional] }
-        target: { type: string }
+        target:
+          type: string
+          enum: [run_status, run_logs, job_status, step_status, api_status_code, api_response_body, api_response_header, git_exit_code, git_output, git_branch_list, secret_access, side_effect, latency, concurrency_isolation, error_message]
         # 断言值字段按 type/target 变化，以下为常见项（允许其一）：
         equals: {}
+        contains: { type: string }
         must_not_contain_secret: { type: string }
+        must_not_contain: { type: string }
         eval: { type: string, enum: [deterministic, llm_assisted] }
         rubric: { type: string }
-  teardown:
-    type: object
-    required: [reset]
-    properties:
-      reset: { type: string, enum: [fixture, full_instance, none] }
+        status_code: { type: integer }
+        status_codes: { type: array, items: { type: integer } }
+        json_path: { type: string }
+        json_value: {}
+        le: { type: number }
+        ge: { type: number }
 
 # 校验要点（review/case-writer 须保证）：
-# 1. 安全用例（dimension=security）assertions 中至少一条 type=negative。
-# 2. 破坏性用例 teardown.reset 不得为 none（除非确无副作用）。
-# 3. 主观判据必须标 eval=llm_assisted 并给 rubric，否则视为 deterministic 且必须可机器判定。
+# 1. test_type 必须显式声明，不可省略。
+# 2. test_type=workflow 时，workflow/trigger 字段必须存在。
+# 3. test_type=api 时，api 字段必须存在；workflow/trigger/fault_injection 应省略。
+# 4. test_type=git 时，git 字段必须存在；workflow/trigger/fault_injection 应省略。
+# 5. 安全用例（dimension=security）assertions 中至少一条 type=negative。
+# 6. 破坏性用例 teardown.reset 不得为 none（除非确无副作用）。
+# 7. 主观判据必须标 eval=llm_assisted 并给 rubric，否则视为 deterministic 且必须可机器判定。

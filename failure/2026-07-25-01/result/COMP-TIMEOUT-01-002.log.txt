@@ -1,9 +1,0 @@
-[2026/07/25 13:00:31.751 GMT+08:00] [INFO] Job(1530560379937636352_1530560379904081927) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/82aa7317-e315-47a3-bde7-4a2d9b41872f.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/82aa7317-e315-47a3-bde7-4a2d9b41872f.sh
-starting
-
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/8fa4fe3c-9541-43c3-90ff-12e75bdf78d9.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/8fa4fe3c-9541-43c3-90ff-12e75bdf78d9.sh

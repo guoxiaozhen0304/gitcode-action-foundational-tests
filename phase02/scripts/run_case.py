@@ -39,6 +39,8 @@ sys.path.insert(0, HERE)
 import workflow_runner as wr        # noqa
 import assertion_engine as ae       # noqa
 import log_fetcher                  # noqa
+import api_runner as ar             # noqa
+import git_runner as gr             # noqa
 
 PHASE02 = os.path.dirname(HERE)     # phase02/
 
@@ -75,6 +77,7 @@ def write_result(run_dir, contract, verdict, rr):
         "dimension": contract.get("dimension", ""),
         "priority": contract.get("priority", ""),
         "intent_ref": contract.get("intent_ref", ""),
+        "test_type": contract.get("test_type", "workflow"),
         "phase02_run": os.path.basename(run_dir),
         "verdict": verdict["verdict"],
         "verdict_flags": verdict.get("verdict_flags", []),
@@ -108,6 +111,7 @@ def write_result(run_dir, contract, verdict, rr):
 | 标题 | {rec['title']} |
 | 维度 / 优先级 | {rec['dimension']} / {rec['priority']} |
 | 溯源意图 | {rec['intent_ref']} |
+| 测试类型 | {rec['test_type']} |
 | Phase 02 Run | {rec['phase02_run']}（原生 harness · run_case.py）|
 | GitCode Run ID | {rec['gitcode_run_id']} |
 | head_sha | {rec['head_sha']} |
@@ -165,6 +169,77 @@ def update_summary(run_dir, rec):
     json.dump(summary, open(sp, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
 
 
+def run_workflow_case(contract, run_dir, cid, cfg, fetch_logs):
+    """执行 workflow 类型用例（原有逻辑）。"""
+    reset = (contract.get("teardown") or {}).get("reset", "fixture")
+    wr.log(f"=== 原生执行 {cid} → {cfg.owner}/{cfg.repo}@{cfg.branch} (teardown={reset}) ===")
+    with wr.Workspace(cfg) as ws:
+        rr = wr.run_case(ws, cfg, cid, contract["workflow"], fetch_logs=fetch_logs,
+                         teardown_reset=reset, trigger_event=(contract.get("trigger") or {}).get("event", "push"))
+    rr["case_id"] = cid
+    wf, asserts = load_execution_inputs(contract, run_dir, cid)
+    engine_asserts = asserts if asserts else [{"kind": "status"}]
+    return ae.evaluate(rr, engine_asserts), rr
+
+
+def run_api_case(contract, cid):
+    """执行 api 类型用例。"""
+    api = contract["api"]
+    cfg = ar.ApiConfig()
+    rr = ar.run_api_case(
+        cfg, cid,
+        endpoint=api["endpoint"],
+        method=api.get("method", "GET"),
+        params=api.get("params"),
+        auth=api.get("auth", "token"),
+    )
+    # 将契约 assertions 映射为 assertion_engine 的 kind
+    engine_asserts = []
+    for a in contract.get("assertions", []):
+        target = a.get("target", "")
+        if target == "api_status_code":
+            if "status_codes" in a:
+                engine_asserts.append({"kind": "api_status_code", "status_codes": a["status_codes"]})
+            elif "status_code" in a:
+                engine_asserts.append({"kind": "api_status_code", "status_code": a["status_code"]})
+            elif "equals" in a:
+                engine_asserts.append({"kind": "api_status_code", "equals": a["equals"]})
+        elif target == "api_response_body":
+            if "contains" in a:
+                engine_asserts.append({"kind": "api_response_contains", "expect": a["contains"]})
+            elif "json_path" in a and "json_value" in a:
+                engine_asserts.append({"kind": "api_response_json", "json_path": a["json_path"], "json_value": a["json_value"]})
+        elif target == "latency":
+            engine_asserts.append({"kind": "api_latency_le", "le": a.get("le", 5000)})
+    if not engine_asserts:
+        engine_asserts = [{"kind": "api_status_code", "status_code": 200}]
+    return ae.evaluate(rr, engine_asserts), rr
+
+
+def run_git_case(contract, cid):
+    """执行 git 类型用例。"""
+    git = contract["git"]
+    cfg = gr.GitConfig()
+    rr = gr.run_git_case(
+        cfg, cid,
+        action=git["action"],
+        args=git.get("args"),
+        local_path=git.get("local_path"),
+    )
+    engine_asserts = []
+    for a in contract.get("assertions", []):
+        target = a.get("target", "")
+        if target == "git_exit_code":
+            engine_asserts.append({"kind": "git_exit_code", "equals": a.get("equals", 0)})
+        elif target == "git_output":
+            engine_asserts.append({"kind": "git_output_contains", "expect": a.get("contains", "")})
+        elif target == "git_branch_list":
+            engine_asserts.append({"kind": "git_branch_exists", "expect": a.get("equals", "")})
+    if not engine_asserts:
+        engine_asserts = [{"kind": "git_exit_code", "equals": 0}]
+    return ae.evaluate(rr, engine_asserts), rr
+
+
 def main():
     if len(sys.argv) < 3:
         print("usage: run_case.py <contract-yaml> <run-id> [--no-logs]")
@@ -177,59 +252,64 @@ def main():
     run_dir = os.path.join(PHASE02, "runs", run_id)
     os.makedirs(run_dir, exist_ok=True)
 
-    cfg = wr.RunnerConfig(branch=None)  # branch 从 env / 默认 main
+    test_type = contract.get("test_type", "workflow")
 
-    # 预检：契约字段 + workflow 本地语法 + GitCode API 校验（合并 schema_check + preflight + validate_workflow）
-    ok, verr = wr.preflight_validate(contract, cfg=cfg)
-    if not ok:
-        wr.log(f"{cid}: 预检不通过（{len(verr)} 项）→ COMPILE_ERROR，不 push")
-        for e in verr:
-            wr.log(f"    - {e}")
-        verdict = {"verdict": "COMPILE_ERROR", "verdict_flags": [],
-                   "reason": "; ".join(verr), "assertion_results": []}
-        rec = write_result(run_dir, contract, verdict, {"status": "COMPILE_ERROR"})
-        update_summary(run_dir, rec)
-        return
-
-    wf, asserts = load_execution_inputs(contract, run_dir, cid)
-    if not wf:
-        wr.log(f"{cid}: 契约无 workflow 字段 → NOT_CONFIGURED（纯配置/非运行类，无可执行 workflow）")
-        verdict = {"verdict": "NOT_CONFIGURED", "verdict_flags": [],
-                   "reason": "Phase 01 契约无 workflow 字段", "assertion_results": []}
-        rec = write_result(run_dir, contract, verdict, {"status": "NOT_CONFIGURED"})
-        update_summary(run_dir, rec)
-        return
-
-    # 触发方式支持性由 workflow_runner.TRIGGER_STATUS 统一裁定
-    ev = (contract.get("trigger") or {}).get("event", "push")
-    trig_as = (contract.get("trigger") or {}).get("as", "maintainer")
-    if trig_as == "untrusted_contributor":
-        cp = os.path.expanduser("~/.gitcode-contributor-token")
-        if ev in ("issue_comment", "pull_request_comment") and os.path.exists(cp):
-            pass  # 有 contributor token + issue_comment → 放行
-        else:
-            wr.log(f"{cid}: trigger.as=untrusted_contributor → INCONCLUSIVE（执行路径未实现，拒绝以 maintainer 假验证）")
-            verdict = {"verdict": "INCONCLUSIVE", "verdict_flags": [],
-                       "reason": "untrusted_contributor 执行路径未实现，拒绝以 maintainer 假验证", "assertion_results": []}
-            rec = write_result(run_dir, contract, verdict, {"status": "INCONCLUSIVE", "case_id": cid})
+    if test_type == "workflow":
+        cfg = wr.RunnerConfig(branch=None)
+        # 预检：契约字段 + workflow 本地语法 + GitCode API 校验
+        ok, verr = wr.preflight_validate(contract, cfg=cfg)
+        if not ok:
+            wr.log(f"{cid}: 预检不通过（{len(verr)} 项）→ COMPILE_ERROR，不 push")
+            for e in verr:
+                wr.log(f"    - {e}")
+            verdict = {"verdict": "COMPILE_ERROR", "verdict_flags": [],
+                       "reason": "; ".join(verr), "assertion_results": []}
+            rec = write_result(run_dir, contract, verdict, {"status": "COMPILE_ERROR"})
             update_summary(run_dir, rec)
             return
 
-    reset = (contract.get("teardown") or {}).get("reset", "fixture")
-    wr.log(f"=== 原生执行 {cid} → {cfg.owner}/{cfg.repo}@{cfg.branch} (teardown={reset}) ===")
-    with wr.Workspace(cfg) as ws:
-        rr = wr.run_case(ws, cfg, cid, wf, fetch_logs=fetch_logs, teardown_reset=reset,
-                         trigger_event=ev)
-    rr["case_id"] = cid
+        wf, asserts = load_execution_inputs(contract, run_dir, cid)
+        if not wf:
+            wr.log(f"{cid}: 契约无 workflow 字段 → NOT_CONFIGURED")
+            verdict = {"verdict": "NOT_CONFIGURED", "verdict_flags": [],
+                       "reason": "Phase 01 契约无 workflow 字段", "assertion_results": []}
+            rec = write_result(run_dir, contract, verdict, {"status": "NOT_CONFIGURED"})
+            update_summary(run_dir, rec)
+            return
 
-    # 无编译断言时退化：用契约 assertions 数量提示（这里只做状态型兜底）
-    engine_asserts = asserts if asserts else [{"kind": "status"}]
-    verdict = ae.evaluate(rr, engine_asserts)
+        # 触发方式支持性由 workflow_runner.TRIGGER_STATUS 统一裁定
+        ev = (contract.get("trigger") or {}).get("event", "push")
+        trig_as = (contract.get("trigger") or {}).get("as", "maintainer")
+        if trig_as == "untrusted_contributor":
+            cp = os.path.expanduser("~/.gitcode-contributor-token")
+            if ev in ("issue_comment", "pull_request_comment") and os.path.exists(cp):
+                pass
+            else:
+                wr.log(f"{cid}: trigger.as=untrusted_contributor → INCONCLUSIVE")
+                verdict = {"verdict": "INCONCLUSIVE", "verdict_flags": [],
+                           "reason": "untrusted_contributor 执行路径未实现，拒绝以 maintainer 假验证",
+                           "assertion_results": []}
+                rec = write_result(run_dir, contract, verdict, {"status": "INCONCLUSIVE", "case_id": cid})
+                update_summary(run_dir, rec)
+                return
+
+        verdict, rr = run_workflow_case(contract, run_dir, cid, cfg, fetch_logs)
+
+    elif test_type == "api":
+        verdict, rr = run_api_case(contract, cid)
+
+    elif test_type == "git":
+        verdict, rr = run_git_case(contract, cid)
+
+    else:
+        verdict = {"verdict": "COMPILE_ERROR", "verdict_flags": [],
+                   "reason": f"未知 test_type: {test_type}", "assertion_results": []}
+        rr = {"status": "COMPILE_ERROR", "case_id": cid}
 
     rec = write_result(run_dir, contract, verdict, rr)
     update_summary(run_dir, rec)
     wr.log(f"→ {rec['verdict']} {rec['verdict_flags']} "
-           f"run={rec['gitcode_run_id'][:10]} ({rec['duration_seconds']}s)")
+           f"({rec['duration_seconds']}s)")
 
 
 if __name__ == "__main__":

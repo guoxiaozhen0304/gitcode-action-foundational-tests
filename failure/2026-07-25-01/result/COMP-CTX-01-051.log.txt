@@ -1,8 +1,0 @@
-[2026/07/25 14:02:36.179 GMT+08:00] [INFO] Job(1530576001497436160_1530576001472270343) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/4fd314b1-c37c-4fab-80a8-45061cc95caf.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/4fd314b1-c37c-4fab-80a8-45061cc95caf.sh
-WF_REF=main
-JOB_REF=main
-JOB_STATUS=success
-ATOMGIT_REF=main

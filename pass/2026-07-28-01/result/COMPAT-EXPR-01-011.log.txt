@@ -1,6 +1,0 @@
-[2026/07/28 13:09:22.330 GMT+08:00] [INFO] Job(1531649768831066112_1531649768793317383) duration check: true
-No shell specified, using platform default: default-bash
-::debug::Script file created: /home/slave1/runner/workers/0.0.4.4.version/_temp/3ca3e714-07e2-4443-8e70-ebf33b444f5f.sh
-::debug::Executing: bash -e /home/slave1/runner/workers/0.0.4.4.version/_temp/3ca3e714-07e2-4443-8e70-ebf33b444f5f.sh
-/home/slave1/runner/workers/0.0.4.4.version/_temp/3ca3e714-07e2-4443-8e70-ebf33b444f5f.sh: line 1: ${{ join(['a', 'b', 'c'], '-') }}: bad substitution
-::error::Process exited with code 1

@@ -1,1 +1,0 @@
-<no logs: verdict=COMPILE_ERROR, case not executed>
