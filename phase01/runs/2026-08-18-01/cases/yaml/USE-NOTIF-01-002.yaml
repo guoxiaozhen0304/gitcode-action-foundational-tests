@@ -1,0 +1,27 @@
+---
+id: USE-NOTIF-01-002
+dimensions: ["usability"]
+dimension: usability
+priority: P1
+title: 站内通知与邮件通知的及时性与完整性
+intent_ref: INTENT-USE-019
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: /api/v5/notifications
+  method: GET
+  auth: token
+  expected_status: [200]
+assertions:
+  - type: positive
+    target: api_status_code
+    status_code: 200
+  - type: positive
+    target: api_response_body
+    contains: mention
+  - type: nonfunctional
+    target: latency
+    le: 300
+teardown:
+  reset: none

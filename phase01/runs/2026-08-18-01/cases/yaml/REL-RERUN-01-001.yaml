@@ -1,0 +1,24 @@
+---
+id: REL-RERUN-01-001
+dimensions: ["reliability"]
+dimension: reliability
+priority: P1
+title: 连续请求第 4 次 rerun 观察拒绝行为
+intent_ref: INTENT-REL-025
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: "/api/v8/repos/{owner}/{repo}/actions/runs/{run_id}/rerun"
+  method: POST
+  auth: token
+  expected_status: [403, 422, 429]
+assertions:
+  - type: negative
+    target: api_status_code
+    status_codes: [403, 422, 429]
+  - type: positive
+    target: api_response_body
+    contains: rerun
+teardown:
+  reset: none

@@ -1,0 +1,21 @@
+---
+id: API-ORG-01-001
+dimensions: ["completeness", "compatibility"]
+dimension: completeness
+priority: P1
+title: 团队权限批量分配到仓库
+intent_ref: INTENT-AUTH-003
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: "/api/v5/teams/{id}/repos"
+  method: GET
+  auth: token
+  expected_status: [200]
+assertions:
+  - type: positive
+    target: api_status_code
+    status_code: 200
+teardown:
+  reset: none

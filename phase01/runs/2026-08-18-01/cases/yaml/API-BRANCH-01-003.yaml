@@ -1,0 +1,27 @@
+---
+id: API-BRANCH-01-003
+dimensions: ["completeness", "security"]
+dimension: completeness
+priority: P0
+title: 保护分支要求 CI 通过才可合并
+intent_ref: INTENT-GIT-002
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+  branch_protection: main
+api:
+  endpoint: "/api/v5/repos/{owner}/{repo}/protected_branches/main"
+  method: PUT
+  params: {"require_ci_pass": true, "require_review_count": 1}
+  auth: token
+  expected_status: [200, 201]
+assertions:
+  - type: positive
+    target: api_status_code
+    status_codes: [200, 201]
+  - type: negative
+    target: api_response_body
+    json_path: "$.mergeable"
+    json_value: false
+teardown:
+  reset: fixture

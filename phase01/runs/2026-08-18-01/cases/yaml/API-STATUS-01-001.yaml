@@ -1,0 +1,26 @@
+---
+id: API-STATUS-01-001
+dimensions: ["completeness"]
+dimension: completeness
+priority: P1
+title: 创建 Commit Status 并关联到 MR
+intent_ref: INTENT-HOOK-002
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: "/api/v5/repos/{owner}/{repo}/statuses/{sha}"
+  method: POST
+  params: {"state": "success", "context": "ci/test", "description": "All tests passed"}
+  auth: token
+  expected_status: [201]
+assertions:
+  - type: positive
+    target: api_status_code
+    status_code: 201
+  - type: positive
+    target: api_response_body
+    json_path: "$.state"
+    json_value: success
+teardown:
+  reset: fixture
