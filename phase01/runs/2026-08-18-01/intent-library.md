@@ -1398,8 +1398,8 @@
 |---|---|---|
 | Git Repository | 仓库镜像/同步 | 新增 INTENT-GIT-006 |
 | Git Repository | 子模块（Submodule）支持 | 新增 INTENT-GIT-007 |
-| Issues | Issue 模板 | 新增 INTENT-ISSUE-005 |
-| Issues | 看板（Board/Kanban） | 新增 INTENT-ISSUE-006（P2） |
+| Issues | ~~Issue 模板~~ | ~~2026-08-19 已覆盖~~ |
+| Issues | ~~看板（Board/Kanban）~~ | ~~2026-08-19 已覆盖~~ |
 | 用户与权限 | 外部协作者（Collaborator） | 新增 INTENT-AUTH-004 |
 | 用户与权限 | SSO / LDAP 集成 | 新增 INTENT-AUTH-005（企业级，P2） |
 | 用户与权限 | 两步验证（2FA） | 新增 INTENT-AUTH-006 |
@@ -1410,15 +1410,39 @@
 
 ---
 
+## 六、增量更新（2026-08-19）
+
+应用户要求补充 Issue 模板、看板（Kanban）覆盖，新增 2 条 intent + 4 条用例。
+
+### INTENT-ISSUE-005
+- **状态**: 准入
+- **维度标签**: `[completeness]`
+- **优先级**: P2
+- **标题**: Issue 模板功能可用性探测
+- **覆盖的能力项**: Parity Matrix — Issue 模板 ❓
+- **去重关系**: 无
+- **来源**: 用户增补
+
+### INTENT-ISSUE-006
+- **状态**: 准入
+- **维度标签**: `[completeness]`
+- **优先级**: P2
+- **标题**: 看板（Kanban）功能可用性探测
+- **覆盖的能力项**: Parity Matrix — 看板（Board/Kanban） ❓
+- **去重关系**: 无
+- **来源**: 用户增补
+
+---
+
 ## 附录：统计速查
 
 | 维度 | 准入条数 | P0 | P1 | P2 | 未准入条数 |
 |---|---|---|---|---|---|
-| completeness | 20 | 8 | 12 | 0 | 3 |
+| completeness | 22 | 8 | 12 | 2 | 3 |
 | compatibility | 29 | 3 | 25 | 1 | 1 |
 | reliability | 25 | 1 | 24 | 0 | 4 |
 | security | 20 | 11 | 9 | 0 | 5 |
 | usability | 19 | 3 | 13 | 3 | 0（含 1 条重编号） |
-| **合计** | **113** | **26** | **83** | **4** | **13** |
+| **合计** | **115** | **26** | **83** | **6** | **13** |
 
-> 注：跨维度 intent 在各维度分别计数一次，故按维度求和为 113（因 USE-019 从 spec 移入 usability，总数为 113 条准入 + 13 条未准入 = 126 条记录在库；原始输入 127 条中 5 条合并/拆分后无独立记录）。
+> 注：跨维度 intent 在各维度分别计数一次，故按维度求和为 115（因 USE-019 从 spec 移入 usability，总数为 115 条准入 + 13 条未准入 = 128 条记录在库；原始输入 127 条中 5 条合并/拆分后无独立记录，+ 2 条增量 intent）。

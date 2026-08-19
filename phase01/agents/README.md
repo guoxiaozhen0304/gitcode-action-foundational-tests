@@ -17,7 +17,6 @@
 | Agent | 职责 | 主要产出 |
 |---|---|---|
 | [`spec-analyst/`](spec-analyst/) | 将 GitCode 规格整理为带出处、约束、默认值和置信度的能力清单 | `intents/spec.md` |
-| [`compat-diff/`](compat-diff/) | 对照 GitHub Actions 与 GitCode，发现兼容性疑点并明确 oracle 对齐方向 | `intents/compat.md` |
 | [`security/`](security/) | 从信任边界和 CI/CD 攻击面出发，设计防御性负向验收目标 | `intents/security.md` |
 | [`reliability/`](reliability/) | 覆盖配额边界、并发、故障注入与恢复行为 | `intents/reliability.md` |
 | [`usability/`](usability/) | 从迁移开发者视角检查报错、文档、调试和迁移摩擦 | `intents/usability.md` |
@@ -25,7 +24,7 @@
 | [`review-gate/`](review-gate/) | 独立审计 intent 的重复性、可测性、优先级和维度覆盖，决定是否准入 | 准入/打回/盲区记录 |
 | [`case-writer/`](case-writer/) | 将准入 intent 展开为文本用例，并按 GitCode 规范编译为 YAML | `cases/text/`、`cases/yaml/`、`case-manifest.md` |
 
-其中前五个角色是**维度分析 agent**。它们可在阶段 A 并行工作；`orchestrator` 与 `review-gate` 是收敛与治理角色；`case-writer` 是唯一可以创建交付用例的角色。
+其中前四个角色是**维度分析 agent**。它们可在阶段 A 并行工作；`orchestrator` 与 `review-gate` 是收敛与治理角色；`case-writer` 是唯一可以创建交付用例的角色。
 
 ## 协作流
 
@@ -33,7 +32,7 @@
 inputs/ + baseline/
         │
         ▼
-阶段 A：五个维度分析 agent 并行产生 intent
+阶段 A：四个维度分析 agent 并行产生 intent
         │
         ▼
 orchestrator 汇总、去重、风险映射、覆盖度建模

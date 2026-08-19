@@ -58,7 +58,7 @@ def _resolve_endpoint(endpoint, cfg):
     return endpoint.replace("{owner}", cfg.owner).replace("{repo}", cfg.repo)
 
 
-def api_call(cfg, endpoint, method="GET", params=None, auth="token"):
+def api_call(cfg, endpoint, method="GET", params=None, auth="token", content_type=None):
     """
     执行一次 API 调用。
     返回 (status_code: int, response_body: dict|str, headers: dict, latency_ms: int)。
@@ -66,7 +66,10 @@ def api_call(cfg, endpoint, method="GET", params=None, auth="token"):
     url = cfg.api_base + _resolve_endpoint(endpoint, cfg)
     data = None
     if method in ("POST", "PUT", "PATCH") and params:
-        data = json.dumps(params).encode("utf-8")
+        if content_type == "application/x-www-form-urlencoded":
+            data = urllib.parse.urlencode(params).encode("utf-8")
+        else:
+            data = json.dumps(params).encode("utf-8")
     elif method == "GET" and params:
         qs = "&".join(f"{k}={urllib.parse.quote(str(v))}" for k, v in params.items())
         url += ("&" if "?" in url else "?") + qs
@@ -75,7 +78,7 @@ def api_call(cfg, endpoint, method="GET", params=None, auth="token"):
     if auth == "token" and cfg.token:
         headers["Authorization"] = f"Bearer {cfg.token}"
     if data:
-        headers["Content-Type"] = "application/json"
+        headers["Content-Type"] = content_type or "application/json"
 
     req = urllib.request.Request(url, data=data, method=method, headers=headers)
     t0 = time.time()
@@ -100,7 +103,7 @@ def api_call(cfg, endpoint, method="GET", params=None, auth="token"):
 
 
 def run_api_case(cfg, case_id, endpoint, method="GET", params=None, auth="token",
-                 assertions=None):
+                 assertions=None, content_type=None):
     """
     执行单条 API 测试用例。
     返回 ApiResult dict（结构同 RunResult，供 assertion_engine.evaluate 消费）。
@@ -108,7 +111,7 @@ def run_api_case(cfg, case_id, endpoint, method="GET", params=None, auth="token"
     t0 = time.time()
     log(f"=== API {case_id} → {method} {endpoint} ===")
     try:
-        status_code, body, headers, latency_ms = api_call(cfg, endpoint, method, params, auth)
+        status_code, body, headers, latency_ms = api_call(cfg, endpoint, method, params, auth, content_type)
         log(f"  ← HTTP {status_code} ({latency_ms}ms)")
         body_str = json.dumps(body, ensure_ascii=False) if isinstance(body, (dict, list)) else str(body)
         return {

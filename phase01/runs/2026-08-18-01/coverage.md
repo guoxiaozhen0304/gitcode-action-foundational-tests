@@ -48,11 +48,11 @@
 | CI/CD — Actions | 25 | 22 | 3 | 88% |
 | 代码托管 — Git Repository | 11 | 7 | 4 | 64% |
 | Merge Request | 9 | 9 | 0 | 100% |
-| Issues | 9 | 5 | 4 | 56% |
+| Issues | 9 | 7 | 2 | 78% |
 | Packages | 8 | 5 | 3 | 63% |
 | 用户与权限 | 8 | 4 | 4 | 50% |
 | Webhooks & 集成 | 3 | 3 | 0 | 100% |
-| **合计** | **73** | **55** | **18** | **75%** |
+| **合计** | **73** | **57** | **16** | **78%** |
 
 ### 2.2 盲区清单（无 intent 覆盖）
 
@@ -60,11 +60,11 @@
 |---|---|---|---|
 | 仓库镜像/同步 | Git Repository | ❓ | 后续 run 补 INTENT-GIT-006（P1） |
 | 子模块（Submodule）支持 | Git Repository | ❓ | 后续 run 补 INTENT-GIT-007（P1） |
-| Issue 模板 | Issues | ❓ | 后续 run 补 INTENT-ISSUE-005（P2） |
-| 看板（Board/Kanban） | Issues | ❓ | 后续 run 补 INTENT-ISSUE-006（P2） |
 | 外部协作者（Collaborator） | 用户与权限 | ❓ | 后续 run 补 INTENT-AUTH-004（P1） |
 | SSO / LDAP 集成 | 用户与权限 | ❓ | 企业级，P2 |
 | 两步验证（2FA） | 用户与权限 | ❓ | 后续 run 补 INTENT-AUTH-006（P1） |
+
+> **2026-08-19 增量更新**：Issue 模板、看板（Kanban）已由 API-ISSUE-01-007/008、API-BOARD-01-001/002 覆盖，从盲区移除。
 
 ---
 

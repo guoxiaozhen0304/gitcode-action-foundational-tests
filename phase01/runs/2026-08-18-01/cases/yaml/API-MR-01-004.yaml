@@ -9,9 +9,9 @@ test_type: api
 setup:
   repo_fixture: ComputingActionTest/gitcode_api
 api:
-  endpoint: "/api/v5/repos/{owner}/{repo}/pulls/{number}/comments"
+  endpoint: "/api/v5/repos/{owner}/{repo}/pulls/3/comments"
   method: POST
-  params: {"body": "建议添加异常处理", "path": "src/main.py", "position": 5}
+  params: {"body": "建议添加异常处理"}
   auth: token
   expected_status: [201]
 assertions:

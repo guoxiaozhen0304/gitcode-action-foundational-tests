@@ -34,5 +34,8 @@ assertions:
   - type: positive
     target: run_status
     equals: completed
+  - type: negative
+    target: run_logs
+    must_not_contain: "workflow file not found"
 teardown:
   reset: fixture

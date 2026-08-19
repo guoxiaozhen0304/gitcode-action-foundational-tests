@@ -317,9 +317,10 @@ def _eval_one(a, run_result):
                     "pass": False, "inconclusive": True,
                     "expected": f"json_path '{path}' == {expected_val}",
                     "actual": "response body is not JSON"}
-        # 简单 json_path 支持：a.b.c 或 a[0].b
+        # 简单 json_path 支持：a.b.c 或 a[0].b；去掉开头的 $. 前缀
         val = body
-        for part in path.split("."):
+        clean_path = path.lstrip("$.")
+        for part in clean_path.split("."):
             if isinstance(val, dict):
                 val = val.get(part)
             else:

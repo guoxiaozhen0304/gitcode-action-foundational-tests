@@ -48,9 +48,13 @@
 | 2026-08-18 | **STOP① — 用户确认进入阶段 B** | ✅ |
 | 2026-08-18 | case-writer 完成 — 88 条新增用例（api×31 / git×3 / workflow×54）| ✅ |
 | 2026-08-18 | 验收完成 — coverage.md + dod-checklist.md（DoD 全绿）| ✅ |
-| 2026-08-18 | **STOP② — 交付验收通过，状态 `delivered`** | 🛑 **等待用户确认** |
-| | 验收（STOP②）| ⏳ 待执行 |
+| 2026-08-18 | **STOP② — 交付验收通过，状态 `delivered`** | ✅ |
+| 2026-08-19 | 用户增补：Issue 模板 + 看板（Kanban）| 🔄 **增量更新** |
+| 2026-08-19 | 新增 2 条 intent + 4 条用例（API-ISSUE-01-007/008, API-BOARD-01-001/002）| ✅ |
+| 2026-08-19 | 更新 coverage.md / gate-log.md / intent-library.md / case-manifest.md | ✅ |
+| 2026-08-19 | **STOP② 复验 — 盲区缩减至 16 项，Issues 模块覆盖率 56%→78%** | 🛑 **等待用户最终确认** |
+| 2026-08-19 | **用户最终确认交付，进入 Phase 02 执行** | ✅ |
 
 ## 状态
 
-`delivered`（STOP② 等待用户确认）
+`delivered`（已确认）

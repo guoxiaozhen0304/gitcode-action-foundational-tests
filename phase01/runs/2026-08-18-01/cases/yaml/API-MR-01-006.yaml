@@ -10,8 +10,8 @@ setup:
   repo_fixture: ComputingActionTest/gitcode_api
   branch_protection: main
 api:
-  endpoint: "/api/v5/repos/{owner}/{repo}/pulls/{number}/merge"
-  method: POST
+  endpoint: "/api/v5/repos/{owner}/{repo}/pulls/1/merge"
+  method: PUT
   auth: token
   expected_status: [405, 422, 409]
 assertions:

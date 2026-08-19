@@ -10,9 +10,9 @@ setup:
   repo_fixture: ComputingActionTest/gitcode_api
   branch_protection: main
 api:
-  endpoint: "/api/v5/repos/{owner}/{repo}/protected_branches/main"
+  endpoint: "/api/v5/repos/{owner}/{repo}/branches/main/setting"
   method: PUT
-  params: {"force_push": false, "allow_push_roles": ["Maintainer", "Owner"], "require_ci_pass": true}
+  params: {"pusher": "Owner,Maintainer", "merger": "Owner,Maintainer"}
   auth: token
   expected_status: [200, 201]
 assertions:

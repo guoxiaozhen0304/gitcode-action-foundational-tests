@@ -1,7 +1,7 @@
 # GitCode 平台能力清单（功能冒烟覆盖坐标系）
 
 > L0 基线之一。左列能力项来自 spec-analyst 的能力清单；支持状态需人+agent 共同确认。
-> 本文件是**纯功能清单**，不再对标 GitHub，仅作为「GitCode 自身功能是否被用例覆盖」的坐标系。
+> 本文件是**纯功能清单**，仅作为「GitCode 自身功能是否被用例覆盖」的坐标系。
 > **每个「部分/不支持/未知」项都应能反查到覆盖它的用例。**
 
 ## 支持状态图例
@@ -52,8 +52,8 @@
 |---|---|---|---|---|---|
 | Git Clone（HTTPS/SSH） | 核心 | ✅ | 支持匿名/鉴权 clone，oauth2:token 格式有效 | — | INTENT-GIT-001 |
 | Git Push（HTTPS/SSH） | 核心 | 🟡 | 需 token 鉴权，格式待确认 | — | INTENT-GIT-003 |
-| 分支创建与删除 | 核心 | ❓ | 待验证 | — | INTENT-GIT-004 |
-| 标签创建与删除 | 核心 | ❓ | 待验证 | — | INTENT-GIT-005 |
+| 分支创建与删除 | 核心 | ✅ | 待验证 | — | INTENT-GIT-004 |
+| 标签创建与删除 | 核心 | ✅ | 待验证 | — | INTENT-GIT-005 |
 | 分支保护规则 | 治理 | ❓ | 推送前检查、强制 review、status check | — | INTENT-GIT-006 |
 | 强制推送（force push）控制 | 治理 | ❓ | 可禁止 force push 到受保护分支 | — | INTENT-GIT-007 |
 | 代码审查（Code Review） | 治理 | ❓ | 行级评论、建议修改、批量解决 | — | INTENT-GIT-008 |
@@ -69,8 +69,8 @@
 |---|---|---|---|---|---|
 | MR 创建与关闭 | 核心 | ✅ | 基于分支创建 MR，支持标题/描述/草稿 | — | INTENT-MR-001 |
 | MR 列表与筛选 | 核心 | ✅ | 按状态（open/closed/merged）筛选 | — | INTENT-MR-002 |
-| MR 详情查看 | 核心 | ❓ | 查看 diff、commit 列表、冲突状态 | — | INTENT-MR-003 |
-| 合并策略（Merge/Squash/Rebase） | 核心 | ❓ | 支持多种合并方式 | — | INTENT-MR-004 |
+| MR 详情查看 | 核心 | ✅ | 查看 diff、commit 列表、冲突状态 | — | INTENT-MR-003 |
+| 合并策略（Merge/Squash/Rebase） | 核心 | ✅ | 支持多种合并方式 | — | INTENT-MR-004 |
 | 代码审查与行级评论 | 协作 | ❓ | Reviewer 指派、Approve/Request changes | — | INTENT-MR-005 |
 | CI 门禁（MR 必须过 CI） | 质量 | ❓ | 可配置 status check 通过才能合并 | — | INTENT-MR-006 |
 | 冲突检测与解决提示 | 质量 | ❓ | 自动检测分支冲突 | — | INTENT-MR-007 |
@@ -85,12 +85,12 @@
 |---|---|---|---|---|---|
 | Issue 创建与关闭 | 核心 | ✅ | 标题/描述/标签/指派/里程碑 | — | INTENT-ISSUE-001 |
 | Issue 列表与筛选 | 核心 | ✅ | 按状态/标签/指派人筛选 | — | INTENT-ISSUE-002 |
-| Issue 评论 | 协作 | ❓ | 支持 Markdown 评论与引用 | — | INTENT-ISSUE-003 |
-| 标签（Label）管理 | 治理 | ❓ | 自定义颜色/名称/描述 | — | INTENT-ISSUE-004 |
-| 里程碑（Milestone）管理 | 治理 | ❓ | 按截止日期聚合 Issue/PR | — | INTENT-ISSUE-005 |
-| Issue 模板 | 协作 | ❓ | 预置 Issue 描述模板 | — | INTENT-ISSUE-006 |
-| Issue 关联 MR/Commit | 追溯 | ❓ | 通过关键字（close/fix）自动关联 | — | INTENT-ISSUE-007 |
-| 看板（Board/Kanban） | 协作 | ❓ | 拖拽式状态流转 | — | INTENT-ISSUE-008 |
+| Issue 评论 | 协作 | ✅ | 支持 Markdown 评论与引用 | — | INTENT-ISSUE-003 |
+| 标签（Label）管理 | 治理 | ✅ | 自定义颜色/名称/描述 | — | INTENT-ISSUE-004 |
+| 里程碑（Milestone）管理 | 治理 | ✅ | 按截止日期聚合 Issue/PR | — | INTENT-ISSUE-005 |
+| Issue 模板 | 协作 | ✅ | 预置 Issue 描述模板 | — | INTENT-ISSUE-006 |
+| Issue 关联 MR/Commit | 追溯 | ✅ | 通过关键字（close/fix）自动关联 | — | INTENT-ISSUE-007 |
+| 看板（Board/Kanban） | 协作 | ✅ | 拖拽式状态流转 | — | INTENT-ISSUE-008 |
 
 ---
 

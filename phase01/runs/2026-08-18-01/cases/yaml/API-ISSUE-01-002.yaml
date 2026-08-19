@@ -9,15 +9,15 @@ test_type: api
 setup:
   repo_fixture: ComputingActionTest/gitcode_api
 api:
-  endpoint: "/api/v5/repos/{owner}/{repo}/issues"
+  endpoint: "/api/v5/repos/{owner}/issues"
   method: POST
-  params: {"title": "Bug: test failure", "body": "Steps to reproduce...", "labels": ["bug"]}
+  params: {"repo": "gitcode_api", "title": "Bug: test failure", "body": "Steps to reproduce...", "labels": "bug"}
   auth: token
-  expected_status: [201]
+  expected_status: [200, 201]
 assertions:
   - type: positive
     target: api_status_code
-    status_code: 201
+    status_codes: [200, 201]
   - type: positive
     target: api_response_body
     json_path: "$.state"

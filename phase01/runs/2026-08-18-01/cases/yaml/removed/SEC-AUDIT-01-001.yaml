@@ -20,5 +20,8 @@ assertions:
   - type: positive
     target: api_response_body
     contains: permission
+  - type: negative
+    target: api_response_body
+    must_not_contain: "forbidden"
 teardown:
   reset: none

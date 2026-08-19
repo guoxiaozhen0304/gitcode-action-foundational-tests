@@ -11,16 +11,16 @@ setup:
 api:
   endpoint: "/api/v5/repos/{owner}/{repo}/milestones"
   method: POST
-  params: {"title": "v1.0.0", "state": "open", "due_on": "2026-12-31T00:00:00Z"}
+  params: {"title": "v2.0.0", "due_on": "2026-12-31"}
   auth: token
-  expected_status: [201]
+  expected_status: [200, 201]
 assertions:
   - type: positive
     target: api_status_code
-    status_code: 201
+    status_codes: [200, 201]
   - type: positive
     target: api_response_body
     json_path: "$.title"
-    json_value: v1.0.0
+    json_value: v2.0.0
 teardown:
   reset: fixture

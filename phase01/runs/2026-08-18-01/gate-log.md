@@ -120,8 +120,8 @@
 |---|---|---|---|---|
 | 仓库镜像/同步 | Git Repository | ❓ | 无 intent 覆盖 | 新增 INTENT-GIT-006（P1） |
 | 子模块（Submodule）支持 | Git Repository | ❓ | 无 intent 覆盖 | 新增 INTENT-GIT-007（P1） |
-| Issue 模板 | Issues | ❓ | 无 intent 覆盖 | 新增 INTENT-ISSUE-005（P2） |
-| 看板（Board/Kanban） | Issues | ❓ | 无 intent 覆盖 | 新增 INTENT-ISSUE-006（P2） |
+| Issue 模板 | Issues | ❓ | ~~2026-08-19 已覆盖~~ | ~~API-ISSUE-01-007/008~~ |
+| 看板（Board/Kanban） | Issues | ❓ | ~~2026-08-19 已覆盖~~ | ~~API-BOARD-01-001/002~~ |
 | 外部协作者（Collaborator） | 用户与权限 | ❓ | 无 intent 覆盖 | 新增 INTENT-AUTH-004（P1） |
 | SSO / LDAP 集成 | 用户与权限 | ❓ | 无 intent 覆盖 | 新增 INTENT-AUTH-005（P2，企业级） |
 | 两步验证（2FA） | 用户与权限 | ❓ | 无 intent 覆盖 | 新增 INTENT-AUTH-006（P1） |

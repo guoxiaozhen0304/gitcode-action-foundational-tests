@@ -9,7 +9,7 @@ test_type: api
 setup:
   repo_fixture: ComputingActionTest/gitcode_api
 api:
-  endpoint: "/api/v5/repos/{owner}/{repo}/pulls/{number}/merge"
+  endpoint: "/api/v5/repos/{owner}/{repo}/pulls/1/merge"
   method: GET
   auth: token
   expected_status: [200]

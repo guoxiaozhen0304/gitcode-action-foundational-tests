@@ -9,9 +9,9 @@ test_type: api
 setup:
   repo_fixture: ComputingActionTest/gitcode_api
 api:
-  endpoint: "/api/v5/repos/{owner}/{repo}/protected_branches/main"
+  endpoint: "/api/v5/repos/{owner}/{repo}/branches/main/setting"
   method: PUT
-  params: {"force_push": false}
+  params: {"pusher": "Owner,Maintainer", "merger": "Owner,Maintainer"}
   auth: token
   expected_status: [403, 404]
 assertions:

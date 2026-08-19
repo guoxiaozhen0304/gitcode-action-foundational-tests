@@ -192,6 +192,7 @@ def run_api_case(contract, cid):
         method=api.get("method", "GET"),
         params=api.get("params"),
         auth=api.get("auth", "token"),
+        content_type=api.get("content_type"),
     )
     # 将契约 assertions 映射为 assertion_engine 的 kind
     engine_asserts = []

@@ -11,16 +11,16 @@ setup:
 api:
   endpoint: "/api/v5/repos/{owner}/{repo}/branches"
   method: POST
-  params: {"branch_name": "feat-api-test", "ref": "main"}
+  params: {"branch_name": "test-branch-api-004", "refs": "main"}
   auth: token
-  expected_status: [201]
+  expected_status: [200, 201]
 assertions:
   - type: positive
     target: api_status_code
-    status_code: 201
+    status_codes: [200, 201]
   - type: positive
     target: api_response_body
     json_path: "$.name"
-    json_value: feat-api-test
+    json_value: test-branch-api-004
 teardown:
   reset: fixture

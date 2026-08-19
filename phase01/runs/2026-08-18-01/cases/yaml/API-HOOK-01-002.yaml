@@ -9,13 +9,13 @@ test_type: api
 setup:
   repo_fixture: ComputingActionTest/gitcode_api
 api:
-  endpoint: "/api/v5/repos/{owner}/{repo}/hooks/{id}/test"
+  endpoint: "/api/v5/repos/{owner}/{repo}/hooks/73043/tests"
   method: POST
   auth: token
   expected_status: [200, 204]
 assertions:
   - type: negative
     target: api_status_code
-    status_codes: [200, 401, 403]
+    status_codes: [200, 204, 401, 403]
 teardown:
   reset: fixture

@@ -82,15 +82,15 @@
 | reliability | 20 | 1 | 19 | 0 |
 | security | 24 | 15 | 9 | 0 |
 | usability | 7 | 1 | 4 | 2 |
-| **合计** | **88** | **35** | **51** | **2** |
+| **合计** | **92** | **35** | **55** | **2** |
 
-> 注：按维度分别计数，存在跨维度重复（如 completeness+security、compatibility+security 等）。去重后 **88 条** 物理用例。
+> 注：按维度分别计数，存在跨维度重复。去重后 **92 条** 物理用例（原 88 条 + 本次增量 4 条）。
 
 ### 2.2 按 test_type 统计
 
 | test_type | 条数 | 说明 |
 |---|---|---|
-| `api` | 31 | REST API 测试（MR/Issue/Branch/Tag/Repo/User/Org/Hook/Status/Package/Rate） |
+| `api` | 35 | REST API 测试（MR/Issue/Branch/Tag/Repo/User/Org/Hook/Status/Package/Rate/Board/Template） |
 | `git` | 3 | Git CLI 操作（Clone PAT/SSH, LFS） |
 | `workflow` | 54 | Actions workflow 测试（含 fault_injection 4 条） |
 
@@ -131,6 +131,10 @@
 | API-HOOK-01-002 | P1 | Webhook 签名验证失败时拒绝请求 | INTENT-HOOK-001 | api |
 | API-STATUS-01-001 | P1 | 创建 Commit Status 并关联到 MR | INTENT-HOOK-002 | api |
 | API-RATE-01-001 | P1 | API 速率限制 429 与 Retry-After | INTENT-REL-018 | api |
+| API-ISSUE-01-007 | P2 | 探测仓库 Issue 模板目录存在性 | INTENT-ISSUE-005 | api |
+| API-ISSUE-01-008 | P2 | 探测 Issue 创建 API 是否支持模板参数 | INTENT-ISSUE-005 | api |
+| API-BOARD-01-001 | P2 | 探测仓库 Projects/看板 API 可用性 | INTENT-ISSUE-006 | api |
+| API-BOARD-01-002 | P2 | 探测 Issues 列表 API 是否返回项目/看板字段 | INTENT-ISSUE-006 | api |
 
 #### compatibility 维度（6 条）
 
