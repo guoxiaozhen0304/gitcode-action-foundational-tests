@@ -1,0 +1,27 @@
+---
+id: SEC-AUDIT-01-001
+dimensions: ["security"]
+dimension: security
+priority: P1
+title: 审计日志记录权限变更与 secret 访问事件
+intent_ref: INTENT-SEC-019
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: "/api/v5/repos/{owner}/{repo}/audit-log"
+  method: GET
+  auth: token
+  expected_status: [200]
+assertions:
+  - type: positive
+    target: api_status_code
+    status_code: 200
+  - type: positive
+    target: api_response_body
+    contains: permission
+  - type: negative
+    target: api_response_body
+    must_not_contain: "forbidden"
+teardown:
+  reset: none

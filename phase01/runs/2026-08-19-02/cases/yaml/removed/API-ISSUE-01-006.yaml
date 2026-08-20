@@ -1,0 +1,22 @@
+---
+id: API-ISSUE-01-006
+dimensions: ["completeness"]
+dimension: completeness
+priority: P1
+title: MR 描述含 close 关键字合并后自动关闭 Issue
+intent_ref: INTENT-ISSUE-004
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: "/api/v5/repos/{owner}/{repo}/pulls"
+  method: POST
+  params: {"title": "Fix bug", "head": "fix-branch", "base": "main", "body": "close #1"}
+  auth: token
+  expected_status: [201]
+assertions:
+  - type: positive
+    target: api_status_code
+    status_code: 201
+teardown:
+  reset: fixture

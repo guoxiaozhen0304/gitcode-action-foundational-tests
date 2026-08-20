@@ -1,0 +1,959 @@
+{
+  "org-enterprise": [
+    {
+      "method": "POST",
+      "path": "/api/v5/orgs/{org}/repos",
+      "summary": "创建仓库"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/orgs/{org}/repos",
+      "summary": "获取组织项目列表"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v5/org/{org}/repo/{repo}/status",
+      "summary": "仓库归档"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/org/{org}/projects/{repo}/transfer",
+      "summary": "转移仓"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/orgs/{org}/members/{username}",
+      "summary": "获取组织成员详情"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/orgs/{org}",
+      "summary": "获取一个组织信息"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/orgs/{org}",
+      "summary": "更新授权用户所管理的组织资料"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/enterprises/{enterprise}/members/{username}",
+      "summary": "获取企业的一个成员"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v5/enterprises/{enterprise}/members/{username}",
+      "summary": "修改企业成员权限"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/user/memberships/orgs/{org}",
+      "summary": "获取授权用户在一个组织的成员资料"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/user/memberships/orgs/{org}",
+      "summary": "退出一个组织"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/orgs/{org}/members",
+      "summary": "列出一个组织的所有成员"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/enterprises/{enterprise}/members",
+      "summary": "列出企业的所有成员"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/orgs/{org}/memberships/{username}",
+      "summary": "移除授权用户所管理组织中的成员"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/orgs/{org}/memberships/{username}",
+      "summary": "邀请组织成员"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/orgs/{owner}/followers",
+      "summary": "列出指定组织的所有关注者"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/orgs/{org}/issue/extend/settings",
+      "summary": "获取 issue 扩展配置"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/orgs/{org}/customized_roles",
+      "summary": "获取组织自定义角色"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/enterprises/{enterprise}/issues",
+      "summary": "获取某个企业的所有Issues"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/orgs/{org}/issues",
+      "summary": "获取当前用户某个组织的Issues"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/enterprises/{enterprise}/issues/{number}/comments",
+      "summary": "获取企业某个Issue所有评论"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/enterprises/{enterprise}/issues/{number}",
+      "summary": "获取企业的某个Issue"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/enterprises/{enterprise}/issues/{issue_id}/labels",
+      "summary": "获取企业某个Issue所有标签"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/enterprises/{enterprise}/issue/statuses",
+      "summary": "获取企业issue状态"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/enterprises/{enterprise}/labels",
+      "summary": "获取企业所有的标签"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/enterprises/{enterprise}/labels",
+      "summary": "获取标签列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/enterprises/{enterprise}/pull_requests",
+      "summary": "企业 Pull Request列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/org/{org}/pull_requests",
+      "summary": "组织 Pull Request列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/enterprises/{enterprise}/issues/{number}/pull_requests",
+      "summary": "获取企业 issue 关联的 Pull Requests"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/org/{owner}/kanban/list",
+      "summary": "获取组织看板列表"
+    },
+    {
+      "method": "PUT",
+      "path": "/org/{owner}/kanban/repo/{repo}/{type}/{iid}",
+      "summary": "更新Issue或者Pull Request关联的看板"
+    },
+    {
+      "method": "DELETE",
+      "path": "/org/{owner}/kanban/{kanban_id}/remove_item",
+      "summary": "删除看板关联的Issue或者Pull Request"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/org/{owner}/kanban/{kanban_id}/detail",
+      "summary": "获取单个看板详情"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/org/{owner}/kanban/{kanban_id}/add_item",
+      "summary": "添加Issue或者Pull Request到看板"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v5/org/{owner}/kanban/repo/{repo}/{type}/{iid}",
+      "summary": "更新Issue或者Pull Request关联的看板"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/org/{owner}/kanban/{kanban_id}/remove_item",
+      "summary": "删除看板关联的Issue或者Pull Request"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/org/{owner}/kanban/{kanban_id}/item_list",
+      "summary": "获取看板内容列表"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v5/org/{owner}/kanban/{kanban_id}/state",
+      "summary": "修改看板状态"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/enterprises/{enterprise}/members/{username}",
+      "summary": "获取企业的一个成员"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v8/enterprises/{enterprise}/members/{username}",
+      "summary": "删除企业成员"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v8/enterprises/{enterprise}/members/{username}",
+      "summary": "修改企业成员权限"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/enterprises/{enterprise}/members",
+      "summary": "列出企业的所有成员"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v8/enterprises/{enterprise}/memberships/{username}",
+      "summary": "邀请企业成员"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/org/{org}/enterprise",
+      "summary": "获取组织关联的企业"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v8/enterprises/{enterprise}/milestones",
+      "summary": "创建企业里程碑"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/enterprises/{enterprise}/milestones",
+      "summary": "获取企业里程碑列表"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v8/enterprises/{enterprise}/milestones/{milestone_id}",
+      "summary": "修改企业里程碑"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/enterprises/{enterprise}/milestones/{milestone_id}",
+      "summary": "获取企业里程碑详情"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v8/enterprises/{enterprise}/milestones/{milestone_id}",
+      "summary": "删除企业里程碑"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/enterprises/{enterprise}/groups/projects",
+      "summary": "获取企业里程碑可以关联的项目列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/enterprises/{enterprise_id}/issue_extend_field",
+      "summary": "获取企业Issue自定义字段列表"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v8/enterprises/{enterprise_id}/issues",
+      "summary": "获取企业Issue列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/orgs/{org}/actions/runner-groups/{runner_group_id}/runners",
+      "summary": "查询指定 Runner Group 下的所有主机 Runner"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/orgs/{org}/actions/runner-groups/{runner_group_id}/runner-sets",
+      "summary": "查询指定 Runner Group 下的所有 K8S Runner"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/orgs/{org}/actions/runner-groups",
+      "summary": "查询指定组织下的所有 Runner Group"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/orgs/{org}/actions/runner-groups/{runner_group_id}",
+      "summary": "获取指定 Runner Group 的详细信息"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/orgs/{org}/actions/runner-groups/{runner_group_id}/shared-namespaces",
+      "summary": "查询有权访问指定 Runner Group 的仓库列表"
+    }
+  ],
+  "repo-level": [
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/git/trees/{sha}",
+      "summary": "获取仓库目录Tree"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/repos/{owner}/{repo}/contents/{path}",
+      "summary": "新建文件"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v5/repos/{owner}/{repo}/contents/{path}",
+      "summary": "更新文件"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/repos/{owner}/{repo}/contents/{path}",
+      "summary": "删除文件"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/file_list",
+      "summary": "获取文件列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/git/blobs/{sha}",
+      "summary": "获取文件Blob"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/languages",
+      "summary": "获取仓库的语言"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/contributors",
+      "summary": "获取仓库贡献者"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/repos/{owner}/{repo}",
+      "summary": "更新仓库设置"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/repos/{owner}/{repo}",
+      "summary": "删除一个仓库"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/transition",
+      "summary": "获取项目的权限模式"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/push_config",
+      "summary": "获取项目推送规则"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/forks",
+      "summary": "查看仓库的Forks"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/subscribers",
+      "summary": "列出 watch 了仓库的用户"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/stargazers",
+      "summary": "列出 star 了仓库的用户"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/repo_settings",
+      "summary": "获取仓库设置"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pull_request_settings",
+      "summary": "获取 Pull Request设置"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/customized_roles",
+      "summary": "获取项目自定义角色"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/download_statistics",
+      "summary": "下载次数统计"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/raw/{path}",
+      "summary": "获取 raw 文件"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/contributors/statistic",
+      "summary": "获取仓库贡献者统计信息"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/events",
+      "summary": "获取仓库动态"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/notifications",
+      "summary": "列出一个仓库里的通知"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/branches/{branch}",
+      "summary": "获取单个分支"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/repos/{owner}/{repo}/branches/{wildcard}/setting",
+      "summary": "删除保护分支规则"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/protect_branches",
+      "summary": "获取保护分支规则列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/commits",
+      "summary": "获取仓库所有提交"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/commits/{sha}",
+      "summary": "仓库的某个提交"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/compare/{base}...{head}",
+      "summary": "Commits对比"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/comments/{id}",
+      "summary": "获取仓库的某条Commit评论"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/comments",
+      "summary": "获取仓库的Commit评论"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/commits/{ref}/comments",
+      "summary": "获取单个commit评论"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/commit/{sha}/diff",
+      "summary": "获取commit的diff"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/commit/{sha}/patch",
+      "summary": "获取commit的patch"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/tags",
+      "summary": "列出项目所有的tags"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/protected_tags",
+      "summary": "列出项目保护 tags"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/protected_tags/{tag_name}",
+      "summary": "获取项目保护 tag 详情"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/issues/{number}",
+      "summary": "获取仓库的某个Issue"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/issues/{number}/comments",
+      "summary": "获取仓库某个Issue所有的评论"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/issues/comments",
+      "summary": "获取仓库所有 Issue 评论"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/issues/{number}/pull_requests",
+      "summary": "获取 issue 关联的 pull requests"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/issues/{number}/operate_logs",
+      "summary": "获取某个issue下的操作日志"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/issues/comments/{id}",
+      "summary": "获取仓库Issue某条评论"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/issues/{number}/related_branches",
+      "summary": "获取issue关联的分支列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/issues/{number}/user_reactions",
+      "summary": "获取issue的表态列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/issues/comment/{comment_id}/user_reactions",
+      "summary": "获取issue评论的表态列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/issues/{number}/modify_history",
+      "summary": "获取issue的修改历史"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/issues/comment/{comment_id}/modify_history",
+      "summary": "获取issue评论的修改历史"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/labels",
+      "summary": "获取仓库所有任务标签"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls",
+      "summary": "获取项目Pull Request列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/{number}/issues",
+      "summary": "获取pr关联的issue"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/{number}/comments",
+      "summary": "获取某个Pull Request的所有评论"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/{number}/files",
+      "summary": "Pull Request Commit文件列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/{number}",
+      "summary": "获取单个Pull Request"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/{number}/commits",
+      "summary": "获取某Pull Request的所有Commit信息"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/{number}/labels",
+      "summary": "获取某个 Pull Request的所有标签"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/{number}/operate_logs",
+      "summary": "获取某个Pull Request的操作日志"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/{number}/option_reviewers",
+      "summary": "获取可作为Pull Request评审人列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/option_testers",
+      "summary": "获取可作为Pull Request测试人列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/{number}/files.json",
+      "summary": "pr提交的文件变更信息"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/{number}/user_reactions",
+      "summary": "获取Pull Request的表态列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/comments/{id}",
+      "summary": "获取Pull Request某条评论"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/comment/{comment_id}/user_reactions",
+      "summary": "获取Pull Request评论的表态列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/{number}/modify_history",
+      "summary": "获取Pull Request的修改历史"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/pulls/comment/{comment_id}/modify_history",
+      "summary": "获取Pull Request评论的修改历史"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/milestones",
+      "summary": "获取仓库所有里程碑"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/milestones/{number}",
+      "summary": "获取仓库单个里程碑"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/collaborators/{username}",
+      "summary": "判断用户是否为仓库成员"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/collaborators",
+      "summary": "获取仓库的所有成员"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/collaborators/{username}/permission",
+      "summary": "查看仓库成员的权限"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/collaborators/self-permission",
+      "summary": "查看当前成员仓库的权限点"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/hooks/{id}",
+      "summary": "获取仓库单个WebHook"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/releases/tags/{tag}",
+      "summary": "根据Tag名称获取仓库的Release"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/releases/{tag}",
+      "summary": "获取仓库的单个Releases"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/releases",
+      "summary": "获取仓库的所有Releases"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/releases/latest",
+      "summary": "获取仓库的最新的Release"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/releases/{tag}/attach_files/{file_name}/download",
+      "summary": "下载仓库release附件"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/repos/{owner}/{repo}/releases/{tag}/upload_url",
+      "summary": "获取Release附件上传地址"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/runs",
+      "summary": "获取仓库所有的流水线的运行记录"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/runs/{run_id}",
+      "summary": "获取流水线的运行详情"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
+      "summary": "获取工作流运行的jobs列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/runs/{run_id}/jobs/{job_id}",
+      "summary": "获取工作流运行的job详情"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/runs/{run_id}/jobs/{job_id}/download_log",
+      "summary": "下载工作流运行的job日志"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/artifacts",
+      "summary": "列出仓库的 Artifacts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
+      "summary": "列出特定 Run 的 Artifacts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
+      "summary": "获取 Artifact 详情"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
+      "summary": "下载指定 Artifact"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/runners",
+      "summary": "查询指定仓库下的所有主机 Runner"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/runners/shared-runners",
+      "summary": "查询分享给仓库的所有主机 Runner"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/runner-sets",
+      "summary": "查询指定仓库下的所有 K8S Runner"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/repos/{owner}/{repo}/actions/shared-runner-sets",
+      "summary": "查询分享给仓库的所有 K8S Runner"
+    }
+  ],
+  "other": [
+    {
+      "method": "GET",
+      "path": "/api/v5/users/{username}/orgs",
+      "summary": "列出用户所属的组织"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/users/orgs",
+      "summary": "列出授权用户所属的组织"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/orgs",
+      "summary": "创建组织"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/users/{username}",
+      "summary": "获取一个用户"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/user",
+      "summary": "获取授权用户的资料"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/user",
+      "summary": "更新授权用户的资料"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/emails",
+      "summary": "获取授权用户的全部邮箱"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/users/{username}/events",
+      "summary": "获取用户个人动态"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/users/{username}/repos",
+      "summary": "获取某个用户的公开仓库"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/users/{username}/starred",
+      "summary": "列出用户 star 了的仓库"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/users/{username}/subscriptions",
+      "summary": "列出用户 watch 了的仓库"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/{owner}/{repo}/repository/commit_statistics",
+      "summary": "获取代码量贡献"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/repos/{owner}/issues/{number}",
+      "summary": "更新Issue"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/search/users",
+      "summary": "搜索用户"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/search/issues",
+      "summary": "搜索 Issues"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/search/repositories",
+      "summary": "搜索仓库"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/image/generate",
+      "summary": "生成图像"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v8/enterprise/{enterprise_id}/customized_roles",
+      "summary": "获取企业自定义角色"
+    }
+  ],
+  "user": [
+    {
+      "method": "POST",
+      "path": "/api/v5/user/repos",
+      "summary": "创建个人项目仓库"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/user/repos",
+      "summary": "列出授权用户所有仓库"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/user/keys",
+      "summary": "添加一个公钥"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/user/keys",
+      "summary": "列出授权用户的所有公钥"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/user/keys/{id}",
+      "summary": "删除一个公钥"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/user/keys/{id}",
+      "summary": "获取一个公钥"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/user/namespace",
+      "summary": "获取授权用户的一个 Namespace"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/user/starred",
+      "summary": "列出授权用户 star 了的仓库"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/user/subscriptions",
+      "summary": "列出授权用户 watch 了的仓库"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/user/namespaces",
+      "summary": "列出授权用户所有的 Namespace"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/user/pulls",
+      "summary": "列出授权用户的Pull Request列表"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/user/issues",
+      "summary": "获取授权用户的所有Issues"
+    }
+  ],
+  "oauth": [
+    {
+      "method": "GET",
+      "path": "/oauth/authorize",
+      "summary": "认证接口"
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/token",
+      "summary": "获取或刷新授权 Token 接口"
+    }
+  ],
+  "ai-services": [
+    {
+      "method": "POST",
+      "path": "/api/v5/chat/completions",
+      "summary": "send"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/similarity/",
+      "summary": "句子相似度"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/images/edits",
+      "summary": "图像生成图像"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/audio/transcriptions",
+      "summary": "自动语音识别"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/detect/yolo",
+      "summary": "目标检测"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/video/generate",
+      "summary": "图像生成视频（创建任务）"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/video/status",
+      "summary": "图像生成视频（查询状态）"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/audio/classification",
+      "summary": "音频分类"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/audio/speech",
+      "summary": "文本转语音"
+    }
+  ]
+}

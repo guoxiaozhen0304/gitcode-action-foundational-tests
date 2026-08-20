@@ -1,0 +1,28 @@
+id: API-SMOKE-01-203
+dimensions:
+- completeness
+dimension: completeness
+priority: P1
+title: 探测 查询指定 Runner Group 下的所有主机 Runner 端点可用性
+intent_ref: INTENT-COMP-106
+test_type: api
+setup:
+  repo_fixture: openeuler-test/gitcode_apitest
+api:
+  endpoint: /api/v8/orgs/{org}/actions/runner-groups/{runner_group_id}/runners
+  method: GET
+  auth: token
+  expected_status: &id001
+  - 200
+  - 401
+  - 403
+  - 404
+assertions:
+- type: positive
+  target: api_status_code
+  status_codes: *id001
+- type: negative
+  target: api_response_body
+  must_not_contain: Internal Server Error
+teardown:
+  reset: fixture

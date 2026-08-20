@@ -1,0 +1,32 @@
+id: API-SMOKE-01-181
+dimensions:
+- completeness
+dimension: completeness
+priority: P1
+title: 探测 更新Issue或者Pull Request关联的看板 端点可用性
+intent_ref: INTENT-COMP-106
+test_type: api
+setup:
+  repo_fixture: openeuler-test/gitcode_apitest
+api:
+  endpoint: /org/{owner}/kanban/repo/{repo}/{type}/{iid}
+  method: PUT
+  auth: token
+  expected_status: &id001
+  - 200
+  - 201
+  - 400
+  - 401
+  - 403
+  - 404
+  - 405
+  - 422
+assertions:
+- type: positive
+  target: api_status_code
+  status_codes: *id001
+- type: negative
+  target: api_response_body
+  must_not_contain: Internal Server Error
+teardown:
+  reset: fixture
