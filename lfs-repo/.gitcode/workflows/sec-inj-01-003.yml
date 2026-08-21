@@ -1,0 +1,17 @@
+name: test-comment-injection
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  test:
+    name: test comment injection
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: echo comment body
+        run: |
+          echo '${{ atomgit.event.comment.body }}'
+      - name: use comment in env
+        run: |
+          echo "BODY=$COMMENT_BODY"
+        env:
+          COMMENT_BODY: ${{ atomgit.event.comment.body }}

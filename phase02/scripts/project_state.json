@@ -1,0 +1,13 @@
+{
+  "owner": "weixin_55883847",
+  "repo": "gitcode_test_run_1787293012",
+  "timestamp": "1787293012",
+  "branches": [
+    "feature-branch-1787293012",
+    "wip-branch-1787293012",
+    "test-branch-1787293012"
+  ],
+  "issue_number": "1",
+  "hook_id": 73641,
+  "milestone_title": "v1.0.0-1787293012"
+}
