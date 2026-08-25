@@ -1,0 +1,11 @@
+{
+  "case_id": "UI-SEARCH-01-001",
+  "status": "ENV_ERROR",
+  "ui_url": "https://gitcode.com",
+  "duration_seconds": 30.26,
+  "assertions": [],
+  "screenshots": [],
+  "logs": "",
+  "logs_available": true,
+  "error": "Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\"input[placeholder*='搜索']\") to be visible\n"
+}

@@ -1,0 +1,26 @@
+---
+id: UI-REPO-01-001
+dimensions: ["completeness"]
+dimension: completeness
+priority: P1
+title: 访问公开仓库首页并验证核心元素可见
+intent_ref: INTENT-UI-002
+test_type: ui
+ui:
+  url: "https://gitcode.com/openeuler-test/test-issue"
+  viewport:
+    width: 1280
+    height: 720
+  actions:
+    - type: wait
+      ms: 3000
+assertions:
+  - type: positive
+    target: ui_page_title
+    text: "test-issue"
+  - type: positive
+    target: ui_element_visible
+    selector: "main"
+    timeout: 10000
+teardown:
+  reset: none

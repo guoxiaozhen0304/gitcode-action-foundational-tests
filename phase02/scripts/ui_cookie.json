@@ -1,0 +1,252 @@
+[
+  {
+    "name": "uuid_tt_dd",
+    "value": "10_8221442450-1787556767411-312735",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1822116767.504696,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "c_gitcode_rid",
+    "value": "1787556767411_447659",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1790148767.504754,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "c_gitcode_fref",
+    "value": "-",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1790148767.504791,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "c_gitcode_um",
+    "value": "-",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1790148767.50484,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "HWWAFSESTIME",
+    "value": "1787556764446",
+    "domain": "gitcode.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "HWWAFSESID",
+    "value": "080cf17ee982aa924fb",
+    "domain": "gitcode.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "HMACCOUNT_BFESS",
+    "value": "23F7795973E4B6F3",
+    "domain": ".hm.baidu.com",
+    "path": "/",
+    "expires": 1822116767.890096,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "None"
+  },
+  {
+    "name": "Hm_lvt_62047c952451105d57bab2c4af9ce85b",
+    "value": "1787556768",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1819092780,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "HMACCOUNT",
+    "value": "23F7795973E4B6F3",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "gitcode_first_time",
+    "value": "2026-08-24%2015:32:48",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1822116768.136372,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "gitcode_theme",
+    "value": "white",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1819092768,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "_fr_ssid",
+    "value": "9b82c8891fde40f49961ca187aaeeae6",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1787558568,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "_frid",
+    "value": "b51498bc9e654f40b7dc5b595bb04d92",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1819092768,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "HWWAFSESTIME",
+    "value": "1787556768072",
+    "domain": "web-api.gitcode.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "HWWAFSESID",
+    "value": "1c2cb8b570b82a5c04",
+    "domain": "web-api.gitcode.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "BENSESSCC_TAG",
+    "value": "10_8221442450-1787556767411-312735",
+    "domain": "web-api.gitcode.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "pageSize",
+    "value": "{%22global-pager%22:10}",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "GITCODE_ACCESS_TOKEN",
+    "value": "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiI2NWVmMDE0NDg4MDI4NjQ0NWNjM2ZiMmMiLCJzdWIiOiJ3ZWl4aW5fNTU4ODM4NDciLCJhdXRob3JpdGllcyI6W10sIm9iamVjdElkIjoiNmE4YmYzYWJiYTMyNjQ2ZDY4MjkxOWI0IiwiaWF0IjoxNzg3NTU2Nzc5LCJleHAiOjE3ODc2NDMxNzl9.xDBy1LtEfERzg1WjIMiPGIZDY-fm3TKyUKsJY2cJAcxQzsdjNfNH08a_PWBPTioO-C5WZCC375d6ORwgjBTRwg",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1803108781.179004,
+    "httpOnly": true,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "GITCODE_REFRESH_TOKEN",
+    "value": "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiI2NWVmMDE0NDg4MDI4NjQ0NWNjM2ZiMmMiLCJzdWIiOiJ3ZWl4aW5fNTU4ODM4NDciLCJhdXRob3JpdGllcyI6W10sIm9iamVjdElkIjoiNmE4YmYzYWJiYTMyNjQ2ZDY4MjkxOWI0IiwiaWF0IjoxNzg3NTU2Nzc5LCJleHAiOjE3OTI3NDA3Nzl9.QUzoUzQWMHEdhtKoXEcTkmEEURFfT3sD0-Hhlu3WdIxw2u2HQgulbi7J-oZ5c3Yo2ZL6h_wmeQv_oMdJMOALfw",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1803108781.179097,
+    "httpOnly": true,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "GitCodeUserName",
+    "value": "weixin_55883847",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1803108784.838227,
+    "httpOnly": true,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "gitcode_wechat_from",
+    "value": "",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1787556793.506884,
+    "httpOnly": true,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "Hm_lpvt_62047c952451105d57bab2c4af9ce85b",
+    "value": "1787556780",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "UnsafeGitCodeUserName",
+    "value": "weixin_55883847",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1787557383.89314,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "canary_bucket",
+    "value": "90",
+    "domain": ".gitcode.com",
+    "path": "/",
+    "expires": 1790148782.218294,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "gitcode_lang",
+    "value": "zh",
+    "domain": "gitcode.com",
+    "path": "/",
+    "expires": 1819092781.218404,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  }
+]

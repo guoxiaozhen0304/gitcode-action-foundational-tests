@@ -1,0 +1,11 @@
+{
+  "case_id": "UI-ISSUE-01-002",
+  "status": "ENV_ERROR",
+  "ui_url": "https://gitcode.com/{owner}/{repo}/issues",
+  "duration_seconds": 16.51,
+  "assertions": [],
+  "screenshots": [],
+  "logs": "",
+  "logs_available": true,
+  "error": "Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href*='{owner}/{repo}/issues/new']\") to be visible\n"
+}

@@ -28,11 +28,11 @@ PHASE02 = os.path.dirname(HERE)
 ROOT = os.path.dirname(PHASE02)
 
 import re
-_ID_RE = re.compile(r"^(COMP|COMPAT|REL|SEC|USE|API|GIT)-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{2}-\d{3}(-V\d+)?$")
+_ID_RE = re.compile(r"^(COMP|COMPAT|REL|SEC|USE|API|GIT|UI)-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{2}-\d{3}(-V\d+)?$")
 _DIMS = {"completeness", "compatibility", "reliability", "security", "usability"}
 _PRIOS = {"P0", "P1", "P2"}
 _ATYPES = {"positive", "negative", "nonfunctional"}
-_TEST_TYPES = {"workflow", "api", "git"}
+_TEST_TYPES = {"workflow", "api", "git", "ui"}
 
 
 def validate_case(doc):
@@ -76,6 +76,25 @@ def validate_case(doc):
             git = doc["git"]
             if not isinstance(git, dict) or "action" not in git:
                 errs.append("git 字段必须包含 action")
+    # ui 类型必填字段
+    if tt == "ui":
+        if "ui" not in doc:
+            errs.append("test_type=ui 时缺 ui 字段")
+        else:
+            ui = doc["ui"]
+            if not isinstance(ui, dict) or "url" not in ui or "actions" not in ui:
+                errs.append("ui 字段必须包含 url 和 actions")
+            actions = ui.get("actions", [])
+            if not isinstance(actions, list):
+                errs.append("ui.actions 必须为数组")
+            else:
+                for i, act in enumerate(actions):
+                    if not isinstance(act, dict) or "type" not in act:
+                        errs.append(f"ui.actions[{i}] 缺 type")
+        # ui 用例应省略 workflow/trigger/fault_injection/api/git 字段
+        for forbidden in ("workflow", "trigger", "fault_injection", "api", "git"):
+            if forbidden in doc:
+                errs.append(f"test_type=ui 时不应包含 {forbidden} 字段")
 
     setup = doc.get("setup")
     if isinstance(setup, dict) and "repo_fixture" not in setup:

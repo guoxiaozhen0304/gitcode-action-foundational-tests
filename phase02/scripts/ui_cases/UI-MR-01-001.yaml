@@ -1,0 +1,26 @@
+---
+id: UI-MR-01-001
+dimensions: ["completeness"]
+dimension: completeness
+priority: P1
+title: 访问公开仓库 MR 列表页并验证列表区域可见
+intent_ref: INTENT-UI-003
+test_type: ui
+ui:
+  url: "https://gitcode.com/openeuler-test/test-issue/pulls"
+  viewport:
+    width: 1280
+    height: 720
+  actions:
+    - type: wait
+      ms: 3000
+assertions:
+  - type: positive
+    target: ui_page_title
+    text: "合并请求"
+  - type: positive
+    target: ui_element_visible
+    selector: "main"
+    timeout: 10000
+teardown:
+  reset: none

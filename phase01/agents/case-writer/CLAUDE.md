@@ -21,6 +21,7 @@
     (2) `if:` 状态**实测只认 `${{ always() }}`（带括号）**——平台拒绝文档里的裸 `${{ always }}`/`${{ failed }}`，也拒绝 `${{ success() }}`；success/failure 门控暂无可用写法，需要条件改用 `${{ atomgit.* }}` 显式表达式。详见 `VALIDATION-RULES.md` §4。
     另外：所有 `run:` 一律用 `run: |` block scalar（单行含冒号会触发 `Nested mappings` 错误，见 §4c）。）
 - `phase01/inputs/gitcode-api/api-reference.md`（**API 参考**：编译 YAML 时，若断言可经 API 确定性判定——如检查 run status、下载 job 日志验证内容——在 assert 块中标注可用的 API 端点与参数）
+- `phase02/scripts/ui_runner.py` 与 `phase02/scripts/ui_cases/*.yaml`（**UI 参考**：当 intent 涉及 Web 页面交互——如创建 Issue/MR、点击合并按钮——编译为 `test_type: ui`。参考 ui_runner 支持的 action 类型：`navigate`/`click`/`fill`/`type`/`select`/`screenshot`/`wait`/`wait_for_selector`；断言 target：`ui_element_visible`/`ui_text_contains`/`ui_page_title`/`ui_url_match`/`ui_element_count`。选择器使用 Playwright 语法，支持 `:visible`、`:has-text()`。）
 - `phase01/rules.md`（命名、优先级、断言、脱敏、溯源纪律。★ 特别注意 §9b 全集原则）
 
 ## 工作步骤
@@ -46,6 +47,13 @@
 
 ### 3. 先写文本用例 → `cases/text/<ID>.md`
 ### 4. 再编译 YAML → `cases/yaml/<ID>.yaml`
+
+编译时按 `test_type` 选择分支：
+- `workflow`：产出 `workflow`/`trigger`/`fault_injection` 块，按 GitCode Actions 规范编译
+- `api`：产出 `api` 块（endpoint/method/params/expected_status）
+- `git`：产出 `git` 块（action/args/local_path）
+- **`ui`（★ 2026-08-25 新增）**：产出 `ui` 块（url/viewport/actions/assertions/cookie）。URL 中可用 `{owner}`/`{repo}` 占位符；选择器使用 Playwright 语法；断言 target 从 `ui_element_visible`、`ui_text_contains`、`ui_page_title`、`ui_url_match`、`ui_element_count` 中选择。`setup.repo_fixture` 可设为 `null` 或省略。
+
 ### 5. 统一 manifest
 产出 `case-manifest.md` = KEEP 用例 + 新增用例 + DEPRECATE 记录。
 
@@ -60,6 +68,7 @@
 - [ ] 每条用例 ID 含 run 序列，跨 run 不碰撞（见 `rules.md` §1.3）。
 - [ ] 每条文本用例可溯源到 `intent_ref`，含明确预期结果与正向+负向验证点。
 - [ ] 每条文本用例有对应、过 schema 校验的 YAML。
+- [ ] UI 用例（`test_type=ui`）的 `ui.url` 可解析，`ui.actions` 序列合理，`ui.assertions` 至少一条可确定性判定（不依赖人眼）。
 - [ ] 安全用例文本层含「不应发生」，YAML 层落 `negative` 断言。
 - [ ] 破坏性用例声明了正确的 `teardown.reset`。
 - [ ] 断言可确定性判定；主观项标 `eval: llm_assisted`。

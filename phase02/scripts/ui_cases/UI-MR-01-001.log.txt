@@ -1,0 +1,25 @@
+{
+  "case_id": "UI-MR-01-001",
+  "status": "PASS",
+  "ui_url": "https://gitcode.com/openeuler-test/test-issue/pulls",
+  "duration_seconds": 9.59,
+  "assertions": [
+    {
+      "assertion": "ui_page_title",
+      "type": "positive",
+      "passed": true,
+      "detail": "Page title '合并请求 - Pull Requests - openeuler-test/test-issue - AtomGit' contains '合并请求'"
+    },
+    {
+      "assertion": "ui_element_visible",
+      "type": "positive",
+      "passed": true,
+      "detail": "Element visible: main"
+    }
+  ],
+  "screenshots": [
+    "phase02/scripts/ui_cases\\UI-MR-01-001_final.png"
+  ],
+  "logs": "",
+  "logs_available": true
+}

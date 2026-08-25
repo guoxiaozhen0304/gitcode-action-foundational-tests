@@ -45,6 +45,7 @@ def main():
         'feature-branch': branches[0] if len(branches) > 0 else f'feature-branch-{ts}',
         'wip-branch': branches[1] if len(branches) > 1 else f'wip-branch-{ts}',
         'test-branch-api-004': f'test-branch-api-004-{ts}',
+        'feat-create-mr': branches[0] if len(branches) > 0 else f'feature-branch-{ts}',
         # issue / hook
         '/issues/1/': f'/issues/{issue_number}/',
         '/hooks/73280/': f'/hooks/{hook_id}/',

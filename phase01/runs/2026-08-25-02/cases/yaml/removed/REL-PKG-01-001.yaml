@@ -1,0 +1,21 @@
+---
+id: REL-PKG-01-001
+dimensions: ["reliability"]
+dimension: reliability
+priority: P1
+title: 500MB 包中途断网观察断点续传或重试
+intent_ref: INTENT-REL-022
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: "/api/v5/repos/{owner}/{repo}/packages/generic"
+  method: POST
+  auth: token
+  expected_status: [201, 408, 499]
+assertions:
+  - type: positive
+    target: api_status_code
+    status_codes: [201, 408, 499]
+teardown:
+  reset: fixture

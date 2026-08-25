@@ -1,0 +1,21 @@
+---
+id: SEC-PKG-01-001
+dimensions: ["security"]
+dimension: security
+priority: P1
+title: 低权限用户不得覆盖或删除已有包版本
+intent_ref: INTENT-SEC-017
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: "/api/v5/repos/{owner}/{repo}/packages/npm/1.0.0"
+  method: DELETE
+  auth: token
+  expected_status: [403]
+assertions:
+  - type: negative
+    target: api_status_code
+    status_code: 403
+teardown:
+  reset: none

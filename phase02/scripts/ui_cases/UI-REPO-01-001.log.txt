@@ -1,0 +1,25 @@
+{
+  "case_id": "UI-REPO-01-001",
+  "status": "PASS",
+  "ui_url": "https://gitcode.com/openeuler-test/test-issue",
+  "duration_seconds": 10.44,
+  "assertions": [
+    {
+      "assertion": "ui_page_title",
+      "type": "positive",
+      "passed": true,
+      "detail": "Page title 'test-issue - AtomGit' contains 'test-issue'"
+    },
+    {
+      "assertion": "ui_element_visible",
+      "type": "positive",
+      "passed": true,
+      "detail": "Element visible: main"
+    }
+  ],
+  "screenshots": [
+    "phase02/scripts/ui_cases\\UI-REPO-01-001_final.png"
+  ],
+  "logs": "",
+  "logs_available": true
+}

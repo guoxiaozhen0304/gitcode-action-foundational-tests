@@ -1,0 +1,25 @@
+---
+id: UI-SMOKE-01-001
+dimensions: ["completeness"]
+dimension: completeness
+priority: P0
+title: 访问 GitCode 首页并验证标题
+intent_ref: INTENT-UI-001
+test_type: ui
+ui:
+  url: "https://gitcode.com"
+  viewport:
+    width: 1280
+    height: 720
+  actions:
+    - type: wait
+      ms: 2000
+assertions:
+  - type: positive
+    target: ui_page_title
+    text: "全球开发者"
+  - type: positive
+    target: ui_element_visible
+    selector: "body"
+teardown:
+  reset: none

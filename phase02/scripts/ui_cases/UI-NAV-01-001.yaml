@@ -1,0 +1,30 @@
+---
+id: UI-NAV-01-001
+dimensions: ["completeness"]
+dimension: completeness
+priority: P1
+title: 在仓库首页点击 Issues Tab 并验证跳转
+intent_ref: INTENT-UI-006
+test_type: ui
+ui:
+  url: "https://gitcode.com/openeuler-test/test-issue"
+  viewport:
+    width: 1280
+    height: 720
+  actions:
+    - type: wait_for_selector
+      selector: "a[href*='openeuler-test/test-issue/issues']"
+      timeout: 10000
+    - type: click
+      selector: "a[href*='openeuler-test/test-issue/issues']"
+    - type: wait
+      ms: 3000
+assertions:
+  - type: positive
+    target: ui_url_match
+    expected: "/issues"
+  - type: positive
+    target: ui_page_title
+    text: "issues"
+teardown:
+  reset: none

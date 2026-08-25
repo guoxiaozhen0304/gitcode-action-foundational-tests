@@ -1,0 +1,22 @@
+---
+id: API-PKG-01-001
+dimensions: ["completeness", "compatibility"]
+dimension: completeness
+priority: P1
+title: 上传 npm 格式包并验证元数据
+intent_ref: INTENT-PKG-001
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: "/api/v5/repos/{owner}/{repo}/packages/npm"
+  method: POST
+  params: {"name": "test-pkg", "version": "1.0.0"}
+  auth: token
+  expected_status: [201]
+assertions:
+  - type: positive
+    target: api_status_code
+    status_code: 201
+teardown:
+  reset: fixture

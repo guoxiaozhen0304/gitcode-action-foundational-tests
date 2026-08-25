@@ -1,0 +1,25 @@
+{
+  "case_id": "UI-NAV-01-001",
+  "status": "PASS",
+  "ui_url": "https://gitcode.com/openeuler-test/test-issue",
+  "duration_seconds": 13.23,
+  "assertions": [
+    {
+      "assertion": "ui_url_match",
+      "type": "positive",
+      "passed": true,
+      "detail": "URL 'https://gitcode.com/openeuler-test/test-issue/issues?categorysearch=%255B%257B%22field%22:%22order_by_sort%22,%22value%22:%22created_at_desc%22,%22label%22:%22%E6%8E%92%E5%BA%8F%22%257D%255D&state=opened&order_by=created_at&sort=desc&scope=all&page=1' matches '/issues'"
+    },
+    {
+      "assertion": "ui_page_title",
+      "type": "positive",
+      "passed": true,
+      "detail": "Page title 'issues - openeuler-test/test-issue - AtomGit' contains 'issues'"
+    }
+  ],
+  "screenshots": [
+    "phase02/scripts/ui_cases\\UI-NAV-01-001_final.png"
+  ],
+  "logs": "",
+  "logs_available": true
+}

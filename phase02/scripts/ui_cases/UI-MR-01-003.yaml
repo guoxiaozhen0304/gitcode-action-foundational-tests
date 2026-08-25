@@ -1,0 +1,28 @@
+---
+id: UI-MR-01-003
+dimensions: ["completeness"]
+dimension: completeness
+priority: P1
+title: 在 Web 页面点击 Merge 按钮并验证状态变更
+intent_ref: INTENT-UI-009
+test_type: ui
+ui:
+  url: "https://gitcode.com/{owner}/{repo}/pull/2"
+  viewport:
+    width: 1280
+    height: 720
+  actions:
+    - type: wait_for_selector
+      selector: "button:has-text('合入')"
+      timeout: 10000
+    - type: click
+      selector: "button:has-text('合入')"
+    - type: wait
+      ms: 5000
+assertions:
+  - type: positive
+    target: ui_text_contains
+    selector: "body"
+    text: "已成功合入"
+teardown:
+  reset: none

@@ -1,0 +1,30 @@
+---
+id: API-MR-01-010
+dimensions: ["completeness"]
+dimension: completeness
+priority: P1
+title: 合并 MR（merge 策略）
+intent_ref: INTENT-MR-004
+test_type: api
+setup:
+  repo_fixture: openeuler-test/gitcode_apitest
+api:
+  endpoint: "/api/v5/repos/{owner}/{repo}/pulls/1/merge"
+  method: PUT
+  params: {"merge_type": "merge"}
+  auth: token
+  expected_status: [200, 201]
+assertions:
+  - type: positive
+    target: api_status_code
+    status_codes: [200, 201]
+  - type: positive
+    target: api_response_body
+    json_path: "$.merged"
+    json_value: true
+  - type: positive
+    target: api_response_body
+    json_path: "$.merge_type"
+    json_value: "merge"
+teardown:
+  reset: fixture

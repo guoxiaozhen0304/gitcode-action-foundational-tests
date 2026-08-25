@@ -1,0 +1,22 @@
+---
+id: API-PKG-01-002
+dimensions: ["completeness", "compatibility"]
+dimension: completeness
+priority: P1
+title: 上传 Docker 镜像并验证拉取
+intent_ref: INTENT-PKG-001
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: "/api/v5/repos/{owner}/{repo}/packages/docker"
+  method: POST
+  params: {"tag": "latest"}
+  auth: token
+  expected_status: [201]
+assertions:
+  - type: positive
+    target: api_status_code
+    status_code: 201
+teardown:
+  reset: fixture

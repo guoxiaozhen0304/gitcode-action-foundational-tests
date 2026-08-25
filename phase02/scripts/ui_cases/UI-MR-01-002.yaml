@@ -1,0 +1,44 @@
+---
+id: UI-MR-01-002
+dimensions: ["completeness"]
+dimension: completeness
+priority: P1
+title: 在 Web 页面填写 MR 表单并创建
+intent_ref: INTENT-UI-008
+test_type: ui
+ui:
+  url: "https://gitcode.com/{owner}/{repo}/compare/main...test-branch"
+  viewport:
+    width: 1280
+    height: 720
+  actions:
+    - type: wait_for_selector
+      selector: "button:has-text('新建Pull Request')"
+      timeout: 10000
+    - type: click
+      selector: "button:has-text('新建Pull Request')"
+    - type: wait
+      ms: 4000
+    - type: wait_for_selector
+      selector: "input.devui-input__inner:visible"
+      timeout: 10000
+    - type: type
+      selector: "input.devui-input__inner:visible"
+      value: "UI自动化测试 MR"
+    - type: type
+      selector: "textarea:visible"
+      value: "由 ui_runner 自动创建的测试 MR。"
+    - type: click
+      selector: "button:has-text('创建')"
+    - type: wait
+      ms: 8000
+assertions:
+  - type: positive
+    target: ui_page_title
+    text: "UI自动化测试 MR"
+  - type: positive
+    target: ui_text_contains
+    selector: "body"
+    text: "UI自动化测试 MR"
+teardown:
+  reset: none

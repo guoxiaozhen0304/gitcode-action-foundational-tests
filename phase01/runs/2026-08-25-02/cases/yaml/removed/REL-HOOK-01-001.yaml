@@ -1,0 +1,24 @@
+---
+id: REL-HOOK-01-001
+dimensions: ["reliability"]
+dimension: reliability
+priority: P1
+title: Webhook 接收端 5xx 时观察重试间隔与风暴抑制
+intent_ref: INTENT-REL-019
+test_type: api
+setup:
+  repo_fixture: ComputingActionTest/gitcode_api
+api:
+  endpoint: "/api/v5/repos/{owner}/{repo}/hooks/{id}/test"
+  method: POST
+  auth: token
+  expected_status: [200, 204, 502]
+assertions:
+  - type: positive
+    target: api_status_code
+    status_codes: [502, 503]
+  - type: nonfunctional
+    target: concurrency_isolation
+    le: 5
+teardown:
+  reset: fixture
